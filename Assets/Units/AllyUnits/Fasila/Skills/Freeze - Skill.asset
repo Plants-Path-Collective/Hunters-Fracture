@@ -12,20 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 337a8add72e640c99dfddb90520bb43a, type: 3}
   m_Name: Freeze - Skill
   m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.UnitSystem.SkillSO
-  skillName: 
-  description: 
+  skillName: Freeze
+  description: "Lanza una rafaga de hielo que da\xF1a y tiene la probabilidad de
+    congelar al objetivo."
   icon: {fileID: 0}
   animationClip: {fileID: 0}
-  animationDuration: 0
+  animationDuration: 30
   skillType: 0
   targetType: 0
-  spCost: 0
+  spCost: 15
   hpCost: 0
-  usageLimit: 0
-  effects: []
-  basePower: 0
-  accuracy: 0
-  damageType: 0
+  usageLimit: -1
+  effects:
+  - effectType: 0
+    statAffected: 0
+    condition: 4
+    value: 0
+    durationInSeconds: 0
+    chance: 70
+  basePower: 4
+  accuracy: 70
+  damageType: 1
   speedModifier: 0
   isUltimate: 0
   isPassive: 0
