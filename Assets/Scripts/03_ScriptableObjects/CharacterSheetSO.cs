@@ -9,11 +9,17 @@ namespace CombatSystem.UnitSystem
     {
         [Header("General Info")] 
         public UNIT_TYPE unitType;
+        
+        [CanBeNull]
+        [Tooltip(("The unit's behavior in combat; this is only used if it is a UNIT_TYPE.EnemyUnit"))] 
+        public BehaviorSO behavior;
+        
         [Tooltip(("Determines the type of damage associated with the Unit; this also determines which stat should be higher (Strength or Magic Power)."))]
         public DAMAGE_TYPE damageType;
         
         [Tooltip("Skill allocation per unit type:\n- Ally Units: max 3 (2 Basic, 1 Ultimate).\n- Regular Enemy Units: 2 Basic skills.\n- Mini Bosses: 2 skills (1 Basic, 1 Ultimate).\n- Bosses: 3 skills (2 Basic, 1 Ultimate).")]        
         public SkillSO[] skills;
+
         
         [Header("Unit Stats")] 
         [Space(5)] 
