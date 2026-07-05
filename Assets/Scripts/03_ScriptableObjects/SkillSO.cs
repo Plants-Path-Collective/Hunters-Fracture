@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CombatSystem.UnitSystem
 {
     [CreateAssetMenu(fileName = "NewSkill", menuName = "ScriptableObjects/Skill", order = 2)]
-    public class SkillSO
+    public class SkillSO : ScriptableObject
     {
         // ------- Basic Information -------
         public string skillName;

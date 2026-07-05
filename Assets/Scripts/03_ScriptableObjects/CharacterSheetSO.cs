@@ -14,7 +14,6 @@ namespace CombatSystem.UnitSystem
         
         [Tooltip("Skill allocation per unit type:\n- Ally Units: max 3 (2 Basic, 1 Ultimate).\n- Regular Enemy Units: 2 Basic skills.\n- Mini Bosses: 2 skills (1 Basic, 1 Ultimate).\n- Bosses: 3 skills (2 Basic, 1 Ultimate).")]        
         public SkillSO[] skills;
-        [Space(15)] 
         
         [Header("Unit Stats")] 
         [Space(5)] 
@@ -47,12 +46,10 @@ namespace CombatSystem.UnitSystem
         
         [Tooltip(("It is used to calculate the damage taken from magical attacks or skills. Percentage."))]
         public float magicalDefense;
-        [Space(15)] 
 
         [Header("Character Information")] 
         [Space(5)]
-        [CanBeNull]
-        public Sprite characterPortrait;
+        [CanBeNull] public Sprite characterPortrait;
         
         [Tooltip(("Characters name; used for the Wiki, the Party display, the info panel during combat, and for dialogue."))]
         public string characterName;
@@ -64,20 +61,17 @@ namespace CombatSystem.UnitSystem
 
         [Header("Model & Animations for Overworld")] 
         [Space(5)]
-        [CanBeNull]
-        public AnimationClip ow_idleAnimation;
-        public AnimationClip ow_walkAnimation;
-        public AnimationClip ow_interactAnimation;
-        [Space(15)] 
-
-        [Header("Model & Animations for Overworld")] 
+        [CanBeNull] public AnimationClip ow_idleAnimation;
+        [CanBeNull] public AnimationClip ow_walkAnimation;
+        [CanBeNull] public AnimationClip ow_interactAnimation;
+        
+        [Header("Model & Animations for Combat")] 
         [Space(5)] 
-        [CanBeNull]
-        public AnimationClip cb_idleAnimation;
-        public AnimationClip cb_runAnimation;
-        public AnimationClip cb_basicAttackAnimation;
-        public AnimationClip cb_skill1Animation;
-        public AnimationClip cb_skill2Animation;
-        public AnimationClip cb_ultimateAnimation;
+        [CanBeNull] public AnimationClip cb_idleAnimation;
+        [CanBeNull] public AnimationClip cb_runAnimation;
+        [CanBeNull] public AnimationClip cb_basicAttackAnimation;
+        [CanBeNull] public AnimationClip cb_skill1Animation;
+        [CanBeNull] public AnimationClip cb_skill2Animation;
+        [CanBeNull] public AnimationClip cb_ultimateAnimation;
     }
 }
