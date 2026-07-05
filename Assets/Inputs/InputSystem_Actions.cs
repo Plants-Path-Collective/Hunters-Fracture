@@ -878,6 +878,15 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Back from Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""65aae14f-9c38-49fa-9ff4-1f5e29507094"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Open Skills Menu"",
                     ""type"": ""Button"",
                     ""id"": ""c833ce8d-9b4a-4211-8c34-e313f6133235"",
@@ -1115,6 +1124,28 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
+                    ""id"": ""9faa6d75-6c6b-4a80-9162-35e055eb7ff4"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Back from Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fa923a1-f11b-4155-ab61-d0a527b4b74a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Back from Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""071d40c7-253e-4a3b-b7d0-35f0fbd380e8"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -1159,6 +1190,17 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d1a4830e-b351-4cd8-9379-ec8ce186b4cf"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""e6cb5f4d-3f2e-4fef-849d-e19fe8d7d42b"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
@@ -1170,12 +1212,217 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
+                    ""id"": ""488248c7-3ecd-4b7e-bd39-7de3bb9e2c6d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""72fa9aa7-d0f9-412d-9f2b-c87f5e0c9186"",
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Right Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Minigame"",
+            ""id"": ""0cdb8581-7904-41a4-9933-d5acf8b3a683"",
+            ""actions"": [
+                {
+                    ""name"": ""Primary Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ecd03d8-d087-4032-b7ab-21439a8563bf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Secondary Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""5bc4c5c8-1f7e-44ee-8b44-fcf685083a1c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Tertiary Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""4fe2b4d7-f58d-44c4-be80-94f9b454105d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Quaternary Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7f055d9-2a3f-4528-9530-3f086eeb9caa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left Shoulder"",
+                    ""type"": ""Button"",
+                    ""id"": ""6fd4fa59-79e6-45e4-aa9c-911caeed5eb6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Shoulder"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb5beaa6-05a3-4a42-b115-966c3df84a61"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""53bb93bb-e27d-474c-8b2c-b21a2bc82867"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Primary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a9adeaf4-1853-44a5-8f2f-1f3209fe5fbb"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Primary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88be7c42-da77-46c8-a617-763e3aee7bdf"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d57be9f6-27b8-4c62-9d52-267526e8f88c"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Right Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5068053-fc8e-473e-9c6f-efbc6dde4fcd"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Quaternary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""591c2943-53e0-4d81-94cd-764ee6107977"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Quaternary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""630e471e-ffea-4493-b592-cd908519205d"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Secondary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d459ad3e-003f-4217-bf5e-debd3520960a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Secondary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44547f1b-01e2-40bc-901a-1f82e79d174d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Tertiary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a887d43d-09b0-4fc8-8414-b0da53bc3276"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Tertiary Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d55c32ca-8f68-4ee9-b297-cac74612146f"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Shoulder"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73e0c838-3060-442f-a2ba-97687a9c7063"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Left Shoulder"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1269,10 +1516,19 @@ namespace InputSystem
             m_Combat_TargetSelection = m_Combat.FindAction("Target  Selection", throwIfNotFound: true);
             m_Combat_MoveinMenu = m_Combat.FindAction("Move in Menu", throwIfNotFound: true);
             m_Combat_BasicAttack = m_Combat.FindAction("Basic Attack", throwIfNotFound: true);
+            m_Combat_BackfromMenu = m_Combat.FindAction("Back from Menu", throwIfNotFound: true);
             m_Combat_OpenSkillsMenu = m_Combat.FindAction("Open Skills Menu", throwIfNotFound: true);
             m_Combat_OpenInventory = m_Combat.FindAction("Open Inventory", throwIfNotFound: true);
             m_Combat_LeftShoulder = m_Combat.FindAction("Left Shoulder", throwIfNotFound: true);
             m_Combat_RightShoulder = m_Combat.FindAction("Right Shoulder", throwIfNotFound: true);
+            // Minigame
+            m_Minigame = asset.FindActionMap("Minigame", throwIfNotFound: true);
+            m_Minigame_PrimaryButton = m_Minigame.FindAction("Primary Button", throwIfNotFound: true);
+            m_Minigame_SecondaryButton = m_Minigame.FindAction("Secondary Button", throwIfNotFound: true);
+            m_Minigame_TertiaryButton = m_Minigame.FindAction("Tertiary Button", throwIfNotFound: true);
+            m_Minigame_QuaternaryButton = m_Minigame.FindAction("Quaternary Button", throwIfNotFound: true);
+            m_Minigame_LeftShoulder = m_Minigame.FindAction("Left Shoulder", throwIfNotFound: true);
+            m_Minigame_RightShoulder = m_Minigame.FindAction("Right Shoulder", throwIfNotFound: true);
         }
 
         ~@InputSystem_Actions()
@@ -1282,6 +1538,7 @@ namespace InputSystem
             UnityEngine.Debug.Assert(!m_Exploration.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Exploration.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Dialogue.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Dialogue.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Combat.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Combat.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Minigame.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Minigame.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1821,6 +2078,7 @@ namespace InputSystem
         private readonly InputAction m_Combat_TargetSelection;
         private readonly InputAction m_Combat_MoveinMenu;
         private readonly InputAction m_Combat_BasicAttack;
+        private readonly InputAction m_Combat_BackfromMenu;
         private readonly InputAction m_Combat_OpenSkillsMenu;
         private readonly InputAction m_Combat_OpenInventory;
         private readonly InputAction m_Combat_LeftShoulder;
@@ -1848,6 +2106,10 @@ namespace InputSystem
             /// Provides access to the underlying input action "Combat/BasicAttack".
             /// </summary>
             public InputAction @BasicAttack => m_Wrapper.m_Combat_BasicAttack;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/BackfromMenu".
+            /// </summary>
+            public InputAction @BackfromMenu => m_Wrapper.m_Combat_BackfromMenu;
             /// <summary>
             /// Provides access to the underlying input action "Combat/OpenSkillsMenu".
             /// </summary>
@@ -1899,6 +2161,9 @@ namespace InputSystem
                 @BasicAttack.started += instance.OnBasicAttack;
                 @BasicAttack.performed += instance.OnBasicAttack;
                 @BasicAttack.canceled += instance.OnBasicAttack;
+                @BackfromMenu.started += instance.OnBackfromMenu;
+                @BackfromMenu.performed += instance.OnBackfromMenu;
+                @BackfromMenu.canceled += instance.OnBackfromMenu;
                 @OpenSkillsMenu.started += instance.OnOpenSkillsMenu;
                 @OpenSkillsMenu.performed += instance.OnOpenSkillsMenu;
                 @OpenSkillsMenu.canceled += instance.OnOpenSkillsMenu;
@@ -1931,6 +2196,9 @@ namespace InputSystem
                 @BasicAttack.started -= instance.OnBasicAttack;
                 @BasicAttack.performed -= instance.OnBasicAttack;
                 @BasicAttack.canceled -= instance.OnBasicAttack;
+                @BackfromMenu.started -= instance.OnBackfromMenu;
+                @BackfromMenu.performed -= instance.OnBackfromMenu;
+                @BackfromMenu.canceled -= instance.OnBackfromMenu;
                 @OpenSkillsMenu.started -= instance.OnOpenSkillsMenu;
                 @OpenSkillsMenu.performed -= instance.OnOpenSkillsMenu;
                 @OpenSkillsMenu.canceled -= instance.OnOpenSkillsMenu;
@@ -1976,6 +2244,157 @@ namespace InputSystem
         /// Provides a new <see cref="CombatActions" /> instance referencing this action map.
         /// </summary>
         public CombatActions @Combat => new CombatActions(this);
+
+        // Minigame
+        private readonly InputActionMap m_Minigame;
+        private List<IMinigameActions> m_MinigameActionsCallbackInterfaces = new List<IMinigameActions>();
+        private readonly InputAction m_Minigame_PrimaryButton;
+        private readonly InputAction m_Minigame_SecondaryButton;
+        private readonly InputAction m_Minigame_TertiaryButton;
+        private readonly InputAction m_Minigame_QuaternaryButton;
+        private readonly InputAction m_Minigame_LeftShoulder;
+        private readonly InputAction m_Minigame_RightShoulder;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Minigame".
+        /// </summary>
+        public struct MinigameActions
+        {
+            private @InputSystem_Actions m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public MinigameActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/PrimaryButton".
+            /// </summary>
+            public InputAction @PrimaryButton => m_Wrapper.m_Minigame_PrimaryButton;
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/SecondaryButton".
+            /// </summary>
+            public InputAction @SecondaryButton => m_Wrapper.m_Minigame_SecondaryButton;
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/TertiaryButton".
+            /// </summary>
+            public InputAction @TertiaryButton => m_Wrapper.m_Minigame_TertiaryButton;
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/QuaternaryButton".
+            /// </summary>
+            public InputAction @QuaternaryButton => m_Wrapper.m_Minigame_QuaternaryButton;
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/LeftShoulder".
+            /// </summary>
+            public InputAction @LeftShoulder => m_Wrapper.m_Minigame_LeftShoulder;
+            /// <summary>
+            /// Provides access to the underlying input action "Minigame/RightShoulder".
+            /// </summary>
+            public InputAction @RightShoulder => m_Wrapper.m_Minigame_RightShoulder;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Minigame; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="MinigameActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(MinigameActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="MinigameActions" />
+            public void AddCallbacks(IMinigameActions instance)
+            {
+                if (instance == null || m_Wrapper.m_MinigameActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_MinigameActionsCallbackInterfaces.Add(instance);
+                @PrimaryButton.started += instance.OnPrimaryButton;
+                @PrimaryButton.performed += instance.OnPrimaryButton;
+                @PrimaryButton.canceled += instance.OnPrimaryButton;
+                @SecondaryButton.started += instance.OnSecondaryButton;
+                @SecondaryButton.performed += instance.OnSecondaryButton;
+                @SecondaryButton.canceled += instance.OnSecondaryButton;
+                @TertiaryButton.started += instance.OnTertiaryButton;
+                @TertiaryButton.performed += instance.OnTertiaryButton;
+                @TertiaryButton.canceled += instance.OnTertiaryButton;
+                @QuaternaryButton.started += instance.OnQuaternaryButton;
+                @QuaternaryButton.performed += instance.OnQuaternaryButton;
+                @QuaternaryButton.canceled += instance.OnQuaternaryButton;
+                @LeftShoulder.started += instance.OnLeftShoulder;
+                @LeftShoulder.performed += instance.OnLeftShoulder;
+                @LeftShoulder.canceled += instance.OnLeftShoulder;
+                @RightShoulder.started += instance.OnRightShoulder;
+                @RightShoulder.performed += instance.OnRightShoulder;
+                @RightShoulder.canceled += instance.OnRightShoulder;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="MinigameActions" />
+            private void UnregisterCallbacks(IMinigameActions instance)
+            {
+                @PrimaryButton.started -= instance.OnPrimaryButton;
+                @PrimaryButton.performed -= instance.OnPrimaryButton;
+                @PrimaryButton.canceled -= instance.OnPrimaryButton;
+                @SecondaryButton.started -= instance.OnSecondaryButton;
+                @SecondaryButton.performed -= instance.OnSecondaryButton;
+                @SecondaryButton.canceled -= instance.OnSecondaryButton;
+                @TertiaryButton.started -= instance.OnTertiaryButton;
+                @TertiaryButton.performed -= instance.OnTertiaryButton;
+                @TertiaryButton.canceled -= instance.OnTertiaryButton;
+                @QuaternaryButton.started -= instance.OnQuaternaryButton;
+                @QuaternaryButton.performed -= instance.OnQuaternaryButton;
+                @QuaternaryButton.canceled -= instance.OnQuaternaryButton;
+                @LeftShoulder.started -= instance.OnLeftShoulder;
+                @LeftShoulder.performed -= instance.OnLeftShoulder;
+                @LeftShoulder.canceled -= instance.OnLeftShoulder;
+                @RightShoulder.started -= instance.OnRightShoulder;
+                @RightShoulder.performed -= instance.OnRightShoulder;
+                @RightShoulder.canceled -= instance.OnRightShoulder;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MinigameActions.UnregisterCallbacks(IMinigameActions)" />.
+            /// </summary>
+            /// <seealso cref="MinigameActions.UnregisterCallbacks(IMinigameActions)" />
+            public void RemoveCallbacks(IMinigameActions instance)
+            {
+                if (m_Wrapper.m_MinigameActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="MinigameActions.AddCallbacks(IMinigameActions)" />
+            /// <seealso cref="MinigameActions.RemoveCallbacks(IMinigameActions)" />
+            /// <seealso cref="MinigameActions.UnregisterCallbacks(IMinigameActions)" />
+            public void SetCallbacks(IMinigameActions instance)
+            {
+                foreach (var item in m_Wrapper.m_MinigameActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_MinigameActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="MinigameActions" /> instance referencing this action map.
+        /// </summary>
+        public MinigameActions @Minigame => new MinigameActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         /// <summary>
         /// Provides access to the input control scheme.
@@ -2179,6 +2598,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnBasicAttack(InputAction.CallbackContext context);
             /// <summary>
+            /// Method invoked when associated input action "Back from Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnBackfromMenu(InputAction.CallbackContext context);
+            /// <summary>
             /// Method invoked when associated input action "Open Skills Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2192,6 +2618,56 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenInventory(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Left Shoulder" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnLeftShoulder(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Right Shoulder" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnRightShoulder(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Minigame" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="MinigameActions.AddCallbacks(IMinigameActions)" />
+        /// <seealso cref="MinigameActions.RemoveCallbacks(IMinigameActions)" />
+        public interface IMinigameActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Primary Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPrimaryButton(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Secondary Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSecondaryButton(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Tertiary Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTertiaryButton(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Quaternary Button" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnQuaternaryButton(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Left Shoulder" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>

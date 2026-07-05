@@ -1,5 +1,5 @@
 using UnityEngine;
-using InputSystem; // Generated wrapper namespace
+using InputSystem;
 
 namespace Core
 {
@@ -10,54 +10,78 @@ namespace Core
     /// Usage — subscribe from any system:
     ///   InputManager.Instance.Exploration.Move.performed += OnMove;
     ///   InputManager.Instance.Combat.BasicAttack.performed += OnAttack;
+    ///   InputManager.Instance.Minigame.PrimaryButton.performed += OnPrimary;
     ///
-    /// Switch maps from a SceneSetter or anywhere:
-    ///   InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Exploration);
+    /// Switch maps:
+    ///   InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Combat);
     /// </summary>
     public class InputManager : MonoBehaviour
     {
-        // ── Singleton ────────────────────────────────────────────────────────
+        // ── Singleton ─────────────────────────────────────────────────────────
         public static InputManager Instance { get; private set; }
 
-        // ── Generated asset ──────────────────────────────────────────────────
-        // Read-only public access so any system can reach its map directly,
-        // e.g. InputManager.Instance.Combat.BasicAttack.performed += ...
+        // ── Generated asset ───────────────────────────────────────────────────
         public InputSystem_Actions Actions { get; private set; }
 
-        // Convenience shorthand properties — avoids typing Actions.Xxx every time
-        public InputSystem_Actions.UIActions       UI          => Actions.UI;
-        public InputSystem_Actions.ExplorationActions Exploration => Actions.Exploration;
-        public InputSystem_Actions.DialogueActions  Dialogue    => Actions.Dialogue;
-        public InputSystem_Actions.CombatActions    Combat      => Actions.Combat;
+        // ── Map shorthands ────────────────────────────────────────────────────
+        // UI
+        public InputSystem_Actions.UIActions          UI          => Actions.UI;
 
-        // ── State ────────────────────────────────────────────────────────────
+        // Exploration
+        //   Move            → leftStick / WASD
+        //   Interact        → buttonWest (□/X) / E
+        //   OpenInventory   → buttonNorth (△/Y) / I
+        //   OpenPauseMenu   → touchpad / select / I
+        public InputSystem_Actions.ExplorationActions Exploration => Actions.Exploration;
+
+        // Dialogue
+        //   Move                        → leftStick / WASD
+        //   CompleteLineConfirmSelection → advance dialogue / confirm choice
+        //   SkipConversation            → Hold to skip
+        //   AbandonConversation         → Hold to abandon
+        public InputSystem_Actions.DialogueActions    Dialogue    => Actions.Dialogue;
+
+        // Combat
+        //   TargetSelection  → navigate targets
+        //   MoveinMenu       → navigate action menu
+        //   BasicAttack      → confirm / attack shortcut
+        //   BackfromMenu     → cancel / go back in menu
+        //   OpenSkillsMenu   → open skill selection
+        //   OpenInventory    → open item inventory
+        //   LeftShoulder     → used combined with RightShoulder to charge Ultimate (5s hold)
+        //   RightShoulder    → used combined with LeftShoulder to charge Ultimate (5s hold)
+        public InputSystem_Actions.CombatActions      Combat      => Actions.Combat;
+
+        // Minigame  (Disputa & Alianza)
+        //   PrimaryButton    → South face button  (Cross  / A)
+        //   SecondaryButton  → East  face button  (Circle / B)
+        //   TertiaryButton   → West  face button  (Square / X)
+        //   QuaternaryButton → North face button  (Triangle / Y)
+        //   LeftShoulder     → reserved for future minigame variants
+        //   RightShoulder    → reserved for future minigame variants
+        public InputSystem_Actions.MinigameActions    Minigame    => Actions.Minigame;
+
+        // ── State ─────────────────────────────────────────────────────────────
         public INPUTACTION_MAP CurrentMap { get; private set; } = INPUTACTION_MAP.Empty;
 
-        // ── Lifecycle ────────────────────────────────────────────────────────
+        // ── Lifecycle ─────────────────────────────────────────────────────────
         private void Awake()
         {
-            // Destroy the duplicate component, NOT the whole GameObject.
-            // (The GameObject holds GameManager and other persistent systems.)
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-                return;
-            }
+            if (Instance != null && Instance != this) { Destroy(this); return; }
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
             Actions = new InputSystem_Actions();
-            Actions.Disable(); // Start with everything off; SceneSetter will enable the right map.
+            Actions.Disable();
         }
 
         private void OnDestroy()
         {
-            // Clean up unmanaged InputSystem resources.
             Actions?.Dispose();
         }
 
-        // ── Public API ───────────────────────────────────────────────────────
+        // ── Public API ────────────────────────────────────────────────────────
 
         /// <summary>
         /// Disables every map, then enables only the requested one.
@@ -68,22 +92,22 @@ namespace Core
             if (CurrentMap == newMap) return;
 
             DisableAllMaps();
-
             CurrentMap = newMap;
 
             switch (newMap)
             {
-                case INPUTACTION_MAP.UI:          Actions.UI.Enable();          break;
-                case INPUTACTION_MAP.Exploration: Actions.Exploration.Enable(); break;
-                case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();    break;
-                case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();      break;
-                case INPUTACTION_MAP.Empty:       /* intentionally blank */      break;
+                case INPUTACTION_MAP.Empty:       /* all maps disabled */         break;
+                case INPUTACTION_MAP.UI:          Actions.UI.Enable();            break;
+                case INPUTACTION_MAP.Exploration: Actions.Exploration.Enable();   break;
+                case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
+                case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
+                case INPUTACTION_MAP.Minigame:    Actions.Minigame.Enable();      break;
             }
         }
 
         /// <summary>
-        /// Convenience: switches to UI map and remembers the previous map so
-        /// you can restore it after closing a menu.
+        /// Switches to UI map, remembering the previous map so PopUIMap() can restore it.
+        /// Useful for opening menus during Exploration or Combat.
         /// </summary>
         public void PushUIMap()
         {
@@ -99,7 +123,7 @@ namespace Core
             ChangeActionMap(_previousMap);
         }
 
-        // ── Internals ────────────────────────────────────────────────────────
+        // ── Internals ─────────────────────────────────────────────────────────
         private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Exploration;
 
         private void DisableAllMaps()
@@ -108,6 +132,7 @@ namespace Core
             Actions.Exploration.Disable();
             Actions.Dialogue.Disable();
             Actions.Combat.Disable();
+            Actions.Minigame.Disable();
         }
     }
 }

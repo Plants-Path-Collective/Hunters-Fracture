@@ -1,78 +1,83 @@
 ﻿using Core;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CombatSystem.UnitSystem
 {
-    [CreateAssetMenu(fileName = "NewCharacterSheet", menuName =  "ScriptableObjects/CharacterSheet", order = 1)]
+    [CreateAssetMenu(fileName = "NewCharacterSheet", menuName = "ScriptableObjects/CharacterSheet", order = 1)]
     public class CharacterSheetSO : ScriptableObject
     {
-        [Header("General Info")] 
+        [Header("General Info")]
         public UNIT_TYPE unitType;
-        
+
         [CanBeNull]
-        [Tooltip(("The unit's behavior in combat; this is only used if it is a UNIT_TYPE.EnemyUnit"))] 
+        [Tooltip("The unit's behavior in combat. Only used if unitType is EnemyUnit.")]
         public BehaviorSO behavior;
-        
-        [Tooltip(("Determines the type of damage associated with the Unit; this also determines which stat should be higher (Strength or Magic Power)."))]
+
+        [Tooltip("Determines the type of damage associated with the Unit; also determines whether Strength or Magic Power is the primary offensive stat.")]
         public DAMAGE_TYPE damageType;
-        
-        [Tooltip("Skill allocation per unit type:\n- Ally Units: max 3 (2 Basic, 1 Ultimate).\n- Regular Enemy Units: 2 Basic skills.\n- Mini Bosses: 2 skills (1 Basic, 1 Ultimate).\n- Bosses: 3 skills (2 Basic, 1 Ultimate).")]        
+
+        [Tooltip("Skill allocation per unit type:\n- Ally Units: max 3 (2 Basic, 1 Ultimate).\n- Regular Enemy Units: 2 Basic skills.\n- Mini Bosses: 2 skills (1 Basic, 1 Ultimate).\n- Bosses: 3 skills (2 Basic, 1 Ultimate).")]
         public SkillSO[] skills;
 
-        
-        [Header("Unit Stats")] 
-        [Space(5)] 
-        
-        [Tooltip(("Unit's Health Points"))]
+        [Header("Prefab")]
+        [Tooltip("The prefab instantiated in combat. Must have a Unit component.")]
+        public GameObject combatPrefab;
+
+        [Header("Unit Stats")]
+        [Space(5)]
+
+        [Tooltip("Unit's Health Points.")]
         public float HP;
-        
-        [Tooltip(("The number of energy points the Unit has; these are used to activate or cast abilities."))]
+
+        [Tooltip("Skill Points — used to activate skills.")]
         public float SP;
-        
-        [Tooltip(("Unit Speed determines how quickly it acts relative to other Units in combat."))]
+
+        [Tooltip("Determines how quickly the unit acts relative to others in ATB.")]
         public float speed;
-        
-        [Tooltip(("Used in the calculation of Physical Attacks."))]
+
+        [Tooltip("Used in Physical Attack calculations.")]
         public float strenght;
-        
-        [Tooltip(("It is used in calculations to determine a skill's power, how much damage a skill deals, or how much healing it provides."))]
+
+        [Tooltip("Used to determine skill power, damage dealt, or healing provided.")]
         public float magicPower;
-        
-        [Tooltip(("Determines the percentage chance that the Unit will dodge an attack or a skill; this value is subtracted from the attacking Unit's accuracy; it may vary due to status changes."))]
+
+        [Tooltip("Percentage chance to dodge an attack. Subtracted from attacker's accuracy.")]
         [Range(1f, 100f)]
         public float evasion = 10;
-        
-        [Tooltip(("Determines the accuracy of the Unit's attacks as a percentage; this may vary depending on changes in status."))]
+
+        [Tooltip("Accuracy of the unit's attacks as a percentage.")]
         [Range(1f, 100f)]
         public float accuracy = 100;
 
-        [Tooltip(("It is used to calculate the damage taken from physical attacks or skills. Percentage."))]
+        [Tooltip("Reduces damage taken from physical attacks/skills. Percentage.")]
         public float physicalDefense;
-        
-        [Tooltip(("It is used to calculate the damage taken from magical attacks or skills. Percentage."))]
+
+        [Tooltip("Reduces damage taken from magical attacks/skills. Percentage.")]
         public float magicalDefense;
 
-        [Header("Character Information")] 
+        [Header("Character Information")]
         [Space(5)]
         [CanBeNull] public Sprite characterPortrait;
-        
-        [Tooltip(("Characters name; used for the Wiki, the Party display, the info panel during combat, and for dialogue."))]
-        public string characterName;
-        
-        [TextArea(4, 10)]
-        [Tooltip(("Character description; used for the “Hunters” section on the Beeper Wiki"))]
-        public string characterPhysicalDescription;
-        [Space (15)]
 
-        [Header("Model & Animations for Overworld")] 
+        [Tooltip("Used in the Wiki, Party display, combat UI, and dialogue.")]
+        public string characterName;
+
+        [FormerlySerializedAs("characterPhysicalDescription")]
+        [TextArea(4, 10)]
+        [Tooltip("Character description for the Hunters section of the Beeper Wiki.")]
+        public string characterDescription;
+
+        [Space(15)]
+        [Header("Model & Animations — Overworld")]
         [Space(5)]
         [CanBeNull] public AnimationClip ow_idleAnimation;
         [CanBeNull] public AnimationClip ow_walkAnimation;
         [CanBeNull] public AnimationClip ow_interactAnimation;
-        
-        [Header("Model & Animations for Combat")] 
-        [Space(5)] 
+
+        [Header("Model & Animations — Combat")]
+        [Space(5)]
         [CanBeNull] public AnimationClip cb_idleAnimation;
         [CanBeNull] public AnimationClip cb_runAnimation;
         [CanBeNull] public AnimationClip cb_basicAttackAnimation;

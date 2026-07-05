@@ -13,7 +13,8 @@
         UI,
         Exploration,
         Dialogue,
-        Combat
+        Combat,
+        Minigame
     }
 
     #endregion
@@ -56,6 +57,69 @@
         Alive,
         Recovering,
         Dead
+    }
+    
+    #endregion
+    
+    #region Combat
+    
+    /// <summary>
+    /// Overall state of the combat encounter, driven by CombatManager.
+    /// </summary>
+    public enum COMBAT_STATE
+    {
+        Inactive,
+        Initializing,
+        ATBRunning,        // Normal loop — ATB ticking for all units
+        TurnPending,       // One unit reached threshold; ATB paused, awaiting action
+        ResolvingAction,   // ActionResolver is executing an action
+        Minigame,          // Disputa or Alianza minigame is running; ATB paused
+        Victory,
+        Defeat
+    }
+
+    /// <summary>
+    /// Which simultaneous-turn event was triggered.
+    /// </summary>
+    public enum SIMULTANEOUS_EVENT_TYPE
+    {
+        Disputa,   // Ally + Enemy reached threshold at the same frame
+        Alianza    // Ally + Ally reached threshold at the same frame
+    }
+
+    /// <summary>
+    /// Result of a combat encounter, written to CombatContext before returning to overworld.
+    /// </summary>
+    public enum COMBAT_RESULT
+    {
+        None,
+        Victory,
+        Defeat,
+        Fled
+    }
+    
+    /// <summary>
+    /// Determines which ally the enemy targets.
+    /// </summary>
+    public enum TARGET_PRIORITY
+    {
+        LowestHP,       // Focus the most wounded ally
+        HighestHP,      // Focus the tankiest ally
+        LowestSpeed,    // Focus the slowest ally
+        HighestSpeed,   // Focus the most dangerous ally
+        Random          // Pick a random alive ally
+    }
+    
+    /// <summary>
+    /// Which face button is required for a minigame step.
+    /// Maps directly to the Minigame action map buttons.
+    /// </summary>
+    public enum FACE_BUTTON
+    {
+        Primary,     // South  — Cross / A      → Minigame.PrimaryButton
+        Secondary,   // East   — Circle / B     → Minigame.SecondaryButton
+        Tertiary,    // West   — Square / X     → Minigame.TertiaryButton
+        Quaternary   // North  — Triangle / Y   → Minigame.QuaternaryButton
     }
     
     #endregion

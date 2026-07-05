@@ -790,6 +790,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Back from Menu",
+                    "type": "Button",
+                    "id": "65aae14f-9c38-49fa-9ff4-1f5e29507094",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Open Skills Menu",
                     "type": "Button",
                     "id": "c833ce8d-9b4a-4211-8c34-e313f6133235",
@@ -1027,6 +1036,28 @@
                 },
                 {
                     "name": "",
+                    "id": "9faa6d75-6c6b-4a80-9162-35e055eb7ff4",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Back from Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2fa923a1-f11b-4155-ab61-d0a527b4b74a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Back from Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "071d40c7-253e-4a3b-b7d0-35f0fbd380e8",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -1071,6 +1102,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d1a4830e-b351-4cd8-9379-ec8ce186b4cf",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e6cb5f4d-3f2e-4fef-849d-e19fe8d7d42b",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
@@ -1082,12 +1124,217 @@
                 },
                 {
                     "name": "",
+                    "id": "488248c7-3ecd-4b7e-bd39-7de3bb9e2c6d",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "72fa9aa7-d0f9-412d-9f2b-c87f5e0c9186",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Right Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Minigame",
+            "id": "0cdb8581-7904-41a4-9933-d5acf8b3a683",
+            "actions": [
+                {
+                    "name": "Primary Button",
+                    "type": "Button",
+                    "id": "6ecd03d8-d087-4032-b7ab-21439a8563bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary Button",
+                    "type": "Button",
+                    "id": "5bc4c5c8-1f7e-44ee-8b44-fcf685083a1c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Tertiary Button",
+                    "type": "Button",
+                    "id": "4fe2b4d7-f58d-44c4-be80-94f9b454105d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Quaternary Button",
+                    "type": "Button",
+                    "id": "f7f055d9-2a3f-4528-9530-3f086eeb9caa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Left Shoulder",
+                    "type": "Button",
+                    "id": "6fd4fa59-79e6-45e4-aa9c-911caeed5eb6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Shoulder",
+                    "type": "Button",
+                    "id": "cb5beaa6-05a3-4a42-b115-966c3df84a61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "53bb93bb-e27d-474c-8b2c-b21a2bc82867",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Primary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a9adeaf4-1853-44a5-8f2f-1f3209fe5fbb",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Primary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "88be7c42-da77-46c8-a617-763e3aee7bdf",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d57be9f6-27b8-4c62-9d52-267526e8f88c",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Right Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a5068053-fc8e-473e-9c6f-efbc6dde4fcd",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Quaternary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "591c2943-53e0-4d81-94cd-764ee6107977",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Quaternary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "630e471e-ffea-4493-b592-cd908519205d",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Secondary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d459ad3e-003f-4217-bf5e-debd3520960a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Secondary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "44547f1b-01e2-40bc-901a-1f82e79d174d",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Tertiary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a887d43d-09b0-4fc8-8414-b0da53bc3276",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Tertiary Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d55c32ca-8f68-4ee9-b297-cac74612146f",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Shoulder",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73e0c838-3060-442f-a2ba-97687a9c7063",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Left Shoulder",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
