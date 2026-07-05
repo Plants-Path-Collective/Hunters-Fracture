@@ -1,6 +1,25 @@
-﻿namespace _00_Core
+﻿namespace Core
 {
-    // UNITS
+    #region INPUT
+
+    /// <summary>
+    /// If you want to add a new input action map to the project,
+    /// you must add it to this enum in the order shown in the
+    /// project settings; otherwise, it will not work.
+    /// </summary>
+    public enum INPUTACTION_MAP
+    {
+        Empty,
+        UI,
+        Exploration,
+        Dialogue,
+        Combat
+    }
+
+    #endregion
+    
+    #region UNITS
+    
     public enum UNIT_TYPE
     {
         AllyUnit,
@@ -38,6 +57,10 @@
         Recovering,
         Dead
     }
+    
+    #endregion
+
+    #region Skills
     
     // FOR UNITS AND FOR SKILLS
     public enum DAMAGE_TYPE
@@ -101,4 +124,6 @@
         Sleep, 
         Confusion
     }
+    
+    #endregion
 }

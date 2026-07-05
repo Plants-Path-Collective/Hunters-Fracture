@@ -225,7 +225,7 @@ namespace PlantsPathCo.DialogueSystem.Editor
             dialogueText.text = "Dialogue text goes here...";
             dialogueText.fontSize = 20;
             dialogueText.color = Color.white;
-            dialogueText.enableWordWrapping = true;
+            dialogueText.textWrappingMode = TextWrappingModes.Normal;
 
             GameObject answerPanelGO = CreateUIObject("AnswerPanel", panelRoot.transform);
             var answerPanelRect = answerPanelGO.GetComponent<RectTransform>();
