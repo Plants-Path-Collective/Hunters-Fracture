@@ -7,178 +7,163 @@ namespace CombatSystem
 {
     /// <summary>
     /// Pure calculation layer — no Unity lifecycle, no UI, no ATB.
-    /// Receives an action description and applies it to the targets.
-    /// Called by TurnHandler (normal turns) and MinigameController (Alianza result).
+    ///
+    /// Unified damage / heal formula:
+    ///   offensiveStat  = damageType == Physical ? caster.Strength : caster.MagicPower
+    ///   defensiveStat  = damageType == Physical ? target.PhysicalDef : target.MagicalDef
+    ///   rawPower       = skill.basePower + offensiveStat
+    ///   finalDamage    = rawPower * (1 - defensiveStat / 100)
+    ///
+    /// SkillEffect entries only handle secondary outcomes (status, buff/debuff,
+    /// revive, shield, drain). They never contain raw damage values.
     /// </summary>
     public class ActionResolver : MonoBehaviour
     {
-        // ── Flee ─────────────────────────────────────────────────────────────
-
         private const float FleeSuccessChance = 0.5f;
 
-        public bool TryFlee()
-        {
-            return Random.value < FleeSuccessChance;
-        }
+        // ── Flee ──────────────────────────────────────────────────────────────
+
+        public bool TryFlee() => Random.value < FleeSuccessChance;
 
         // ── Basic Attack ──────────────────────────────────────────────────────
 
         /// <summary>
-        /// Resolves a basic attack from attacker to a single target.
-        /// Uses the attacker's damage type to pick Strength or MagicPower.
-        /// Returns actual damage dealt (0 if miss).
+        /// Resolves a basic attack from an AttackSO.
+        /// Uses the AttackSO's own damageType (matches unit affinity by default,
+        /// but can differ for special attack variants).
+        /// Returns damage dealt (0 if miss).
         /// </summary>
-        public float ResolveBasicAttack(Unit attacker, Unit target, DAMAGE_TYPE damageType)
+        public float ResolveBasicAttack(Unit caster, Unit target)
         {
-            if (!RollHit(attacker.Accuracy, target.Evasion)) return 0f;
+            AttackSO attack = caster.Sheet.basicAttack;
+            if (attack == null)
+            {
+                Debug.LogWarning($"[ActionResolver] {caster.UnitName} has no AttackSO assigned.");
+                return 0f;
+            }
 
-            float raw    = damageType == DAMAGE_TYPE.Physical ? attacker.Strength : attacker.MagicPower;
-            float defense = damageType == DAMAGE_TYPE.Physical ? target.PhysicalDef : target.MagicalDef;
-            float damage = CalculateDamage(raw, defense);
+            if (!RollHit(attack.accuracy, target.Evasion)) return 0f;
 
+            float damage = CalculateDamage(attack.basePower, caster, attack.damageType, target);
             target.ModifyHP(-damage);
+
+            // Apply any on-hit secondary effects
+            if (attack.onHitEffects != null)
+                foreach (SkillEffect effect in attack.onHitEffects)
+                    ApplySecondaryEffect(effect, caster, target, attack.basePower, attack.damageType);
+
             return damage;
         }
 
         // ── Skill ─────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Resolves all effects of a skill from caster to a list of targets.
-        /// Also deducts SP/HP cost from the caster.
+        /// Resolves a skill. Pays cost, applies main damage/heal, then secondary effects.
         /// </summary>
         public void ResolveSkill(SkillSO skill, Unit caster, List<Unit> targets, int skillIndex)
         {
-            // Pay costs
+            // Pay costs first
             caster.ModifySP(-skill.spCost);
-            caster.ModifyHP(-skill.hpCost);
+            if (skill.hpCost > 0f) caster.ModifyHP(-skill.hpCost);
             caster.ConsumeSkillUse(skillIndex);
 
-            // Apply every effect to every target
             foreach (Unit target in targets)
             {
-                if (target.State == UNIT_STATE.Dead && !SkillCanTargetDead(skill)) continue;
+                bool targetIsDead = target.State == UNIT_STATE.Dead;
 
-                foreach (SkillEffect effect in skill.effects)
-                    ApplyEffect(skill, effect, caster, target);
+                // Only Revive effects can target dead units — skip main formula for them
+                if (targetIsDead && !SkillCanRevive(skill)) continue;
+                if (targetIsDead) { ApplyAllSecondaryEffects(skill, caster, target); continue; }
+
+                // Main damage or heal based on basePower
+                if (skill.basePower > 0f)
+                {
+                    bool isHeal = skill.targetType == SKILL_TARGET.SingleAlly
+                               || skill.targetType == SKILL_TARGET.AllAllies
+                               || skill.targetType == SKILL_TARGET.Self;
+
+                    if (!RollHit(skill.accuracy, target.Evasion) && !isHeal) continue;
+
+                    if (isHeal)
+                    {
+                        float heal = CalculateHeal(skill.basePower, caster);
+                        target.ModifyHP(heal);
+                    }
+                    else
+                    {
+                        float damage = CalculateDamage(skill.basePower, caster, skill.damageType, target);
+                        target.ModifyHP(-damage);
+                    }
+                }
+
+                // Secondary effects (status, buff/debuff, drain, shield…)
+                ApplyAllSecondaryEffects(skill, caster, target);
             }
         }
 
         // ── Disputa result ────────────────────────────────────────────────────
 
         /// <summary>
-        /// Applies the result of a Disputa minigame.
+        /// Loser takes damage proportional to enemy Potencia (5% maxHP per point).
         /// Winner keeps their turn (handled by CombatManager).
-        /// Loser takes damage proportional to potencia and resets their ATB.
         /// </summary>
         public void ResolveDisputaResult(Unit winner, Unit loser, int loserPotencia)
         {
-            // Damage scales linearly with potencia: each point = 5% of loser's maxHP
-            float damagePercent = loserPotencia * 0.05f;
-            float damage        = loser.MaxHP * damagePercent;
-
+            float damage = loser.MaxHP * (loserPotencia * 0.05f);
             loser.ModifyHP(-damage);
             loser.ResetATB();
 
             Debug.Log($"[Disputa] {winner.UnitName} wins. " +
-                      $"{loser.UnitName} takes {damage:F1} damage and resets ATB.");
+                      $"{loser.UnitName} takes {damage:F1} and resets ATB.");
         }
 
         // ── Alianza result ────────────────────────────────────────────────────
 
         /// <summary>
-        /// Applies the combined attack from an Alianza minigame.
-        /// Damage scales with potencia earned during the minigame.
-        /// Both units act; targets are all enemies (can be changed per design).
+        /// Combined attack scaled by Potencia earned during the minigame.
+        /// Each Potencia point adds 10% to the combined raw power.
         /// </summary>
         public void ResolveAlianzaAttack(Unit unitA, Unit unitB,
-                                         int potencia, List<Unit> targets)
+                                          int potencia, List<Unit> targets)
         {
-            // Base power is average of both units' offensive stat
-            float powerA   = GetOffensiveStat(unitA);
-            float powerB   = GetOffensiveStat(unitB);
-            float combined = (powerA + powerB) * (1f + potencia * 0.1f); // +10% per potencia point
+            float powerA   = GetOffensiveStat(unitA, unitA.Sheet.damageType) + unitA.Sheet.basicAttack.basePower;
+            float powerB   = GetOffensiveStat(unitB, unitB.Sheet.damageType) + unitB.Sheet.basicAttack.basePower;
+            float combined = (powerA + powerB) * (1f + potencia * 0.1f);
 
             foreach (Unit target in targets)
             {
                 if (target.State == UNIT_STATE.Dead) continue;
-
-                float defense = GetDefenseStat(target, unitA.Sheet.damageType);
-                float damage  = CalculateDamage(combined, defense);
+                // Use unitA's damage type as the dominant type for the combined hit
+                float defense = GetDefensiveStat(target, unitA.Sheet.damageType);
+                float damage  = Mathf.Max(1f, combined * (1f - defense / 100f));
                 target.ModifyHP(-damage);
             }
 
-            Debug.Log($"[Alianza] {unitA.UnitName} + {unitB.UnitName} " +
-                      $"combined attack with potencia {potencia}.");
+            Debug.Log($"[Alianza] {unitA.UnitName} + {unitB.UnitName} — " +
+                      $"potencia {potencia}, combined power {combined:F1}.");
         }
 
-        // ── Internal helpers ──────────────────────────────────────────────────
+        // ── Core formulas ─────────────────────────────────────────────────────
 
-        private void ApplyEffect(SkillSO skill, SkillEffect effect, Unit caster, Unit target)
+        /// <summary>
+        /// damage = (basePower + offensiveStat) * (1 - defense%)
+        /// Minimum 1 damage always lands on a hit.
+        /// </summary>
+        private static float CalculateDamage(float basePower, Unit caster,
+                                              DAMAGE_TYPE dmgType, Unit target)
         {
-            switch (effect.effectType)
-            {
-                case EFFECT_TYPE.Damage:
-                {
-                    if (!RollHit(skill.accuracy, target.Evasion)) return;
-                    float offStat = skill.damageType == DAMAGE_TYPE.Physical
-                        ? caster.Strength : caster.MagicPower;
-                    float defense = GetDefenseStat(target, skill.damageType);
-                    float damage  = CalculateDamage(skill.basePower * offStat, defense) * effect.value;
-                    target.ModifyHP(-damage);
-                    break;
-                }
-
-                case EFFECT_TYPE.Heal:
-                {
-                    float heal = skill.basePower * caster.MagicPower * effect.value;
-                    target.ModifyHP(heal);
-                    break;
-                }
-
-                case EFFECT_TYPE.StealHP:
-                {
-                    if (!RollHit(skill.accuracy, target.Evasion)) return;
-                    float damage = CalculateDamage(skill.basePower * caster.Strength, GetDefenseStat(target, DAMAGE_TYPE.Physical));
-                    target.ModifyHP(-damage);
-                    caster.ModifyHP(damage * effect.value); // value = drain ratio (e.g. 0.5)
-                    break;
-                }
-
-                case EFFECT_TYPE.Buff:
-                    ApplyStatMod(target, effect.statAffected, +effect.value);
-                    break;
-
-                case EFFECT_TYPE.Debuff:
-                    if (RollChance(effect.chance))
-                        ApplyStatMod(target, effect.statAffected, -effect.value);
-                    break;
-
-                case EFFECT_TYPE.StatusCondition:
-                    if (RollChance(effect.chance))
-                        target.ApplyStatus(effect.condition);
-                    break;
-
-                case EFFECT_TYPE.RemoveStatus:
-                    target.ClearStatus();
-                    break;
-
-                case EFFECT_TYPE.Shield:
-                    // Shield is implemented as a temporary HP buffer
-                    target.ModifyHP(+effect.value);
-                    break;
-
-                case EFFECT_TYPE.Revive:
-                    if (target.State == UNIT_STATE.Dead)
-                        target.Revive(effect.value); // value = revive HP percent (e.g. 0.3 = 30%)
-                    break;
-            }
+            float offStat = GetOffensiveStat(caster, dmgType);
+            float defense = GetDefensiveStat(target, dmgType);
+            return Mathf.Max(1f, (basePower + offStat) * (1f - defense / 100f));
         }
 
-        private static float CalculateDamage(float rawPower, float defensePercent)
+        /// <summary>
+        /// heal = (basePower + caster.MagicPower)
+        /// Healing always uses MagicPower regardless of affinity.
+        /// </summary>
+        private static float CalculateHeal(float basePower, Unit caster)
         {
-            // Defense is a percentage reduction (0–100)
-            float reduction = Mathf.Clamp01(defensePercent / 100f);
-            return Mathf.Max(1f, rawPower * (1f - reduction));
+            return basePower + caster.MagicPower;
         }
 
         private static bool RollHit(float accuracy, float evasion)
@@ -187,44 +172,115 @@ namespace CombatSystem
             return Random.Range(0f, 100f) <= hitChance;
         }
 
+        private static float GetOffensiveStat(Unit unit, DAMAGE_TYPE dmgType)
+            => dmgType == DAMAGE_TYPE.Physical ? unit.Strength : unit.MagicPower;
+
+        private static float GetDefensiveStat(Unit target, DAMAGE_TYPE dmgType)
+            => dmgType == DAMAGE_TYPE.Physical ? target.PhysicalDef : target.MagicalDef;
+
+        // ── Secondary effects ─────────────────────────────────────────────────
+
+        private void ApplyAllSecondaryEffects(SkillSO skill, Unit caster, Unit target)
+        {
+            if (skill.effects == null) return;
+            foreach (SkillEffect effect in skill.effects)
+                ApplySecondaryEffect(effect, caster, target, skill.basePower, skill.damageType);
+        }
+
+        private static void ApplySecondaryEffect(SkillEffect effect, Unit caster, Unit target,
+                                                   float basePower, DAMAGE_TYPE dmgType)
+        {
+            if (!RollChance(effect.chance)) return;
+
+            switch (effect.effectType)
+            {
+                case EFFECT_TYPE.Heal:
+                {
+                    // modifier acts as a multiplier on top of the heal formula
+                    float heal = (basePower + caster.MagicPower) * Mathf.Max(1f, effect.modifier);
+                    target.ModifyHP(heal);
+                    break;
+                }
+
+                case EFFECT_TYPE.Buff:
+                    ApplyStatMod(target, effect.statAffected, +effect.modifier);
+                    break;
+
+                case EFFECT_TYPE.Debuff:
+                    ApplyStatMod(target, effect.statAffected, -effect.modifier);
+                    break;
+
+                case EFFECT_TYPE.StatusCondition:
+                    target.ApplyStatus(effect.condition);
+                    break;
+
+                case EFFECT_TYPE.RemoveStatus:
+                    target.ClearStatus();
+                    break;
+
+                case EFFECT_TYPE.Shield:
+                {
+                    // Shield as HP buffer = modifier% of (basePower + caster.MagicPower)
+                    float buffer = (basePower + caster.MagicPower) * Mathf.Clamp01(effect.modifier);
+                    target.ModifyHP(buffer);
+                    break;
+                }
+
+                case EFFECT_TYPE.StealHP:
+                {
+                    // modifier = drain ratio (e.g. 0.5 = heal caster 50% of damage dealt)
+                    float damage = CalculateDamageStatic(basePower, caster, dmgType, target);
+                    target.ModifyHP(-damage);
+                    caster.ModifyHP(damage * Mathf.Clamp01(effect.modifier));
+                    break;
+                }
+
+                case EFFECT_TYPE.Revive:
+                    if (target.State == UNIT_STATE.Dead)
+                        target.Revive(Mathf.Clamp01(effect.modifier));
+                    break;
+
+                case EFFECT_TYPE.Damage:
+                    // Should not appear in SkillEffect — use basePower on the skill instead.
+                    Debug.LogWarning("[ActionResolver] EFFECT_TYPE.Damage found in SkillEffect. " +
+                                     "Use basePower on the SkillSO/AttackSO instead.");
+                    break;
+            }
+        }
+
+        // Static version for use inside static contexts (StealHP)
+        private static float CalculateDamageStatic(float basePower, Unit caster,
+                                                     DAMAGE_TYPE dmgType, Unit target)
+        {
+            float offStat = GetOffensiveStat(caster, dmgType);
+            float defense = GetDefensiveStat(target, dmgType);
+            return Mathf.Max(1f, (basePower + offStat) * (1f - defense / 100f));
+        }
+
         private static bool RollChance(float chance)
-        {
-            // chance is 0–1
-            return Random.value <= Mathf.Clamp01(chance);
-        }
-
-        private static float GetOffensiveStat(Unit unit)
-        {
-            return unit.Sheet.damageType == DAMAGE_TYPE.Physical
-                ? unit.Strength : unit.MagicPower;
-        }
-
-        private static float GetDefenseStat(Unit target, DAMAGE_TYPE damageType)
-        {
-            return damageType == DAMAGE_TYPE.Physical
-                ? target.PhysicalDef : target.MagicalDef;
-        }
+            => Random.value <= Mathf.Clamp01(chance);
 
         private static void ApplyStatMod(Unit target, STAT_TYPE stat, float delta)
         {
             switch (stat)
             {
-                case STAT_TYPE.Speed:          target.SpeedMod       += delta; break;
-                case STAT_TYPE.Strength:       target.StrengthMod    += delta; break;
-                case STAT_TYPE.MagicPower:     target.MagicPowerMod  += delta; break;
-                case STAT_TYPE.Evasion:        target.EvasionMod     += delta; break;
-                case STAT_TYPE.Accuracy:       target.AccuracyMod    += delta; break;
-                case STAT_TYPE.PhysicalDefense:target.PhysicalDefMod += delta; break;
-                case STAT_TYPE.MagicDefense:   target.MagicalDefMod  += delta; break;
-                case STAT_TYPE.HP:             target.ModifyHP(delta);          break;
-                case STAT_TYPE.SP:             target.ModifySP(delta);          break;
+                case STAT_TYPE.Speed:           target.SpeedMod       += delta; break;
+                case STAT_TYPE.Strength:        target.StrengthMod    += delta; break;
+                case STAT_TYPE.MagicPower:      target.MagicPowerMod  += delta; break;
+                case STAT_TYPE.Evasion:         target.EvasionMod     += delta; break;
+                case STAT_TYPE.Accuracy:        target.AccuracyMod    += delta; break;
+                case STAT_TYPE.PhysicalDefense: target.PhysicalDefMod += delta; break;
+                case STAT_TYPE.MagicDefense:    target.MagicalDefMod  += delta; break;
+                case STAT_TYPE.HP:              target.ModifyHP(delta);          break;
+                case STAT_TYPE.SP:              target.ModifySP(delta);          break;
             }
         }
 
-        private static bool SkillCanTargetDead(SkillSO skill)
+        private static bool SkillCanRevive(SkillSO skill)
         {
-            foreach (var effect in skill.effects)
-                if (effect.effectType == EFFECT_TYPE.Revive) return true;
+            if (skill.effects == null) return false;
+            foreach (var e in skill.effects)
+                if (e.effectType == EFFECT_TYPE.Revive) return true;
             return false;
         }
     }

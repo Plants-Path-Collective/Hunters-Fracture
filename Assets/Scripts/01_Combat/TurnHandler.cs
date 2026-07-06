@@ -85,7 +85,7 @@ namespace CombatSystem
 
         public void ExecuteBasicAttack(Unit target)
         {
-            actionResolver.ResolveBasicAttack(_activeUnit, target, _activeUnit.Sheet.damageType);
+            actionResolver.ResolveBasicAttack(_activeUnit, target);
             FinishTurn();
         }
 
@@ -140,7 +140,7 @@ namespace CombatSystem
             {
                 Unit fallback = GetPriorityTarget(TARGET_PRIORITY.Random, _allies);
                 if (fallback != null)
-                    actionResolver.ResolveBasicAttack(unit, fallback, unit.Sheet.damageType);
+                    actionResolver.ResolveBasicAttack(unit, fallback);
                 FinishTurn();
                 yield break;
             }
@@ -180,7 +180,7 @@ namespace CombatSystem
                 {
                     Unit target = GetPriorityTarget(behavior.targetPriority, _allies);
                     if (target != null)
-                        actionResolver.ResolveBasicAttack(unit, target, unit.Sheet.damageType);
+                        actionResolver.ResolveBasicAttack(unit, target);
                     break;
                 }
             }
