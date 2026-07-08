@@ -1476,10 +1476,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1822619055}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b4f300b0e2944deb3de8a246da814f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 058ef296b0c1add4eae9425fe585aa09, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.PartyHolder
-  party: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.CombatTrigger
+  enemyParty: {fileID: 11400000, guid: 64ea25e0a8bcadf49a92978bc68c03b7, type: 2}
+  combatScene: CombatStage
+  playerTag: Player
 --- !u!1 &2103940998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1634,6 +1636,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 747995040771332011, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ea93937974a9774caa4188952198212, type: 2}
+    - target: {fileID: 2708809965844764703, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 5313629951579403049, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1682,6 +1692,10 @@ PrefabInstance:
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1602890175}
+    - target: {fileID: 7967826649268827091, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
+      propertyPath: party
+      value: 
+      objectReference: {fileID: 11400000, guid: f8e555e69c7a7bb4d9d3fa79ba14c2ed, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1695,6 +1709,6 @@ SceneRoots:
   - {fileID: 6074159178634438000}
   - {fileID: 891217340}
   - {fileID: 3374580110090363931}
-  - {fileID: 7343133755916109638}
   - {fileID: 1508357963}
   - {fileID: 709694443}
+  - {fileID: 7343133755916109638}
