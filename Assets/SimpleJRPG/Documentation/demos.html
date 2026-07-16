@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demos - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html" class="active">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#generating">Generating Demos</a></li>
+            <li><a href="#battle-core">Battle Core Demo</a></li>
+            <li><a href="#classic">Classic Turn Demo</a></li>
+            <li><a href="#atb">ATB Turn Demo</a></li>
+            <li><a href="#timeline">Timeline Turn Demo</a></li>
+            <li><a href="#press-turn">Press Turn Demo</a></li>
+            <li><a href="#action-point">Action Point Demo</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Demos</h1>
+        <p class="subtitle">6 interactive demo scenes that showcase every feature of SimpleJRPG.</p>
+    </div>
+
+    <!-- Overview -->
+    <div class="section">
+        <h2 id="overview">Overview</h2>
+        <p>
+            SimpleJRPG ships with 6 interactive demo scenes, each generated via a menu item in the Unity editor.
+            Every scene is fully self-contained with its own UI and demonstrates a specific feature of the API.
+            No setup required &mdash; just generate and hit Play.
+        </p>
+    </div>
+
+    <!-- Generating Demos -->
+    <div class="section">
+        <h2 id="generating">Generating Demos</h2>
+        <p>
+            Open the Unity menu bar and go to <strong>Window &gt; Simple JRPG</strong>. Each menu item generates
+            a fully-wired scene with combatants, UI, and event subscriptions already configured.
+        </p>
+    </div>
+
+    <!-- Battle Core Demo -->
+    <div class="section">
+        <h2 id="battle-core">Battle Core Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Battle Core Demo</p>
+        <p>
+            The kitchen-sink demo. Demonstrates ALL core features of the Battle class: full lifecycle
+            (StartBattle through EndBattle), DealDamage (single-target and multi-target), Heal, Kill,
+            Revive, before-events (toggle cancel and toggle halve), ApplyStatus, ApplyBuff, Flee,
+            battle history, RemoveCombatant, BattleResult, and the GetEnemies/GetAllies query helpers.
+        </p>
+        <p>
+            <strong>UI layout:</strong> Party HP panel on the left, action buttons in the center,
+            and a scrolling event log on the right.
+        </p>
+    </div>
+
+    <!-- Classic Turn Demo -->
+    <div class="section">
+        <h2 id="classic">Classic Turn Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Classic Turn Demo</p>
+        <p>
+            A 3v3 party battle using <code>ClassicTurnSystem</code>. Step through turns one at a time,
+            see the turn order displayed, watch auto-attacks resolve, observe round cycling as all
+            combatants take their turns, and see dead combatants get skipped. Includes revive to
+            demonstrate mid-battle turn order updates.
+        </p>
+    </div>
+
+    <!-- ATB Turn Demo -->
+    <div class="section">
+        <h2 id="atb">ATB Turn Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate ATB Turn Demo</p>
+        <p>
+            A 3v3 party battle using <code>ATBTurnSystem</code>. A Tick button advances time, filling
+            each combatant's gauge based on their speed. Gauge bars are displayed per combatant.
+            When a combatant's gauge is full, they become ready and you can select an action for them.
+        </p>
+    </div>
+
+    <!-- Timeline Turn Demo -->
+    <div class="section">
+        <h2 id="timeline">Timeline Turn Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Timeline Turn Demo</p>
+        <p>
+            A 3v3 party battle using <code>TimelineTurnSystem</code>. Displays the full timeline showing
+            when each combatant will act next. Actions have different cast-time costs &mdash;
+            Quick (50), Normal (100), and Heavy (200) &mdash; that push the actor further down the
+            timeline. Tick progression advances the timeline and resolves turns as they come up.
+        </p>
+    </div>
+
+    <!-- Press Turn Demo -->
+    <div class="section">
+        <h2 id="press-turn">Press Turn Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Press Turn Demo</p>
+        <p>
+            A two-team battle using <code>PressTurnSystem</code>. Displays the current phase and the
+            team's turn point pool as Full and Half points. Demonstrates SelectActor to pick who acts,
+            ConsumeAction for normal actions, ConvertAction to convert a Full point to Half,
+            and ConsumeAllActions to end the phase early.
+        </p>
+    </div>
+
+    <!-- Action Point Turn Demo -->
+    <div class="section">
+        <h2 id="action-point">Action Point Turn Demo</h2>
+        <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Action Point Turn Demo</p>
+        <p>
+            A 3v3 party battle using <code>ActionPointTurnSystem</code>. Displays each combatant's
+            current AP (Action Points). Spending AP queues extra actions in a single turn.
+            Saving AP banks points by skipping a turn. Demonstrates the risk/reward of going negative
+            on AP for burst damage versus saving up for future turns.
+        </p>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert alert-info">
+        <strong>Scene Location</strong>
+        Demo scenes are saved to Assets/SimpleJRPG/Scenes/. You can regenerate them at any time &mdash; existing scenes will be overwritten.
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

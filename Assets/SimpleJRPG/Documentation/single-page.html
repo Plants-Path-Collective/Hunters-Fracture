@@ -1,0 +1,2359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleJRPG — Complete Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link active">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="#home" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#quick-start">Quick Start</a></li>
+        <li><a href="#battle-core">Battle Core</a></li>
+        <li><a href="#before-events">Before-Events</a></li>
+        <li><a href="#helpers">Helpers</a></li>
+        <li><a href="#turn-systems">Turn Systems</a></li>
+        <li><a href="#cookbook">Cookbook</a></li>
+        <li><a href="#api-reference">API Reference</a></li>
+        <li><a href="#demos">Demos</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>Sections</h3>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#quick-start">Quick Start</a></li>
+            <li><a href="#battle-core">Battle Core</a></li>
+            <li><a href="#before-events">Before-Events</a></li>
+            <li><a href="#helpers">Helpers</a></li>
+            <li><a href="#turn-systems">Turn Systems</a></li>
+            <li><a href="#cookbook">Cookbook</a></li>
+            <li><a href="#api-reference">API Reference</a></li>
+            <li><a href="#demos">Demos</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <!-- ==================== HOME ==================== -->
+    <div id="home">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>SimpleJRPG</h1>
+            <p class="subtitle">A lean runtime battle API for JRPGs</p>
+            <p class="tagline">Your rules, your formulas.</p>
+        </div>
+
+        <!-- Philosophy -->
+        <div class="section">
+            <h2>Philosophy</h2>
+            <p>
+                SimpleJRPG orchestrates battles. You bring your own stats, formulas, UI, and data storage.
+            </p>
+            <p>
+                There are no opinionated damage formulas, no built-in status effect logic, no UI layer.
+                Instead, SimpleJRPG exposes clean combat verbs and fires events on every action.
+                Your code decides what "Fire" means, how much damage a critical hit deals, and what
+                happens when a character is knocked out. We just make sure the battle flows.
+            </p>
+        </div>
+
+        <!-- Turn Systems -->
+        <div class="section">
+            <h2>Turn Systems</h2>
+            <p>Five pluggable turn systems ship out of the box. Implement <code>ITurnSystem</code> to build your own.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Classic</h4>
+                    <p>DQ-style speed-sorted round-robin. Each round, combatants act in speed order. Simple, predictable, timeless.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>ATB</h4>
+                    <p>Active Time Battle. Gauges fill over ticks based on speed. When a gauge is full, that combatant acts. No waiting for the whole team.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Timeline / CTB</h4>
+                    <p>Charge Time Battle. Actions have cast times that place actors on a timeline. Heavier moves push your next turn further out.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Press Turn</h4>
+                    <p>SMT-style team phases. Each team gets a pool of turn points. Exploit weaknesses to gain extra points; miss to lose them.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Action Point</h4>
+                    <p>Spend/Save AP system. Bank AP by defending, then spend it for multiple actions in a single turn. Risk and reward.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Grid -->
+        <div class="section">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Instance-Based</h4>
+                    <p>No singletons, no statics, no MonoBehaviours. Create a <code>Battle</code> instance, pass in combatants, and go.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Pass-Through Design</h4>
+                    <p>Strings, not enums, for all game-specific values. We don't interpret "Fire" or "Poison" — we pass them through. Your system decides what they mean.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Combat Verbs</h4>
+                    <p><code>DealDamage()</code>, <code>Heal()</code>, <code>Kill()</code>, <code>Revive()</code>, <code>ApplyStatus()</code>, <code>ApplyBuff()</code>, <code>Flee()</code> — simple imperative methods.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Events Over Callbacks</h4>
+                    <p>Every verb fires an event. Subscribe to <code>OnDamageDealt</code>, <code>OnHealed</code>, <code>OnKO</code>, and more to drive UI, sound, VFX, or logging.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Pluggable Turn Systems</h4>
+                    <p>Five built-in implementations of <code>ITurnSystem</code>. Swap between Classic, ATB, Timeline, Press Turn, or Action Point — or write your own.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>No Unity Dependencies</h4>
+                    <p>Pure C# with <code>noEngineReferences: true</code>. No ScriptableObjects, no MonoBehaviours, no UnityEngine imports. Testable anywhere.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="section">
+            <h2>Getting Started</h2>
+            <ol class="steps">
+                <li>Import SimpleJRPG from the Unity Asset Store into your project.</li>
+                <li>Implement <code>ICombatant</code> on your character class — provide Name, IsAlive, Team, Speed, TakeDamage(), and Heal().</li>
+                <li>Create a <code>Battle</code> instance and pass in your list of combatants along with a turn system.</li>
+                <li>Choose a turn system: <code>ClassicTurnSystem</code>, <code>ATBTurnSystem</code>, <code>TimelineTurnSystem</code>, <code>PressTurnSystem</code>, or <code>ActionPointTurnSystem</code>.</li>
+                <li>Subscribe to events like <code>OnDamageDealt</code>, <code>OnHealed</code>, and <code>OnKO</code> to wire up your UI, animations, and game logic.</li>
+            </ol>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== INSTALLATION ==================== -->
+    <div id="installation">
+
+        <div class="hero">
+            <h1>Installation</h1>
+            <p class="subtitle">Get SimpleJRPG into your Unity project in under a minute.</p>
+        </div>
+
+        <!-- Import from Unity Asset Store -->
+        <div class="section">
+            <h2>Import from Unity Asset Store</h2>
+            <p>SimpleJRPG is available on the Unity Asset Store. Follow these steps to add it to your project:</p>
+            <ol class="steps">
+                <li>Open the Unity Editor and navigate to <strong>Window &gt; Package Manager</strong>.</li>
+                <li>In the Package Manager, select <strong>My Assets</strong> from the dropdown in the top-left.</li>
+                <li>Search for <strong>SimpleJRPG</strong> in your asset list.</li>
+                <li>Click <strong>Download</strong> if you haven't already, then click <strong>Import</strong>.</li>
+                <li>In the Import dialog, ensure all files are selected and click <strong>Import</strong>.</li>
+                <li>SimpleJRPG will appear under <code>Assets/SimpleJRPG/</code> in your project.</li>
+            </ol>
+        </div>
+
+        <!-- Folder Structure -->
+        <div class="section">
+            <h2>Folder Structure</h2>
+            <p>After importing, you'll find the following structure in your project:</p>
+            <pre><code>Assets/SimpleJRPG/
+├── Runtime/          — Core battle API
+├── Demo/             — Interactive demo scenes
+├── Documentation/    — This documentation
+└── Scenes/           — Generated demo scenes</code></pre>
+            <p>The <code>Runtime/</code> folder contains everything you need. The other folders are optional and can be safely deleted if you only want the core API.</p>
+        </div>
+
+        <!-- Assembly Definition -->
+        <div class="section">
+            <h2>Assembly Definition</h2>
+            <p>SimpleJRPG ships with an assembly definition file (<code>SimpleJRPG.asmdef</code>) located in the <code>Runtime/</code> folder. This assembly definition is configured with <code>noEngineReferences: true</code>, which means:</p>
+            <ul>
+                <li><strong>Pure C#</strong> — No dependency on UnityEngine or any Unity API.</li>
+                <li><strong>Testable</strong> — You can reference this assembly from a test project and run unit tests with any .NET test framework, no Unity test runner required.</li>
+                <li><strong>Portable</strong> — The code can be compiled and used outside of Unity entirely, making it easy to share logic between a Unity client and a server, for example.</li>
+            </ul>
+            <p>To reference SimpleJRPG from your own assembly definitions, simply add <code>SimpleJRPG</code> to your asmdef's reference list.</p>
+        </div>
+
+        <!-- Requirements -->
+        <div class="section">
+            <h2>Requirements</h2>
+            <ul>
+                <li><strong>Unity 2021.3+</strong> — Any recent Unity version is supported (2021 LTS or newer).</li>
+                <li><strong>No third-party dependencies</strong> — SimpleJRPG does not rely on any external packages or plugins.</li>
+            </ul>
+        </div>
+
+        <!-- Info Alert -->
+        <div class="alert alert-info">
+            <strong>Zero Dependencies</strong>
+            SimpleJRPG has zero external dependencies. It's pure C# — no MonoBehaviours, no ScriptableObjects, no Unity API calls.
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== QUICK START ==================== -->
+    <div id="quick-start">
+
+        <div class="hero">
+            <h1>Quick Start</h1>
+            <p class="subtitle">Get a battle running in four steps.</p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="section">
+            <h2>Step 1: Implement ICombatant</h2>
+            <p>
+                <code>ICombatant</code> is the only interface your characters need to implement.
+                You own the stats, the properties, the logic. SimpleJRPG just needs a name, alive status,
+                team index, speed, and methods to take damage and heal.
+            </p>
+<pre><code>public class MyCombatant : ICombatant
+{
+    public string Name { get; }
+    public bool IsAlive => HP > 0;
+    public int Team { get; }
+    public float Speed { get; }
+
+    public int HP { get; private set; }
+    public int MaxHP { get; }
+
+    public MyCombatant(string name, int hp, float speed, int team)
+    {
+        Name = name;
+        HP = hp;
+        MaxHP = hp;
+        Speed = speed;
+        Team = team;
+    }
+
+    public void TakeDamage(int amount) => HP = Math.Max(0, HP - amount);
+    public void Heal(int amount) => HP = Math.Min(MaxHP, HP + amount);
+}</code></pre>
+            <div class="alert alert-info">
+                <strong>Your class, your rules.</strong>
+                Add whatever stats you need &mdash; MP, defense, elemental resistances, equipment slots.
+                SimpleJRPG never inspects those. It only touches what <code>ICombatant</code> defines.
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="section">
+            <h2>Step 2: Create a Battle</h2>
+            <p>
+                Create a <code>Battle</code> instance, build your party and enemy lists, then call
+                <code>Start()</code> with all combatants and a turn system.
+            </p>
+<pre><code>var battle = new Battle();
+var party = new List&lt;ICombatant&gt;
+{
+    new MyCombatant("Hero", 100, 10f, 0),
+    new MyCombatant("Mage", 70, 12f, 0),
+};
+var enemies = new List&lt;ICombatant&gt;
+{
+    new MyCombatant("Goblin", 50, 8f, 1),
+    new MyCombatant("Orc", 80, 6f, 1),
+};
+var all = new List&lt;ICombatant&gt;();
+all.AddRange(party);
+all.AddRange(enemies);
+battle.Start(all, new ClassicTurnSystem());</code></pre>
+            <div class="alert alert-info">
+                <strong>Team convention.</strong>
+                Team <code>0</code> is the player party. All other team values are enemies.
+                <code>CheckBattleEnd()</code> uses this to determine Victory vs. Defeat.
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="section">
+            <h2>Step 3: Subscribe to Events</h2>
+            <p>
+                Every combat verb fires an event. Subscribe to drive your UI, play sound effects,
+                trigger animations, or log to console &mdash; whatever your game needs.
+            </p>
+<pre><code>battle.OnDamageDealt += e => Debug.Log($"{e.Source.Name} hits {e.Target.Name} for {e.Amount}!");
+battle.OnKO += e => Debug.Log($"{e.Target.Name} was knocked out!");
+battle.OnBattleEnd += (b, state) => Debug.Log($"Battle ended: {state}");</code></pre>
+            <p>
+                Events are the primary way SimpleJRPG communicates what happened. There are no built-in
+                UI components, no logging systems, no animation controllers. You subscribe to exactly
+                the events you care about and handle them however you want.
+            </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="section">
+            <h2>Step 4: Run the Battle Loop</h2>
+            <p>
+                Ask the battle for the next actor, execute your game logic (pick targets, calculate damage
+                with your own formulas), call combat verbs, end the turn, and check if the battle is over.
+            </p>
+<pre><code>while (battle.State == BattleState.WaitingForCommands)
+{
+    ICombatant actor = battle.BeginNextTurn();
+    // Your game logic: pick targets, calculate damage, etc.
+    var target = battle.GetEnemies(actor)[0];
+    int damage = CalculateDamage(actor, target); // Your formula
+    battle.DealDamage(actor, target, damage, "physical", "none");
+    battle.EndTurn();
+    battle.CheckBattleEnd();
+}</code></pre>
+            <div class="alert alert-warning">
+                <strong>You do the math.</strong>
+                <code>CalculateDamage()</code> is your function, not ours. SimpleJRPG never calculates
+                damage, hit rates, or any other formula. You pass in the final number, we apply it and
+                fire the event.
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="section">
+            <h2>What's Next</h2>
+            <p>You have a working battle. Here is where to go from here:</p>
+            <ul>
+                <li><a href="#battle-core">Battle Core</a> &mdash; All combat verbs: <code>DealDamage</code>, <code>Heal</code>, <code>Kill</code>, <code>Revive</code>, <code>ApplyStatus</code>, <code>ApplyBuff</code>, <code>Flee</code>, and the events they fire.</li>
+                <li><a href="#turn-systems">Turn Systems</a> &mdash; Alternatives to <code>ClassicTurnSystem</code>: ATB, Timeline/CTB, Press Turn, and Action Point.</li>
+                <li><a href="#api-reference">API Reference</a> &mdash; Full details on every class, interface, method, and event.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== BATTLE CORE ==================== -->
+    <div id="battle-core">
+
+        <div class="hero">
+            <h1>Battle Core</h1>
+            <p class="subtitle">The <code>Battle</code> class is the heart of SimpleJRPG — a plain C# instance that orchestrates combat through lifecycle methods, combat verbs, and events.</p>
+        </div>
+
+        <!-- Battle Lifecycle -->
+        <div class="section">
+            <h2>Battle Lifecycle</h2>
+
+            <h3>Start()</h3>
+            <pre><code>public void Start(List&lt;ICombatant&gt; combatants, ITurnSystem turnSystem)</code></pre>
+            <p>Initializes the battle. Pass in your list of combatants and a turn system implementation. Internally, this method:</p>
+            <ol>
+                <li>Stores the combatants and turn system references.</li>
+                <li>Resets the turn counter and battle history.</li>
+                <li>Calls <code>turnSystem.Init(combatants)</code> so the turn system can set up its internal state.</li>
+                <li>Sets <code>State</code> to <code>BattleState.WaitingForCommands</code>.</li>
+                <li>Fires the <code>OnBattleStart</code> event.</li>
+            </ol>
+            <p><code>Start()</code> will silently return if the battle state is anything other than <code>NotStarted</code>. You cannot restart a battle instance — create a new one.</p>
+
+            <h3>EndBattle()</h3>
+            <pre><code>public void EndBattle(BattleState result)</code></pre>
+            <p>Ends the battle with the given outcome. Pass <code>BattleState.Victory</code>, <code>BattleState.Defeat</code>, or <code>BattleState.Fled</code>. This method:</p>
+            <ol>
+                <li>Sets <code>State</code> to the given result.</li>
+                <li>Clears <code>CurrentActor</code>.</li>
+                <li>Creates a <code>BattleResult</code> containing the outcome, total turns taken, surviving combatants, and the full battle history.</li>
+                <li>Fires the <code>OnBattleEnd</code> event with the battle instance and the resulting state.</li>
+            </ol>
+            <p>If the battle has already ended (state is Victory, Defeat, or Fled), calling <code>EndBattle()</code> again does nothing.</p>
+        </div>
+
+        <!-- Turn Flow -->
+        <div class="section">
+            <h2>Turn Flow</h2>
+
+            <h3>BeginNextTurn()</h3>
+            <pre><code>public ICombatant BeginNextTurn()</code></pre>
+            <p>Advances to the next turn. Asks the turn system for the next actor via <code>GetNextActor()</code>, increments the turn counter, sets state to <code>Executing</code>, and fires <code>OnTurnStart</code>. Returns the actor whose turn it is, or <code>null</code> if no actor is available.</p>
+            <p>Can only be called when state is <code>WaitingForCommands</code> or <code>Executing</code>.</p>
+
+            <h3>EndTurn()</h3>
+            <pre><code>public void EndTurn()</code></pre>
+            <p>Ends the current turn. Fires <code>OnTurnEnd</code>, notifies the turn system via <code>OnTurnEnd()</code>, clears <code>CurrentActor</code>, then automatically calls <code>CheckBattleEnd()</code>. If the battle hasn't ended, state returns to <code>WaitingForCommands</code>.</p>
+            <p>Can only be called when state is <code>Executing</code>.</p>
+        </div>
+
+        <!-- State Machine Diagram -->
+        <div class="section">
+            <h2>State Machine</h2>
+            <p>The battle progresses through a simple state machine. All transitions are driven by the methods described above.</p>
+            <div class="state-diagram">
+NotStarted ──Start()──> WaitingForCommands
+                              │
+                      BeginNextTurn()
+                              │
+                              ▼
+                          Executing
+                              │
+                          EndTurn()
+                              │
+                              ▼
+                      WaitingForCommands
+                              │
+                     CheckBattleEnd()
+                        /         \
+                    Victory      Defeat      Fled</div>
+            <div class="alert alert-info">
+                <strong>Note</strong>
+                <code>Fled</code> is reached via <code>Flee()</code>, which calls <code>EndBattle(BattleState.Fled)</code> directly — it can happen from any active state, not just after <code>CheckBattleEnd()</code>.
+            </div>
+        </div>
+
+        <!-- Combat Verbs -->
+        <div class="section">
+            <h2>Combat Verbs</h2>
+            <p>Combat verbs are the imperative methods you call to make things happen in battle. You do the math — we orchestrate the result.</p>
+
+            <h3>DealDamage</h3>
+            <pre><code>public void DealDamage(ICombatant source, ICombatant target, int amount,
+    string damageType = "", string element = "", bool isCrit = false)</code></pre>
+            <p>Deals damage to a single target. The flow is:</p>
+            <ol>
+                <li>Fires <code>OnBeforeDamage</code> with a <code>BeforeDamageEvent</code>. Subscribers can modify <code>Amount</code>, <code>DamageType</code>, <code>Element</code>, <code>IsCrit</code>, or set <code>Cancel = true</code> to prevent the damage entirely.</li>
+                <li>If not cancelled, calls <code>target.TakeDamage(amount)</code> with the (potentially modified) amount.</li>
+                <li>Fires <code>OnDamageDealt</code> with the final <code>DamageEvent</code>.</li>
+                <li>If the target is no longer alive, automatically fires <code>OnKO</code> and notifies the turn system.</li>
+            </ol>
+            <p>There is also a group overload that accepts <code>IList&lt;ICombatant&gt; targets</code> and fires <code>OnGroupDamageDealt</code> after processing all individual hits.</p>
+
+            <h3>Heal</h3>
+            <pre><code>public void Heal(ICombatant source, ICombatant target, int amount)</code></pre>
+            <p>Heals a single target. The flow mirrors damage:</p>
+            <ol>
+                <li>Fires <code>OnBeforeHeal</code> with a <code>BeforeHealEvent</code>. Subscribers can modify <code>Amount</code> or set <code>Cancel = true</code>.</li>
+                <li>If not cancelled, calls <code>target.Heal(amount)</code>.</li>
+                <li>Fires <code>OnHealed</code> with the final <code>HealEvent</code>.</li>
+            </ol>
+            <p>Group overload available — fires <code>OnGroupHealed</code> after all individual heals.</p>
+
+            <h3>Kill</h3>
+            <pre><code>public void Kill(ICombatant target, ICombatant killer = null)</code></pre>
+            <p>Forces a KO regardless of the target's current HP. Calls <code>target.TakeDamage(int.MaxValue)</code>, then fires <code>OnKO</code> and notifies the turn system. Does nothing if the target is already dead. This bypasses the before-event system — there is no <code>OnBeforeDamage</code> for Kill.</p>
+
+            <h3>Revive</h3>
+            <pre><code>public void Revive(ICombatant target, int hpAmount)</code></pre>
+            <p>Revives a dead combatant by calling <code>target.Heal(hpAmount)</code>, then notifies the turn system via <code>OnActorAdded()</code> so the revived combatant is re-inserted into the turn order. Fires <code>OnRevived</code>. Does nothing if the target is already alive.</p>
+        </div>
+
+        <!-- Status & Buff -->
+        <div class="section">
+            <h2>Status &amp; Buff</h2>
+
+            <div class="alert alert-warning">
+                <strong>Event-only — no internal tracking</strong>
+                Battle does NOT maintain a list of active statuses or buffs. These methods exist solely to fire events. Your game's status system subscribes to these events and handles all tracking, stacking, duration, and removal logic.
+            </div>
+
+            <h3>ApplyStatus / RemoveStatus</h3>
+            <pre><code>public void ApplyStatus(ICombatant source, ICombatant target, string statusId, int duration = -1)
+public void RemoveStatus(ICombatant target, string statusId)</code></pre>
+            <p><code>ApplyStatus</code> fires <code>OnStatusApplied</code> with a <code>StatusEvent</code> containing the source, target, status ID string, and optional duration. <code>RemoveStatus</code> fires <code>OnStatusRemoved</code> with the target and status ID. Both have group overloads that fire <code>OnGroupStatusApplied</code>.</p>
+            <p>The <code>statusId</code> is a pass-through string — Battle doesn't know or care what "Poison" or "Blind" means. Your system decides.</p>
+
+            <h3>ApplyBuff / RemoveBuff</h3>
+            <pre><code>public void ApplyBuff(ICombatant source, ICombatant target, string buffId, float amount, int duration = -1)
+public void RemoveBuff(ICombatant target, string buffId)</code></pre>
+            <p><code>ApplyBuff</code> fires <code>OnBuffApplied</code> with a <code>BuffEvent</code> containing source, target, buff ID, numeric amount, and optional duration. <code>RemoveBuff</code> fires <code>OnBuffRemoved</code>. Group overloads fire <code>OnGroupBuffApplied</code>.</p>
+            <p>Same pass-through philosophy — <code>buffId</code> and <code>amount</code> are yours to interpret. "ATK_UP" with amount 1.5 could mean +50% attack, or 1.5 flat — your call.</p>
+        </div>
+
+        <!-- Flee -->
+        <div class="section">
+            <h2>Flee</h2>
+            <pre><code>public void Flee(ICombatant who)</code></pre>
+            <p>Fires <code>OnFled</code> with the fleeing combatant, then immediately calls <code>EndBattle(BattleState.Fled)</code>. The battle ends — no further actions are possible.</p>
+            <p>Whether the flee attempt succeeds is your game's decision. Only call <code>Flee()</code> after you've already determined the attempt was successful. If you want a chance-based flee, do your roll first, and only call this if it passes.</p>
+        </div>
+
+        <!-- CheckBattleEnd -->
+        <div class="section">
+            <h2>CheckBattleEnd</h2>
+            <pre><code>public bool CheckBattleEnd()</code></pre>
+            <p>Checks whether the battle should end based on which teams still have living combatants. Returns <code>true</code> if the battle ended, <code>false</code> otherwise.</p>
+            <p>The logic:</p>
+            <ul>
+                <li><strong>Team 0 = player team.</strong> All other team numbers are considered enemies.</li>
+                <li>If no enemies are alive (only team 0 remains) — <code>EndBattle(BattleState.Victory)</code>.</li>
+                <li>If no team 0 members are alive — <code>EndBattle(BattleState.Defeat)</code>.</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Automatic calls</strong>
+                <code>CheckBattleEnd()</code> is called automatically at two points: inside <code>EndTurn()</code>, and inside <code>HandleKO()</code> (which fires whenever a combatant dies from <code>DealDamage</code> or <code>Kill</code>). You typically don't need to call it yourself, but you can if you want to check mid-turn.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== BEFORE-EVENTS ==================== -->
+    <div id="before-events">
+
+        <div class="hero">
+            <h1>Before-Events</h1>
+            <p class="subtitle">Intercept, modify, or cancel actions before they execute.</p>
+        </div>
+
+        <!-- Overview -->
+        <div class="section">
+            <h2>Overview</h2>
+            <p>Before-events fire <strong>before</strong> the action executes, giving subscribers a chance to modify or cancel it. Two before-events exist: <code>BeforeDamageEvent</code> and <code>BeforeHealEvent</code>.</p>
+            <p>These are <strong>classes</strong> (not structs) so modifications persist. When a subscriber changes <code>Amount</code> or sets <code>Cancel = true</code>, those changes are visible to the Battle method that fired the event and to all subsequent subscribers.</p>
+        </div>
+
+        <!-- BeforeDamageEvent -->
+        <div class="section">
+            <h2>BeforeDamageEvent</h2>
+            <p>Fired by <code>Battle.DealDamage()</code> before any damage is applied.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Settable</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Source</code></td>
+                        <td><code>ICombatant</code></td>
+                        <td>No</td>
+                        <td>The combatant dealing damage.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Target</code></td>
+                        <td><code>ICombatant</code></td>
+                        <td>No</td>
+                        <td>The combatant receiving damage.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Amount</code></td>
+                        <td><code>int</code></td>
+                        <td>Yes</td>
+                        <td>The damage amount. Modify this to increase or reduce damage.</td>
+                    </tr>
+                    <tr>
+                        <td><code>DamageType</code></td>
+                        <td><code>string</code></td>
+                        <td>No</td>
+                        <td>Pass-through string for the type of damage (e.g. "Physical", "Magic").</td>
+                    </tr>
+                    <tr>
+                        <td><code>Element</code></td>
+                        <td><code>string</code></td>
+                        <td>No</td>
+                        <td>Pass-through string for the element (e.g. "Fire", "Ice").</td>
+                    </tr>
+                    <tr>
+                        <td><code>IsCrit</code></td>
+                        <td><code>bool</code></td>
+                        <td>No</td>
+                        <td>Whether this hit is a critical.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Cancel</code></td>
+                        <td><code>bool</code></td>
+                        <td>Yes</td>
+                        <td>Set to <code>true</code> to cancel the damage entirely. <code>OnDamageDealt</code> will not fire.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>When <code>Cancel</code> is set to <code>true</code>, the damage is not applied and <code>OnDamageDealt</code> does not fire.</p>
+        </div>
+
+        <!-- BeforeHealEvent -->
+        <div class="section">
+            <h2>BeforeHealEvent</h2>
+            <p>Fired by <code>Battle.Heal()</code> before any healing is applied.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Settable</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Source</code></td>
+                        <td><code>ICombatant</code></td>
+                        <td>No</td>
+                        <td>The combatant performing the heal.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Target</code></td>
+                        <td><code>ICombatant</code></td>
+                        <td>No</td>
+                        <td>The combatant being healed.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Amount</code></td>
+                        <td><code>int</code></td>
+                        <td>Yes</td>
+                        <td>The heal amount. Modify this to boost or reduce healing.</td>
+                    </tr>
+                    <tr>
+                        <td><code>Cancel</code></td>
+                        <td><code>bool</code></td>
+                        <td>Yes</td>
+                        <td>Set to <code>true</code> to cancel the heal entirely. <code>OnHealed</code> will not fire.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Same cancellation behavior as <code>BeforeDamageEvent</code> — when <code>Cancel</code> is <code>true</code>, the heal is not applied and <code>OnHealed</code> does not fire.</p>
+        </div>
+
+        <!-- Example: Dodge System -->
+        <div class="section">
+            <h2>Example: Dodge System</h2>
+            <p>Subscribe to <code>OnBeforeDamage</code> and cancel the event to implement a dodge mechanic:</p>
+            <pre><code>battle.OnBeforeDamage += e =>
+{
+    // 20% dodge chance
+    if (Random.value < 0.2f)
+    {
+        e.Cancel = true;
+        Debug.Log($"{e.Target.Name} dodged the attack!");
+    }
+};</code></pre>
+        </div>
+
+        <!-- Example: Damage Reduction -->
+        <div class="section">
+            <h2>Example: Damage Reduction</h2>
+            <p>Modify <code>Amount</code> to reduce incoming damage when a combatant is defending:</p>
+            <pre><code>battle.OnBeforeDamage += e =>
+{
+    // Halve damage if target is defending
+    if (IsDefending(e.Target))
+        e.Amount /= 2;
+};</code></pre>
+        </div>
+
+        <!-- Example: Healing Boost -->
+        <div class="section">
+            <h2>Example: Healing Boost</h2>
+            <p>Modify <code>Amount</code> on <code>OnBeforeHeal</code> to amplify healing:</p>
+            <pre><code>battle.OnBeforeHeal += e =>
+{
+    // Double healing if healer has "Amplify" buff
+    if (HasBuff(e.Source, "Amplify"))
+        e.Amount *= 2;
+};</code></pre>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="alert alert-warning">
+            <strong>Before-events are classes, not structs.</strong>
+            This is intentional — modifications to <code>Amount</code> and <code>Cancel</code> must persist to the Battle method that fired the event. Multiple subscribers can all modify the same event.
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== HELPERS ==================== -->
+    <div id="helpers">
+
+        <div class="hero">
+            <h1>Helpers</h1>
+            <p class="subtitle">Multi-target overloads, query methods, battle history, and utility features.</p>
+        </div>
+
+        <!-- Multi-Target Overloads -->
+        <div class="section">
+            <h2>Multi-Target Overloads</h2>
+            <p>
+                <code>DealDamage</code>, <code>Heal</code>, <code>ApplyStatus</code>, and <code>ApplyBuff</code>
+                all have overloads that accept <code>IList&lt;ICombatant&gt;</code> instead of a single target.
+                Each individual action still fires its own event. Additionally, a group event fires with aggregated data.
+            </p>
+            <ul>
+                <li><code>OnGroupDamageDealt(GroupDamageEvent)</code> &mdash; contains Source, list of Hits (<code>IReadOnlyList&lt;DamageEvent&gt;</code>), TotalDamage</li>
+                <li><code>OnGroupHealed(GroupHealEvent)</code> &mdash; contains Source, list of Heals (<code>IReadOnlyList&lt;HealEvent&gt;</code>), TotalHealed</li>
+                <li><code>OnGroupStatusApplied(GroupStatusEvent)</code> &mdash; contains Source, list of Applications</li>
+                <li><code>OnGroupBuffApplied(GroupBuffEvent)</code> &mdash; contains Source, list of Applications</li>
+            </ul>
+<pre><code>var enemies = battle.GetEnemies(actor);
+battle.DealDamage(actor, enemies, 50, "magic", "Fire");
+// Fires OnDamageDealt for EACH enemy, then OnGroupDamageDealt once</code></pre>
+        </div>
+
+        <!-- Query Helpers -->
+        <div class="section">
+            <h2>Query Helpers</h2>
+            <p>
+                <code>GetEnemies(combatant)</code> returns all alive combatants NOT on the same team.
+                <code>GetAllies(combatant, includeSelf)</code> returns alive combatants on the same team.
+                <code>GetAlive(team)</code> and <code>GetDead(team)</code> filter by team (<code>-1</code> for all).
+            </p>
+<pre><code>var enemies = battle.GetEnemies(hero);     // All alive enemies
+var allies = battle.GetAllies(hero, true);  // All alive allies including hero
+var dead = battle.GetDead(0);               // Dead party members (team 0)</code></pre>
+        </div>
+
+        <!-- Battle History -->
+        <div class="section">
+            <h2>Battle History</h2>
+            <p>
+                Battle records every event as a <code>BattleHistoryEntry</code> with Sequence number,
+                TurnNumber, EventType string, and the Event object. Access via
+                <code>battle.History</code> (<code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code>).
+            </p>
+<pre><code>foreach (var entry in battle.History)
+    Debug.Log($"[Turn {entry.TurnNumber}] {entry.EventType}: {entry.Event}");</code></pre>
+        </div>
+
+        <!-- RemoveCombatant -->
+        <div class="section">
+            <h2>RemoveCombatant</h2>
+            <p>
+                Removes a combatant from battle entirely (not just KO). Fires <code>OnCombatantRemoved</code>.
+                Useful for flee-per-combatant or banish mechanics.
+            </p>
+<pre><code>battle.RemoveCombatant(summon); // Completely removes from battle</code></pre>
+        </div>
+
+        <!-- BattleResult -->
+        <div class="section">
+            <h2>BattleResult</h2>
+            <p>
+                Created when battle ends via <code>EndBattle()</code> or <code>CheckBattleEnd()</code>.
+                Contains Outcome (<code>BattleState</code>), TotalTurns, Survivors (list of alive combatants),
+                and full History. Access via <code>battle.Result</code>.
+            </p>
+<pre><code>battle.OnBattleEnd += (b, state) =>
+{
+    var result = b.Result;
+    Debug.Log($"Outcome: {result.Value.Outcome}");
+    Debug.Log($"Turns: {result.Value.TotalTurns}");
+    Debug.Log($"Survivors: {result.Value.Survivors.Count}");
+};</code></pre>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== TURN SYSTEMS ==================== -->
+    <div id="turn-systems">
+
+        <div class="hero">
+            <h1>Turn Systems</h1>
+            <p class="subtitle">Five pluggable turn systems &mdash; from classic round-robin to press turns and action points.</p>
+        </div>
+
+        <!-- ITurnSystem Interface -->
+        <div class="section">
+            <h2>ITurnSystem Interface</h2>
+            <p>
+                All turn systems implement <code>ITurnSystem</code>. This is the shared contract that
+                <code>Battle</code> uses to manage turn order. You can also implement your own.
+            </p>
+<pre><code>public interface ITurnSystem
+{
+    void Init(List&lt;ICombatant&gt; combatants);
+    ICombatant GetNextActor();
+    IReadOnlyList&lt;ICombatant&gt; GetTimeline();
+    void OnActorDied(ICombatant combatant);
+    void OnActorAdded(ICombatant combatant);
+    void OnTurnEnd();
+}</code></pre>
+            <h3>Methods</h3>
+            <ul>
+                <li><code>Init(combatants)</code> &mdash; called once when the battle starts. Sets up internal state from the combatant list.</li>
+                <li><code>GetNextActor()</code> &mdash; returns the next combatant who should act, or <code>null</code> if no one is ready.</li>
+                <li><code>GetTimeline()</code> &mdash; returns a read-only list representing upcoming turn order. Useful for UI previews.</li>
+                <li><code>OnActorDied(combatant)</code> &mdash; notifies the turn system that a combatant died so it can clean up.</li>
+                <li><code>OnActorAdded(combatant)</code> &mdash; notifies the turn system that a combatant was added mid-battle.</li>
+                <li><code>OnTurnEnd()</code> &mdash; called after an actor finishes their turn. Advances internal state.</li>
+            </ul>
+        </div>
+
+        <!-- ClassicTurnSystem -->
+        <div class="section">
+            <h2>ClassicTurnSystem</h2>
+            <p>DQ-style speed-sorted round-robin. Simple and predictable.</p>
+
+            <h3>Constructor</h3>
+<pre><code>new ClassicTurnSystem()  // No parameters</code></pre>
+
+            <h3>Behavior</h3>
+            <ul>
+                <li>On init (and at the start of each new round), all alive combatants are sorted by <code>Speed</code> descending.</li>
+                <li>Dead combatants are skipped automatically in <code>GetNextActor()</code>.</li>
+                <li>Mid-round additions via <code>OnActorAdded()</code> are appended to the end of the current round.</li>
+                <li>When all combatants in the round have acted, a new round begins with a fresh speed sort.</li>
+            </ul>
+
+            <h3>Additional Methods</h3>
+            <p>None. ClassicTurnSystem only exposes the <code>ITurnSystem</code> interface.</p>
+
+            <h3>Usage</h3>
+<pre><code>var battle = new Battle();
+battle.Start(combatants, new ClassicTurnSystem());
+
+var actor = battle.BeginNextTurn(); // Fastest combatant
+// ... do action ...
+battle.EndTurn();</code></pre>
+        </div>
+
+        <!-- ATBTurnSystem -->
+        <div class="section">
+            <h2>ATBTurnSystem</h2>
+            <p>Active Time Battle (gauge-based, FF-style). Gauges fill in real time based on speed.</p>
+
+            <h3>Constructor</h3>
+<pre><code>new ATBTurnSystem(float gaugeMax = 100f)</code></pre>
+            <ul>
+                <li><code>gaugeMax</code> &mdash; the gauge value a combatant must reach before they can act. Default: <code>100f</code>.</li>
+            </ul>
+
+            <h3>Behavior</h3>
+            <ul>
+                <li>Each combatant has a gauge starting at <code>0</code>.</li>
+                <li><code>Tick(deltaTime)</code> fills each alive combatant's gauge by <code>Speed * deltaTime</code>. Already-full gauges do not overflow.</li>
+                <li><code>GetNextActor()</code> returns the ready combatant (gauge &gt;= max) with the highest gauge. Ties broken by speed. Returns <code>null</code> if no one is ready.</li>
+                <li>After acting, <code>OnTurnEnd()</code> resets the actor's gauge to <code>0</code>.</li>
+                <li>Dead combatants have their gauge removed entirely.</li>
+            </ul>
+
+            <h3>Additional Methods</h3>
+            <table>
+                <tr><th>Method</th><th>Description</th></tr>
+                <tr><td><code>Tick(float deltaTime)</code></td><td>Advances all alive combatants' gauges by <code>Speed * deltaTime</code>.</td></tr>
+                <tr><td><code>IsReady(ICombatant)</code></td><td>Returns <code>true</code> if the combatant's gauge &gt;= max.</td></tr>
+                <tr><td><code>GetGauge(ICombatant)</code></td><td>Returns current gauge value (or <code>0</code> if not tracked).</td></tr>
+                <tr><td><code>SetGauge(ICombatant, float)</code></td><td>Sets gauge value directly (e.g. for slow/haste effects).</td></tr>
+                <tr><td><code>HasReadyActor()</code></td><td>Returns <code>true</code> if any alive combatant's gauge &gt;= max.</td></tr>
+            </table>
+
+            <h3>Usage</h3>
+<pre><code>var atb = new ATBTurnSystem(100f);
+battle.Start(combatants, atb);
+
+// Game loop
+atb.Tick(1f); // Advance time
+if (atb.HasReadyActor())
+{
+    var actor = battle.BeginNextTurn();
+    // ... do action ...
+    battle.EndTurn();
+}</code></pre>
+
+            <div class="alert alert-info">
+                <strong>Real-time system.</strong>
+                You drive the clock by calling <code>Tick()</code> yourself. This works with Unity's
+                <code>Time.deltaTime</code>, fixed timesteps, or any custom tick rate.
+            </div>
+        </div>
+
+        <!-- TimelineTurnSystem -->
+        <div class="section">
+            <h2>TimelineTurnSystem</h2>
+            <p>Charge Time Battle (timeline-based, FFT-style). Combatants sit on a tick timeline; lower tick = sooner turn.</p>
+
+            <h3>Constructor</h3>
+<pre><code>new TimelineTurnSystem(int defaultActionCost = 100, int baseTick = 100)</code></pre>
+            <ul>
+                <li><code>defaultActionCost</code> &mdash; the default cost added after an action. Default: <code>100</code>.</li>
+                <li><code>baseTick</code> &mdash; base tick value used for initial placement and new combatants. Default: <code>100</code>.</li>
+            </ul>
+
+            <h3>Behavior</h3>
+            <ul>
+                <li>On init, each combatant is placed on the timeline at tick <code>baseTick / Speed</code>. Faster combatants start closer to 0.</li>
+                <li><code>GetNextActor()</code> returns the alive combatant with the lowest tick. Ties broken by highest speed, then init order.</li>
+                <li>After acting, the actor's tick advances by <code>actionCost</code> (default or overridden via <code>SetActionCost()</code>).</li>
+                <li>Heavy actions with higher costs push the actor further down the timeline. Light actions let them act again sooner.</li>
+                <li>New combatants added mid-battle are placed at <code>currentTick + baseTick</code>.</li>
+            </ul>
+
+            <h3>Additional Methods</h3>
+            <table>
+                <tr><th>Method</th><th>Description</th></tr>
+                <tr><td><code>SetActionCost(int cost)</code></td><td>Override the cost for the current action. Call between <code>BeginNextTurn()</code> and <code>EndTurn()</code>. Resets to default each turn.</td></tr>
+                <tr><td><code>GetTick(ICombatant)</code></td><td>Returns the combatant's current tick value on the timeline.</td></tr>
+            </table>
+
+            <h3>Usage</h3>
+<pre><code>var timeline = new TimelineTurnSystem(100, 100);
+battle.Start(combatants, timeline);
+
+var actor = battle.BeginNextTurn(); // Lowest tick actor
+
+// Light attack — default cost
+battle.EndTurn();
+
+var next = battle.BeginNextTurn();
+timeline.SetActionCost(200); // Heavy attack — delays next turn more
+battle.EndTurn();</code></pre>
+
+            <div class="alert alert-info">
+                <strong>Action cost strategy.</strong>
+                Use <code>SetActionCost()</code> to make different abilities cost different amounts of time.
+                A quick jab might cost 50, a powerful spell 300. This creates meaningful tactical decisions
+                about speed vs. power.
+            </div>
+        </div>
+
+        <!-- PressTurnSystem -->
+        <div class="section">
+            <h2>PressTurnSystem</h2>
+            <p>SMT-style press turn system. Teams take turns in phases, spending turn points to act.</p>
+
+            <h3>Constructor</h3>
+<pre><code>new PressTurnSystem(int maxPointsPerTeam = 0)</code></pre>
+            <ul>
+                <li><code>maxPointsPerTeam</code> &mdash; cap on points per phase. <code>0</code> = auto (one point per alive team member).</li>
+            </ul>
+
+            <h3>Behavior</h3>
+            <ul>
+                <li>Teams are determined from combatant <code>Team</code> values, sorted ascending. Team 0 goes first.</li>
+                <li>Each team phase starts with full points = number of alive members (capped by <code>maxPointsPerTeam</code> if set).</li>
+                <li>You choose who acts via <code>SelectActor()</code>, then call <code>GetNextActor()</code> to retrieve them.</li>
+                <li>Actions consume or convert points. When points are exhausted, the next team's phase begins.</li>
+                <li>A KO mid-phase does not retroactively shrink points &mdash; dead actors simply cannot be selected.</li>
+            </ul>
+
+            <h3>Properties</h3>
+            <table>
+                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>ActiveTeam</code></td><td><code>int</code></td><td>The team ID currently taking their phase.</td></tr>
+                <tr><td><code>FullPoints</code></td><td><code>int</code></td><td>Remaining full turn points.</td></tr>
+                <tr><td><code>HalfPoints</code></td><td><code>int</code></td><td>Remaining half turn points.</td></tr>
+                <tr><td><code>TotalPoints</code></td><td><code>int</code></td><td>Full + half points combined.</td></tr>
+                <tr><td><code>HasActionsRemaining</code></td><td><code>bool</code></td><td><code>true</code> if <code>TotalPoints &gt; 0</code>.</td></tr>
+            </table>
+
+            <h3>Additional Methods</h3>
+            <table>
+                <tr><th>Method</th><th>Description</th></tr>
+                <tr><td><code>SelectActor(ICombatant)</code></td><td>Choose who acts next. Must be alive and on the active team. Throws if not.</td></tr>
+                <tr><td><code>ConsumeAction()</code></td><td>Spends one point. Consumes a half point first; if none, consumes a full point.</td></tr>
+                <tr><td><code>ConvertAction()</code></td><td>Converts one full point into a half point. If no full points, consumes a half point instead.</td></tr>
+                <tr><td><code>ConsumeActions(int count)</code></td><td>Consumes multiple points (half first, then full).</td></tr>
+                <tr><td><code>ConsumeAllActions()</code></td><td>Ends the team's phase immediately by zeroing all points.</td></tr>
+            </table>
+
+            <h3>Usage</h3>
+<pre><code>var press = new PressTurnSystem();
+battle.Start(combatants, press);
+
+// Team 0's phase — 1 point per alive member
+press.SelectActor(myChosenActor);
+var actor = battle.BeginNextTurn();
+// ... do action ...
+press.ConsumeAction();
+battle.EndTurn();
+
+// If points remain, select another actor
+if (press.HasActionsRemaining)
+{
+    press.SelectActor(anotherActor);
+    var next = battle.BeginNextTurn();
+    // ... hit a weakness? Convert instead of consume ...
+    press.ConvertAction();
+    battle.EndTurn();
+}</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>You manage the points.</strong>
+                SimpleJRPG does not decide when to consume vs. convert &mdash; that is your game logic.
+                Hitting a weakness, getting a critical, or missing are all your system's responsibility.
+                Call the appropriate point method based on your rules.
+            </div>
+        </div>
+
+        <!-- ActionPointTurnSystem -->
+        <div class="section">
+            <h2>ActionPointTurnSystem</h2>
+            <p>Action Point system. Combatants bank or spend Action Points for extra actions.</p>
+
+            <h3>Constructor</h3>
+<pre><code>new ActionPointTurnSystem(int defaultAP = 0, int minAP = -4, int maxAP = 4)</code></pre>
+            <ul>
+                <li><code>defaultAP</code> &mdash; starting AP for each combatant. Default: <code>0</code>.</li>
+                <li><code>minAP</code> &mdash; lowest AP can go (going negative means skipping future turns). Default: <code>-4</code>.</li>
+                <li><code>maxAP</code> &mdash; highest AP can be banked. Default: <code>4</code>.</li>
+            </ul>
+
+            <h3>Behavior</h3>
+            <ul>
+                <li>Uses speed-sorted round-robin like <code>ClassicTurnSystem</code> for base turn order.</li>
+                <li>At the start of each round, all alive combatants gain <code>+1 AP</code> passively (capped at <code>maxAP</code>).</li>
+                <li><code>SpendAP()</code> spends 1 AP to queue an extra action this turn. Can be called multiple times. AP can go negative down to <code>minAP</code>.</li>
+                <li><code>SaveAP()</code> gains 1 AP (capped at <code>maxAP</code>) and the combatant skips their action.</li>
+                <li>Combatants with negative AP are skipped when their turn comes &mdash; they must wait for passive AP to bring them back to 0.</li>
+                <li>If a combatant dies mid-spend-chain, remaining extra actions are cleared.</li>
+            </ul>
+
+            <h3>Properties</h3>
+            <table>
+                <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>MinAP</code></td><td><code>int</code></td><td>The minimum AP value (constructor param).</td></tr>
+                <tr><td><code>MaxAP</code></td><td><code>int</code></td><td>The maximum AP value (constructor param).</td></tr>
+            </table>
+
+            <h3>Additional Methods</h3>
+            <table>
+                <tr><th>Method</th><th>Description</th></tr>
+                <tr><td><code>GetAP(ICombatant)</code></td><td>Returns the combatant's current Action Points.</td></tr>
+                <tr><td><code>SpendAP()</code></td><td>Spend 1 AP for an extra action this turn. Throws if already at <code>minAP</code>.</td></tr>
+                <tr><td><code>SaveAP()</code></td><td>Gain 1 AP (capped at <code>maxAP</code>). The combatant should skip their action.</td></tr>
+            </table>
+
+            <h3>Usage</h3>
+<pre><code>var ap = new ActionPointTurnSystem(0, -4, 4);
+battle.Start(combatants, ap);
+
+var actor = battle.BeginNextTurn();
+
+// Option A: SpendAP — take multiple actions now, risk negative AP
+ap.SpendAP(); // AP: 0 -> -1, queues 1 extra action
+// ... do first action ...
+battle.EndTurn();
+// Extra action fires — same actor again
+var same = battle.BeginNextTurn();
+// ... do second action ...
+battle.EndTurn();
+
+// Option B: SaveAP — skip turn, bank AP for later
+var next = battle.BeginNextTurn();
+ap.SaveAP(); // AP +1
+battle.EndTurn(); // Skips action</code></pre>
+
+            <div class="alert alert-info">
+                <strong>Risk vs. reward.</strong>
+                Spending AP lets you burst multiple actions in one turn but leaves you vulnerable
+                if AP goes negative. Saving AP is safe but costs a turn. The tension between
+                the two is the core of this system.
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="section">
+            <h2>Comparison Table</h2>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Classic</th>
+                    <th>ATB</th>
+                    <th>Timeline</th>
+                    <th>Press Turn</th>
+                    <th>Action Point</th>
+                </tr>
+                <tr>
+                    <td>Turn order</td>
+                    <td>Speed sort</td>
+                    <td>Gauge fill</td>
+                    <td>Tick timeline</td>
+                    <td>Team phase</td>
+                    <td>Round-robin</td>
+                </tr>
+                <tr>
+                    <td>Real-time</td>
+                    <td>No</td>
+                    <td>Yes (Tick)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Player choice in order</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Via action cost</td>
+                    <td>SelectActor</td>
+                    <td>Spend/Save AP</td>
+                </tr>
+                <tr>
+                    <td>Team-based</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>Resource management</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>Action cost</td>
+                    <td>Turn points</td>
+                    <td>AP</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== COOKBOOK ==================== -->
+    <div id="cookbook">
+
+        <div class="hero">
+            <h1>Cookbook</h1>
+            <p class="subtitle">Copy-paste recipes for common battle patterns. Your formulas, your rules &mdash; these are starting points.</p>
+        </div>
+
+        <div class="section">
+            <h2>Mana Costs</h2>
+            <p>SimpleJRPG doesn't manage MP &mdash; that's your domain. Check costs before calling combat verbs, deduct MP yourself.</p>
+<pre><code>void CastFireball(ICombatant caster, ICombatant target)
+{
+    int mpCost = 8;
+    var myCaster = (MyCombatant)caster;
+    if (myCaster.MP < mpCost) { Debug.Log("Not enough MP!"); return; }
+    myCaster.MP -= mpCost;
+    int damage = myCaster.MagicPower * 3;
+    battle.DealDamage(caster, target, damage, "magical", "fire");
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Elemental Weakness / Resistance</h2>
+            <p>Use <code>OnBeforeDamage</code> to modify damage based on element.</p>
+<pre><code>battle.OnBeforeDamage += evt =>
+{
+    var target = (MyCombatant)evt.Target;
+    float multiplier = target.GetElementMultiplier(evt.Element);
+    evt.Amount = (int)(evt.Amount * multiplier);
+    if (multiplier == 0f) evt.Cancel = true; // Immune
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Status Effect Timers</h2>
+            <p>Track durations yourself and call <code>RemoveStatus()</code> when they expire. Tick in <code>OnTurnEnd</code>.</p>
+<pre><code>Dictionary&lt;ICombatant, List&lt;(string id, int turnsLeft)&gt;&gt; statuses = new();
+
+battle.OnStatusApplied += evt =>
+{
+    if (!statuses.ContainsKey(evt.Target)) statuses[evt.Target] = new();
+    statuses[evt.Target].Add((evt.StatusId, evt.Duration));
+};
+
+battle.OnTurnEnd += evt =>
+{
+    if (!statuses.ContainsKey(evt.Actor)) return;
+    var list = statuses[evt.Actor];
+    for (int i = list.Count - 1; i >= 0; i--)
+    {
+        if (list[i].id == "poison")
+            battle.DealDamage(evt.Actor, evt.Actor, 5, "status", "poison");
+        var updated = (list[i].id, list[i].turnsLeft - 1);
+        if (updated.Item2 <= 0) { battle.RemoveStatus(evt.Actor, list[i].id); list.RemoveAt(i); }
+        else list[i] = updated;
+    }
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Buff Stacking</h2>
+            <p>Track buff multipliers yourself. Apply them in <code>OnBeforeDamage</code> / <code>OnBeforeHeal</code>.</p>
+<pre><code>Dictionary&lt;ICombatant, Dictionary&lt;string, (float mult, int turns)&gt;&gt; buffs = new();
+
+battle.OnBuffApplied += evt =>
+{
+    if (!buffs.ContainsKey(evt.Target)) buffs[evt.Target] = new();
+    buffs[evt.Target][evt.BuffId] = (evt.Amount, evt.Duration); // Replace
+};
+
+battle.OnBeforeDamage += evt =>
+{
+    if (buffs.TryGetValue(evt.Source, out var dict))
+        if (dict.TryGetValue("attack_up", out var buff))
+            evt.Amount = (int)(evt.Amount * buff.mult);
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Revive Logic</h2>
+<pre><code>void CastRevive(ICombatant caster, ICombatant target, bool full)
+{
+    if (target.IsAlive) return;
+    var myTarget = (MyCombatant)target;
+    int hp = full ? myTarget.MaxHP : myTarget.MaxHP / 2;
+    battle.Revive(target, hp);
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Flee Chance</h2>
+<pre><code>void AttemptFlee(ICombatant actor)
+{
+    float partySpeed = battle.GetAlive(0).Average(c => c.Speed);
+    float enemySpeed = battle.GetAlive(1).Average(c => c.Speed);
+    float chance = Mathf.Clamp01(partySpeed / (partySpeed + enemySpeed));
+    if (UnityEngine.Random.value < chance) battle.Flee(actor);
+    else { Debug.Log("Couldn't escape!"); battle.EndTurn(); }
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Multi-Hit Attacks</h2>
+<pre><code>void Barrage(ICombatant actor, ICombatant target, int hitCount)
+{
+    for (int i = 0; i < hitCount; i++)
+    {
+        int damage = CalculateDamage(actor, target);
+        bool isCrit = UnityEngine.Random.value < 0.15f;
+        battle.DealDamage(actor, target, damage, "physical", "", isCrit);
+        if (!target.IsAlive) break;
+    }
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Damage Shields / Barriers</h2>
+            <p>Use <code>OnBeforeDamage</code> to absorb or cancel damage. Track shield HP yourself.</p>
+<pre><code>Dictionary&lt;ICombatant, int&gt; shields = new();
+
+battle.OnBeforeDamage += evt =>
+{
+    if (!shields.TryGetValue(evt.Target, out int hp) || hp <= 0) return;
+    if (hp >= evt.Amount) { shields[evt.Target] = hp - evt.Amount; evt.Cancel = true; }
+    else { evt.Amount -= hp; shields[evt.Target] = 0; battle.RemoveBuff(evt.Target, "shield"); }
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Counter Attacks</h2>
+<pre><code>battle.OnDamageDealt += evt =>
+{
+    if (!evt.Target.IsAlive) return;
+    var target = (MyCombatant)evt.Target;
+    if (!target.HasSkill("counter")) return;
+    if (UnityEngine.Random.value < 0.3f)
+        battle.DealDamage(evt.Target, evt.Source, CalculateDamage(evt.Target, evt.Source), "physical", "");
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Critical Hits</h2>
+<pre><code>void Attack(ICombatant attacker, ICombatant target)
+{
+    int baseDamage = CalculateDamage(attacker, target);
+    bool isCrit = UnityEngine.Random.value < 0.1f;
+    int finalDamage = isCrit ? baseDamage * 2 : baseDamage;
+    battle.DealDamage(attacker, target, finalDamage, "physical", "", isCrit);
+}
+
+battle.OnDamageDealt += evt =>
+{
+    if (evt.WasCrit) ShowBigDamageNumber(evt.Amount);
+    else ShowDamageNumber(evt.Amount);
+};</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Drain / Life Steal</h2>
+<pre><code>void DrainAttack(ICombatant attacker, ICombatant target)
+{
+    int damage = CalculateDamage(attacker, target);
+    battle.DealDamage(attacker, target, damage, "magical", "dark");
+    battle.Heal(attacker, attacker, damage / 2);
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Instant Kill</h2>
+<pre><code>void CastDeath(ICombatant caster, ICombatant target)
+{
+    var myTarget = (MyCombatant)target;
+    if (myTarget.IsImmuneToInstantDeath) { Debug.Log($"{target.Name} resisted!"); return; }
+    if (UnityEngine.Random.value < 0.3f) battle.Kill(target, caster);
+    else Debug.Log("It missed!");
+}</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>Damage Formula Examples</h2>
+<pre><code>// Simple: attack - defense
+int SimpleDamage(MyCombatant atk, MyCombatant def)
+    => Math.Max(1, atk.Attack - def.Defense);
+
+// DQ-style: attack/2 - defense/4, randomized
+int DQDamage(MyCombatant atk, MyCombatant def)
+{
+    int base_ = Math.Max(1, atk.Attack / 2 - def.Defense / 4);
+    return (int)(base_ * UnityEngine.Random.Range(0.875f, 1.125f));
+}
+
+// Level-scaled with crit
+int ScaledDamage(MyCombatant atk, MyCombatant def, bool isCrit)
+{
+    float levelBonus = 1f + (atk.Level - def.Level) * 0.05f;
+    int raw = Math.Max(1, (int)(atk.Attack * levelBonus) - def.Defense);
+    return isCrit ? raw * 2 : raw;
+}</code></pre>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== API REFERENCE ==================== -->
+    <div id="api-reference">
+
+        <div class="hero">
+            <h1>API Reference</h1>
+            <p class="subtitle">Complete reference for every type, member, method, event, and struct in SimpleJRPG.</p>
+        </div>
+
+        <!-- ICombatant Interface -->
+        <div class="section">
+            <h2>ICombatant Interface</h2>
+            <p>The interface users implement for their characters and enemies. Battle never modifies combatants directly — it calls <code>TakeDamage()</code> and <code>Heal()</code>, and your implementation decides what that means.</p>
+            <table>
+                <tr>
+                    <th>Member</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Name</code></td>
+                    <td><code>string</code> (get)</td>
+                    <td>Display name</td>
+                </tr>
+                <tr>
+                    <td><code>IsAlive</code></td>
+                    <td><code>bool</code> (get)</td>
+                    <td>Whether combatant is alive</td>
+                </tr>
+                <tr>
+                    <td><code>Team</code></td>
+                    <td><code>int</code> (get)</td>
+                    <td>Team identifier (0 = player)</td>
+                </tr>
+                <tr>
+                    <td><code>Speed</code></td>
+                    <td><code>float</code> (get)</td>
+                    <td>Speed stat for turn order</td>
+                </tr>
+                <tr>
+                    <td><code>TakeDamage(int amount)</code></td>
+                    <td><code>void</code></td>
+                    <td>Reduce HP by amount</td>
+                </tr>
+                <tr>
+                    <td><code>Heal(int amount)</code></td>
+                    <td><code>void</code></td>
+                    <td>Restore HP by amount</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ITurnSystem Interface -->
+        <div class="section">
+            <h2>ITurnSystem Interface</h2>
+            <p>The interface for turn order logic. Implement this to create custom turn systems, or use one of the built-in implementations.</p>
+            <table>
+                <tr>
+                    <th>Member</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Init(List&lt;ICombatant&gt; combatants)</code></td>
+                    <td><code>void</code></td>
+                    <td>Initialize with combatant list</td>
+                </tr>
+                <tr>
+                    <td><code>GetNextActor()</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Get next combatant to act</td>
+                </tr>
+                <tr>
+                    <td><code>GetTimeline()</code></td>
+                    <td><code>IReadOnlyList&lt;ICombatant&gt;</code></td>
+                    <td>Predicted turn order</td>
+                </tr>
+                <tr>
+                    <td><code>OnActorDied(ICombatant)</code></td>
+                    <td><code>void</code></td>
+                    <td>Notify of combatant death</td>
+                </tr>
+                <tr>
+                    <td><code>OnActorAdded(ICombatant)</code></td>
+                    <td><code>void</code></td>
+                    <td>Notify of combatant addition</td>
+                </tr>
+                <tr>
+                    <td><code>OnTurnEnd()</code></td>
+                    <td><code>void</code></td>
+                    <td>Notify turn completed</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Battle — Properties -->
+        <div class="section">
+            <h2>Battle — Properties</h2>
+            <table>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>State</code></td>
+                    <td><code>BattleState</code></td>
+                    <td>Current battle state</td>
+                </tr>
+                <tr>
+                    <td><code>TurnNumber</code></td>
+                    <td><code>int</code></td>
+                    <td>Current turn count</td>
+                </tr>
+                <tr>
+                    <td><code>Combatants</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>All combatants</td>
+                </tr>
+                <tr>
+                    <td><code>TurnSystem</code></td>
+                    <td><code>ITurnSystem</code></td>
+                    <td>Active turn system</td>
+                </tr>
+                <tr>
+                    <td><code>CurrentActor</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Current acting combatant</td>
+                </tr>
+                <tr>
+                    <td><code>Result</code></td>
+                    <td><code>BattleResult?</code></td>
+                    <td>Result after battle ends</td>
+                </tr>
+                <tr>
+                    <td><code>History</code></td>
+                    <td><code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code></td>
+                    <td>All recorded events</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Battle — Methods -->
+        <div class="section">
+            <h2>Battle — Methods</h2>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Returns</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Start(List&lt;ICombatant&gt;, ITurnSystem)</code></td>
+                    <td><code>void</code></td>
+                    <td>Start battle</td>
+                </tr>
+                <tr>
+                    <td><code>EndBattle(BattleState)</code></td>
+                    <td><code>void</code></td>
+                    <td>End battle with result</td>
+                </tr>
+                <tr>
+                    <td><code>BeginNextTurn()</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Start next turn, returns actor</td>
+                </tr>
+                <tr>
+                    <td><code>EndTurn()</code></td>
+                    <td><code>void</code></td>
+                    <td>End current turn</td>
+                </tr>
+                <tr>
+                    <td><code>DealDamage(ICombatant source, ICombatant target, int amount, string damageType = "", string element = "", bool isCrit = false)</code></td>
+                    <td><code>void</code></td>
+                    <td>Deal damage to single target</td>
+                </tr>
+                <tr>
+                    <td><code>DealDamage(ICombatant source, IList&lt;ICombatant&gt; targets, int amount, string damageType = "", string element = "", bool isCrit = false)</code></td>
+                    <td><code>void</code></td>
+                    <td>Deal damage to multiple targets</td>
+                </tr>
+                <tr>
+                    <td><code>Heal(ICombatant source, ICombatant target, int amount)</code></td>
+                    <td><code>void</code></td>
+                    <td>Heal single target</td>
+                </tr>
+                <tr>
+                    <td><code>Heal(ICombatant source, IList&lt;ICombatant&gt; targets, int amount)</code></td>
+                    <td><code>void</code></td>
+                    <td>Heal multiple targets</td>
+                </tr>
+                <tr>
+                    <td><code>Kill(ICombatant target, ICombatant killer = null)</code></td>
+                    <td><code>void</code></td>
+                    <td>Force KO</td>
+                </tr>
+                <tr>
+                    <td><code>Revive(ICombatant target, int hpAmount)</code></td>
+                    <td><code>void</code></td>
+                    <td>Revive dead target</td>
+                </tr>
+                <tr>
+                    <td><code>ApplyStatus(ICombatant source, ICombatant target, string statusId, int duration = -1)</code></td>
+                    <td><code>void</code></td>
+                    <td>Apply status effect</td>
+                </tr>
+                <tr>
+                    <td><code>ApplyStatus(ICombatant source, IList&lt;ICombatant&gt; targets, string statusId, int duration = -1)</code></td>
+                    <td><code>void</code></td>
+                    <td>Apply status to multiple</td>
+                </tr>
+                <tr>
+                    <td><code>RemoveStatus(ICombatant target, string statusId)</code></td>
+                    <td><code>void</code></td>
+                    <td>Remove status</td>
+                </tr>
+                <tr>
+                    <td><code>ApplyBuff(ICombatant source, ICombatant target, string buffId, float amount, int duration = -1)</code></td>
+                    <td><code>void</code></td>
+                    <td>Apply buff</td>
+                </tr>
+                <tr>
+                    <td><code>ApplyBuff(ICombatant source, IList&lt;ICombatant&gt; targets, string buffId, float amount, int duration = -1)</code></td>
+                    <td><code>void</code></td>
+                    <td>Apply buff to multiple</td>
+                </tr>
+                <tr>
+                    <td><code>RemoveBuff(ICombatant target, string buffId)</code></td>
+                    <td><code>void</code></td>
+                    <td>Remove buff</td>
+                </tr>
+                <tr>
+                    <td><code>Flee(ICombatant who)</code></td>
+                    <td><code>void</code></td>
+                    <td>Flee from battle</td>
+                </tr>
+                <tr>
+                    <td><code>RemoveCombatant(ICombatant)</code></td>
+                    <td><code>void</code></td>
+                    <td>Remove from battle entirely</td>
+                </tr>
+                <tr>
+                    <td><code>CheckBattleEnd()</code></td>
+                    <td><code>bool</code></td>
+                    <td>Check if battle should end</td>
+                </tr>
+                <tr>
+                    <td><code>GetAlive(int team = -1)</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>Get alive combatants</td>
+                </tr>
+                <tr>
+                    <td><code>GetDead(int team = -1)</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>Get dead combatants</td>
+                </tr>
+                <tr>
+                    <td><code>GetEnemies(ICombatant)</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>Get alive enemies</td>
+                </tr>
+                <tr>
+                    <td><code>GetAllies(ICombatant, bool includeSelf = false)</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>Get alive allies</td>
+                </tr>
+                <tr>
+                    <td><code>GetTimeline()</code></td>
+                    <td><code>IReadOnlyList&lt;ICombatant&gt;</code></td>
+                    <td>Get turn order from turn system</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Battle — Events -->
+        <div class="section">
+            <h2>Battle — Events</h2>
+            <table>
+                <tr>
+                    <th>Event</th>
+                    <th>Signature</th>
+                    <th>When</th>
+                </tr>
+                <tr>
+                    <td><code>OnBattleStart</code></td>
+                    <td><code>Action&lt;Battle&gt;</code></td>
+                    <td>Battle.Start() called</td>
+                </tr>
+                <tr>
+                    <td><code>OnBattleEnd</code></td>
+                    <td><code>Action&lt;Battle, BattleState&gt;</code></td>
+                    <td>Battle ends</td>
+                </tr>
+                <tr>
+                    <td><code>OnTurnStart</code></td>
+                    <td><code>Action&lt;TurnEvent&gt;</code></td>
+                    <td>BeginNextTurn() called</td>
+                </tr>
+                <tr>
+                    <td><code>OnTurnEnd</code></td>
+                    <td><code>Action&lt;TurnEvent&gt;</code></td>
+                    <td>EndTurn() called</td>
+                </tr>
+                <tr>
+                    <td><code>OnBeforeDamage</code></td>
+                    <td><code>Action&lt;BeforeDamageEvent&gt;</code></td>
+                    <td>Before damage applied (cancellable)</td>
+                </tr>
+                <tr>
+                    <td><code>OnDamageDealt</code></td>
+                    <td><code>Action&lt;DamageEvent&gt;</code></td>
+                    <td>After damage applied</td>
+                </tr>
+                <tr>
+                    <td><code>OnBeforeHeal</code></td>
+                    <td><code>Action&lt;BeforeHealEvent&gt;</code></td>
+                    <td>Before heal applied (cancellable)</td>
+                </tr>
+                <tr>
+                    <td><code>OnHealed</code></td>
+                    <td><code>Action&lt;HealEvent&gt;</code></td>
+                    <td>After heal applied</td>
+                </tr>
+                <tr>
+                    <td><code>OnKO</code></td>
+                    <td><code>Action&lt;KOEvent&gt;</code></td>
+                    <td>Combatant knocked out</td>
+                </tr>
+                <tr>
+                    <td><code>OnRevived</code></td>
+                    <td><code>Action&lt;ICombatant&gt;</code></td>
+                    <td>Combatant revived</td>
+                </tr>
+                <tr>
+                    <td><code>OnStatusApplied</code></td>
+                    <td><code>Action&lt;StatusEvent&gt;</code></td>
+                    <td>Status applied</td>
+                </tr>
+                <tr>
+                    <td><code>OnStatusRemoved</code></td>
+                    <td><code>Action&lt;ICombatant, string&gt;</code></td>
+                    <td>Status removed</td>
+                </tr>
+                <tr>
+                    <td><code>OnBuffApplied</code></td>
+                    <td><code>Action&lt;BuffEvent&gt;</code></td>
+                    <td>Buff applied</td>
+                </tr>
+                <tr>
+                    <td><code>OnBuffRemoved</code></td>
+                    <td><code>Action&lt;ICombatant, string&gt;</code></td>
+                    <td>Buff removed</td>
+                </tr>
+                <tr>
+                    <td><code>OnFled</code></td>
+                    <td><code>Action&lt;ICombatant&gt;</code></td>
+                    <td>Combatant fled</td>
+                </tr>
+                <tr>
+                    <td><code>OnCombatantRemoved</code></td>
+                    <td><code>Action&lt;ICombatant&gt;</code></td>
+                    <td>Combatant removed</td>
+                </tr>
+                <tr>
+                    <td><code>OnGroupDamageDealt</code></td>
+                    <td><code>Action&lt;GroupDamageEvent&gt;</code></td>
+                    <td>Multi-target damage</td>
+                </tr>
+                <tr>
+                    <td><code>OnGroupHealed</code></td>
+                    <td><code>Action&lt;GroupHealEvent&gt;</code></td>
+                    <td>Multi-target heal</td>
+                </tr>
+                <tr>
+                    <td><code>OnGroupStatusApplied</code></td>
+                    <td><code>Action&lt;GroupStatusEvent&gt;</code></td>
+                    <td>Multi-target status</td>
+                </tr>
+                <tr>
+                    <td><code>OnGroupBuffApplied</code></td>
+                    <td><code>Action&lt;GroupBuffEvent&gt;</code></td>
+                    <td>Multi-target buff</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- BattleEvents — Structs -->
+        <div class="section">
+            <h2>BattleEvents — Structs</h2>
+
+            <h3>DamageEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who dealt the damage</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who received the damage</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code></td>
+                    <td>Damage amount</td>
+                </tr>
+                <tr>
+                    <td><code>DamageType</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through damage type</td>
+                </tr>
+                <tr>
+                    <td><code>Element</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through element</td>
+                </tr>
+                <tr>
+                    <td><code>WasCrit</code></td>
+                    <td><code>bool</code></td>
+                    <td>Whether the hit was critical</td>
+                </tr>
+            </table>
+
+            <h3>HealEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who performed the heal</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who was healed</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code></td>
+                    <td>Heal amount</td>
+                </tr>
+            </table>
+
+            <h3>StatusEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who applied the status</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who received the status</td>
+                </tr>
+                <tr>
+                    <td><code>StatusId</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through status identifier</td>
+                </tr>
+                <tr>
+                    <td><code>Duration</code></td>
+                    <td><code>int</code></td>
+                    <td>Duration in turns (-1 = permanent)</td>
+                </tr>
+            </table>
+
+            <h3>BuffEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who applied the buff</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who received the buff</td>
+                </tr>
+                <tr>
+                    <td><code>BuffId</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through buff identifier</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>float</code></td>
+                    <td>Numeric value (user-interpreted)</td>
+                </tr>
+                <tr>
+                    <td><code>Duration</code></td>
+                    <td><code>int</code></td>
+                    <td>Duration in turns (-1 = permanent)</td>
+                </tr>
+            </table>
+
+            <h3>KOEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who was knocked out</td>
+                </tr>
+                <tr>
+                    <td><code>Killer</code></td>
+                    <td><code>ICombatant</code> (nullable)</td>
+                    <td>Who caused the KO (null if none)</td>
+                </tr>
+            </table>
+
+            <h3>TurnEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Actor</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Whose turn it is</td>
+                </tr>
+                <tr>
+                    <td><code>TurnNumber</code></td>
+                    <td><code>int</code></td>
+                    <td>Current turn number</td>
+                </tr>
+            </table>
+
+            <h3>GroupDamageEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who dealt the damage</td>
+                </tr>
+                <tr>
+                    <td><code>Hits</code></td>
+                    <td><code>IReadOnlyList&lt;DamageEvent&gt;</code></td>
+                    <td>Individual damage events</td>
+                </tr>
+                <tr>
+                    <td><code>TotalDamage</code></td>
+                    <td><code>int</code></td>
+                    <td>Sum of all damage dealt</td>
+                </tr>
+            </table>
+
+            <h3>GroupHealEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who performed the heals</td>
+                </tr>
+                <tr>
+                    <td><code>Heals</code></td>
+                    <td><code>IReadOnlyList&lt;HealEvent&gt;</code></td>
+                    <td>Individual heal events</td>
+                </tr>
+                <tr>
+                    <td><code>TotalHealed</code></td>
+                    <td><code>int</code></td>
+                    <td>Sum of all HP restored</td>
+                </tr>
+            </table>
+
+            <h3>GroupStatusEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who applied the statuses</td>
+                </tr>
+                <tr>
+                    <td><code>Applications</code></td>
+                    <td><code>IReadOnlyList&lt;StatusEvent&gt;</code></td>
+                    <td>Individual status events</td>
+                </tr>
+            </table>
+
+            <h3>GroupBuffEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who applied the buffs</td>
+                </tr>
+                <tr>
+                    <td><code>Applications</code></td>
+                    <td><code>IReadOnlyList&lt;BuffEvent&gt;</code></td>
+                    <td>Individual buff events</td>
+                </tr>
+            </table>
+
+            <h3>BattleHistoryEntry</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Sequence</code></td>
+                    <td><code>int</code></td>
+                    <td>Global sequence number</td>
+                </tr>
+                <tr>
+                    <td><code>TurnNumber</code></td>
+                    <td><code>int</code></td>
+                    <td>Turn when event occurred</td>
+                </tr>
+                <tr>
+                    <td><code>EventType</code></td>
+                    <td><code>string</code></td>
+                    <td>Type of event recorded</td>
+                </tr>
+                <tr>
+                    <td><code>Event</code></td>
+                    <td><code>object</code></td>
+                    <td>The event data (cast to specific type)</td>
+                </tr>
+            </table>
+
+            <h3>BattleResult</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Outcome</code></td>
+                    <td><code>BattleState</code></td>
+                    <td>Victory, Defeat, or Fled</td>
+                </tr>
+                <tr>
+                    <td><code>TotalTurns</code></td>
+                    <td><code>int</code></td>
+                    <td>Total turns taken</td>
+                </tr>
+                <tr>
+                    <td><code>Survivors</code></td>
+                    <td><code>List&lt;ICombatant&gt;</code></td>
+                    <td>Combatants still alive at end</td>
+                </tr>
+                <tr>
+                    <td><code>History</code></td>
+                    <td><code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code></td>
+                    <td>Complete battle event log</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- BattleEvents — Classes (Before-Events) -->
+        <div class="section">
+            <h2>BattleEvents — Before-Events (Classes)</h2>
+            <p>Before-events are mutable classes (not structs) that allow subscribers to modify or cancel actions before they execute.</p>
+
+            <h3>BeforeDamageEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who is dealing the damage</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who will receive the damage</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code> (settable)</td>
+                    <td>Damage amount — modify to change final damage</td>
+                </tr>
+                <tr>
+                    <td><code>DamageType</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through damage type</td>
+                </tr>
+                <tr>
+                    <td><code>Element</code></td>
+                    <td><code>string</code></td>
+                    <td>Pass-through element</td>
+                </tr>
+                <tr>
+                    <td><code>IsCrit</code></td>
+                    <td><code>bool</code></td>
+                    <td>Whether the hit is critical</td>
+                </tr>
+                <tr>
+                    <td><code>Cancel</code></td>
+                    <td><code>bool</code> (settable)</td>
+                    <td>Set to <code>true</code> to prevent damage entirely</td>
+                </tr>
+            </table>
+
+            <h3>BeforeHealEvent</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who is performing the heal</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>Who will be healed</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code> (settable)</td>
+                    <td>Heal amount — modify to change final heal</td>
+                </tr>
+                <tr>
+                    <td><code>Cancel</code></td>
+                    <td><code>bool</code> (settable)</td>
+                    <td>Set to <code>true</code> to prevent heal entirely</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- BattleState Enum -->
+        <div class="section">
+            <h2>BattleState Enum</h2>
+            <table>
+                <tr>
+                    <th>Value</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>NotStarted</code></td>
+                    <td>Battle has not begun yet</td>
+                </tr>
+                <tr>
+                    <td><code>WaitingForCommands</code></td>
+                    <td>Waiting for the next turn to begin</td>
+                </tr>
+                <tr>
+                    <td><code>Executing</code></td>
+                    <td>A turn is in progress</td>
+                </tr>
+                <tr>
+                    <td><code>Victory</code></td>
+                    <td>Player team won</td>
+                </tr>
+                <tr>
+                    <td><code>Defeat</code></td>
+                    <td>Player team lost</td>
+                </tr>
+                <tr>
+                    <td><code>Fled</code></td>
+                    <td>A combatant fled the battle</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== DEMOS ==================== -->
+    <div id="demos">
+
+        <div class="hero">
+            <h1>Demos</h1>
+            <p class="subtitle">6 interactive demo scenes that showcase every feature of SimpleJRPG.</p>
+        </div>
+
+        <!-- Overview -->
+        <div class="section">
+            <h2>Overview</h2>
+            <p>
+                SimpleJRPG ships with 6 interactive demo scenes, each generated via a menu item in the Unity editor.
+                Every scene is fully self-contained with its own UI and demonstrates a specific feature of the API.
+                No setup required &mdash; just generate and hit Play.
+            </p>
+        </div>
+
+        <!-- Generating Demos -->
+        <div class="section">
+            <h2>Generating Demos</h2>
+            <p>
+                Open the Unity menu bar and go to <strong>Window &gt; Simple JRPG</strong>. Each menu item generates
+                a fully-wired scene with combatants, UI, and event subscriptions already configured.
+            </p>
+        </div>
+
+        <!-- Battle Core Demo -->
+        <div class="section">
+            <h2>Battle Core Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Battle Core Demo</p>
+            <p>
+                The kitchen-sink demo. Demonstrates ALL core features of the Battle class: full lifecycle
+                (StartBattle through EndBattle), DealDamage (single-target and multi-target), Heal, Kill,
+                Revive, before-events (toggle cancel and toggle halve), ApplyStatus, ApplyBuff, Flee,
+                battle history, RemoveCombatant, BattleResult, and the GetEnemies/GetAllies query helpers.
+            </p>
+            <p>
+                <strong>UI layout:</strong> Party HP panel on the left, action buttons in the center,
+                and a scrolling event log on the right.
+            </p>
+        </div>
+
+        <!-- Classic Turn Demo -->
+        <div class="section">
+            <h2>Classic Turn Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Classic Turn Demo</p>
+            <p>
+                A 3v3 party battle using <code>ClassicTurnSystem</code>. Step through turns one at a time,
+                see the turn order displayed, watch auto-attacks resolve, observe round cycling as all
+                combatants take their turns, and see dead combatants get skipped. Includes revive to
+                demonstrate mid-battle turn order updates.
+            </p>
+        </div>
+
+        <!-- ATB Turn Demo -->
+        <div class="section">
+            <h2>ATB Turn Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate ATB Turn Demo</p>
+            <p>
+                A 3v3 party battle using <code>ATBTurnSystem</code>. A Tick button advances time, filling
+                each combatant's gauge based on their speed. Gauge bars are displayed per combatant.
+                When a combatant's gauge is full, they become ready and you can select an action for them.
+            </p>
+        </div>
+
+        <!-- Timeline Turn Demo -->
+        <div class="section">
+            <h2>Timeline Turn Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Timeline Turn Demo</p>
+            <p>
+                A 3v3 party battle using <code>TimelineTurnSystem</code>. Displays the full timeline showing
+                when each combatant will act next. Actions have different cast-time costs &mdash;
+                Quick (50), Normal (100), and Heavy (200) &mdash; that push the actor further down the
+                timeline. Tick progression advances the timeline and resolves turns as they come up.
+            </p>
+        </div>
+
+        <!-- Press Turn Demo -->
+        <div class="section">
+            <h2>Press Turn Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Press Turn Demo</p>
+            <p>
+                A two-team battle using <code>PressTurnSystem</code>. Displays the current phase and the
+                team's turn point pool as Full and Half points. Demonstrates SelectActor to pick who acts,
+                ConsumeAction for normal actions, ConvertAction to convert a Full point to Half,
+                and ConsumeAllActions to end the phase early.
+            </p>
+        </div>
+
+        <!-- Action Point Turn Demo -->
+        <div class="section">
+            <h2>Action Point Turn Demo</h2>
+            <p><strong>Menu:</strong> Window &gt; Simple JRPG &gt; Generate Action Point Turn Demo</p>
+            <p>
+                A 3v3 party battle using <code>ActionPointTurnSystem</code>. Displays each combatant's
+                current AP (Action Points). Spend AP queues extra actions in a single turn.
+                Save AP banks points by skipping a turn. Demonstrates the risk/reward of going negative
+                on AP for burst damage versus saving up for future turns.
+            </p>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert alert-info">
+            <strong>Scene Location</strong>
+            Demo scenes are saved to Assets/SimpleJRPG/Scenes/. You can regenerate them at any time &mdash; existing scenes will be overwritten.
+        </div>
+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================== ABOUT ==================== -->
+    <div id="about">
+
+        <div class="hero">
+            <h1>About</h1>
+            <p class="subtitle">The design philosophy behind SimpleJRPG.</p>
+        </div>
+
+        <!-- Design Philosophy -->
+        <div class="section">
+            <h2>Design Philosophy</h2>
+            <p>
+                SimpleJRPG orchestrates battles &mdash; turn order, events, state management.
+                You implement damage formulas, design status effects, and build your UI.
+            </p>
+            <p>
+                SimpleJRPG has no opinions on your game design. It uses pass-through strings instead of
+                enums for all game-specific values like damage types, elements, status IDs, and buff IDs.
+                We never interpret what "Fire" or "Poison" means &mdash; your system decides.
+            </p>
+            <p>
+                Everything is instance-based. No singletons, no statics, no global state. Create a
+                <code>Battle</code> instance, pass in your combatants and a turn system, subscribe to
+                events, and call combat verbs. That's it.
+            </p>
+        </div>
+
+        <!-- What SimpleJRPG Is NOT -->
+        <div class="section">
+            <h2>What SimpleJRPG Is NOT</h2>
+            <ul>
+                <li><strong>Not a complete battle system</strong> &mdash; it's the skeleton, you add the flesh. We provide orchestration; you provide the game.</li>
+                <li><strong>Not opinionated about damage formulas, stat systems, or game balance</strong> &mdash; you do the math, pass us the result, and we route it through.</li>
+                <li><strong>Not a UI framework</strong> &mdash; events let you drive any UI you want. We fire <code>OnDamageDealt</code>, you decide what that looks like on screen.</li>
+                <li><strong>Not dependent on Unity</strong> &mdash; pure C#, no MonoBehaviours, no ScriptableObjects, no UnityEngine imports. The asmdef uses <code>noEngineReferences: true</code>.</li>
+            </ul>
+        </div>
+
+        <!-- Version History -->
+        <div class="section">
+            <h2>Version History</h2>
+            <ul>
+                <li>
+                    <strong>v2.0</strong> (February 2026) &mdash; Complete rewrite. Lean runtime API with an instance-based
+                    <code>Battle</code> class, pluggable turn systems (Classic, ATB, Timeline, Press Turn, Action Point),
+                    before-events for cancellation and modification, and battle helpers (multi-target, queries, history, results).
+                </li>
+                <li>
+                    <strong>v1.0</strong> (scrapped) &mdash; ScriptableObject-based composable effects system.
+                    Over-engineered abstraction layers. Lesson learned.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Support -->
+        <div class="section">
+            <h2>Support</h2>
+            <p>
+                For questions, bug reports, and feature requests:
+            </p>
+            <ul>
+                <li><strong>Email</strong> &mdash; <a href="mailto:livingfailuregames@gmail.com">livingfailuregames@gmail.com</a></li>
+                <li><strong>Website</strong> &mdash; <a href="https://livingfailure.com">livingfailure.com</a></li>
+                <li><strong>Unity Asset Store</strong> &mdash; leave a review or use the Q&amp;A section on the SimpleJRPG store page.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    </main>
+</div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

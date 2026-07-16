@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 02bbf99fb85f719468b611f63bf75589
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364770
+  packageName: 'Simple JRPG: Turn-Based combat API-Classic, ATB, CTB, Action Points
+    & Press Turn'
+  packageVersion: 1.0
+  assetPath: Assets/Scenes/ActionPointDemoScene.unity
+  uploadId: 894130

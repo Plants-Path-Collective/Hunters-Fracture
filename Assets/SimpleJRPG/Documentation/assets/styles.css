@@ -1,0 +1,538 @@
+/* SimpleJRPG Documentation — Sakura Pink Theme */
+
+/* ─── Light Mode (default) ─── */
+:root {
+    --bg: #f8f5f7;
+    --section-bg: #ffffff;
+    --navbar-bg: #ffffff;
+    --border: #e8dce3;
+    --accent: #d4829c;
+    --accent-hover: #e8a0bf;
+    --accent-light: #f0d4e0;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --code-bg: #f5eff2;
+    --code-text: #c04d77;
+    --success: #4caf50;
+    --info: #2196f3;
+    --warning-bg: #fff0f5;
+    --warning-border: #d4829c;
+    --success-bg: #e8f5e9;
+    --success-border: #4caf50;
+    --info-bg: #e3f2fd;
+    --info-border: #2196f3;
+    --shadow: rgba(212, 130, 156, 0.1);
+    --toc-hover-bg: #f5eff2;
+    --format-bg: #f5eff2;
+    --scroll-bg: #ffffff;
+}
+
+/* ─── Dark Mode ─── */
+[data-theme="dark"] {
+    --bg: #1a1520;
+    --section-bg: #221c28;
+    --navbar-bg: #221c28;
+    --border: #3a2e42;
+    --accent: #e8a0bf;
+    --accent-hover: #f0c0d5;
+    --accent-light: #3a2e42;
+    --text-primary: #e0dae0;
+    --text-secondary: #a099a6;
+    --code-bg: #2a2230;
+    --code-text: #e8a0bf;
+    --success: #66bb6a;
+    --info: #64b5f6;
+    --warning-bg: #2a1a22;
+    --warning-border: #e8a0bf;
+    --success-bg: #1a2a1a;
+    --success-border: #66bb6a;
+    --info-bg: #1a1a2a;
+    --info-border: #64b5f6;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --toc-hover-bg: #2a2230;
+    --format-bg: #2a2230;
+    --scroll-bg: #221c28;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* ─── Format Selector ─── */
+.format-selector {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem 0;
+    text-align: right;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.format-label {
+    color: var(--text-secondary);
+}
+
+.format-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.format-link:hover {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.format-link.active {
+    background: var(--format-bg);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ─── Theme Toggle ─── */
+.theme-toggle {
+    background: var(--format-bg);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    margin-left: 0.75rem;
+}
+
+.theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ─── Navbar ─── */
+.navbar {
+    background: var(--navbar-bg);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    margin-right: 2rem;
+    white-space: nowrap;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.navbar-nav a {
+    display: block;
+    padding: 0.5rem 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.navbar-nav a:hover {
+    color: var(--accent);
+    background: var(--accent-light);
+}
+
+.navbar-nav a.active {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ─── Page Layout (sidebar + content) ─── */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-layout .content {
+    flex: 1;
+    min-width: 0;
+    max-width: 960px;
+}
+
+/* ─── Legacy Container (still used in single-page) ─── */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ─── Sticky Table of Contents ─── */
+.toc {
+    position: sticky;
+    top: 80px;
+    width: 220px;
+    min-width: 220px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+}
+
+.toc h3 {
+    color: var(--accent);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc li {
+    margin: 0;
+}
+
+.toc a {
+    display: block;
+    padding: 0.35rem 0.6rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.toc a:hover {
+    color: var(--accent);
+    background: var(--toc-hover-bg);
+    border-left-color: var(--accent);
+    text-decoration: none;
+}
+
+/* ─── Hero ─── */
+.hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.hero .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.hero .tagline {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* ─── Sections ─── */
+.section {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    color: var(--accent);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-light);
+}
+
+h3 {
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    margin: 1.25rem 0 0.75rem;
+}
+
+h4 {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+}
+
+p { margin-bottom: 0.75rem; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+/* ─── Code ─── */
+code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: 'Consolas', 'Fira Code', monospace;
+}
+
+pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+/* ─── Feature Grid ─── */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.feature-card {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.25rem;
+}
+
+.feature-card h4 {
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ─── Steps ─── */
+.steps { counter-reset: step; list-style: none; padding: 0; }
+
+.steps li {
+    counter-increment: step;
+    padding: 0.75rem 0 0.75rem 3rem;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.65rem;
+    width: 2rem;
+    height: 2rem;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* ─── Tables ─── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+th {
+    background: var(--accent-light);
+    color: var(--accent);
+    text-align: left;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    font-weight: 600;
+}
+
+td {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+}
+
+tr:nth-child(even) { background: var(--code-bg); }
+
+/* ─── Alerts ─── */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    border-left: 4px solid;
+}
+
+.alert-warning {
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+}
+
+.alert-success {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+}
+
+.alert-info {
+    background: var(--info-bg);
+    border-color: var(--info-border);
+}
+
+.alert strong { display: block; margin-bottom: 0.25rem; }
+
+/* ─── Lists ─── */
+ul, ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+li { margin-bottom: 0.35rem; }
+
+/* ─── State diagram ─── */
+.state-diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* ─── Footer ─── */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+}
+
+/* ─── Comparison table highlight ─── */
+.check { color: var(--success); font-weight: bold; }
+.cross { color: #ccc; }
+
+/* ─── Scroll Buttons ─── */
+.scroll-btn {
+    position: fixed;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    background: var(--scroll-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--accent);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    z-index: 100;
+    transition: all 0.2s;
+}
+
+.scroll-btn:hover {
+    background: var(--accent-light);
+    color: var(--accent-hover);
+    text-decoration: none;
+}
+
+.scroll-to-top {
+    bottom: 80px;
+}
+
+.scroll-to-bottom {
+    bottom: 30px;
+}
+
+/* ─── Single-page specific ─── */
+.page-break {
+    border-top: 3px solid var(--accent-light);
+    margin: 3rem 0;
+    padding-top: 2rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; height: auto; padding: 0.75rem 1rem; }
+    .navbar-nav { flex-wrap: wrap; justify-content: center; }
+    .navbar-nav a { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+    .page-layout { padding: 1rem; flex-direction: column; }
+    .container { padding: 1rem; }
+    .hero h1 { font-size: 1.75rem; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .format-selector { padding: 0.5rem 1rem 0; }
+}
+
+@media (max-width: 900px) {
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .toc {
+        display: none;
+    }
+
+    .scroll-btn {
+        right: 15px;
+    }
+}

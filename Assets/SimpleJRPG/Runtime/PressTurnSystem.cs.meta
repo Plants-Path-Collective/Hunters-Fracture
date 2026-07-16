@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 7f0295379f575a84f88b5b5e87bd53f0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364770
+  packageName: 'Simple JRPG: Turn-Based combat API-Classic, ATB, CTB, Action Points
+    & Press Turn'
+  packageVersion: 1.0
+  assetPath: Assets/SimpleJRPG/Runtime/PressTurnSystem.cs
+  uploadId: 894130

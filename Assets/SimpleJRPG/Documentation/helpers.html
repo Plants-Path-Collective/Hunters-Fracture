@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helpers - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html" class="active">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#multi-target">Multi-Target Overloads</a></li>
+            <li><a href="#query-helpers">Query Helpers</a></li>
+            <li><a href="#battle-history">Battle History</a></li>
+            <li><a href="#remove-combatant">RemoveCombatant</a></li>
+            <li><a href="#battle-result">BattleResult</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Helpers</h1>
+        <p class="subtitle">Multi-target overloads, query methods, battle history, and utility features.</p>
+    </div>
+
+    <!-- Multi-Target Overloads -->
+    <div class="section">
+        <h2 id="multi-target">Multi-Target Overloads</h2>
+        <p>
+            <code>DealDamage</code>, <code>Heal</code>, <code>ApplyStatus</code>, and <code>ApplyBuff</code>
+            all have overloads that accept <code>IList&lt;ICombatant&gt;</code> instead of a single target.
+            Each individual action still fires its own event. Additionally, a group event fires with aggregated data.
+        </p>
+        <ul>
+            <li><code>OnGroupDamageDealt(GroupDamageEvent)</code> &mdash; contains Source, list of Hits (<code>IReadOnlyList&lt;DamageEvent&gt;</code>), TotalDamage</li>
+            <li><code>OnGroupHealed(GroupHealEvent)</code> &mdash; contains Source, list of Heals (<code>IReadOnlyList&lt;HealEvent&gt;</code>), TotalHealed</li>
+            <li><code>OnGroupStatusApplied(GroupStatusEvent)</code> &mdash; contains Source, list of Applications</li>
+            <li><code>OnGroupBuffApplied(GroupBuffEvent)</code> &mdash; contains Source, list of Applications</li>
+        </ul>
+<pre><code>var enemies = battle.GetEnemies(actor);
+battle.DealDamage(actor, enemies, 50, "magic", "Fire");
+// Fires OnDamageDealt for EACH enemy, then OnGroupDamageDealt once</code></pre>
+    </div>
+
+    <!-- Query Helpers -->
+    <div class="section">
+        <h2 id="query-helpers">Query Helpers</h2>
+        <p>
+            <code>GetEnemies(combatant)</code> returns all alive combatants NOT on the same team.
+            <code>GetAllies(combatant, includeSelf)</code> returns alive combatants on the same team.
+            <code>GetAlive(team)</code> and <code>GetDead(team)</code> filter by team (<code>-1</code> for all).
+        </p>
+<pre><code>var enemies = battle.GetEnemies(hero);     // All alive enemies
+var allies = battle.GetAllies(hero, true);  // All alive allies including hero
+var dead = battle.GetDead(0);               // Dead party members (team 0)</code></pre>
+    </div>
+
+    <!-- Battle History -->
+    <div class="section">
+        <h2 id="battle-history">Battle History</h2>
+        <p>
+            Battle records every event as a <code>BattleHistoryEntry</code> with Sequence number,
+            TurnNumber, EventType string, and the Event object. Access via
+            <code>battle.History</code> (<code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code>).
+        </p>
+<pre><code>foreach (var entry in battle.History)
+    Debug.Log($"[Turn {entry.TurnNumber}] {entry.EventType}: {entry.Event}");</code></pre>
+    </div>
+
+    <!-- RemoveCombatant -->
+    <div class="section">
+        <h2 id="remove-combatant">RemoveCombatant</h2>
+        <p>
+            Removes a combatant from battle entirely (not just KO). Fires <code>OnCombatantRemoved</code>.
+            Useful for flee-per-combatant or banish mechanics.
+        </p>
+<pre><code>battle.RemoveCombatant(summon); // Completely removes from battle</code></pre>
+    </div>
+
+    <!-- BattleResult -->
+    <div class="section">
+        <h2 id="battle-result">BattleResult</h2>
+        <p>
+            Created when battle ends via <code>EndBattle()</code> or <code>CheckBattleEnd()</code>.
+            Contains Outcome (<code>BattleState</code>), TotalTurns, Survivors (list of alive combatants),
+            and full History. Access via <code>battle.Result</code>.
+        </p>
+<pre><code>battle.OnBattleEnd += (b, state) =>
+{
+    var result = b.Result;
+    Debug.Log($"Outcome: {result.Value.Outcome}");
+    Debug.Log($"Turns: {result.Value.TotalTurns}");
+    Debug.Log($"Survivors: {result.Value.Survivors.Count}");
+};</code></pre>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

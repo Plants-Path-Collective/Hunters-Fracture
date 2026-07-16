@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleJRPG — Lean Battle API for Unity</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link active">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="#turn-systems">Turn Systems</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#getting-started">Getting Started</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>SimpleJRPG</h1>
+        <p class="subtitle">A lean runtime battle API for JRPGs</p>
+        <p class="tagline">Your rules, your formulas.</p>
+    </div>
+
+    <!-- Philosophy -->
+    <div class="section">
+        <h2 id="philosophy">Philosophy</h2>
+        <p>
+            SimpleJRPG orchestrates battles — you bring your own stats, formulas, UI, and data storage.
+            SimpleJRPG orchestrates battles. You bring your own stats, formulas, UI, and data storage.
+        </p>
+        <p>
+            There are no opinionated damage formulas, no built-in status effect logic, no UI layer.
+            Instead, SimpleJRPG exposes clean combat verbs and fires events on every action.
+            Your code decides what "Fire" means, how much damage a critical hit deals, and what
+            happens when a character is knocked out. We just make sure the battle flows.
+        </p>
+    </div>
+
+    <!-- Turn Systems -->
+    <div class="section">
+        <h2 id="turn-systems">Turn Systems</h2>
+        <p>Five pluggable turn systems ship out of the box. Implement <code>ITurnSystem</code> to build your own.</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>Classic</h4>
+                <p>DQ-style speed-sorted round-robin. Each round, combatants act in speed order. Simple, predictable, timeless.</p>
+            </div>
+            <div class="feature-card">
+                <h4>ATB</h4>
+                <p>Active Time Battle. Gauges fill over ticks based on speed. When a gauge is full, that combatant acts. No waiting for the whole team.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Timeline / CTB</h4>
+                <p>Charge Time Battle. Actions have cast times that place actors on a timeline. Heavier moves push your next turn further out.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Press Turn</h4>
+                <p>SMT-style team phases. Each team gets a pool of turn points. Exploit weaknesses to gain extra points; miss to lose them.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Action Point</h4>
+                <p>Save or spend Action Points. Bank AP by defending, then spend it for multiple actions in a single turn. Risk and reward.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="section">
+        <h2 id="features">Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>Instance-Based</h4>
+                <p>No singletons, no statics, no MonoBehaviours. Create a <code>Battle</code> instance, pass in combatants, and go.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Pass-Through Design</h4>
+                <p>Strings, not enums, for all game-specific values. We don't interpret "Fire" or "Poison" — we pass them through. Your system decides what they mean.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Combat Verbs</h4>
+                <p><code>DealDamage()</code>, <code>Heal()</code>, <code>Kill()</code>, <code>Revive()</code>, <code>ApplyStatus()</code>, <code>ApplyBuff()</code>, <code>Flee()</code> — simple imperative methods.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Events Over Callbacks</h4>
+                <p>Every verb fires an event. Subscribe to <code>OnDamageDealt</code>, <code>OnHealed</code>, <code>OnKO</code>, and more to drive UI, sound, VFX, or logging.</p>
+            </div>
+            <div class="feature-card">
+                <h4>Pluggable Turn Systems</h4>
+                <p>Five built-in implementations of <code>ITurnSystem</code>. Swap between Classic, ATB, Timeline, Press Turn, or Action Point — or write your own.</p>
+            </div>
+            <div class="feature-card">
+                <h4>No Unity Dependencies</h4>
+                <p>Pure C# with <code>noEngineReferences: true</code>. No ScriptableObjects, no MonoBehaviours, no UnityEngine imports. Testable anywhere.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Getting Started -->
+    <div class="section">
+        <h2 id="getting-started">Getting Started</h2>
+        <ol class="steps">
+            <li>Import SimpleJRPG from the Unity Asset Store into your project.</li>
+            <li>Implement <code>ICombatant</code> on your character class — provide Name, IsAlive, Team, Speed, TakeDamage(), and Heal().</li>
+            <li>Create a <code>Battle</code> instance and pass in your list of combatants along with a turn system.</li>
+            <li>Choose a turn system: <code>ClassicTurnSystem</code>, <code>ATBTurnSystem</code>, <code>TimelineTurnSystem</code>, <code>PressTurnSystem</code>, or <code>ActionPointTurnSystem</code>.</li>
+            <li>Subscribe to events like <code>OnDamageDealt</code>, <code>OnHealed</code>, and <code>OnKO</code> to wire up your UI, animations, and game logic.</li>
+        </ol>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG — Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

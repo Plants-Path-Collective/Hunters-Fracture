@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#design-philosophy">Design Philosophy</a></li>
+            <li><a href="#what-its-not">What SimpleJRPG Is NOT</a></li>
+            <li><a href="#version-history">Version History</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>About</h1>
+        <p class="subtitle">The design philosophy behind SimpleJRPG.</p>
+    </div>
+
+    <!-- Design Philosophy -->
+    <div class="section">
+        <h2 id="design-philosophy">Design Philosophy</h2>
+        <p>
+            SimpleJRPG orchestrates battles &mdash; turn order, events, state management.
+            You implement damage formulas, design status effects, and build your UI.
+        </p>
+        <p>
+            SimpleJRPG has no opinions on your game design. It uses pass-through strings instead of
+            enums for all game-specific values like damage types, elements, status IDs, and buff IDs.
+            We never interpret what "Fire" or "Poison" means &mdash; your system decides.
+        </p>
+        <p>
+            Everything is instance-based. No singletons, no statics, no global state. Create a
+            <code>Battle</code> instance, pass in your combatants and a turn system, subscribe to
+            events, and call combat verbs. That's it.
+        </p>
+    </div>
+
+    <!-- What SimpleJRPG Is NOT -->
+    <div class="section">
+        <h2 id="what-its-not">What SimpleJRPG Is NOT</h2>
+        <ul>
+            <li><strong>Not a complete battle system</strong> &mdash; it's the skeleton, you add the flesh. We provide orchestration; you provide the game.</li>
+            <li><strong>Not opinionated about damage formulas, stat systems, or game balance</strong> &mdash; you do the math, pass us the result, and we route it through.</li>
+            <li><strong>Not a UI framework</strong> &mdash; events let you drive any UI you want. We fire <code>OnDamageDealt</code>, you decide what that looks like on screen.</li>
+            <li><strong>Not dependent on Unity</strong> &mdash; pure C#, no MonoBehaviours, no ScriptableObjects, no UnityEngine imports. The asmdef uses <code>noEngineReferences: true</code>.</li>
+        </ul>
+    </div>
+
+    <!-- Version History -->
+    <div class="section">
+        <h2 id="version-history">Version History</h2>
+        <ul>
+            <li>
+                <strong>v2.0</strong> (February 2026) &mdash; Complete rewrite. Lean runtime API with an instance-based
+                <code>Battle</code> class, pluggable turn systems (Classic, ATB, Timeline, Press Turn, Action Point),
+                before-events for cancellation and modification, and battle helpers (multi-target, queries, history, results).
+            </li>
+            <li>
+                <strong>v1.0</strong> (scrapped) &mdash; ScriptableObject-based composable effects system.
+                Over-engineered abstraction layers. Lesson learned.
+            </li>
+        </ul>
+    </div>
+
+    <!-- Support -->
+    <div class="section">
+        <h2 id="support">Support</h2>
+        <p>
+            For questions, bug reports, and feature requests:
+        </p>
+        <ul>
+            <li><strong>Email</strong> &mdash; <a href="mailto:livingfailuregames@gmail.com">livingfailuregames@gmail.com</a></li>
+            <li><strong>Website</strong> &mdash; <a href="https://livingfailuregames.com">livingfailuregames.com</a></li>
+            <li><strong>Unity Asset Store</strong> &mdash; leave a review or use the Q&amp;A section on the SimpleJRPG store page.</li>
+        </ul>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

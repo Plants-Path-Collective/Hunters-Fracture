@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference — SimpleJRPG</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html" class="active">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#icombatant">ICombatant Interface</a></li>
+            <li><a href="#iturn-system">ITurnSystem Interface</a></li>
+            <li><a href="#battle-props">Battle — Properties</a></li>
+            <li><a href="#battle-methods">Battle — Methods</a></li>
+            <li><a href="#battle-events">Battle — Events</a></li>
+            <li><a href="#event-structs">BattleEvents — Structs</a></li>
+            <li><a href="#before-events">Before-Events (Classes)</a></li>
+            <li><a href="#battle-state">BattleState Enum</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>API Reference</h1>
+        <p class="subtitle">Complete reference for every type, member, method, event, and struct in SimpleJRPG.</p>
+    </div>
+
+    <!-- ICombatant Interface -->
+    <div class="section">
+        <h2 id="icombatant">ICombatant Interface</h2>
+        <p>The interface users implement for their characters and enemies. Battle never modifies combatants directly — it calls <code>TakeDamage()</code> and <code>Heal()</code>, and your implementation decides what that means.</p>
+        <table>
+            <tr>
+                <th>Member</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Name</code></td>
+                <td><code>string</code> (get)</td>
+                <td>Display name</td>
+            </tr>
+            <tr>
+                <td><code>IsAlive</code></td>
+                <td><code>bool</code> (get)</td>
+                <td>Whether combatant is alive</td>
+            </tr>
+            <tr>
+                <td><code>Team</code></td>
+                <td><code>int</code> (get)</td>
+                <td>Team identifier (0 = player)</td>
+            </tr>
+            <tr>
+                <td><code>Speed</code></td>
+                <td><code>float</code> (get)</td>
+                <td>Speed stat for turn order</td>
+            </tr>
+            <tr>
+                <td><code>TakeDamage(int amount)</code></td>
+                <td><code>void</code></td>
+                <td>Reduce HP by amount</td>
+            </tr>
+            <tr>
+                <td><code>Heal(int amount)</code></td>
+                <td><code>void</code></td>
+                <td>Restore HP by amount</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ITurnSystem Interface -->
+    <div class="section">
+        <h2 id="iturn-system">ITurnSystem Interface</h2>
+        <p>The interface for turn order logic. Implement this to create custom turn systems, or use one of the built-in implementations.</p>
+        <table>
+            <tr>
+                <th>Member</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Init(List&lt;ICombatant&gt; combatants)</code></td>
+                <td><code>void</code></td>
+                <td>Initialize with combatant list</td>
+            </tr>
+            <tr>
+                <td><code>GetNextActor()</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Get next combatant to act</td>
+            </tr>
+            <tr>
+                <td><code>GetTimeline()</code></td>
+                <td><code>IReadOnlyList&lt;ICombatant&gt;</code></td>
+                <td>Predicted turn order</td>
+            </tr>
+            <tr>
+                <td><code>OnActorDied(ICombatant)</code></td>
+                <td><code>void</code></td>
+                <td>Notify of combatant death</td>
+            </tr>
+            <tr>
+                <td><code>OnActorAdded(ICombatant)</code></td>
+                <td><code>void</code></td>
+                <td>Notify of combatant addition</td>
+            </tr>
+            <tr>
+                <td><code>OnTurnEnd()</code></td>
+                <td><code>void</code></td>
+                <td>Notify turn completed</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Battle — Properties -->
+    <div class="section">
+        <h2 id="battle-props">Battle — Properties</h2>
+        <table>
+            <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>State</code></td>
+                <td><code>BattleState</code></td>
+                <td>Current battle state</td>
+            </tr>
+            <tr>
+                <td><code>TurnNumber</code></td>
+                <td><code>int</code></td>
+                <td>Current turn count</td>
+            </tr>
+            <tr>
+                <td><code>Combatants</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>All combatants</td>
+            </tr>
+            <tr>
+                <td><code>TurnSystem</code></td>
+                <td><code>ITurnSystem</code></td>
+                <td>Active turn system</td>
+            </tr>
+            <tr>
+                <td><code>CurrentActor</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Current acting combatant</td>
+            </tr>
+            <tr>
+                <td><code>Result</code></td>
+                <td><code>BattleResult?</code></td>
+                <td>Result after battle ends</td>
+            </tr>
+            <tr>
+                <td><code>History</code></td>
+                <td><code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code></td>
+                <td>All recorded events</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Battle — Methods -->
+    <div class="section">
+        <h2 id="battle-methods">Battle — Methods</h2>
+        <table>
+            <tr>
+                <th>Method</th>
+                <th>Returns</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Start(List&lt;ICombatant&gt;, ITurnSystem)</code></td>
+                <td><code>void</code></td>
+                <td>Start battle</td>
+            </tr>
+            <tr>
+                <td><code>EndBattle(BattleState)</code></td>
+                <td><code>void</code></td>
+                <td>End battle with result</td>
+            </tr>
+            <tr>
+                <td><code>BeginNextTurn()</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Start next turn, returns actor</td>
+            </tr>
+            <tr>
+                <td><code>EndTurn()</code></td>
+                <td><code>void</code></td>
+                <td>End current turn</td>
+            </tr>
+            <tr>
+                <td><code>DealDamage(ICombatant source, ICombatant target, int amount, string damageType = "", string element = "", bool isCrit = false)</code></td>
+                <td><code>void</code></td>
+                <td>Deal damage to single target</td>
+            </tr>
+            <tr>
+                <td><code>DealDamage(ICombatant source, IList&lt;ICombatant&gt; targets, int amount, string damageType = "", string element = "", bool isCrit = false)</code></td>
+                <td><code>void</code></td>
+                <td>Deal damage to multiple targets</td>
+            </tr>
+            <tr>
+                <td><code>Heal(ICombatant source, ICombatant target, int amount)</code></td>
+                <td><code>void</code></td>
+                <td>Heal single target</td>
+            </tr>
+            <tr>
+                <td><code>Heal(ICombatant source, IList&lt;ICombatant&gt; targets, int amount)</code></td>
+                <td><code>void</code></td>
+                <td>Heal multiple targets</td>
+            </tr>
+            <tr>
+                <td><code>Kill(ICombatant target, ICombatant killer = null)</code></td>
+                <td><code>void</code></td>
+                <td>Force KO</td>
+            </tr>
+            <tr>
+                <td><code>Revive(ICombatant target, int hpAmount)</code></td>
+                <td><code>void</code></td>
+                <td>Revive dead target</td>
+            </tr>
+            <tr>
+                <td><code>ApplyStatus(ICombatant source, ICombatant target, string statusId, int duration = -1)</code></td>
+                <td><code>void</code></td>
+                <td>Apply status effect</td>
+            </tr>
+            <tr>
+                <td><code>ApplyStatus(ICombatant source, IList&lt;ICombatant&gt; targets, string statusId, int duration = -1)</code></td>
+                <td><code>void</code></td>
+                <td>Apply status to multiple</td>
+            </tr>
+            <tr>
+                <td><code>RemoveStatus(ICombatant target, string statusId)</code></td>
+                <td><code>void</code></td>
+                <td>Remove status</td>
+            </tr>
+            <tr>
+                <td><code>ApplyBuff(ICombatant source, ICombatant target, string buffId, float amount, int duration = -1)</code></td>
+                <td><code>void</code></td>
+                <td>Apply buff</td>
+            </tr>
+            <tr>
+                <td><code>ApplyBuff(ICombatant source, IList&lt;ICombatant&gt; targets, string buffId, float amount, int duration = -1)</code></td>
+                <td><code>void</code></td>
+                <td>Apply buff to multiple</td>
+            </tr>
+            <tr>
+                <td><code>RemoveBuff(ICombatant target, string buffId)</code></td>
+                <td><code>void</code></td>
+                <td>Remove buff</td>
+            </tr>
+            <tr>
+                <td><code>Flee(ICombatant who)</code></td>
+                <td><code>void</code></td>
+                <td>Flee from battle</td>
+            </tr>
+            <tr>
+                <td><code>RemoveCombatant(ICombatant)</code></td>
+                <td><code>void</code></td>
+                <td>Remove from battle entirely</td>
+            </tr>
+            <tr>
+                <td><code>CheckBattleEnd()</code></td>
+                <td><code>bool</code></td>
+                <td>Check if battle should end</td>
+            </tr>
+            <tr>
+                <td><code>GetAlive(int team = -1)</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>Get alive combatants</td>
+            </tr>
+            <tr>
+                <td><code>GetDead(int team = -1)</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>Get dead combatants</td>
+            </tr>
+            <tr>
+                <td><code>GetEnemies(ICombatant)</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>Get alive enemies</td>
+            </tr>
+            <tr>
+                <td><code>GetAllies(ICombatant, bool includeSelf = false)</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>Get alive allies</td>
+            </tr>
+            <tr>
+                <td><code>GetTimeline()</code></td>
+                <td><code>IReadOnlyList&lt;ICombatant&gt;</code></td>
+                <td>Get turn order from turn system</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Battle — Events -->
+    <div class="section">
+        <h2 id="battle-events">Battle — Events</h2>
+        <table>
+            <tr>
+                <th>Event</th>
+                <th>Signature</th>
+                <th>When</th>
+            </tr>
+            <tr>
+                <td><code>OnBattleStart</code></td>
+                <td><code>Action&lt;Battle&gt;</code></td>
+                <td>Battle.Start() called</td>
+            </tr>
+            <tr>
+                <td><code>OnBattleEnd</code></td>
+                <td><code>Action&lt;Battle, BattleState&gt;</code></td>
+                <td>Battle ends</td>
+            </tr>
+            <tr>
+                <td><code>OnTurnStart</code></td>
+                <td><code>Action&lt;TurnEvent&gt;</code></td>
+                <td>BeginNextTurn() called</td>
+            </tr>
+            <tr>
+                <td><code>OnTurnEnd</code></td>
+                <td><code>Action&lt;TurnEvent&gt;</code></td>
+                <td>EndTurn() called</td>
+            </tr>
+            <tr>
+                <td><code>OnBeforeDamage</code></td>
+                <td><code>Action&lt;BeforeDamageEvent&gt;</code></td>
+                <td>Before damage applied (cancellable)</td>
+            </tr>
+            <tr>
+                <td><code>OnDamageDealt</code></td>
+                <td><code>Action&lt;DamageEvent&gt;</code></td>
+                <td>After damage applied</td>
+            </tr>
+            <tr>
+                <td><code>OnBeforeHeal</code></td>
+                <td><code>Action&lt;BeforeHealEvent&gt;</code></td>
+                <td>Before heal applied (cancellable)</td>
+            </tr>
+            <tr>
+                <td><code>OnHealed</code></td>
+                <td><code>Action&lt;HealEvent&gt;</code></td>
+                <td>After heal applied</td>
+            </tr>
+            <tr>
+                <td><code>OnKO</code></td>
+                <td><code>Action&lt;KOEvent&gt;</code></td>
+                <td>Combatant knocked out</td>
+            </tr>
+            <tr>
+                <td><code>OnRevived</code></td>
+                <td><code>Action&lt;ICombatant&gt;</code></td>
+                <td>Combatant revived</td>
+            </tr>
+            <tr>
+                <td><code>OnStatusApplied</code></td>
+                <td><code>Action&lt;StatusEvent&gt;</code></td>
+                <td>Status applied</td>
+            </tr>
+            <tr>
+                <td><code>OnStatusRemoved</code></td>
+                <td><code>Action&lt;ICombatant, string&gt;</code></td>
+                <td>Status removed</td>
+            </tr>
+            <tr>
+                <td><code>OnBuffApplied</code></td>
+                <td><code>Action&lt;BuffEvent&gt;</code></td>
+                <td>Buff applied</td>
+            </tr>
+            <tr>
+                <td><code>OnBuffRemoved</code></td>
+                <td><code>Action&lt;ICombatant, string&gt;</code></td>
+                <td>Buff removed</td>
+            </tr>
+            <tr>
+                <td><code>OnFled</code></td>
+                <td><code>Action&lt;ICombatant&gt;</code></td>
+                <td>Combatant fled</td>
+            </tr>
+            <tr>
+                <td><code>OnCombatantRemoved</code></td>
+                <td><code>Action&lt;ICombatant&gt;</code></td>
+                <td>Combatant removed</td>
+            </tr>
+            <tr>
+                <td><code>OnGroupDamageDealt</code></td>
+                <td><code>Action&lt;GroupDamageEvent&gt;</code></td>
+                <td>Multi-target damage</td>
+            </tr>
+            <tr>
+                <td><code>OnGroupHealed</code></td>
+                <td><code>Action&lt;GroupHealEvent&gt;</code></td>
+                <td>Multi-target heal</td>
+            </tr>
+            <tr>
+                <td><code>OnGroupStatusApplied</code></td>
+                <td><code>Action&lt;GroupStatusEvent&gt;</code></td>
+                <td>Multi-target status</td>
+            </tr>
+            <tr>
+                <td><code>OnGroupBuffApplied</code></td>
+                <td><code>Action&lt;GroupBuffEvent&gt;</code></td>
+                <td>Multi-target buff</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- BattleEvents — Structs -->
+    <div class="section">
+        <h2 id="event-structs">BattleEvents — Structs</h2>
+
+        <h3>DamageEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who dealt the damage</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who received the damage</td>
+            </tr>
+            <tr>
+                <td><code>Amount</code></td>
+                <td><code>int</code></td>
+                <td>Damage amount</td>
+            </tr>
+            <tr>
+                <td><code>DamageType</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through damage type</td>
+            </tr>
+            <tr>
+                <td><code>Element</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through element</td>
+            </tr>
+            <tr>
+                <td><code>WasCrit</code></td>
+                <td><code>bool</code></td>
+                <td>Whether the hit was critical</td>
+            </tr>
+        </table>
+
+        <h3>HealEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who performed the heal</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who was healed</td>
+            </tr>
+            <tr>
+                <td><code>Amount</code></td>
+                <td><code>int</code></td>
+                <td>Heal amount</td>
+            </tr>
+        </table>
+
+        <h3>StatusEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who applied the status</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who received the status</td>
+            </tr>
+            <tr>
+                <td><code>StatusId</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through status identifier</td>
+            </tr>
+            <tr>
+                <td><code>Duration</code></td>
+                <td><code>int</code></td>
+                <td>Duration in turns (-1 = permanent)</td>
+            </tr>
+        </table>
+
+        <h3>BuffEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who applied the buff</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who received the buff</td>
+            </tr>
+            <tr>
+                <td><code>BuffId</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through buff identifier</td>
+            </tr>
+            <tr>
+                <td><code>Amount</code></td>
+                <td><code>float</code></td>
+                <td>Numeric value (user-interpreted)</td>
+            </tr>
+            <tr>
+                <td><code>Duration</code></td>
+                <td><code>int</code></td>
+                <td>Duration in turns (-1 = permanent)</td>
+            </tr>
+        </table>
+
+        <h3>KOEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who was knocked out</td>
+            </tr>
+            <tr>
+                <td><code>Killer</code></td>
+                <td><code>ICombatant</code> (nullable)</td>
+                <td>Who caused the KO (null if none)</td>
+            </tr>
+        </table>
+
+        <h3>TurnEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Actor</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Whose turn it is</td>
+            </tr>
+            <tr>
+                <td><code>TurnNumber</code></td>
+                <td><code>int</code></td>
+                <td>Current turn number</td>
+            </tr>
+        </table>
+
+        <h3>GroupDamageEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who dealt the damage</td>
+            </tr>
+            <tr>
+                <td><code>Hits</code></td>
+                <td><code>IReadOnlyList&lt;DamageEvent&gt;</code></td>
+                <td>Individual damage events</td>
+            </tr>
+            <tr>
+                <td><code>TotalDamage</code></td>
+                <td><code>int</code></td>
+                <td>Sum of all damage dealt</td>
+            </tr>
+        </table>
+
+        <h3>GroupHealEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who performed the heals</td>
+            </tr>
+            <tr>
+                <td><code>Heals</code></td>
+                <td><code>IReadOnlyList&lt;HealEvent&gt;</code></td>
+                <td>Individual heal events</td>
+            </tr>
+            <tr>
+                <td><code>TotalHealed</code></td>
+                <td><code>int</code></td>
+                <td>Sum of all HP restored</td>
+            </tr>
+        </table>
+
+        <h3>GroupStatusEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who applied the statuses</td>
+            </tr>
+            <tr>
+                <td><code>Applications</code></td>
+                <td><code>IReadOnlyList&lt;StatusEvent&gt;</code></td>
+                <td>Individual status events</td>
+            </tr>
+        </table>
+
+        <h3>GroupBuffEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who applied the buffs</td>
+            </tr>
+            <tr>
+                <td><code>Applications</code></td>
+                <td><code>IReadOnlyList&lt;BuffEvent&gt;</code></td>
+                <td>Individual buff events</td>
+            </tr>
+        </table>
+
+        <h3>BattleHistoryEntry</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Sequence</code></td>
+                <td><code>int</code></td>
+                <td>Global sequence number</td>
+            </tr>
+            <tr>
+                <td><code>TurnNumber</code></td>
+                <td><code>int</code></td>
+                <td>Turn when event occurred</td>
+            </tr>
+            <tr>
+                <td><code>EventType</code></td>
+                <td><code>string</code></td>
+                <td>Type of event recorded</td>
+            </tr>
+            <tr>
+                <td><code>Event</code></td>
+                <td><code>object</code></td>
+                <td>The event data (cast to specific type)</td>
+            </tr>
+        </table>
+
+        <h3>BattleResult</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Outcome</code></td>
+                <td><code>BattleState</code></td>
+                <td>Victory, Defeat, or Fled</td>
+            </tr>
+            <tr>
+                <td><code>TotalTurns</code></td>
+                <td><code>int</code></td>
+                <td>Total turns taken</td>
+            </tr>
+            <tr>
+                <td><code>Survivors</code></td>
+                <td><code>List&lt;ICombatant&gt;</code></td>
+                <td>Combatants still alive at end</td>
+            </tr>
+            <tr>
+                <td><code>History</code></td>
+                <td><code>IReadOnlyList&lt;BattleHistoryEntry&gt;</code></td>
+                <td>Complete battle event log</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- BattleEvents — Classes (Before-Events) -->
+    <div class="section">
+        <h2 id="before-events">BattleEvents — Before-Events (Classes)</h2>
+        <p>Before-events are mutable classes (not structs) that allow subscribers to modify or cancel actions before they execute.</p>
+
+        <h3>BeforeDamageEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who is dealing the damage</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who will receive the damage</td>
+            </tr>
+            <tr>
+                <td><code>Amount</code></td>
+                <td><code>int</code> (settable)</td>
+                <td>Damage amount — modify to change final damage</td>
+            </tr>
+            <tr>
+                <td><code>DamageType</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through damage type</td>
+            </tr>
+            <tr>
+                <td><code>Element</code></td>
+                <td><code>string</code></td>
+                <td>Pass-through element</td>
+            </tr>
+            <tr>
+                <td><code>IsCrit</code></td>
+                <td><code>bool</code></td>
+                <td>Whether the hit is critical</td>
+            </tr>
+            <tr>
+                <td><code>Cancel</code></td>
+                <td><code>bool</code> (settable)</td>
+                <td>Set to <code>true</code> to prevent damage entirely</td>
+            </tr>
+        </table>
+
+        <h3>BeforeHealEvent</h3>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Source</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who is performing the heal</td>
+            </tr>
+            <tr>
+                <td><code>Target</code></td>
+                <td><code>ICombatant</code></td>
+                <td>Who will be healed</td>
+            </tr>
+            <tr>
+                <td><code>Amount</code></td>
+                <td><code>int</code> (settable)</td>
+                <td>Heal amount — modify to change final heal</td>
+            </tr>
+            <tr>
+                <td><code>Cancel</code></td>
+                <td><code>bool</code> (settable)</td>
+                <td>Set to <code>true</code> to prevent heal entirely</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- BattleState Enum -->
+    <div class="section">
+        <h2 id="battle-state">BattleState Enum</h2>
+        <table>
+            <tr>
+                <th>Value</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>NotStarted</code></td>
+                <td>Battle has not begun yet</td>
+            </tr>
+            <tr>
+                <td><code>WaitingForCommands</code></td>
+                <td>Waiting for the next turn to begin</td>
+            </tr>
+            <tr>
+                <td><code>Executing</code></td>
+                <td>A turn is in progress</td>
+            </tr>
+            <tr>
+                <td><code>Victory</code></td>
+                <td>Player team won</td>
+            </tr>
+            <tr>
+                <td><code>Defeat</code></td>
+                <td>Player team lost</td>
+            </tr>
+            <tr>
+                <td><code>Fled</code></td>
+                <td>A combatant fled the battle</td>
+            </tr>
+        </table>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG — Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

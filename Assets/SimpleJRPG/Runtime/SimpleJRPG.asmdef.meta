@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 52f3347b1967b734d90eb8d39617e082
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364770
+  packageName: 'Simple JRPG: Turn-Based combat API-Classic, ATB, CTB, Action Points
+    & Press Turn'
+  packageVersion: 1.0
+  assetPath: Assets/SimpleJRPG/Runtime/SimpleJRPG.asmdef
+  uploadId: 894130

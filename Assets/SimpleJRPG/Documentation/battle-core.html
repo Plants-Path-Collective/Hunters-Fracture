@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Core — SimpleJRPG</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html" class="active">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#battle-lifecycle">Battle Lifecycle</a></li>
+            <li><a href="#turn-flow">Turn Flow</a></li>
+            <li><a href="#state-machine">State Machine</a></li>
+            <li><a href="#combat-verbs">Combat Verbs</a></li>
+            <li><a href="#status-buff">Status &amp; Buff</a></li>
+            <li><a href="#flee">Flee</a></li>
+            <li><a href="#check-battle-end">CheckBattleEnd</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Battle Core</h1>
+        <p class="subtitle">The <code>Battle</code> class is the heart of SimpleJRPG — a plain C# instance that orchestrates combat through lifecycle methods, combat verbs, and events.</p>
+    </div>
+
+    <!-- Battle Lifecycle -->
+    <div class="section">
+        <h2 id="battle-lifecycle">Battle Lifecycle</h2>
+
+        <h3>Start()</h3>
+        <pre><code>public void Start(List&lt;ICombatant&gt; combatants, ITurnSystem turnSystem)</code></pre>
+        <p>Initializes the battle. Pass in your list of combatants and a turn system implementation. Internally, this method:</p>
+        <ol>
+            <li>Stores the combatants and turn system references.</li>
+            <li>Resets the turn counter and battle history.</li>
+            <li>Calls <code>turnSystem.Init(combatants)</code> so the turn system can set up its internal state.</li>
+            <li>Sets <code>State</code> to <code>BattleState.WaitingForCommands</code>.</li>
+            <li>Fires the <code>OnBattleStart</code> event.</li>
+        </ol>
+        <p><code>Start()</code> will silently return if the battle state is anything other than <code>NotStarted</code>. You cannot restart a battle instance — create a new one.</p>
+
+        <h3>EndBattle()</h3>
+        <pre><code>public void EndBattle(BattleState result)</code></pre>
+        <p>Ends the battle with the given outcome. Pass <code>BattleState.Victory</code>, <code>BattleState.Defeat</code>, or <code>BattleState.Fled</code>. This method:</p>
+        <ol>
+            <li>Sets <code>State</code> to the given result.</li>
+            <li>Clears <code>CurrentActor</code>.</li>
+            <li>Creates a <code>BattleResult</code> containing the outcome, total turns taken, surviving combatants, and the full battle history.</li>
+            <li>Fires the <code>OnBattleEnd</code> event with the battle instance and the resulting state.</li>
+        </ol>
+        <p>If the battle has already ended (state is Victory, Defeat, or Fled), calling <code>EndBattle()</code> again does nothing.</p>
+    </div>
+
+    <!-- Turn Flow -->
+    <div class="section">
+        <h2 id="turn-flow">Turn Flow</h2>
+
+        <h3>BeginNextTurn()</h3>
+        <pre><code>public ICombatant BeginNextTurn()</code></pre>
+        <p>Advances to the next turn. Asks the turn system for the next actor via <code>GetNextActor()</code>, increments the turn counter, sets state to <code>Executing</code>, and fires <code>OnTurnStart</code>. Returns the actor whose turn it is, or <code>null</code> if no actor is available.</p>
+        <p>Can only be called when state is <code>WaitingForCommands</code> or <code>Executing</code>.</p>
+
+        <h3>EndTurn()</h3>
+        <pre><code>public void EndTurn()</code></pre>
+        <p>Ends the current turn. Fires <code>OnTurnEnd</code>, notifies the turn system via <code>OnTurnEnd()</code>, clears <code>CurrentActor</code>, then automatically calls <code>CheckBattleEnd()</code>. If the battle hasn't ended, state returns to <code>WaitingForCommands</code>.</p>
+        <p>Can only be called when state is <code>Executing</code>.</p>
+    </div>
+
+    <!-- State Machine Diagram -->
+    <div class="section">
+        <h2 id="state-machine">State Machine</h2>
+        <p>The battle progresses through a simple state machine. All transitions are driven by the methods described above.</p>
+        <div class="state-diagram">
+NotStarted ──Start()──> WaitingForCommands
+                              │
+                      BeginNextTurn()
+                              │
+                              ▼
+                          Executing
+                              │
+                          EndTurn()
+                              │
+                              ▼
+                      WaitingForCommands
+                              │
+                     CheckBattleEnd()
+                        /         \
+                    Victory      Defeat      Fled</div>
+        <div class="alert alert-info">
+            <strong>Note</strong>
+            <code>Fled</code> is reached via <code>Flee()</code>, which calls <code>EndBattle(BattleState.Fled)</code> directly — it can happen from any active state, not just after <code>CheckBattleEnd()</code>.
+        </div>
+    </div>
+
+    <!-- Combat Verbs -->
+    <div class="section">
+        <h2 id="combat-verbs">Combat Verbs</h2>
+        <p>Combat verbs are the imperative methods you call to make things happen in battle. You do the math — we orchestrate the result.</p>
+
+        <h3>DealDamage</h3>
+        <pre><code>public void DealDamage(ICombatant source, ICombatant target, int amount,
+    string damageType = "", string element = "", bool isCrit = false)</code></pre>
+        <p>Deals damage to a single target. The flow is:</p>
+        <ol>
+            <li>Fires <code>OnBeforeDamage</code> with a <code>BeforeDamageEvent</code>. Subscribers can modify <code>Amount</code>, <code>DamageType</code>, <code>Element</code>, <code>IsCrit</code>, or set <code>Cancel = true</code> to prevent the damage entirely.</li>
+            <li>If not cancelled, calls <code>target.TakeDamage(amount)</code> with the (potentially modified) amount.</li>
+            <li>Fires <code>OnDamageDealt</code> with the final <code>DamageEvent</code>.</li>
+            <li>If the target is no longer alive, automatically fires <code>OnKO</code> and notifies the turn system.</li>
+        </ol>
+        <p>There is also a group overload that accepts <code>IList&lt;ICombatant&gt; targets</code> and fires <code>OnGroupDamageDealt</code> after processing all individual hits.</p>
+
+        <h3>Heal</h3>
+        <pre><code>public void Heal(ICombatant source, ICombatant target, int amount)</code></pre>
+        <p>Heals a single target. The flow mirrors damage:</p>
+        <ol>
+            <li>Fires <code>OnBeforeHeal</code> with a <code>BeforeHealEvent</code>. Subscribers can modify <code>Amount</code> or set <code>Cancel = true</code>.</li>
+            <li>If not cancelled, calls <code>target.Heal(amount)</code>.</li>
+            <li>Fires <code>OnHealed</code> with the final <code>HealEvent</code>.</li>
+        </ol>
+        <p>Group overload available — fires <code>OnGroupHealed</code> after all individual heals.</p>
+
+        <h3>Kill</h3>
+        <pre><code>public void Kill(ICombatant target, ICombatant killer = null)</code></pre>
+        <p>Forces a KO regardless of the target's current HP. Calls <code>target.TakeDamage(int.MaxValue)</code>, then fires <code>OnKO</code> and notifies the turn system. Does nothing if the target is already dead. This bypasses the before-event system — there is no <code>OnBeforeDamage</code> for Kill.</p>
+
+        <h3>Revive</h3>
+        <pre><code>public void Revive(ICombatant target, int hpAmount)</code></pre>
+        <p>Revives a dead combatant by calling <code>target.Heal(hpAmount)</code>, then notifies the turn system via <code>OnActorAdded()</code> so the revived combatant is re-inserted into the turn order. Fires <code>OnRevived</code>. Does nothing if the target is already alive.</p>
+    </div>
+
+    <!-- Status & Buff -->
+    <div class="section">
+        <h2 id="status-buff">Status &amp; Buff</h2>
+
+        <div class="alert alert-warning">
+            <strong>Event-only — no internal tracking</strong>
+            Battle does NOT maintain a list of active statuses or buffs. These methods exist solely to fire events. Your game's status system subscribes to these events and handles all tracking, stacking, duration, and removal logic.
+        </div>
+
+        <h3>ApplyStatus / RemoveStatus</h3>
+        <pre><code>public void ApplyStatus(ICombatant source, ICombatant target, string statusId, int duration = -1)
+public void RemoveStatus(ICombatant target, string statusId)</code></pre>
+        <p><code>ApplyStatus</code> fires <code>OnStatusApplied</code> with a <code>StatusEvent</code> containing the source, target, status ID string, and optional duration. <code>RemoveStatus</code> fires <code>OnStatusRemoved</code> with the target and status ID. Both have group overloads that fire <code>OnGroupStatusApplied</code>.</p>
+        <p>The <code>statusId</code> is a pass-through string — Battle doesn't know or care what "Poison" or "Blind" means. Your system decides.</p>
+
+        <h3>ApplyBuff / RemoveBuff</h3>
+        <pre><code>public void ApplyBuff(ICombatant source, ICombatant target, string buffId, float amount, int duration = -1)
+public void RemoveBuff(ICombatant target, string buffId)</code></pre>
+        <p><code>ApplyBuff</code> fires <code>OnBuffApplied</code> with a <code>BuffEvent</code> containing source, target, buff ID, numeric amount, and optional duration. <code>RemoveBuff</code> fires <code>OnBuffRemoved</code>. Group overloads fire <code>OnGroupBuffApplied</code>.</p>
+        <p>Same pass-through philosophy — <code>buffId</code> and <code>amount</code> are yours to interpret. "ATK_UP" with amount 1.5 could mean +50% attack, or 1.5 flat — your call.</p>
+    </div>
+
+    <!-- Flee -->
+    <div class="section">
+        <h2 id="flee">Flee</h2>
+        <pre><code>public void Flee(ICombatant who)</code></pre>
+        <p>Fires <code>OnFled</code> with the fleeing combatant, then immediately calls <code>EndBattle(BattleState.Fled)</code>. The battle ends — no further actions are possible.</p>
+        <p>Whether the flee attempt succeeds is your game's decision. Only call <code>Flee()</code> after you've already determined the attempt was successful. If you want a chance-based flee, do your roll first, and only call this if it passes.</p>
+    </div>
+
+    <!-- CheckBattleEnd -->
+    <div class="section">
+        <h2 id="check-battle-end">CheckBattleEnd</h2>
+        <pre><code>public bool CheckBattleEnd()</code></pre>
+        <p>Checks whether the battle should end based on which teams still have living combatants. Returns <code>true</code> if the battle ended, <code>false</code> otherwise.</p>
+        <p>The logic:</p>
+        <ul>
+            <li><strong>Team 0 = player team.</strong> All other team numbers are considered enemies.</li>
+            <li>If no enemies are alive (only team 0 remains) — <code>EndBattle(BattleState.Victory)</code>.</li>
+            <li>If no team 0 members are alive — <code>EndBattle(BattleState.Defeat)</code>.</li>
+        </ul>
+
+        <div class="alert alert-info">
+            <strong>Automatic calls</strong>
+            <code>CheckBattleEnd()</code> is called automatically at two points: inside <code>EndTurn()</code>, and inside <code>HandleKO()</code> (which fires whenever a combatant dies from <code>DealDamage</code> or <code>Kill</code>). You typically don't need to call it yourself, but you can if you want to check mid-turn.
+        </div>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG — Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

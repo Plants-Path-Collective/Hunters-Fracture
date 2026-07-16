@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation — SimpleJRPG</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html" class="active">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#import">Import from Asset Store</a></li>
+            <li><a href="#folder-structure">Folder Structure</a></li>
+            <li><a href="#assembly-definition">Assembly Definition</a></li>
+            <li><a href="#requirements">Requirements</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Installation</h1>
+        <p class="subtitle">Get SimpleJRPG into your Unity project in under a minute.</p>
+    </div>
+
+    <!-- Import from Unity Asset Store -->
+    <div class="section">
+        <h2 id="import">Import from Unity Asset Store</h2>
+        <p>SimpleJRPG is available on the Unity Asset Store. Follow these steps to add it to your project:</p>
+        <ol class="steps">
+            <li>Open the Unity Editor and navigate to <strong>Window &gt; Package Manager</strong>.</li>
+            <li>In the Package Manager, select <strong>My Assets</strong> from the dropdown in the top-left.</li>
+            <li>Search for <strong>SimpleJRPG</strong> in your asset list.</li>
+            <li>Click <strong>Download</strong> if you haven't already, then click <strong>Import</strong>.</li>
+            <li>In the Import dialog, ensure all files are selected and click <strong>Import</strong>.</li>
+            <li>SimpleJRPG will appear under <code>Assets/SimpleJRPG/</code> in your project.</li>
+        </ol>
+    </div>
+
+    <!-- Folder Structure -->
+    <div class="section">
+        <h2 id="folder-structure">Folder Structure</h2>
+        <p>After importing, you'll find the following structure in your project:</p>
+        <pre><code>Assets/SimpleJRPG/
+├── Runtime/          — Core battle API
+├── Demo/             — Interactive demo scenes
+├── Documentation/    — This documentation
+└── Scenes/           — Generated demo scenes</code></pre>
+        <p>The <code>Runtime/</code> folder contains everything you need. The other folders are optional and can be safely deleted if you only want the core API.</p>
+    </div>
+
+    <!-- Assembly Definition -->
+    <div class="section">
+        <h2 id="assembly-definition">Assembly Definition</h2>
+        <p>SimpleJRPG ships with an assembly definition file (<code>SimpleJRPG.asmdef</code>) located in the <code>Runtime/</code> folder. This assembly definition is configured with <code>noEngineReferences: true</code>, which means:</p>
+        <ul>
+            <li><strong>Pure C#</strong> — No dependency on UnityEngine or any Unity API.</li>
+            <li><strong>Testable</strong> — You can reference this assembly from a test project and run unit tests with any .NET test framework, no Unity test runner required.</li>
+            <li><strong>Portable</strong> — The code can be compiled and used outside of Unity entirely, making it easy to share logic between a Unity client and a server, for example.</li>
+        </ul>
+        <p>To reference SimpleJRPG from your own assembly definitions, simply add <code>SimpleJRPG</code> to your asmdef's reference list.</p>
+    </div>
+
+    <!-- Requirements -->
+    <div class="section">
+        <h2 id="requirements">Requirements</h2>
+        <ul>
+            <li><strong>Unity 2021.3+</strong> — Any recent Unity version is supported (2021 LTS or newer).</li>
+            <li><strong>No third-party dependencies</strong> — SimpleJRPG does not rely on any external packages or plugins.</li>
+        </ul>
+    </div>
+
+    <!-- Info Alert -->
+    <div class="alert alert-info">
+        <strong>Zero Dependencies</strong>
+        SimpleJRPG has zero external dependencies. It's pure C# — no MonoBehaviours, no ScriptableObjects, no Unity API calls.
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG — Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

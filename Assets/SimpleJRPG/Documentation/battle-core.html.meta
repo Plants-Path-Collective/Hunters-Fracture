@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ec2dcf665b5322745a86b90eb39b60ce
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 364770
+  packageName: 'Simple JRPG: Turn-Based combat API-Classic, ATB, CTB, Action Points
+    & Press Turn'
+  packageVersion: 1.0
+  assetPath: Assets/SimpleJRPG/Documentation/battle-core.html
+  uploadId: 894130
