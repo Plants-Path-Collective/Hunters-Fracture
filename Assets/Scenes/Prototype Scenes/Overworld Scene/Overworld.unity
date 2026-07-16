@@ -1421,7 +1421,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1822619056}
-  - component: {fileID: 1822619058}
   - component: {fileID: 1822619057}
   m_Layer: 0
   m_Name: Enemy1
@@ -1467,21 +1466,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &1822619058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822619055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058ef296b0c1add4eae9425fe585aa09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.CombatTrigger
-  enemyParty: {fileID: 11400000, guid: 64ea25e0a8bcadf49a92978bc68c03b7, type: 2}
-  combatScene: CombatStage
-  playerTag: Player
 --- !u!1 &2103940998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,7 +1607,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[GameManager]'
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2892240965244473777, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
