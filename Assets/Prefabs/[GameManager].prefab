@@ -64,7 +64,11 @@ MonoBehaviour:
     panelRoot: {fileID: 0}
     dialogueText: {fileID: 0}
     answerPanel: {fileID: 0}
-    answerLabels: []
+    answerLabels:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     portraitImage: {fileID: 0}
     speakerNameText: {fileID: 0}
   audioSource: {fileID: 0}

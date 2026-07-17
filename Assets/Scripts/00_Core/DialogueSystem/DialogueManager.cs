@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,6 +45,9 @@ namespace PlantsPathCo.DialogueSystem
         [SerializeField] private DisplayMode displayMode = DisplayMode.Both;
         [Tooltip("Reference to the conversation currently being played. Used internally to track the active dialogue flow.")]
         [SerializeField] private ConversationSO currentConversation;
+        
+        private ConversationTrigger currentTrigger;
+        
         [Tooltip("Current line index being played within the active conversation. Resets when changing conversations.")]
         [SerializeField] private int lineIndex;
 
@@ -85,8 +89,8 @@ namespace PlantsPathCo.DialogueSystem
                 if (input != null) input.action.Disable();
         }
 
-        /// <summary>Method to start a conversation, needs a ConversationSO.</summary>
-        public void StartConversation(ConversationSO conversation)
+        /// <summary>Función para empezar una conversación, requiere de un ConversationSO.</summary>
+        public void StartConversation(ConversationSO conversation, ConversationTrigger trigger)
         {
             if (conversation == null || conversation.lines == null || conversation.lines.Length == 0)
                 return;
@@ -95,7 +99,10 @@ namespace PlantsPathCo.DialogueSystem
                 StopCoroutine(runningCoroutine);
 
             currentConversation = conversation;
+            currentTrigger = trigger;
             lineIndex = 0;
+            
+            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Dialogue);
 
             if (dialoguePanel.panelRoot != null)
                 dialoguePanel.panelRoot.SetActive(true);
@@ -240,10 +247,18 @@ namespace PlantsPathCo.DialogueSystem
             if (dialoguePanel.panelRoot != null)
                 dialoguePanel.panelRoot.SetActive(false);
 
+            if (currentTrigger != null)
+            {
+                currentTrigger.playing = false;
+                currentTrigger.AdvanceConversation();
+            }
+            
             onConversationEnd?.Invoke(currentConversation);
 
             currentConversation = null;
             runningCoroutine = null;
+            
+            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Exploration);
         }
     }
 }

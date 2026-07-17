@@ -4,6 +4,8 @@ using PlantsPathCo.DialogueSystem;
 [RequireComponent(typeof(Collider))]
 public class ConversationTrigger : MonoBehaviour
 {
+    [ReadOnly] public bool playing;
+    
     [Header("NPC")]
     [SerializeField] private int npcID;
 
@@ -14,7 +16,7 @@ public class ConversationTrigger : MonoBehaviour
     [SerializeField] private bool request;
 
     [Tooltip("Indice de la conversación a reproducir.")]
-    private int conversationIndex;
+    [ReadOnly] [SerializeField] private int conversationIndex;
 
     private string SaveKey => $"NPC_{npcID}_Conversation";
 
@@ -38,7 +40,9 @@ public class ConversationTrigger : MonoBehaviour
 
         int index = Mathf.Clamp(conversationIndex, 0, conversations.Length - 1);
 
-        DialogueManager.Instance.StartConversation(conversations[index]);
+        DialogueManager.Instance.StartConversation(conversations[index], this);
+
+        playing = true;
     }
 
     public void AdvanceConversation()
