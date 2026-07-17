@@ -665,6 +665,42 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=1)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Answer1"",
+                    ""type"": ""Button"",
+                    ""id"": ""b4156932-519a-4b2a-8748-93a9a20ab8e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Answer2"",
+                    ""type"": ""Button"",
+                    ""id"": ""69ed2d38-2f33-40b7-a75a-5318d4e39cd6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Answer3"",
+                    ""type"": ""Button"",
+                    ""id"": ""e3a09720-1494-4a9a-ae7b-de497fdf318b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Answer4"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd34c6d4-e69f-48d2-8d7b-532004380807"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -841,6 +877,138 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Skip Conversation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d830fb6-b66d-4abe-812b-a96869b60622"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""78050b74-5af8-493a-86a5-bfeb3e1aeda5"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96974a05-5ec8-4fcf-875a-d6342046caa2"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Answer1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32c11628-4f96-4757-88f6-f2fc9c081744"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c9772592-c0ab-48fc-8f4a-d26f48963a6f"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b959b157-cd6e-4c4c-8420-817812ee1ccd"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Answer2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3261a1f0-5496-477d-9234-659008d078a8"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c29df935-30a6-471c-897f-294bbb5818e4"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c84ac4e5-30c0-4ca4-aba8-0f982d26ed2c"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Answer3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75bde026-592c-43be-a1cd-398031c45e33"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0dae320-0d38-45a0-a871-2f4498e9a16e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Answer4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25bd3c15-d2c5-4394-9786-4ce1292f53a7"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Answer4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1511,6 +1679,10 @@ namespace InputSystem
             m_Dialogue_CompleteLineConfirmSelection = m_Dialogue.FindAction("Complete Line / Confirm Selection", throwIfNotFound: true);
             m_Dialogue_SkipConversation = m_Dialogue.FindAction("Skip Conversation", throwIfNotFound: true);
             m_Dialogue_AbandonConversation = m_Dialogue.FindAction("Abandon Conversation", throwIfNotFound: true);
+            m_Dialogue_Answer1 = m_Dialogue.FindAction("Answer1", throwIfNotFound: true);
+            m_Dialogue_Answer2 = m_Dialogue.FindAction("Answer2", throwIfNotFound: true);
+            m_Dialogue_Answer3 = m_Dialogue.FindAction("Answer3", throwIfNotFound: true);
+            m_Dialogue_Answer4 = m_Dialogue.FindAction("Answer4", throwIfNotFound: true);
             // Combat
             m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
             m_Combat_TargetSelection = m_Combat.FindAction("Target  Selection", throwIfNotFound: true);
@@ -1950,6 +2122,10 @@ namespace InputSystem
         private readonly InputAction m_Dialogue_CompleteLineConfirmSelection;
         private readonly InputAction m_Dialogue_SkipConversation;
         private readonly InputAction m_Dialogue_AbandonConversation;
+        private readonly InputAction m_Dialogue_Answer1;
+        private readonly InputAction m_Dialogue_Answer2;
+        private readonly InputAction m_Dialogue_Answer3;
+        private readonly InputAction m_Dialogue_Answer4;
         /// <summary>
         /// Provides access to input actions defined in input action map "Dialogue".
         /// </summary>
@@ -1977,6 +2153,22 @@ namespace InputSystem
             /// Provides access to the underlying input action "Dialogue/AbandonConversation".
             /// </summary>
             public InputAction @AbandonConversation => m_Wrapper.m_Dialogue_AbandonConversation;
+            /// <summary>
+            /// Provides access to the underlying input action "Dialogue/Answer1".
+            /// </summary>
+            public InputAction @Answer1 => m_Wrapper.m_Dialogue_Answer1;
+            /// <summary>
+            /// Provides access to the underlying input action "Dialogue/Answer2".
+            /// </summary>
+            public InputAction @Answer2 => m_Wrapper.m_Dialogue_Answer2;
+            /// <summary>
+            /// Provides access to the underlying input action "Dialogue/Answer3".
+            /// </summary>
+            public InputAction @Answer3 => m_Wrapper.m_Dialogue_Answer3;
+            /// <summary>
+            /// Provides access to the underlying input action "Dialogue/Answer4".
+            /// </summary>
+            public InputAction @Answer4 => m_Wrapper.m_Dialogue_Answer4;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2015,6 +2207,18 @@ namespace InputSystem
                 @AbandonConversation.started += instance.OnAbandonConversation;
                 @AbandonConversation.performed += instance.OnAbandonConversation;
                 @AbandonConversation.canceled += instance.OnAbandonConversation;
+                @Answer1.started += instance.OnAnswer1;
+                @Answer1.performed += instance.OnAnswer1;
+                @Answer1.canceled += instance.OnAnswer1;
+                @Answer2.started += instance.OnAnswer2;
+                @Answer2.performed += instance.OnAnswer2;
+                @Answer2.canceled += instance.OnAnswer2;
+                @Answer3.started += instance.OnAnswer3;
+                @Answer3.performed += instance.OnAnswer3;
+                @Answer3.canceled += instance.OnAnswer3;
+                @Answer4.started += instance.OnAnswer4;
+                @Answer4.performed += instance.OnAnswer4;
+                @Answer4.canceled += instance.OnAnswer4;
             }
 
             /// <summary>
@@ -2038,6 +2242,18 @@ namespace InputSystem
                 @AbandonConversation.started -= instance.OnAbandonConversation;
                 @AbandonConversation.performed -= instance.OnAbandonConversation;
                 @AbandonConversation.canceled -= instance.OnAbandonConversation;
+                @Answer1.started -= instance.OnAnswer1;
+                @Answer1.performed -= instance.OnAnswer1;
+                @Answer1.canceled -= instance.OnAnswer1;
+                @Answer2.started -= instance.OnAnswer2;
+                @Answer2.performed -= instance.OnAnswer2;
+                @Answer2.canceled -= instance.OnAnswer2;
+                @Answer3.started -= instance.OnAnswer3;
+                @Answer3.performed -= instance.OnAnswer3;
+                @Answer3.canceled -= instance.OnAnswer3;
+                @Answer4.started -= instance.OnAnswer4;
+                @Answer4.performed -= instance.OnAnswer4;
+                @Answer4.canceled -= instance.OnAnswer4;
             }
 
             /// <summary>
@@ -2568,6 +2784,34 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAbandonConversation(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Answer1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAnswer1(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Answer2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAnswer2(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Answer3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAnswer3(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Answer4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAnswer4(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Combat" which allows adding and removing callbacks.

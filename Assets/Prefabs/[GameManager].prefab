@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2730033684326986306}
   - component: {fileID: 6073577517078600201}
-  - component: {fileID: 2892240965244473777}
+  - component: {fileID: 605386163924564926}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6b7249f53b41b4a967bf28f8558831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.InputManager
---- !u!114 &2892240965244473777
+--- !u!114 &605386163924564926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,6 +54,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587788151947633200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b58338e6ea5857148a0217028bd37663, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fefb009d14508d429eeca34a946f24b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.CombatContext
+  m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.DialogueManager
+  displayMode: 0
+  currentConversation: {fileID: 0}
+  lineIndex: 0
+  dialoguePanel:
+    panelRoot: {fileID: 0}
+    dialogueText: {fileID: 0}
+    answerPanel: {fileID: 0}
+    answerLabels: []
+    portraitImage: {fileID: 0}
+    speakerNameText: {fileID: 0}
+  audioSource: {fileID: 0}
+  choiceInputs:
+  - {fileID: -2760926259230368687, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -6371554520156609948, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: 2932816288556341207, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: 1099615934892938436, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  onConversationStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onConversationEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onLineDisplayed:
+    m_PersistentCalls:
+      m_Calls: []
+  onChoiceSelected:
+    m_PersistentCalls:
+      m_Calls: []

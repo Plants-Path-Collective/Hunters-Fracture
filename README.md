@@ -2,6 +2,8 @@
 
 JRPG roguelite en 3D con cámara fija en tercera persona, con exploración, investigación, gestión del tiempo, combates basados en turnos dinámicos (ATB) y narrativa basada en bucles temporales.
 
+---
+
 ## Especificaciones Técnicas
 
 * **Versión de Unity:** 6000.3.8f1
@@ -10,6 +12,8 @@ JRPG roguelite en 3D con cámara fija en tercera persona, con exploración, inve
 * **Dependencias principales:** 
   * Unity Input System (1.19.0) (com.unity.inputsystem)
   * DOTween (1.2.825)
+
+---
 
 ## Sistema de Inputs
 
@@ -22,9 +26,72 @@ El proyecto utiliza el nuevo **Unity Input System** (`com.unity.inputsystem`).
 - **Flujo de datos:**
   `Periférico → Unity Input System → InputManager → Action Map activo → Sistema consumidor (PlayerController, CombatManager, DialogueManager, etc.)`
 
+---
+
 ## Sistema de Combate
 
 [Pendiente a redacción]
+
+---
+
+## Sistema de Diálogo
+
+El sistema de diálogo está basado en una arquitectura **Data-Driven** utilizando **ScriptableObjects** para desacoplar los datos de la lógica de reproducción. Cada conversación se representa mediante un `ConversationSO`, el cual almacena un conjunto ordenado de `DialogueLine`. Cada línea puede contener texto, una línea de voz opcional (`AudioClip`), hasta cuatro respuestas posibles (`AnswerOption`), un tiempo límite para responder y una conversación alternativa que se ejecuta cuando el jugador no realiza ninguna elección.
+
+La reproducción de las conversaciones está centralizada en `DialogueManager`, un sistema global persistente encargado de iniciar y finalizar diálogos, mostrar el texto y la interfaz correspondiente, reproducir líneas de voz, gestionar las respuestas del jugador y controlar la transición entre conversaciones mediante *Coroutines*. Su funcionamiento es completamente independiente de los NPCs, permitiendo que cualquier sistema pueda iniciar una conversación proporcionando únicamente una referencia a un `ConversationSO`.
+
+Cada NPC dispone de un componente `ConversationTrigger`, responsable de detectar la entrada del jugador mediante un **Trigger Collider** e iniciar la conversación correspondiente. Además, cada NPC posee un identificador único (`NPC_ID`) y un índice de progreso (`conversationIndex`) que registra cuántas veces el jugador ha interactuado con él. Este índice permite presentar distintas conversaciones conforme avanza la relación entre el jugador y el personaje, almacenando el progreso de forma individual para cada NPC.
+
+El `ConversationTrigger` también incorpora una bandera de estado (`request`) que bloquea el avance del `conversationIndex` mientras exista una solicitud o misión pendiente asociada al personaje. De esta forma, un NPC mantiene el mismo diálogo durante el desarrollo de una misión y únicamente avanza a la siguiente conversación cuando la condición correspondiente ha sido resuelta, garantizando la continuidad narrativa.
+
+### Flujo del sistema
+
+```
+Jugador entra al Trigger Collider
+            │
+            ▼
+ConversationTrigger
+            │
+            ▼
+Obtiene NPC_ID y conversationIndex
+            │
+            ▼
+Selecciona ConversationSO correspondiente
+            │
+            ▼
+DialogueManager.StartConversation()
+            │
+            ▼
+Reproduce DialogueLine
+            │
+            ├── Texto
+            ├── Voz (opcional)
+            └── Respuestas (opcional)
+            │
+            ▼
+¿Finalizó la conversación?
+            │
+            ▼
+¿request == false?
+            │
+      Sí ───────► conversationIndex++
+      No ───────► Mantiene el mismo índice
+            │
+            ▼
+Guarda el progreso del NPC
+```
+
+### Componentes principales
+
+- **ConversationSO:** Contenedor de datos que representa una conversación completa.
+- **DialogueManager:** Sistema global encargado de reproducir y controlar el flujo completo de las conversaciones.
+- **ConversationTrigger:** Gestiona el inicio de la conversación y el progreso individual de cada NPC mediante `NPC_ID` y `conversationIndex`.
+
+```markdown
+Nota: Actualmente el progreso de las conversaciones se almacena por NPC utilizando la combinación NPC_ID + conversationIndex. En futuras iteraciones este sistema será integrado con el gestor de guardado y el sistema de misiones, permitiendo persistencia completa entre partidas y una gestión centralizada del estado narrativo.
+```
+
+---
 
 ## Arquitectura y Flujo de Escenas
 

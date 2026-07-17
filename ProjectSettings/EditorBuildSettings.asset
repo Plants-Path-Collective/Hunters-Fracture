@@ -6,11 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/Overworld Scene/Overworld.unity
-    guid: ed0cf8abd57b1f949ac0fa959104e3dd
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/SimpleJRPGHub.unity
+    guid: 352f18278111d31449be61a463351cc9
   - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/CombatStage.unity
-    guid: 9dae52f81dee27b4ca79a9829c57bb31
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/ActionPointDemoScene.unity
+    guid: 02bbf99fb85f719468b611f63bf75589
+  - enabled: 1
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/ATBTurnDemoScene.unity
+    guid: 6f6dc11e98285c44b921f878d1ef330d
+  - enabled: 1
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/ClassicTurnDemoScene.unity
+    guid: fcc989c48b608f249aeea2cde5e62a70
+  - enabled: 1
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/PressTurnDemoScene.unity
+    guid: 6224abb5cf36abc418a2279319c49309
+  - enabled: 1
+    path: Assets/ThirdParty/SimpleJRPG/Scenes/TimelineTurnDemoScene.unity
+    guid: dfb0a7e0471175c48b445c06856362bf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
