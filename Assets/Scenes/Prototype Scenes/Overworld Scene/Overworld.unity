@@ -2073,11 +2073,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8573e4302179c7c42bd047471cb250b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConversationTrigger
+  playing: 0
   npcID: 100
   conversations:
   - {fileID: 11400000, guid: 6d020c596a55ff943b71fc62a418d206, type: 2}
   - {fileID: 11400000, guid: 8ccc8f53e19e9f8448f974812d50054e, type: 2}
   request: 0
+  conversationIndex: 0
 --- !u!1 &2031271331
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,6 +2301,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 605386163924564926, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: displayMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 605386163924564926, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: dialoguePanel.panelRoot
       value: 

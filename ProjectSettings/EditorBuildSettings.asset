@@ -24,5 +24,8 @@ EditorBuildSettings:
     path: Assets/ThirdParty/SimpleJRPG/Scenes/TimelineTurnDemoScene.unity
     guid: dfb0a7e0471175c48b445c06856362bf
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 043acf2e76bdf2243b008ec4e4869ad8, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.localization.addressable-group-rules: {fileID: 11400000, guid: eeee8eb9f62bf2c40bf4ad35093676bb, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: a149dd6c1e1222f4f96beca6d8e90675, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Localization;
 
 namespace PlantsPathCo.DialogueSystem
 {
@@ -45,14 +46,14 @@ namespace PlantsPathCo.DialogueSystem
         [SerializeField] private DisplayMode displayMode = DisplayMode.Both;
         [Tooltip("Reference to the conversation currently being played. Used internally to track the active dialogue flow.")]
         [SerializeField] private ConversationSO currentConversation;
-        
+
         private ConversationTrigger currentTrigger;
-        
+
         [Tooltip("Current line index being played within the active conversation. Resets when changing conversations.")]
         [SerializeField] private int lineIndex;
 
         [SerializeField] private DialoguePanel dialoguePanel;
-        
+
         [Tooltip("Audio Source from which the voice lines will be played.")]
         [SerializeField] private AudioSource audioSource;
 
@@ -66,6 +67,10 @@ namespace PlantsPathCo.DialogueSystem
         public UnityEvent<AnswerOption, int> onChoiceSelected;
 
         private Coroutine runningCoroutine;
+
+        // Cache of currently active answer LocalizedStrings, in the same order as line.answers,
+        // so we can map an input index back to the correct AnswerOption/nextConversation.
+        private int[] activeAnswerIndices = new int[4];
 
         public bool IsTalking => runningCoroutine != null;
 
@@ -101,7 +106,7 @@ namespace PlantsPathCo.DialogueSystem
             currentConversation = conversation;
             currentTrigger = trigger;
             lineIndex = 0;
-            
+
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Dialogue);
 
             if (dialoguePanel.panelRoot != null)
@@ -146,25 +151,69 @@ namespace PlantsPathCo.DialogueSystem
             EndConversation();
         }
 
+        // Resolves a LocalizedString against the currently selected Locale.
+        // Blocks the coroutine (not the whole game) until the string/table is loaded.
+        private IEnumerator ResolveLocalizedString(LocalizedString localizedString, Action<string> onResolved)
+        {
+            if (localizedString == null || localizedString.IsEmpty)
+            {
+                onResolved(string.Empty);
+                yield break;
+            }
+
+            var op = localizedString.GetLocalizedStringAsync();
+            yield return op;
+            onResolved(op.Result);
+        }
+
+        // Resolves a LocalizedAudioClip against the currently selected Locale.
+        // Returns null if the field is empty (no voice line configured for this line/locale),
+        // which is a perfectly valid state — voice lines are optional.
+        private IEnumerator ResolveLocalizedAudioClip(LocalizedAudioClip localizedAudioClip, Action<AudioClip> onResolved)
+        {
+            if (localizedAudioClip == null || localizedAudioClip.IsEmpty)
+            {
+                onResolved(null);
+                yield break;
+            }
+
+            var op = localizedAudioClip.LoadAssetAsync();
+            yield return op;
+            onResolved(op.Result);
+        }
+
         private IEnumerator PlayLine(DialogueLine line)
         {
+            if (line.speaker != null)
+                yield return ShowSpeaker(line.speaker);
+
+            string text = string.Empty;
+            yield return ResolveLocalizedString(line.dialogueText, result => text = result);
+
             // Show text based on display mode
             bool showText = (displayMode == DisplayMode.TextOnly || displayMode == DisplayMode.Both);
             bool playVoice = (displayMode == DisplayMode.VoiceOnly || displayMode == DisplayMode.Both);
 
             if (showText && dialoguePanel.dialogueText != null)
-                dialoguePanel.dialogueText.text = line.dialogueText;
+                dialoguePanel.dialogueText.text = text;
 
-            if (playVoice && audioSource != null && line.voiceLine != null)
+            // La línea de voz es opcional: solo se intenta resolver si el Display Mode
+            // actual la necesita. Que no haya clip (para este idioma o en general) es válido.
+            AudioClip clip = null;
+            if (playVoice)
+                yield return ResolveLocalizedAudioClip(line.voiceLine, result => clip = result);
+
+            if (playVoice && audioSource != null && clip != null)
             {
-                audioSource.clip = line.voiceLine;
+                audioSource.clip = clip;
                 audioSource.Play();
-                yield return new WaitForSeconds(line.voiceLine.length);
+                yield return new WaitForSeconds(clip.length);
             }
-            else if (showText && !playVoice)
+            else if (showText)
             {
-                // Estimate duration based on text if there is no voice line
-                float duration = Mathf.Max(2f, line.dialogueText.Length * 0.06f);
+                // Sin clip que reproducir (no había voz para esta línea/idioma, o el modo es TextOnly):
+                // se estima la duración según la longitud del texto.
+                float duration = Mathf.Max(2f, text.Length * 0.06f);
                 yield return new WaitForSeconds(duration);
             }
             else
@@ -177,7 +226,7 @@ namespace PlantsPathCo.DialogueSystem
 
         private IEnumerator WaitForAnswer(DialogueLine line, Action<ConversationSO> callback)
         {
-            ShowAnswers(line);
+            yield return ShowAnswers(line);
 
             float timer = 0f;
             int chosenIndex = -1;
@@ -212,22 +261,41 @@ namespace PlantsPathCo.DialogueSystem
             }
         }
 
-        private void ShowAnswers(DialogueLine line)
+        private IEnumerator ShowSpeaker(SpeakerSO speaker)
         {
-            if (dialoguePanel.answerPanel == null) return;
+            if (dialoguePanel.portraitImage != null)
+                dialoguePanel.portraitImage.sprite = speaker.portrait;
+
+            if (dialoguePanel.speakerNameText != null)
+            {
+                string name = string.Empty;
+                yield return ResolveLocalizedString(speaker.speakerName, result => name = result);
+                dialoguePanel.speakerNameText.text = name;
+            }
+        }
+
+        private IEnumerator ShowAnswers(DialogueLine line)
+        {
+            if (dialoguePanel.answerPanel == null) yield break;
 
             dialoguePanel.answerPanel.SetActive(true);
-            if (dialoguePanel.answerLabels == null) return;
+            if (dialoguePanel.answerLabels == null) yield break;
 
             for (int i = 0; i < dialoguePanel.answerLabels.Length; i++)
             {
-                bool active = i < line.answers.Length && !string.IsNullOrEmpty(line.answers[i].answerText);
+                bool active = i < line.answers.Length &&
+                              line.answers[i].answerText != null &&
+                              !line.answers[i].answerText.IsEmpty;
+
                 var label = dialoguePanel.answerLabels[i];
-                if (label != null)
-                {
-                    label.gameObject.SetActive(active);
-                    if (active) label.text = line.answers[i].answerText;
-                }
+                if (label == null) continue;
+
+                label.gameObject.SetActive(active);
+                if (!active) continue;
+
+                string answerText = string.Empty;
+                yield return ResolveLocalizedString(line.answers[i].answerText, result => answerText = result);
+                label.text = answerText;
             }
         }
 
@@ -252,12 +320,12 @@ namespace PlantsPathCo.DialogueSystem
                 currentTrigger.playing = false;
                 currentTrigger.AdvanceConversation();
             }
-            
+
             onConversationEnd?.Invoke(currentConversation);
 
             currentConversation = null;
             runningCoroutine = null;
-            
+
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Exploration);
         }
     }
