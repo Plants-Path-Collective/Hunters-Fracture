@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turn Systems - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html" class="active">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#iturn-system">ITurnSystem Interface</a></li>
+            <li><a href="#classic">ClassicTurnSystem</a></li>
+            <li><a href="#atb">ATBTurnSystem</a></li>
+            <li><a href="#timeline">TimelineTurnSystem</a></li>
+            <li><a href="#press-turn">PressTurnSystem</a></li>
+            <li><a href="#action-point">ActionPointTurnSystem</a></li>
+            <li><a href="#comparison">Comparison Table</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Turn Systems</h1>
+        <p class="subtitle">Five pluggable turn systems &mdash; from classic round-robin to press turns and spend/save AP.</p>
+    </div>
+
+    <!-- ITurnSystem Interface -->
+    <div class="section">
+        <h2 id="iturn-system">ITurnSystem Interface</h2>
+        <p>
+            All turn systems implement <code>ITurnSystem</code>. This is the shared contract that
+            <code>Battle</code> uses to manage turn order. You can also implement your own.
+        </p>
+<pre><code>public interface ITurnSystem
+{
+    void Init(List&lt;ICombatant&gt; combatants);
+    ICombatant GetNextActor();
+    IReadOnlyList&lt;ICombatant&gt; GetTimeline();
+    void OnActorDied(ICombatant combatant);
+    void OnActorAdded(ICombatant combatant);
+    void OnTurnEnd();
+}</code></pre>
+        <h3>Methods</h3>
+        <ul>
+            <li><code>Init(combatants)</code> &mdash; called once when the battle starts. Sets up internal state from the combatant list.</li>
+            <li><code>GetNextActor()</code> &mdash; returns the next combatant who should act, or <code>null</code> if no one is ready.</li>
+            <li><code>GetTimeline()</code> &mdash; returns a read-only list representing upcoming turn order. Useful for UI previews.</li>
+            <li><code>OnActorDied(combatant)</code> &mdash; notifies the turn system that a combatant died so it can clean up.</li>
+            <li><code>OnActorAdded(combatant)</code> &mdash; notifies the turn system that a combatant was added mid-battle.</li>
+            <li><code>OnTurnEnd()</code> &mdash; called after an actor finishes their turn. Advances internal state.</li>
+        </ul>
+    </div>
+
+    <!-- ClassicTurnSystem -->
+    <div class="section">
+        <h2 id="classic">ClassicTurnSystem</h2>
+        <p>DQ-style speed-sorted round-robin. Simple and predictable.</p>
+
+        <h3>Constructor</h3>
+<pre><code>new ClassicTurnSystem()  // No parameters</code></pre>
+
+        <h3>Behavior</h3>
+        <ul>
+            <li>On init (and at the start of each new round), all alive combatants are sorted by <code>Speed</code> descending.</li>
+            <li>Dead combatants are skipped automatically in <code>GetNextActor()</code>.</li>
+            <li>Mid-round additions via <code>OnActorAdded()</code> are appended to the end of the current round.</li>
+            <li>When all combatants in the round have acted, a new round begins with a fresh speed sort.</li>
+        </ul>
+
+        <h3>Additional Methods</h3>
+        <p>None. ClassicTurnSystem only exposes the <code>ITurnSystem</code> interface.</p>
+
+        <h3>Usage</h3>
+<pre><code>var battle = new Battle();
+battle.Start(combatants, new ClassicTurnSystem());
+
+var actor = battle.BeginNextTurn(); // Fastest combatant
+// ... do action ...
+battle.EndTurn();</code></pre>
+    </div>
+
+    <!-- ATBTurnSystem -->
+    <div class="section">
+        <h2 id="atb">ATBTurnSystem</h2>
+        <p>Active Time Battle (gauge-based, FF-style). Gauges fill in real time based on speed.</p>
+
+        <h3>Constructor</h3>
+<pre><code>new ATBTurnSystem(float gaugeMax = 100f)</code></pre>
+        <ul>
+            <li><code>gaugeMax</code> &mdash; the gauge value a combatant must reach before they can act. Default: <code>100f</code>.</li>
+        </ul>
+
+        <h3>Behavior</h3>
+        <ul>
+            <li>Each combatant has a gauge starting at <code>0</code>.</li>
+            <li><code>Tick(deltaTime)</code> fills each alive combatant's gauge by <code>Speed * deltaTime</code>. Already-full gauges do not overflow.</li>
+            <li><code>GetNextActor()</code> returns the ready combatant (gauge &gt;= max) with the highest gauge. Ties broken by speed. Returns <code>null</code> if no one is ready.</li>
+            <li>After acting, <code>OnTurnEnd()</code> resets the actor's gauge to <code>0</code>.</li>
+            <li>Dead combatants have their gauge removed entirely.</li>
+        </ul>
+
+        <h3>Additional Methods</h3>
+        <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td><code>Tick(float deltaTime)</code></td><td>Advances all alive combatants' gauges by <code>Speed * deltaTime</code>.</td></tr>
+            <tr><td><code>IsReady(ICombatant)</code></td><td>Returns <code>true</code> if the combatant's gauge &gt;= max.</td></tr>
+            <tr><td><code>GetGauge(ICombatant)</code></td><td>Returns current gauge value (or <code>0</code> if not tracked).</td></tr>
+            <tr><td><code>SetGauge(ICombatant, float)</code></td><td>Sets gauge value directly (e.g. for slow/haste effects).</td></tr>
+            <tr><td><code>HasReadyActor()</code></td><td>Returns <code>true</code> if any alive combatant's gauge &gt;= max.</td></tr>
+        </table>
+
+        <h3>Usage</h3>
+<pre><code>var atb = new ATBTurnSystem(100f);
+battle.Start(combatants, atb);
+
+// Game loop
+atb.Tick(1f); // Advance time
+if (atb.HasReadyActor())
+{
+    var actor = battle.BeginNextTurn();
+    // ... do action ...
+    battle.EndTurn();
+}</code></pre>
+
+        <div class="alert alert-info">
+            <strong>Real-time system.</strong>
+            You drive the clock by calling <code>Tick()</code> yourself. This works with Unity's
+            <code>Time.deltaTime</code>, fixed timesteps, or any custom tick rate.
+        </div>
+    </div>
+
+    <!-- TimelineTurnSystem -->
+    <div class="section">
+        <h2 id="timeline">TimelineTurnSystem</h2>
+        <p>Charge Time Battle (timeline-based, FFT-style). Combatants sit on a tick timeline; lower tick = sooner turn.</p>
+
+        <h3>Constructor</h3>
+<pre><code>new TimelineTurnSystem(int defaultActionCost = 100, int baseTick = 100)</code></pre>
+        <ul>
+            <li><code>defaultActionCost</code> &mdash; the default cost added after an action. Default: <code>100</code>.</li>
+            <li><code>baseTick</code> &mdash; base tick value used for initial placement and new combatants. Default: <code>100</code>.</li>
+        </ul>
+
+        <h3>Behavior</h3>
+        <ul>
+            <li>On init, each combatant is placed on the timeline at tick <code>baseTick / Speed</code>. Faster combatants start closer to 0.</li>
+            <li><code>GetNextActor()</code> returns the alive combatant with the lowest tick. Ties broken by highest speed, then init order.</li>
+            <li>After acting, the actor's tick advances by <code>actionCost</code> (default or overridden via <code>SetActionCost()</code>).</li>
+            <li>Heavy actions with higher costs push the actor further down the timeline. Light actions let them act again sooner.</li>
+            <li>New combatants added mid-battle are placed at <code>currentTick + baseTick</code>.</li>
+        </ul>
+
+        <h3>Additional Methods</h3>
+        <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td><code>SetActionCost(int cost)</code></td><td>Override the cost for the current action. Call between <code>BeginNextTurn()</code> and <code>EndTurn()</code>. Resets to default each turn.</td></tr>
+            <tr><td><code>GetTick(ICombatant)</code></td><td>Returns the combatant's current tick value on the timeline.</td></tr>
+        </table>
+
+        <h3>Usage</h3>
+<pre><code>var timeline = new TimelineTurnSystem(100, 100);
+battle.Start(combatants, timeline);
+
+var actor = battle.BeginNextTurn(); // Lowest tick actor
+
+// Light attack — default cost
+battle.EndTurn();
+
+var next = battle.BeginNextTurn();
+timeline.SetActionCost(200); // Heavy attack — delays next turn more
+battle.EndTurn();</code></pre>
+
+        <div class="alert alert-info">
+            <strong>Action cost strategy.</strong>
+            Use <code>SetActionCost()</code> to make different abilities cost different amounts of time.
+            A quick jab might cost 50, a powerful spell 300. This creates meaningful tactical decisions
+            about speed vs. power.
+        </div>
+    </div>
+
+    <!-- PressTurnSystem -->
+    <div class="section">
+        <h2 id="press-turn">PressTurnSystem</h2>
+        <p>SMT-style press turn system. Teams take turns in phases, spending turn points to act.</p>
+
+        <h3>Constructor</h3>
+<pre><code>new PressTurnSystem(int maxPointsPerTeam = 0)</code></pre>
+        <ul>
+            <li><code>maxPointsPerTeam</code> &mdash; cap on points per phase. <code>0</code> = auto (one point per alive team member).</li>
+        </ul>
+
+        <h3>Behavior</h3>
+        <ul>
+            <li>Teams are determined from combatant <code>Team</code> values, sorted ascending. Team 0 goes first.</li>
+            <li>Each team phase starts with full points = number of alive members (capped by <code>maxPointsPerTeam</code> if set).</li>
+            <li>You choose who acts via <code>SelectActor()</code>, then call <code>GetNextActor()</code> to retrieve them.</li>
+            <li>Actions consume or convert points. When points are exhausted, the next team's phase begins.</li>
+            <li>A KO mid-phase does not retroactively shrink points &mdash; dead actors simply cannot be selected.</li>
+        </ul>
+
+        <h3>Properties</h3>
+        <table>
+            <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+            <tr><td><code>ActiveTeam</code></td><td><code>int</code></td><td>The team ID currently taking their phase.</td></tr>
+            <tr><td><code>FullPoints</code></td><td><code>int</code></td><td>Remaining full turn points.</td></tr>
+            <tr><td><code>HalfPoints</code></td><td><code>int</code></td><td>Remaining half turn points.</td></tr>
+            <tr><td><code>TotalPoints</code></td><td><code>int</code></td><td>Full + half points combined.</td></tr>
+            <tr><td><code>HasActionsRemaining</code></td><td><code>bool</code></td><td><code>true</code> if <code>TotalPoints &gt; 0</code>.</td></tr>
+        </table>
+
+        <h3>Additional Methods</h3>
+        <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td><code>SelectActor(ICombatant)</code></td><td>Choose who acts next. Must be alive and on the active team. Throws if not.</td></tr>
+            <tr><td><code>ConsumeAction()</code></td><td>Spends one point. Consumes a half point first; if none, consumes a full point.</td></tr>
+            <tr><td><code>ConvertAction()</code></td><td>Converts one full point into a half point. If no full points, consumes a half point instead.</td></tr>
+            <tr><td><code>ConsumeActions(int count)</code></td><td>Consumes multiple points (half first, then full).</td></tr>
+            <tr><td><code>ConsumeAllActions()</code></td><td>Ends the team's phase immediately by zeroing all points.</td></tr>
+        </table>
+
+        <h3>Usage</h3>
+<pre><code>var press = new PressTurnSystem();
+battle.Start(combatants, press);
+
+// Team 0's phase — 1 point per alive member
+press.SelectActor(myChosenActor);
+var actor = battle.BeginNextTurn();
+// ... do action ...
+press.ConsumeAction();
+battle.EndTurn();
+
+// If points remain, select another actor
+if (press.HasActionsRemaining)
+{
+    press.SelectActor(anotherActor);
+    var next = battle.BeginNextTurn();
+    // ... hit a weakness? Convert instead of consume ...
+    press.ConvertAction();
+    battle.EndTurn();
+}</code></pre>
+
+        <div class="alert alert-warning">
+            <strong>You manage the points.</strong>
+            SimpleJRPG does not decide when to consume vs. convert &mdash; that is your game logic.
+            Hitting a weakness, getting a critical, or missing are all your system's responsibility.
+            Call the appropriate point method based on your rules.
+        </div>
+    </div>
+
+    <!-- ActionPointTurnSystem -->
+    <div class="section">
+        <h2 id="action-point">ActionPointTurnSystem</h2>
+        <p>Action Point system. Combatants save or spend Action Points for extra actions.</p>
+
+        <h3>Constructor</h3>
+<pre><code>new ActionPointTurnSystem(int defaultAP = 0, int minAP = -4, int maxAP = 4)</code></pre>
+        <ul>
+            <li><code>defaultAP</code> &mdash; starting AP for each combatant. Default: <code>0</code>.</li>
+            <li><code>minAP</code> &mdash; lowest AP can go (going negative means skipping future turns). Default: <code>-4</code>.</li>
+            <li><code>maxAP</code> &mdash; highest AP can be saved. Default: <code>4</code>.</li>
+        </ul>
+
+        <h3>Behavior</h3>
+        <ul>
+            <li>Uses speed-sorted round-robin like <code>ClassicTurnSystem</code> for base turn order.</li>
+            <li>At the start of each round, all alive combatants gain <code>+1 AP</code> passively (capped at <code>maxAP</code>).</li>
+            <li><code>SpendAP()</code> spends 1 AP to queue an extra action this turn. Can be called multiple times. AP can go negative down to <code>minAP</code>.</li>
+            <li><code>SaveAP()</code> gains 1 AP (capped at <code>maxAP</code>) and the combatant skips their action.</li>
+            <li>Combatants with negative AP are skipped when their turn comes &mdash; they must wait for passive AP to bring them back to 0.</li>
+            <li>If a combatant dies mid-action-chain, remaining extra actions are cleared.</li>
+        </ul>
+
+        <h3>Properties</h3>
+        <table>
+            <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+            <tr><td><code>MinAP</code></td><td><code>int</code></td><td>The minimum AP value (constructor param).</td></tr>
+            <tr><td><code>MaxAP</code></td><td><code>int</code></td><td>The maximum AP value (constructor param).</td></tr>
+        </table>
+
+        <h3>Additional Methods</h3>
+        <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td><code>GetAP(ICombatant)</code></td><td>Returns the combatant's current Action Points.</td></tr>
+            <tr><td><code>SpendAP()</code></td><td>Spend 1 AP for an extra action this turn. Throws if already at <code>minAP</code>.</td></tr>
+            <tr><td><code>SaveAP()</code></td><td>Gain 1 AP (capped at <code>maxAP</code>). The combatant should skip their action.</td></tr>
+        </table>
+
+        <h3>Usage</h3>
+<pre><code>var ap = new ActionPointTurnSystem(0, -4, 4);
+battle.Start(combatants, ap);
+
+var actor = battle.BeginNextTurn();
+
+// Option A: Spend AP — take multiple actions now, risk negative AP
+ap.SpendAP(); // AP: 0 -> -1, queues 1 extra action
+// ... do first action ...
+battle.EndTurn();
+// Extra action fires — same actor again
+var same = battle.BeginNextTurn();
+// ... do second action ...
+battle.EndTurn();
+
+// Option B: Save AP — skip turn, bank AP for later
+var next = battle.BeginNextTurn();
+ap.SaveAP(); // AP +1
+battle.EndTurn(); // Skips action</code></pre>
+
+        <div class="alert alert-info">
+            <strong>Risk vs. reward.</strong>
+            Spending AP lets you burst multiple actions in one turn but leaves you vulnerable
+            if AP goes negative. Saving AP is safe but costs a turn. The tension between
+            the two is the core of this system.
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="section">
+        <h2 id="comparison">Comparison Table</h2>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Classic</th>
+                <th>ATB</th>
+                <th>Timeline</th>
+                <th>Press Turn</th>
+                <th>Action Point</th>
+            </tr>
+            <tr>
+                <td>Turn order</td>
+                <td>Speed sort</td>
+                <td>Gauge fill</td>
+                <td>Tick timeline</td>
+                <td>Team phase</td>
+                <td>Round-robin</td>
+            </tr>
+            <tr>
+                <td>Real-time</td>
+                <td>No</td>
+                <td>Yes (Tick)</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Player choice in order</td>
+                <td>No</td>
+                <td>No</td>
+                <td>Via action cost</td>
+                <td>SelectActor</td>
+                <td>Spend/Save AP</td>
+            </tr>
+            <tr>
+                <td>Team-based</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Resource management</td>
+                <td>None</td>
+                <td>None</td>
+                <td>Action cost</td>
+                <td>Turn points</td>
+                <td>AP</td>
+            </tr>
+        </table>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

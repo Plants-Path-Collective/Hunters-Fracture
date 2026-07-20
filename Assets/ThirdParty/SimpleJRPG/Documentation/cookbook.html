@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookbook - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html" class="active">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#mana-costs">Mana Costs</a></li>
+            <li><a href="#elemental">Elemental Weakness</a></li>
+            <li><a href="#status-timers">Status Effect Timers</a></li>
+            <li><a href="#buff-stacking">Buff Stacking</a></li>
+            <li><a href="#revive">Revive Logic</a></li>
+            <li><a href="#flee">Flee Chance</a></li>
+            <li><a href="#multi-hit">Multi-Hit Attacks</a></li>
+            <li><a href="#aoe">AoE / Group Attacks</a></li>
+            <li><a href="#barriers">Damage Shields</a></li>
+            <li><a href="#counter">Counter Attacks</a></li>
+            <li><a href="#crits">Critical Hits</a></li>
+            <li><a href="#turn-order">Turn Order Display</a></li>
+            <li><a href="#drain">Drain / Life Steal</a></li>
+            <li><a href="#instant-kill">Instant Kill</a></li>
+            <li><a href="#formulas">Damage Formulas</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Cookbook</h1>
+        <p class="subtitle">Copy-paste recipes for common battle patterns. Your formulas, your rules &mdash; these are starting points.</p>
+    </div>
+
+    <!-- Mana Costs -->
+    <div class="section">
+        <h2 id="mana-costs">Mana Costs</h2>
+        <p>
+            SimpleJRPG doesn't manage MP &mdash; that's your domain. Check costs before calling combat verbs,
+            deduct MP yourself.
+        </p>
+<pre><code>void CastFireball(ICombatant caster, ICombatant target)
+{
+    int mpCost = 8;
+    var myCaster = (MyCombatant)caster;
+
+    if (myCaster.MP < mpCost)
+    {
+        Debug.Log("Not enough MP!");
+        return;
+    }
+
+    myCaster.MP -= mpCost;
+    int damage = myCaster.MagicPower * 3;
+    battle.DealDamage(caster, target, damage, "magical", "fire");
+}</code></pre>
+    </div>
+
+    <!-- Elemental Weakness -->
+    <div class="section">
+        <h2 id="elemental">Elemental Weakness / Resistance</h2>
+        <p>
+            Use <code>OnBeforeDamage</code> to modify damage based on element. The <code>element</code>
+            string is pass-through &mdash; you define what elements exist and how they interact.
+        </p>
+<pre><code>battle.OnBeforeDamage += evt =>
+{
+    var target = (MyCombatant)evt.Target;
+    float multiplier = target.GetElementMultiplier(evt.Element);
+    evt.Amount = (int)(evt.Amount * multiplier);
+};
+
+// In your MyCombatant class:
+public float GetElementMultiplier(string element)
+{
+    if (Weaknesses.Contains(element)) return 2.0f;
+    if (Resistances.Contains(element)) return 0.5f;
+    if (Immunities.Contains(element)) return 0f;
+    return 1.0f;
+}</code></pre>
+        <div class="alert alert-info">
+            <strong>Cancel for immunity.</strong>
+            If the multiplier is <code>0</code>, you can set <code>evt.Cancel = true</code> instead
+            and show an "Immune!" message in your UI.
+        </div>
+    </div>
+
+    <!-- Status Effect Timers -->
+    <div class="section">
+        <h2 id="status-timers">Status Effect Timers</h2>
+        <p>
+            SimpleJRPG fires <code>OnStatusApplied</code> and <code>OnStatusRemoved</code> but doesn't
+            track duration. You manage timers and call <code>RemoveStatus()</code> when they expire.
+        </p>
+<pre><code>// Track active statuses
+Dictionary&lt;ICombatant, List&lt;(string id, int turnsLeft)&gt;&gt; statuses = new();
+
+// When a status is applied
+battle.OnStatusApplied += evt =>
+{
+    if (!statuses.ContainsKey(evt.Target))
+        statuses[evt.Target] = new();
+
+    statuses[evt.Target].Add((evt.StatusId, evt.Duration));
+};
+
+// Tick statuses at end of each turn
+battle.OnTurnEnd += evt =>
+{
+    if (!statuses.ContainsKey(evt.Actor)) return;
+
+    var list = statuses[evt.Actor];
+    for (int i = list.Count - 1; i >= 0; i--)
+    {
+        // Apply per-turn effects (e.g. poison damage)
+        if (list[i].id == "poison")
+            battle.DealDamage(evt.Actor, evt.Actor, 5, "status", "poison");
+
+        var updated = (list[i].id, list[i].turnsLeft - 1);
+        if (updated.Item2 <= 0)
+        {
+            battle.RemoveStatus(evt.Actor, list[i].id);
+            list.RemoveAt(i);
+        }
+        else
+        {
+            list[i] = updated;
+        }
+    }
+};</code></pre>
+    </div>
+
+    <!-- Buff Stacking -->
+    <div class="section">
+        <h2 id="buff-stacking">Buff Stacking</h2>
+        <p>
+            You decide how buffs stack. SimpleJRPG fires the events &mdash; you track amounts and apply
+            them in your damage formulas or in <code>OnBeforeDamage</code> / <code>OnBeforeHeal</code>.
+        </p>
+<pre><code>// Track buffs: combatant -> buff id -> (multiplier, turnsLeft)
+Dictionary&lt;ICombatant, Dictionary&lt;string, (float mult, int turns)&gt;&gt; buffs = new();
+
+battle.OnBuffApplied += evt =>
+{
+    if (!buffs.ContainsKey(evt.Target))
+        buffs[evt.Target] = new();
+
+    var dict = buffs[evt.Target];
+    if (dict.ContainsKey(evt.BuffId))
+    {
+        // Stack: multiply existing, refresh duration
+        var existing = dict[evt.BuffId];
+        dict[evt.BuffId] = (existing.mult * evt.Amount, evt.Duration);
+    }
+    else
+    {
+        dict[evt.BuffId] = (evt.Amount, evt.Duration);
+    }
+};
+
+// Apply attack buff in before-damage
+battle.OnBeforeDamage += evt =>
+{
+    if (buffs.TryGetValue(evt.Source, out var dict))
+    {
+        if (dict.TryGetValue("attack_up", out var buff))
+            evt.Amount = (int)(evt.Amount * buff.mult);
+    }
+};</code></pre>
+        <div class="alert alert-warning">
+            <strong>Replace, don't stack?</strong>
+            If you want buffs to replace instead of stack, just overwrite: <code>dict[evt.BuffId] = (evt.Amount, evt.Duration);</code>
+        </div>
+    </div>
+
+    <!-- Revive Logic -->
+    <div class="section">
+        <h2 id="revive">Revive Logic</h2>
+        <p>
+            <code>Revive(target, hpAmount)</code> restores a dead combatant with the specified HP
+            and re-adds them to the turn system. You control how much HP they come back with.
+        </p>
+<pre><code>void CastRevive(ICombatant caster, ICombatant target, bool fullRevive)
+{
+    if (target.IsAlive) return;
+
+    var myTarget = (MyCombatant)target;
+    int hp = fullRevive ? myTarget.MaxHP : myTarget.MaxHP / 2;
+    battle.Revive(target, hp);
+}
+
+// Revive items
+void UsePhoenixFeather(ICombatant target)
+{
+    if (target.IsAlive) return;
+    battle.Revive(target, 1); // Revive with 1 HP
+}</code></pre>
+    </div>
+
+    <!-- Flee Chance -->
+    <div class="section">
+        <h2 id="flee">Flee Chance</h2>
+        <p>
+            <code>Flee(who)</code> ends the battle with <code>BattleState.Fled</code>. You decide
+            whether fleeing succeeds and what the formula is.
+        </p>
+<pre><code>void AttemptFlee(ICombatant actor)
+{
+    // Classic formula: party avg speed vs enemy avg speed
+    float partySpeed = battle.GetAlive(0).Average(c => c.Speed);
+    float enemySpeed = battle.GetAlive(1).Average(c => c.Speed);
+    float chance = Mathf.Clamp01(partySpeed / (partySpeed + enemySpeed));
+
+    if (UnityEngine.Random.value < chance)
+    {
+        battle.Flee(actor);
+    }
+    else
+    {
+        Debug.Log("Couldn't escape!");
+        // Consume the turn
+        battle.EndTurn();
+    }
+}</code></pre>
+        <div class="alert alert-info">
+            <strong>Boss fights.</strong>
+            Want to prevent fleeing? Just don't call <code>Flee()</code>. Show a "Can't escape!" message instead.
+        </div>
+    </div>
+
+    <!-- Multi-Hit Attacks -->
+    <div class="section">
+        <h2 id="multi-hit">Multi-Hit Attacks</h2>
+        <p>
+            For attacks that hit multiple times (e.g. Barrage, Double Slash), call <code>DealDamage</code>
+            in a loop. Each hit fires its own <code>OnDamageDealt</code> event.
+        </p>
+<pre><code>void Barrage(ICombatant actor, ICombatant target, int hitCount)
+{
+    for (int i = 0; i < hitCount; i++)
+    {
+        // Vary damage per hit if you want
+        int damage = CalculateDamage(actor, target);
+        bool isCrit = UnityEngine.Random.value < 0.15f;
+
+        battle.DealDamage(actor, target, damage, "physical", "", isCrit);
+
+        // Stop if target died
+        if (!target.IsAlive) break;
+    }
+}</code></pre>
+    </div>
+
+    <!-- AoE / Group Attacks -->
+    <div class="section">
+        <h2 id="aoe">AoE / Group Attacks</h2>
+        <p>
+            Use the multi-target <code>DealDamage</code> overload. It fires individual
+            <code>OnDamageDealt</code> per target, then one <code>OnGroupDamageDealt</code> with totals.
+        </p>
+<pre><code>void CastBlizzard(ICombatant caster)
+{
+    int mpCost = 12;
+    var myCaster = (MyCombatant)caster;
+    if (myCaster.MP < mpCost) return;
+    myCaster.MP -= mpCost;
+
+    var targets = battle.GetEnemies(caster);
+    int damage = myCaster.MagicPower * 2;
+    battle.DealDamage(caster, targets, damage, "magical", "ice");
+}
+
+// Per-target damage variation
+void CastMeteor(ICombatant caster)
+{
+    var targets = battle.GetEnemies(caster);
+    foreach (var target in targets)
+    {
+        int damage = UnityEngine.Random.Range(80, 120);
+        battle.DealDamage(caster, target, damage, "magical", "fire");
+    }
+}</code></pre>
+        <div class="alert alert-info">
+            <strong>Loop vs overload.</strong>
+            The multi-target overload applies the same damage to all targets and fires <code>OnGroupDamageDealt</code>.
+            If you need per-target variation, use a loop with single-target <code>DealDamage</code> calls.
+        </div>
+    </div>
+
+    <!-- Damage Shields / Barriers -->
+    <div class="section">
+        <h2 id="barriers">Damage Shields / Barriers</h2>
+        <p>
+            Use <code>OnBeforeDamage</code> to absorb or cancel damage. Track shield HP yourself.
+        </p>
+<pre><code>Dictionary&lt;ICombatant, int&gt; shields = new();
+
+void ApplyShield(ICombatant target, int amount)
+{
+    shields[target] = amount;
+    battle.ApplyBuff(target, target, "shield", amount);
+}
+
+battle.OnBeforeDamage += evt =>
+{
+    if (!shields.TryGetValue(evt.Target, out int shieldHP)) return;
+    if (shieldHP <= 0) return;
+
+    if (shieldHP >= evt.Amount)
+    {
+        shields[evt.Target] = shieldHP - evt.Amount;
+        evt.Cancel = true; // Fully absorbed
+        Debug.Log($"Shield absorbed {evt.Amount} damage!");
+    }
+    else
+    {
+        evt.Amount -= shieldHP;
+        shields[evt.Target] = 0;
+        battle.RemoveBuff(evt.Target, "shield");
+        Debug.Log($"Shield broke! {evt.Amount} damage gets through.");
+    }
+};</code></pre>
+    </div>
+
+    <!-- Counter Attacks -->
+    <div class="section">
+        <h2 id="counter">Counter Attacks</h2>
+        <p>
+            React to incoming damage with <code>OnDamageDealt</code>. The target can strike back
+            immediately.
+        </p>
+<pre><code>battle.OnDamageDealt += evt =>
+{
+    if (!evt.Target.IsAlive) return;
+
+    var target = (MyCombatant)evt.Target;
+    if (!target.HasSkill("counter")) return;
+
+    float counterChance = 0.3f;
+    if (UnityEngine.Random.value < counterChance)
+    {
+        int damage = CalculateDamage(evt.Target, evt.Source);
+        battle.DealDamage(evt.Target, evt.Source, damage, "physical", "");
+        Debug.Log($"{evt.Target.Name} counters!");
+    }
+};</code></pre>
+    </div>
+
+    <!-- Critical Hits -->
+    <div class="section">
+        <h2 id="crits">Critical Hits</h2>
+        <p>
+            Pass <code>isCrit: true</code> to <code>DealDamage</code>. The <code>WasCrit</code> flag
+            carries through to events for your UI to react to.
+        </p>
+<pre><code>void Attack(ICombatant attacker, ICombatant target)
+{
+    int baseDamage = CalculateDamage(attacker, target);
+    float critChance = 0.1f; // 10%
+    bool isCrit = UnityEngine.Random.value < critChance;
+
+    int finalDamage = isCrit ? baseDamage * 2 : baseDamage;
+    battle.DealDamage(attacker, target, finalDamage, "physical", "", isCrit);
+}
+
+// React in UI
+battle.OnDamageDealt += evt =>
+{
+    if (evt.WasCrit)
+        ShowBigDamageNumber(evt.Amount); // Your UI method
+    else
+        ShowDamageNumber(evt.Amount);
+};</code></pre>
+    </div>
+
+    <!-- Turn Order Display -->
+    <div class="section">
+        <h2 id="turn-order">Turn Order Display</h2>
+        <p>
+            Use <code>GetTimeline()</code> to show upcoming turn order in your UI.
+            Works with all turn systems.
+        </p>
+<pre><code>void UpdateTurnOrderUI()
+{
+    var timeline = battle.GetTimeline();
+    for (int i = 0; i < timeline.Count; i++)
+    {
+        // Update your UI elements
+        turnOrderSlots[i].SetCombatant(timeline[i]);
+    }
+}
+
+// For ATB, also show gauge fill:
+void UpdateATBGauges(ATBTurnSystem atb)
+{
+    foreach (var combatant in battle.GetAlive())
+    {
+        float gauge = atb.GetGauge(combatant);
+        gaugeBar[combatant].fillAmount = gauge / 100f;
+    }
+}</code></pre>
+    </div>
+
+    <!-- Drain / Life Steal -->
+    <div class="section">
+        <h2 id="drain">Drain / Life Steal</h2>
+        <p>
+            Deal damage, then heal the attacker for a portion of the damage dealt.
+        </p>
+<pre><code>void DrainAttack(ICombatant attacker, ICombatant target)
+{
+    int damage = CalculateDamage(attacker, target);
+    battle.DealDamage(attacker, target, damage, "magical", "dark");
+
+    int healAmount = damage / 2;
+    battle.Heal(attacker, attacker, healAmount);
+}</code></pre>
+    </div>
+
+    <!-- Instant Kill -->
+    <div class="section">
+        <h2 id="instant-kill">Instant Kill</h2>
+        <p>
+            <code>Kill(target, killer)</code> bypasses damage formulas entirely. Use for death spells
+            or execution mechanics.
+        </p>
+<pre><code>void CastDeath(ICombatant caster, ICombatant target)
+{
+    float hitChance = 0.3f; // 30% base
+    var myTarget = (MyCombatant)target;
+
+    // Undead or bosses might be immune
+    if (myTarget.IsImmuneToInstantDeath)
+    {
+        Debug.Log($"{target.Name} resisted!");
+        return;
+    }
+
+    if (UnityEngine.Random.value < hitChance)
+        battle.Kill(target, caster);
+    else
+        Debug.Log("It missed!");
+}</code></pre>
+    </div>
+
+    <!-- Damage Formula Examples -->
+    <div class="section">
+        <h2 id="formulas">Damage Formula Examples</h2>
+        <p>
+            SimpleJRPG never calculates damage. Here are classic formulas you might use:
+        </p>
+<pre><code>// Simple: attack - defense
+int SimpleDamage(MyCombatant atk, MyCombatant def)
+{
+    return Math.Max(1, atk.Attack - def.Defense);
+}
+
+// DQ-style: attack/2 - defense/4, randomized
+int DQDamage(MyCombatant atk, MyCombatant def)
+{
+    int base_ = atk.Attack / 2 - def.Defense / 4;
+    base_ = Math.Max(1, base_);
+    float variance = UnityEngine.Random.Range(0.875f, 1.125f);
+    return (int)(base_ * variance);
+}
+
+// Level-scaled with crit
+int ScaledDamage(MyCombatant atk, MyCombatant def, bool isCrit)
+{
+    float levelBonus = 1f + (atk.Level - def.Level) * 0.05f;
+    int raw = (int)(atk.Attack * levelBonus) - def.Defense;
+    raw = Math.Max(1, raw);
+    return isCrit ? raw * 2 : raw;
+}</code></pre>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

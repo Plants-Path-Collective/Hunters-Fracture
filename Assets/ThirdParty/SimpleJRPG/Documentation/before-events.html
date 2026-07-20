@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Before-Events — SimpleJRPG</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html" class="active">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#before-damage-event">BeforeDamageEvent</a></li>
+            <li><a href="#before-heal-event">BeforeHealEvent</a></li>
+            <li><a href="#dodge-system">Dodge System</a></li>
+            <li><a href="#damage-reduction">Damage Reduction</a></li>
+            <li><a href="#healing-boost">Healing Boost</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Before-Events</h1>
+        <p class="subtitle">Intercept, modify, or cancel actions before they execute.</p>
+    </div>
+
+    <!-- Overview -->
+    <div class="section">
+        <h2 id="overview">Overview</h2>
+        <p>Before-events fire <strong>before</strong> the action executes, giving subscribers a chance to modify or cancel it. Two before-events exist: <code>BeforeDamageEvent</code> and <code>BeforeHealEvent</code>.</p>
+        <p>These are <strong>classes</strong> (not structs) so modifications persist. When a subscriber changes <code>Amount</code> or sets <code>Cancel = true</code>, those changes are visible to the Battle method that fired the event and to all subsequent subscribers.</p>
+    </div>
+
+    <!-- BeforeDamageEvent -->
+    <div class="section">
+        <h2 id="before-damage-event">BeforeDamageEvent</h2>
+        <p>Fired by <code>Battle.DealDamage()</code> before any damage is applied.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Settable</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>No</td>
+                    <td>The combatant dealing damage.</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>No</td>
+                    <td>The combatant receiving damage.</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code></td>
+                    <td>Yes</td>
+                    <td>The damage amount. Modify this to increase or reduce damage.</td>
+                </tr>
+                <tr>
+                    <td><code>DamageType</code></td>
+                    <td><code>string</code></td>
+                    <td>No</td>
+                    <td>Pass-through string for the type of damage (e.g. "Physical", "Magic").</td>
+                </tr>
+                <tr>
+                    <td><code>Element</code></td>
+                    <td><code>string</code></td>
+                    <td>No</td>
+                    <td>Pass-through string for the element (e.g. "Fire", "Ice").</td>
+                </tr>
+                <tr>
+                    <td><code>IsCrit</code></td>
+                    <td><code>bool</code></td>
+                    <td>No</td>
+                    <td>Whether this hit is a critical.</td>
+                </tr>
+                <tr>
+                    <td><code>Cancel</code></td>
+                    <td><code>bool</code></td>
+                    <td>Yes</td>
+                    <td>Set to <code>true</code> to cancel the damage entirely. <code>OnDamageDealt</code> will not fire.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>When <code>Cancel</code> is set to <code>true</code>, the damage is not applied and <code>OnDamageDealt</code> does not fire.</p>
+    </div>
+
+    <!-- BeforeHealEvent -->
+    <div class="section">
+        <h2 id="before-heal-event">BeforeHealEvent</h2>
+        <p>Fired by <code>Battle.Heal()</code> before any healing is applied.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Settable</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>No</td>
+                    <td>The combatant performing the heal.</td>
+                </tr>
+                <tr>
+                    <td><code>Target</code></td>
+                    <td><code>ICombatant</code></td>
+                    <td>No</td>
+                    <td>The combatant being healed.</td>
+                </tr>
+                <tr>
+                    <td><code>Amount</code></td>
+                    <td><code>int</code></td>
+                    <td>Yes</td>
+                    <td>The heal amount. Modify this to boost or reduce healing.</td>
+                </tr>
+                <tr>
+                    <td><code>Cancel</code></td>
+                    <td><code>bool</code></td>
+                    <td>Yes</td>
+                    <td>Set to <code>true</code> to cancel the heal entirely. <code>OnHealed</code> will not fire.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Same cancellation behavior as <code>BeforeDamageEvent</code> — when <code>Cancel</code> is <code>true</code>, the heal is not applied and <code>OnHealed</code> does not fire.</p>
+    </div>
+
+    <!-- Example: Dodge System -->
+    <div class="section">
+        <h2 id="dodge-system">Example: Dodge System</h2>
+        <p>Subscribe to <code>OnBeforeDamage</code> and cancel the event to implement a dodge mechanic:</p>
+        <pre><code>battle.OnBeforeDamage += e =>
+{
+    // 20% dodge chance
+    if (Random.value < 0.2f)
+    {
+        e.Cancel = true;
+        Debug.Log($"{e.Target.Name} dodged the attack!");
+    }
+};</code></pre>
+    </div>
+
+    <!-- Example: Damage Reduction -->
+    <div class="section">
+        <h2 id="damage-reduction">Example: Damage Reduction</h2>
+        <p>Modify <code>Amount</code> to reduce incoming damage when a combatant is defending:</p>
+        <pre><code>battle.OnBeforeDamage += e =>
+{
+    // Halve damage if target is defending
+    if (IsDefending(e.Target))
+        e.Amount /= 2;
+};</code></pre>
+    </div>
+
+    <!-- Example: Healing Boost -->
+    <div class="section">
+        <h2 id="healing-boost">Example: Healing Boost</h2>
+        <p>Modify <code>Amount</code> on <code>OnBeforeHeal</code> to amplify healing:</p>
+        <pre><code>battle.OnBeforeHeal += e =>
+{
+    // Double healing if healer has "Amplify" buff
+    if (HasBuff(e.Source, "Amplify"))
+        e.Amount *= 2;
+};</code></pre>
+    </div>
+
+    <!-- Important Notes -->
+    <div class="alert alert-warning">
+        <strong>Before-events are classes, not structs.</strong>
+        This is intentional — modifications to <code>Amount</code> and <code>Cancel</code> must persist to the Battle method that fired the event. Multiple subscribers can all modify the same event.
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG — Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

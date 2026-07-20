@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start - SimpleJRPG Documentation</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="format-selector" id="top">
+    <span class="format-label">View:</span>
+    <a href="index.html" class="format-link">Multi-Page</a>
+    <a href="single-page.html" class="format-link">Single Page</a>
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+</div>
+
+<nav class="navbar">
+    <a href="index.html" class="navbar-brand">SimpleJRPG</a>
+    <ul class="navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="installation.html">Installation</a></li>
+        <li><a href="quick-start.html" class="active">Quick Start</a></li>
+        <li><a href="battle-core.html">Battle Core</a></li>
+        <li><a href="before-events.html">Before-Events</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="turn-systems.html">Turn Systems</a></li>
+        <li><a href="cookbook.html">Cookbook</a></li>
+        <li><a href="api-reference.html">API Reference</a></li>
+        <li><a href="demos.html">Demos</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="page-layout">
+    <aside class="toc">
+        <h3>On This Page</h3>
+        <ul>
+            <li><a href="#step-1">Step 1: Implement ICombatant</a></li>
+            <li><a href="#step-2">Step 2: Create a Battle</a></li>
+            <li><a href="#step-3">Step 3: Subscribe to Events</a></li>
+            <li><a href="#step-4">Step 4: Run the Battle Loop</a></li>
+            <li><a href="#whats-next">What's Next</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+
+    <div class="hero">
+        <h1>Quick Start</h1>
+        <p class="subtitle">Get a battle running in four steps.</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="section">
+        <h2 id="step-1">Step 1: Implement ICombatant</h2>
+        <p>
+            <code>ICombatant</code> is the only interface your characters need to implement.
+            You own the stats, the properties, the logic. SimpleJRPG just needs a name, alive status,
+            team index, speed, and methods to take damage and heal.
+        </p>
+<pre><code>public class MyCombatant : ICombatant
+{
+    public string Name { get; }
+    public bool IsAlive => HP > 0;
+    public int Team { get; }
+    public float Speed { get; }
+
+    public int HP { get; private set; }
+    public int MaxHP { get; }
+
+    public MyCombatant(string name, int hp, float speed, int team)
+    {
+        Name = name;
+        HP = hp;
+        MaxHP = hp;
+        Speed = speed;
+        Team = team;
+    }
+
+    public void TakeDamage(int amount) => HP = Math.Max(0, HP - amount);
+    public void Heal(int amount) => HP = Math.Min(MaxHP, HP + amount);
+}</code></pre>
+        <div class="alert alert-info">
+            <strong>Your class, your rules.</strong>
+            Add whatever stats you need &mdash; MP, defense, elemental resistances, equipment slots.
+            SimpleJRPG never inspects those. It only touches what <code>ICombatant</code> defines.
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="section">
+        <h2 id="step-2">Step 2: Create a Battle</h2>
+        <p>
+            Create a <code>Battle</code> instance, build your party and enemy lists, then call
+            <code>Start()</code> with all combatants and a turn system.
+        </p>
+<pre><code>var battle = new Battle();
+var party = new List&lt;ICombatant&gt;
+{
+    new MyCombatant("Hero", 100, 10f, 0),
+    new MyCombatant("Mage", 70, 12f, 0),
+};
+var enemies = new List&lt;ICombatant&gt;
+{
+    new MyCombatant("Goblin", 50, 8f, 1),
+    new MyCombatant("Orc", 80, 6f, 1),
+};
+var all = new List&lt;ICombatant&gt;();
+all.AddRange(party);
+all.AddRange(enemies);
+battle.Start(all, new ClassicTurnSystem());</code></pre>
+        <div class="alert alert-info">
+            <strong>Team convention.</strong>
+            Team <code>0</code> is the player party. All other team values are enemies.
+            <code>CheckBattleEnd()</code> uses this to determine Victory vs. Defeat.
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="section">
+        <h2 id="step-3">Step 3: Subscribe to Events</h2>
+        <p>
+            Every combat verb fires an event. Subscribe to drive your UI, play sound effects,
+            trigger animations, or log to console &mdash; whatever your game needs.
+        </p>
+<pre><code>battle.OnDamageDealt += e => Debug.Log($"{e.Source.Name} hits {e.Target.Name} for {e.Amount}!");
+battle.OnKO += e => Debug.Log($"{e.Target.Name} was knocked out!");
+battle.OnBattleEnd += (b, state) => Debug.Log($"Battle ended: {state}");</code></pre>
+        <p>
+            Events are the primary way SimpleJRPG communicates what happened. There are no built-in
+            UI components, no logging systems, no animation controllers. You subscribe to exactly
+            the events you care about and handle them however you want.
+        </p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="section">
+        <h2 id="step-4">Step 4: Run the Battle Loop</h2>
+        <p>
+            Ask the battle for the next actor, execute your game logic (pick targets, calculate damage
+            with your own formulas), call combat verbs, end the turn, and check if the battle is over.
+        </p>
+<pre><code>while (battle.State == BattleState.WaitingForCommands)
+{
+    ICombatant actor = battle.BeginNextTurn();
+    // Your game logic: pick targets, calculate damage, etc.
+    var target = battle.GetEnemies(actor)[0];
+    int damage = CalculateDamage(actor, target); // Your formula
+    battle.DealDamage(actor, target, damage, "physical", "none");
+    battle.EndTurn();
+    battle.CheckBattleEnd();
+}</code></pre>
+        <div class="alert alert-warning">
+            <strong>You do the math.</strong>
+            <code>CalculateDamage()</code> is your function, not ours. SimpleJRPG never calculates
+            damage, hit rates, or any other formula. You pass in the final number, we apply it and
+            fire the event.
+        </div>
+    </div>
+
+    <!-- What's Next -->
+    <div class="section">
+        <h2 id="whats-next">What's Next</h2>
+        <p>You have a working battle. Here is where to go from here:</p>
+        <ul>
+            <li><a href="battle-core.html">Battle Core</a> &mdash; All combat verbs: <code>DealDamage</code>, <code>Heal</code>, <code>Kill</code>, <code>Revive</code>, <code>ApplyStatus</code>, <code>ApplyBuff</code>, <code>Flee</code>, and the events they fire.</li>
+            <li><a href="turn-systems.html">Turn Systems</a> &mdash; Alternatives to <code>ClassicTurnSystem</code>: ATB, Timeline/CTB, Press Turn, and Action Point.</li>
+            <li><a href="api-reference.html">API Reference</a> &mdash; Full details on every class, interface, method, and event.</li>
+        </ul>
+    </div>
+
+</main></div>
+
+<div class="footer" id="bottom">
+    SimpleJRPG &mdash; Lean Battle API for Unity
+</div>
+
+<a href="#bottom" class="scroll-btn scroll-to-bottom" title="Scroll to bottom">&#8595;</a>
+<a href="#top" class="scroll-btn scroll-to-top" title="Scroll to top">&#8593;</a>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector('.theme-toggle');
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        btn.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = 'Light Mode';
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

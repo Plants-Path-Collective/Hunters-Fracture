@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb0c979353496b48af70932d2b0e940, type: 3}
+  m_Name: Test0_Conversation
+  m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.ConversationSO
+  lines:
+  - speaker: {fileID: 11400000, guid: dad6cf510505b864dab5d9236cc2d192, type: 2}
+    dialogueText:
+      m_TableReference:
+        m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+      m_TableEntryReference:
+        m_KeyId: 3879579373568
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    voiceLine: {fileID: 0}
+    answers: []
+    noResponseConversation: {fileID: 11400000, guid: ade907cd7c45d3a449d232f0e9c04ffd, type: 2}
+    answerTimeout: 6
+  - speaker: {fileID: 11400000, guid: dad6cf510505b864dab5d9236cc2d192, type: 2}
+    dialogueText:
+      m_TableReference:
+        m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+      m_TableEntryReference:
+        m_KeyId: 3879579373569
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    voiceLine: {fileID: 0}
+    answers:
+    - answerText:
+        m_TableReference:
+          m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+        m_TableEntryReference:
+          m_KeyId: 3879579373570
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      nextConversation: {fileID: 11400000, guid: 04a7f924149cc844eb4c9f6b9391d426, type: 2}
+    - answerText:
+        m_TableReference:
+          m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+        m_TableEntryReference:
+          m_KeyId: 3879583567872
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      nextConversation: {fileID: 11400000, guid: 37051a4cb8bc73746a0b253995e6d331, type: 2}
+    - answerText:
+        m_TableReference:
+          m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+        m_TableEntryReference:
+          m_KeyId: 3879583567873
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      nextConversation: {fileID: 11400000, guid: 49f02d111bc00694bbdb0a988dc386a2, type: 2}
+    - answerText:
+        m_TableReference:
+          m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+        m_TableEntryReference:
+          m_KeyId: 3879583567874
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 0
+        m_LocalVariables: []
+      nextConversation: {fileID: 11400000, guid: ee211c3a40e93bd43bafe4c52f175fe0, type: 2}
+    noResponseConversation: {fileID: 11400000, guid: ade907cd7c45d3a449d232f0e9c04ffd, type: 2}
+    answerTimeout: 6
+  references:
+    version: 2
+    RefIds: []

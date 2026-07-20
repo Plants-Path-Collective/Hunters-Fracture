@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: UI_Common
+  m_EditorClassIdentifier: Unity.Localization.Editor::UnityEditor.Localization.StringTableCollection
+  m_SharedTableData: {fileID: 11400000, guid: f0d6af3bf629de14285f0c5fbbed27b8, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: 0bf70f97e54a8854e81270abc09c1434, type: 2}
+  - {fileID: 11400000, guid: f3de1e5f758c2924e97adc6e83e5bc27, type: 2}
+  - {fileID: 11400000, guid: 0bf3d1faea1537a4e92e36abe0a0dfe1, type: 2}
+  - {fileID: 11400000, guid: e8917b012784ad04594cca4f937ee107, type: 2}
+  m_Extensions:
+  - rid: 7017567448507613448
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds:
+    - rid: 7017567448507613448
+      type: {class: GoogleSheetsExtension, ns: UnityEditor.Localization.Plugins.Google, asm: Unity.Localization.Editor}
+      data:
+        m_Collection: {fileID: 11400000}
+        m_SheetsServiceProvider: {fileID: 11400000, guid: 36dfbf0336db59c429cb903521d0d24a, type: 2}
+        m_SpreadsheetId: 1LMYYk3xMSRVdPzq2KFidSALfQHIyk9rMkZBSmJ4QJVk
+        m_SheetId: 571647696
+        m_Columns: []
+        m_RemoveMissingPulledKeys: 1

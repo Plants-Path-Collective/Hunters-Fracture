@@ -1,0 +1,20 @@
+{
+    "name": "SimpleJRPG.Demo.Editor",
+    "rootNamespace": "SimpleJRPG.Demo.Editor",
+    "references": [
+        "SimpleJRPG",
+        "SimpleJRPG.Demo",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
