@@ -17,7 +17,23 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 5d087e21f2ad2694092005582285f089, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 3968249283956736
+    m_Localized: Nueva Partida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969272765435904
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969500037992448
+    m_Localized: Opciones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969609287028736
+    m_Localized: Salir
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

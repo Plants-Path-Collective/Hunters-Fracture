@@ -14,7 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: UI_Menus
   m_TableCollectionNameGuidString: 5d087e21f2ad2694092005582285f089
-  m_Entries: []
+  m_Entries:
+  - m_Id: 3968249283956736
+    m_Key: ui_menu_newgame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969272765435904
+    m_Key: ui_menu_continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969500037992448
+    m_Key: ui_menu_options
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3969609287028736
+    m_Key: ui_menu_quit
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

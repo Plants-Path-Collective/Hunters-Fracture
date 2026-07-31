@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Google Sheets Service
   m_EditorClassIdentifier: Unity.Localization.Editor::UnityEditor.Localization.Plugins.Google.SheetsServiceProvider
   m_ApiKey: 
-  m_ClientId: 593663294033-7t4hdmhc1unjuutlbevt33d6l24p54a0.apps.googleusercontent.com
-  m_ClientSecret: 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
+  m_ClientId: 593663294033-gsuj3p6jpmom8slvkd10o47rrvvc7t15.apps.googleusercontent.com
+  m_ClientSecret: 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
   m_AuthenticationType: 1
   m_ApplicationName: Hunters Fracture in Time
   m_NewSheetProperties:
