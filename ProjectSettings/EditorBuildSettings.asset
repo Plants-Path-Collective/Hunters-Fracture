@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype Scenes/MainMenu.unity
     guid: def58fb23fd83db47b943fcb204c7e8e
   - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/Overworld Scene/Overworld.unity
+    path: Assets/Scenes/Prototype Scenes/Overworld Scene (Dungeon)/Overworld.unity
     guid: ed0cf8abd57b1f949ac0fa959104e3dd
   - enabled: 1
     path: Assets/ThirdParty/SimpleJRPG/Scenes/SimpleJRPGHub.unity
