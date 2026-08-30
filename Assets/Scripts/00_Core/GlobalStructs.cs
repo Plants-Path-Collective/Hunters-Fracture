@@ -17,4 +17,10 @@
     }
 
     #endregion
+
+    public enum UNITY_TYPE
+    {
+        Physical,
+        Magical
+    }
 }
