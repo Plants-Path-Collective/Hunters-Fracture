@@ -10,7 +10,6 @@ namespace Core
     /// Usage — subscribe from any system:
     ///   InputManager.Instance.Exploration.Move.performed += OnMove;
     ///   InputManager.Instance.Combat.BasicAttack.performed += OnAttack;
-    ///   InputManager.Instance.Minigame.PrimaryButton.performed += OnPrimary;
     ///
     /// Switch maps:
     ///   InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Combat);
@@ -52,15 +51,6 @@ namespace Core
         //   RightShoulder    → used combined with LeftShoulder to charge Ultimate (5s hold)
         public InputSystem_Actions.CombatActions      Combat      => Actions.Combat;
 
-        // Minigame  (Disputa & Alianza)
-        //   PrimaryButton    → South face button  (Cross  / A)
-        //   SecondaryButton  → East  face button  (Circle / B)
-        //   TertiaryButton   → West  face button  (Square / X)
-        //   QuaternaryButton → North face button  (Triangle / Y)
-        //   LeftShoulder     → reserved for future minigame variants
-        //   RightShoulder    → reserved for future minigame variants
-        public InputSystem_Actions.MinigameActions    Minigame    => Actions.Minigame;
-
         // ── State ─────────────────────────────────────────────────────────────
         public INPUTACTION_MAP CurrentMap { get; private set; } = INPUTACTION_MAP.Empty;
 
@@ -101,7 +91,6 @@ namespace Core
                 case INPUTACTION_MAP.Exploration: Actions.Exploration.Enable();   break;
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
                 case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
-                case INPUTACTION_MAP.Minigame:    Actions.Minigame.Enable();      break;
             }
         }
 
@@ -132,7 +121,6 @@ namespace Core
             Actions.Exploration.Disable();
             Actions.Dialogue.Disable();
             Actions.Combat.Disable();
-            Actions.Minigame.Disable();
         }
     }
 }
