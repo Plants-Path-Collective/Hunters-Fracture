@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Localización — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación técnica · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">04</span>Diálogo</a></li>
+          <li><a href="localization.html" aria-current="page"><span class="nav-num">05</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">06</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <p class="eyebrow">05 · SISTEMA</p>
+    <h1>Sistema de Localización</h1>
+    <p class="page-lede">Unity Localization como capa de datos para todo el texto traducible del juego.</p>
+
+    <p>
+      El proyecto utiliza el paquete oficial <strong>Unity Localization</strong>
+      (<code>com.unity.localization</code>) para diálogos, UI y wiki. La edición de traducciones se
+      realiza desde la ventana nativa del paquete (<code>Window &gt; Asset Management &gt; Localization
+      Tables</code>), o desde la Google Spreadsheet <em>"Hunters: Fracture of Time - Localization"</em>.
+    </p>
+
+    <ul>
+      <li><strong>Locales:</strong> definidos en <code>Edit &gt; Project Settings &gt; Localization</code>.</li>
+      <li><strong>String Tables:</strong> organizadas por dominio funcional, en vez de una única tabla global, para evitar cargar en memoria contenido que el jugador no está usando (ej. la wiki completa al iniciar el juego).</li>
+      <li><strong>Convención de keys:</strong> prefijo por dominio + identificador descriptivo, ej. <code>npc_flora_line_003</code>, <code>menu_pause_resume</code>, <code>wiki_bestiary_slime_desc</code>.</li>
+      <li><strong>Integración con Google Sheets:</strong> flujo de sincronización opcional sobre las String Tables existentes — no las reemplaza, permite editarlas de forma colaborativa fuera del Editor.</li>
+      <li><strong>Uso en código:</strong> cualquier texto traducible se expone como <code>LocalizedString</code> (ver <code>DialogueLine.dialogueText</code>, <code>AnswerOption.answerText</code> y <code>SpeakerSO.speakerName</code>), resuelto en runtime según el <code>Locale</code> activo.</li>
+    </ul>
+
+    <h2>Convención de tablas</h2>
+    <table class="dep-table">
+      <tbody>
+        <tr><td><code>Dialogue_&lt;NPC o Capítulo&gt;</code></td><td>Diálogos agrupados por NPC principal o por capítulo/zona.</td></tr>
+        <tr><td><code>UI_Common</code></td><td>Textos genéricos repetidos en toda la interfaz.</td></tr>
+        <tr><td><code>UI_Menus</code></td><td>Textos específicos de cada menú.</td></tr>
+        <tr><td><code>Wiki_&lt;Categoría&gt;</code></td><td>Una tabla por sección grande de la wiki.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box">
+      <span class="note-tag">Nota</span>
+      <p>Por ahora la organización por tablas está aplicada al sistema de diálogo. La extensión a menús y
+      wiki sigue el mismo paquete y convención, pero su integración en código aún está pendiente.</p>
+    </div>
+
+    <nav class="page-nav" aria-label="Navegación entre páginas">
+    <a href="dialogue.html" class="page-nav-prev">
+      <span class="page-nav-dir">Anterior</span>
+      <span class="page-nav-title">Diálogo</span>
+    </a>
+    <a href="architecture.html" class="page-nav-next">
+      <span class="page-nav-dir">Siguiente</span>
+      <span class="page-nav-title">Arquitectura</span>
+    </a>
+    </nav>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

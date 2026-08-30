@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentación — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html" aria-current="page"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">04</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">05</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">06</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <div class="hero">
+      <p class="eyebrow">DOCUMENTACIÓN</p>
+      <h1>Hunters: Fracture of Time</h1>
+      <p class="hero-desc">
+        JRPG roguelite en 3D con cámara fija en tercera persona.
+      </p>
+      <div class="badge-row">
+        <span class="badge">Engine <strong>Unity 6000.3.8f1</strong></span>
+        <span class="badge">Pipeline <strong>URP</strong></span>
+        <span class="badge">Género <strong>JRPG · Roguelite</strong></span>
+      </div>
+    
+    </div>
+
+    <h2>Sistemas</h2>
+    <div class="index-grid">
+      <a href="specs.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">01</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Especificaciones</span>
+        <span class="index-card-desc">Versión de Unity, pipeline, arquitectura general y dependencias del proyecto.</span>
+      </a>
+      <a href="inputs.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">02</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Inputs</span>
+        <span class="index-card-desc">Unity Input System, InputManager y el flujo de datos hasta cada sistema consumidor.</span>
+      </a>
+      <a href="combat.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">03</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Combate<span class="status-tag">Pendiente</span></span>
+        <span class="index-card-desc">Sistema ATB, units y resolución de daño. En redacción.</span>
+      </a>
+      <a href="dialogue.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">04</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Diálogo</span>
+        <span class="index-card-desc">ConversationSO, DialogueManager y el ciclo de conversación por NPC.</span>
+      </a>
+      <a href="localization.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">05</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Localización</span>
+        <span class="index-card-desc">Unity Localization, organización de String Tables y convención de keys.</span>
+      </a>
+      <a href="architecture.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">06</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Arquitectura</span>
+        <span class="index-card-desc">GameManager persistente, escenas aditivas y transición hacia el combate.</span>
+      </a>
+      <a href="structure.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">07</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Directorios</span>
+        <span class="index-card-desc">Estructura clave de carpetas dentro de Assets/.</span>
+      </a>
+      <a href="contributing.html" class="index-card">
+        <div class="index-card-top"><span class="index-card-num">08</span><span class="index-card-arrow">→</span></div>
+        <span class="index-card-title">Contribución</span>
+        <span class="index-card-desc">Nomenclatura de código y formato de commits.</span>
+      </a>
+    </div>
+    
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Diálogo — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación técnica · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="dialogue.html" aria-current="page"><span class="nav-num">04</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">05</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">06</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <p class="eyebrow">04 · SISTEMA</p>
+    <h1>Sistema de Diálogo</h1>
+    <p class="page-lede">Arquitectura data-driven basada en ScriptableObjects para desacoplar los datos de la lógica de reproducción.</p>
+
+    <p>
+      Cada conversación se representa mediante un <code>ConversationSO</code>, el cual almacena un
+      conjunto ordenado de <code>DialogueLine</code>. Cada línea puede contener un hablante
+      (<code>SpeakerSO</code>), texto localizado, una línea de voz opcional (<code>AudioClip</code>),
+      hasta cuatro respuestas posibles (<code>AnswerOption</code>), un tiempo límite para responder y
+      una conversación alternativa que se ejecuta cuando el jugador no realiza ninguna elección.
+    </p>
+    <p>
+      Tanto <code>dialogueText</code> como <code>answerText</code> son de tipo <code>LocalizedString</code>
+      (Unity Localization): no almacenan el texto directamente, sino una referencia a una entrada dentro
+      de una String Table — ver <a href="localization.html">Sistema de Localización</a>.
+    </p>
+    <p>
+      La reproducción está centralizada en <code>DialogueManager</code>, un sistema global persistente
+      encargado de iniciar y finalizar diálogos, mostrar la interfaz correspondiente (nombre y retrato
+      del hablante), reproducir líneas de voz, gestionar las respuestas del jugador y controlar la
+      transición entre conversaciones mediante <em>Coroutines</em>. Su funcionamiento es independiente
+      de los NPCs: cualquier sistema puede iniciar una conversación con solo una referencia a un
+      <code>ConversationSO</code>.
+    </p>
+    <p>
+      Cada NPC dispone de un componente <code>ConversationTrigger</code>, responsable de detectar la
+      entrada del jugador mediante un Trigger Collider e iniciar la conversación correspondiente.
+      Además posee un identificador único (<code>NPC_ID</code>) y un índice de progreso
+      (<code>conversationIndex</code>) que registra cuántas veces el jugador ha interactuado con él,
+      permitiendo presentar distintas conversaciones conforme avanza la relación entre el jugador y el
+      personaje.
+    </p>
+    <p>
+      El <code>ConversationTrigger</code> también incorpora una bandera de estado (<code>request</code>)
+      que bloquea el avance del <code>conversationIndex</code> mientras exista una solicitud o misión
+      pendiente asociada al personaje, manteniendo el mismo diálogo hasta que la condición
+      correspondiente se resuelve.
+    </p>
+
+    <h2>Flujo del sistema</h2>
+    <pre class="ascii-flow">Jugador entra al Trigger Collider
+            │
+            ▼
+     ConversationTrigger
+            │
+            ▼
+   Obtiene NPC_ID y conversationIndex
+            │
+            ▼
+   Selecciona ConversationSO correspondiente
+            │
+            ▼
+   DialogueManager.StartConversation()
+            │
+            ▼
+       Reproduce DialogueLine
+            │
+            ├── Texto
+            ├── Voz (opcional)
+            └── Respuestas (opcional)
+            │
+            ▼
+   ¿Finalizó la conversación?
+            │
+            ▼
+      ¿request == false?
+            │
+      Sí ───────► conversationIndex++
+      No ───────► Mantiene el mismo índice
+            │
+            ▼
+     Guarda el progreso del NPC</pre>
+
+    <h2>Componentes principales</h2>
+    <div class="component-grid">
+      <div class="component-card">
+        <span class="component-name">ConversationSO</span>
+        <span class="component-desc">Contenedor de datos que representa una conversación completa.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">SpeakerSO</span>
+        <span class="component-desc">Contenedor de datos reutilizable para un personaje (nombre localizado y retrato).</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">DialogueManager</span>
+        <span class="component-desc">Sistema global encargado de reproducir y controlar el flujo completo de las conversaciones.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">ConversationTrigger</span>
+        <span class="component-desc">Gestiona el inicio de la conversación y el progreso individual de cada NPC.</span>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <span class="note-tag">Nota</span>
+      <p>Actualmente el progreso de las conversaciones se almacena con <code>PlayerPrefs</code> por NPC,
+      combinando <code>NPC_ID</code> + <code>conversationIndex</code>. En futuras iteraciones este sistema
+      será integrado con el gestor de guardado y el sistema de misiones, permitiendo persistencia completa
+      entre partidas y gestión centralizada del estado narrativo.</p>
+    </div>
+
+    <nav class="page-nav" aria-label="Navegación entre páginas">
+    <a href="combat.html" class="page-nav-prev">
+      <span class="page-nav-dir">Anterior</span>
+      <span class="page-nav-title">Combate</span>
+    </a>
+    <a href="localization.html" class="page-nav-next">
+      <span class="page-nav-dir">Siguiente</span>
+      <span class="page-nav-title">Localización</span>
+    </a>
+    </nav>
+    
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

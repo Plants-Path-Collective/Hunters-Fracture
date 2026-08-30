@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Especificaciones Técnicas — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación técnica · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html" aria-current="page"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">04</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">05</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">06</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <p class="eyebrow">01 · SISTEMA</p>
+    <h1>Especificaciones Técnicas</h1>
+    <p class="page-lede">Resumen del motor, pipeline de renderizado, arquitectura general y dependencias del proyecto.</p>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <span class="spec-label">Versión de Unity</span>
+        <span class="spec-value">6000.3.8f1</span>
+      </div>
+      <div class="spec-card">
+        <span class="spec-label">Pipeline de renderizado</span>
+        <span class="spec-value">Universal Render Pipeline (URP)</span>
+      </div>
+      <div class="spec-card spec-card--wide">
+        <span class="spec-label">Arquitectura</span>
+        <span class="spec-value">Event-Driven Architecture, ScriptableObjects (Data-Driven) y patrón Singleton para sistemas globales.</span>
+      </div>
+    </div>
+
+    <h2>Dependencias principales</h2>
+    <table class="dep-table">
+      <thead><tr><th>Paquete</th><th>ID</th><th>Versión</th></tr></thead>
+      <tbody>
+        <tr><td>Unity Input System</td><td><code>com.unity.inputsystem</code></td><td>1.19.0</td></tr>
+        <tr><td>DOTween</td><td><code>—</code></td><td>1.2.825</td></tr>
+        <tr><td>Unity Localization</td><td><code>com.unity.localization</code></td><td>1.5.12</td></tr>
+      </tbody>
+    </table>
+
+    <nav class="page-nav" aria-label="Navegación entre páginas">
+    <span></span>
+    <a href="inputs.html" class="page-nav-next">
+      <span class="page-nav-dir">Siguiente</span>
+      <span class="page-nav-title">Inputs</span>
+    </a>
+    </nav>
+    
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura y Flujo de Escenas — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación técnica · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">04</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">05</span>Localización</a></li>
+          <li><a href="architecture.html" aria-current="page"><span class="nav-num">06</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <p class="eyebrow">06 · SISTEMA</p>
+    <h1>Arquitectura y Flujo de Escenas</h1>
+    <p class="page-lede">Cómo se organizan los sistemas globales y las escenas aditivas durante la exploración y el combate.</p>
+
+    <p>
+      La aplicación utiliza un GameObject persistente denominado <code>[ GameManager ]</code>, marcado
+      con <code>DontDestroyOnLoad()</code>, que permanece activo durante toda la ejecución del juego.
+      Este objeto centraliza los principales sistemas globales mediante componentes Singleton, incluyendo
+      <code>GameManager</code>, <code>InputManager</code>, <code>UIManager</code> y
+      <code>DialogueManager</code>. Su propósito es mantener el estado global del juego y evitar la
+      reinicialización de estos sistemas durante las transiciones entre escenas.
+    </p>
+    <p>
+      La exploración se desarrolla sobre una escena principal denominada <code>Overworld</code>, que
+      actúa como contenedor permanente del mundo. Las distintas áreas del juego (Mercado, Alcantarillas,
+      Hoteles...) se cargan y descargan como <strong>escenas aditivas</strong>, manteniendo en memoria
+      únicamente las zonas cercanas al jugador.
+    </p>
+    <p>
+      Cada escena contiene un componente derivado de la clase base <code>SceneSetter</code> (ej.
+      <code>MarketSetter</code>, <code>SewersSetter</code>, <code>ChurchSetter</code>), que actúa como
+      punto de configuración de la escena, proporcionando a los sistemas globales la información
+      necesaria para inicializar el área — NPCs presentes, cámara a activar, u otros parámetros
+      específicos. Así, <code>SceneSetter</code> funciona como capa de comunicación entre la escena
+      cargada y los distintos Managers, evitando que estos dependan de buscar componentes uno a uno cada
+      vez que el jugador entra a una zona.
+    </p>
+    <p>
+      La carga y descarga de escenas se controla mediante Trigger Colliders ubicados en las transiciones
+      entre áreas. Cuando el jugador ingresa a una nueva zona, el sistema carga las escenas adyacentes y
+      descarga aquellas a más de dos zonas de distancia, reduciendo el consumo de memoria y los tiempos
+      de carga durante la exploración.
+    </p>
+    <p>
+      El combate se desarrolla en una escena independiente denominada <code>CombatStage</code>. Al
+      detectar un encuentro con un enemigo en el <code>Overworld</code>, el sistema inicia la transición
+      hacia esta escena, descargando temporalmente la escena de exploración. Al finalizar el combate, el
+      flujo retorna al <code>Overworld</code> para continuar la exploración.
+    </p>
+
+    <nav class="page-nav" aria-label="Navegación entre páginas">
+    <a href="localization.html" class="page-nav-prev">
+      <span class="page-nav-dir">Anterior</span>
+      <span class="page-nav-title">Localización</span>
+    </a>
+    <a href="structure.html" class="page-nav-next">
+      <span class="page-nav-dir">Siguiente</span>
+      <span class="page-nav-title">Directorios</span>
+    </a>
+    </nav>
+    
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
