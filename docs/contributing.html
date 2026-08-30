@@ -53,7 +53,14 @@
     <div class="rule-grid">
       <div class="rule-card" style="grid-column: 1 / -1;">
         <span class="rule-title">Nomenclatura</span>
-        <p>Comentarios y documentación en español. Código en inglés, siguiendo las convenciones estándar de C#: <strong>PascalCase</strong> para métodos/clases, <strong>camelCase</strong> para variables locales.</p>
+
+        <p><strong>Comentarios en código:</strong> Todos los comentarios y la documentación XML (ej. <code>&lt;summary&gt;</code>, <code>&lt;param&gt;</code>, <code>&lt;returns&gt;</code>) se redactan en <strong>inglés</strong>. Utiliza <code>&lt;summary&gt;</code> para describir el propósito de clases, métodos y funciones, de modo que otros programadores puedan comprender su uso rápidamente desde el entorno de desarrollo.</p>
+
+        <p><strong>Variables en el Inspector:</strong> Para campos serializados o públicos que se muestran en el Inspector de Unity, emplea el atributo <code>[Tooltip("…")]</code> para explicar su función o el tipo de referencia esperada. Usa también <code>[Header("…")]</code> para agrupar variables relacionadas y mejorar la legibilidad del Inspector.</p>
+
+        <p><strong>Nombres de código:</strong> El código (variables, métodos, clases) se escribe en inglés, siguiendo las convenciones estándar de C#: <strong>PascalCase</strong> para métodos y clases; <strong>camelCase</strong> para variables locales.</p>
+
+        <p><strong>Documentación del proyecto:</strong> Los documentos de esta guía, las especificaciones y cualquier comentario de línea que no sea documentación XML deben redactarse en <strong>español</strong> para facilitar la comprensión de todo el equipo.</p>
       </div>
     </div>
 
