@@ -3,7 +3,7 @@ using UnityEngine.Localization;
 
 namespace PlantsPathCo.DialogueSystem
 {
-    [CreateAssetMenu(fileName = "NewSpeaker", menuName = "Dialogue/Speaker")]
+    [CreateAssetMenu(fileName = "NewSpeaker", menuName = "Dialogue System/Speaker")]
     public class SpeakerSO : ScriptableObject
     {
         [Tooltip("Nombre del personaje a mostrar en el panel de diálogo. Localizado, " +
