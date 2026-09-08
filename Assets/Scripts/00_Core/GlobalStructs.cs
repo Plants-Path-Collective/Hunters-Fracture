@@ -23,4 +23,18 @@
         Physical,
         Magical
     }
+
+    /// <summary>
+    /// Which stat a StatModifierEffectSO applies to.
+    /// </summary>
+    public enum STAT_TYPE
+    {
+        HP,
+        SP,
+        Speed,
+        Strength,
+        MagicPower,
+        PhysicalDefense,
+        MagicalDefense
+    }
 }

@@ -12,7 +12,7 @@ namespace CombatSystem.Unit
         [SerializeField] private UNITY_TYPE unitType;
 
         [Tooltip("Sprite that will be used in the Turn Timeline on combat")]
-        [SerializeField] private Image unitPortrait;
+        [SerializeField] private Sprite unitPortrait;
         [SerializeField] private string unitDescription;
 
         [Header("----- Battle (ICombatant) -----")]
@@ -36,6 +36,11 @@ namespace CombatSystem.Unit
             inventory = GetComponent<UnitInventory>();
             effectController = GetComponent<UnitEffectController>();
             statsController = GetComponent<UnitStatsController>();
+
+            // Explicit call instead of relying on Unity's Awake() execution
+            // order between components on the same GameObject — that order
+            // is not guaranteed, so MaxHP/MaxSP must be resolved here first.
+            statsController.RecalculateStats(inventory);
 
             HP = statsController.MaxHP;
             SP = statsController.MaxSP;

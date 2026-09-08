@@ -18,14 +18,51 @@ namespace CombatSystem.Unit
     /// </remarks>
     public class UnitInventory : MonoBehaviour
     {
+        [Header("----- Item Catalog -----")]
+        [SerializeField] private ItemCatalog itemCatalog;
+
         [Header("----- Inventory -----")]
-        [SerializeField] private Dictionary<int, Item> inventory = new Dictionary<int, Item>();
+        public Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 
         /// <summary>
         /// Event invoked whenever an item's quantity changes (via <see cref="AddItem"/> or <see cref="RemoveItem"/>).
         /// </summary>
         [Tooltip("Triggered when an item quantity changes (added or removed).")]
         public UnityEvent OnStackChanged { get; private set; } = new UnityEvent();
+
+        private void Awake()
+        {
+            InitializeInventory();
+        }
+
+        private void InitializeInventory()
+        {
+            inventory.Clear();
+
+            if (itemCatalog == null)
+            {
+                Debug.LogError($"[UnitInventory] {gameObject.name} has no ItemCatalog assigned.");
+                return;
+            }
+
+            foreach (ItemSO itemSO in itemCatalog.AllItems)
+            {
+                if (itemSO == null)
+                    continue;
+
+                if (inventory.ContainsKey(itemSO.itemID))
+                {
+                    Debug.LogError($"[UnitInventory] Duplicate itemID {itemSO.itemID} found in ItemCatalog.");
+                    continue;
+                }
+
+                inventory.Add(itemSO.itemID, new Item
+                {
+                    itemSO = itemSO,
+                    quantity = 0
+                });
+            }
+        }
 
         /// <summary>
         /// Adds a specified quantity of an item to the unit's inventory.
