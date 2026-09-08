@@ -1,6 +1,7 @@
 using UnityEngine;
 using SimpleJRPG;
 using Core;
+using UnityEngine.UI;
 
 namespace CombatSystem.Unit 
 {    
@@ -11,7 +12,7 @@ namespace CombatSystem.Unit
         [SerializeField] private UNITY_TYPE unitType;
 
         [Tooltip("Sprite that will be used in the Turn Timeline on combat")]
-        [SerializeField] private string unitPortrait;
+        [SerializeField] private Image unitPortrait;
         [SerializeField] private string unitDescription;
 
         [Header("----- Battle (ICombatant) -----")]
@@ -19,9 +20,11 @@ namespace CombatSystem.Unit
         public string Name => unitName;
         public bool IsAlive => HP > 0;
         public int Team => team;
-        public int HP { get; private set; }
-        public int SP { get; private set; }
-        public float Speed => statsController.Speed;
+        public int HP { get;  set; }
+        public int SP { get;  set; }
+        public int MaxHP { get;  set; }
+        public int MaxSP { get;  set; }
+        public float Speed { get; set; }
 
         [Header("----- References -----")]
         public UnitInventory inventory { get; private set; }
@@ -36,6 +39,7 @@ namespace CombatSystem.Unit
 
             HP = statsController.MaxHP;
             SP = statsController.MaxSP;
+            Speed = statsController.Speed;
 
         }
 

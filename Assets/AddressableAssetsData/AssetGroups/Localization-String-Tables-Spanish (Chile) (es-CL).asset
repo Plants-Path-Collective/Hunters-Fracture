@@ -22,7 +22,7 @@ MonoBehaviour:
     - Locale-es-CL
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e8cf41e33c299b498bfe797c9e12460
-    m_Address: Test_es-CL
+    m_Address: Dialogue_Test_es-CL
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-es-CL

@@ -34,7 +34,7 @@ MonoBehaviour:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b39d1b29b428f634fb3fcf7a9ef02879
-    m_Address: Test_ja-JP
+    m_Address: Dialogue_Test_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP

@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 9992784de0b555946905221a034eaf28
   m_SerializeEntries:
   - m_GUID: 03379fe277b0e5a46abbc5d8746db182
-    m_Address: Test_zh-Hans
+    m_Address: Dialogue_Test_zh-Hans
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hans
