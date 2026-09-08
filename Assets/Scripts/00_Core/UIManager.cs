@@ -16,7 +16,7 @@ namespace Core
         [SerializeField] private GameObject optionsPanel;
 
         [Header("Scene Names")]
-        [SerializeField] private string overworldSceneName = "Overworld";
+        [SerializeField] private string overworldSceneName = "ItemsTester";
 
         private void Awake()
         {

@@ -3458,7 +3458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.UIManager
   mainMenuPanel: {fileID: 927481151}
   optionsPanel: {fileID: 2032262931}
-  overworldSceneName: Overworld
+  overworldSceneName: ItemsTester
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
