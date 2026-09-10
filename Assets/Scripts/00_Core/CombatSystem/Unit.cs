@@ -48,6 +48,16 @@ namespace CombatSystem.Unit
 
         }
 
+        public Unit(string name, int hp, int mp, float speed, int team)
+        {
+            unitName = name;
+            HP = hp;
+            MaxHP = hp;
+            SP = mp;
+            MaxSP = mp;
+            Speed = speed;
+        }
+
         // ----- Iherited from ICombatant  -----
         public void TakeDamage(int amount)
         {

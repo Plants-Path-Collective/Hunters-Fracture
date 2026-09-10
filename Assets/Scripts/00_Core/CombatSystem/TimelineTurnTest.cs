@@ -76,6 +76,16 @@ public class TimelineTurnTest : MonoBehaviour
 
     void Start()
     {
+        _party.Add(new Unit("Hero", 120, 30, 10f, 0));
+        _party.Add(new Unit("Warrior", 100, 0, 8f, 0));
+        _party.Add(new Unit("Mage", 60, 80, 12f, 0));
+        _party.Add(new Unit("Priest", 80, 60, 9f, 0));
+
+        _enemies.Add(new Unit("Blob", 120, 30, 10f, 0));
+        _enemies.Add(new Unit("Imp", 100, 0, 8f, 0));
+        _enemies.Add(new Unit("Mimic", 60, 80, 12f, 0));
+
+
         var all = new List<ICombatant>();
         all.AddRange(_party);
         all.AddRange(_enemies);

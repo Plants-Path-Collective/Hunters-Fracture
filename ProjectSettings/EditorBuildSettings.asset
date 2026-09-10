@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prototype Scenes/Overworld Scene (Dungeon)/ItemsTester.unity
     guid: 0c4a83343def74f40a4bb05a76b7e790
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Prototype Scenes/Overworld Scene (Dungeon)/Overworld.unity
     guid: ed0cf8abd57b1f949ac0fa959104e3dd
   - enabled: 0
@@ -32,6 +32,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ThirdParty/SimpleJRPG/Scenes/TimelineTurnDemoScene.unity
     guid: dfb0a7e0471175c48b445c06856362bf
+  - enabled: 1
+    path: Assets/Scenes/Prototype Scenes/TimelineTurnTesting.unity
+    guid: 577a87700e4b75248ad4a591b1439af3
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 043acf2e76bdf2243b008ec4e4869ad8, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
