@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Objetos — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Hunters: Fracture of Time</span>
+      </a>
+      <p class="brand-sub">Documentación técnica · v0.1</p>
+
+      <nav class="nav" aria-label="Secciones de documentación">
+        <p class="nav-group-label">Contenidos</p>
+        <ol class="nav-list">
+          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+          <li><a href="items.html" aria-current="page"><span class="nav-num">04</span>Objetos</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">08</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">09</span>Contribución</a></li>
+        </ol>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+        <p class="footer-hint">Para el equipo y futuros modders</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content" id="top">
+    <p class="eyebrow">09 · SISTEMA</p>
+    <h1>Sistema de Objetos</h1>
+    <p class="page-lede">
+      La progresión del roguelite: cómo se definen los objetos, cómo modifican stats, y cómo
+      reaccionan a los eventos de combate sin que <code>Battle</code> sepa que existen.
+    </p>
+
+    <h2>Jerarquía de datos</h2>
+    <div class="tree-box">
+      <div class="tree-row"><span><code>ItemCatalog</code></span><span>Un único asset. Lookup pasivo por <code>itemID</code>.</span></div>
+      <div class="tree-row"><span><code>ItemSO</code></span><span>Un asset por objeto. ID, nombre, ícono, lista de <code>ItemEffectSO</code>.</span></div>
+      <div class="tree-row"><span><code>ItemEffectSO</code></span><span>Base abstracta, sin miembros propios. Nunca se instancia directamente.</span></div>
+      <div class="tree-row"><span>↳ <code>StatModifierEffectSO</code></span><span>Modificador estático o por fórmula sobre una stat.</span></div>
+      <div class="tree-row"><span>↳ <code>TriggeredEffectSO</code></span><span>Reacciona a eventos de <code>Battle</code> mediante <code>Attach()</code>/<code>Detach()</code>.</span></div>
+    </div>
+
+    <h2>ItemCatalog</h2>
+    <p>
+      Registro central de todo <code>ItemSO</code> del juego. Existe un único asset en el proyecto,
+      referenciado directamente donde se necesita — sin <code>static Instance</code> ni singleton —
+      siguiendo el mismo principio de evitar estado global del resto del sistema de combate. Se
+      consulta para poblar drop tables, UI, guardado/carga, y para inicializar el inventario de una
+      Unit con todos los objetos válidos en cantidad 0. <strong>Nunca</strong> se consulta durante la
+      resolución de una acción de combate.
+    </p>
+
+    <h2>ItemSO</h2>
+    <div class="component-grid">
+      <div class="component-card">
+        <span class="component-name">itemID</span>
+        <span class="component-desc">Identificador único, usado como clave en <code>ItemCatalog</code> y en el diccionario de <code>UnitInventory</code>.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">itemName</span>
+        <span class="component-desc">Nombre mostrado en UI.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">itemIcon</span>
+        <span class="component-desc">Sprite del objeto.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">effects</span>
+        <span class="component-desc">Lista de <code>ItemEffectSO</code>. Un mismo objeto puede combinar más de un efecto (por ejemplo, un modificador de stat y un efecto reactivo a la vez).</span>
+      </div>
+    </div>
+
+    <h2>StatModifierEffectSO</h2>
+    <p>
+      Contribuye un modificador estático o por fórmula a una única stat (<code>statType</code>), sin
+      suscribirse jamás a <code>Battle</code>. Cada stack del objeto se aplica por separado, en dos
+      pasadas: primero los modificadores porcentuales, luego los planos.
+    </p>
+    <table class="dep-table">
+      <thead><tr><th>Campo</th><th>Aplica a</th></tr></thead>
+      <tbody>
+        <tr><td><code>flatBonus</code></td><td>Primer stack — valor plano</td></tr>
+        <tr><td><code>percentBonus</code></td><td>Primer stack — porcentaje del valor actual</td></tr>
+        <tr><td><code>perStackFlatBonus</code></td><td>Cada stack adicional — valor plano</td></tr>
+        <tr><td><code>perStackPercentBonus</code></td><td>Cada stack adicional — porcentaje del valor actual</td></tr>
+      </tbody>
+    </table>
+    <p class="flow-note">
+      <code>UnitStatsController.RecalculateStats()</code> invoca <code>ApplyModifiers()</code> una vez
+      por cada objeto con quantity mayor a 0 que la Unit sostiene, como parte de un recálculo completo
+      desde cero — nunca aplica deltas incrementales.
+    </p>
+
+    <h2>TriggeredEffectSO</h2>
+    <p>
+      Efecto abstracto que reacciona a eventos de combate en lugar de aportar un número fijo:
+      quemadura, dormir, probabilidades on-hit, robo de stats. Cada objeto concreto implementa
+      <code>Attach(Unit unit)</code> y <code>Detach(Unit unit)</code> con su propia lógica de
+      suscripción a <code>Battle</code>.
+    </p>
+    <div class="note-box">
+      <span class="note-tag">Importante</span>
+      <p>
+        Al ser un <code>ScriptableObject</code>, la misma instancia de asset es compartida por todas
+        las Units que portan ese objeto. Ningún estado por-Unit (como "quién es mi dueño ahora mismo")
+        se guarda en campos del efecto concreto — <code>Attach()</code> captura la Unit dentro de un
+        closure, y guarda referencia a ese mismo delegado para que <code>Detach()</code> lo remueva
+        correctamente.
+      </p>
+    </div>
+
+    <h2>Integración con Unit</h2>
+    <div class="flow-chain">
+      <span>UnitInventory</span><span class="flow-arrow">→</span>
+      <span>OnStackChanged</span><span class="flow-arrow">→</span>
+      <span>UnitEffectController</span><span class="flow-arrow">→</span>
+      <span>UnitStatsController</span>
+    </div>
+    <p class="flow-note">
+      <code>UnitInventory.AddItem()</code>/<code>RemoveItem()</code> disparan
+      <code>OnStackChanged</code>. <code>UnitEffectController</code> escucha ese evento: engancha o
+      desengancha cada <code>TriggeredEffectSO</code> del objeto que cambió de cantidad, y pide un
+      recálculo completo a <code>UnitStatsController</code>, que resetea a base y vuelve a aplicar
+      cada <code>StatModifierEffectSO</code> activo.
+    </p>
+
+    <h2>Objetos de la demo</h2>
+    <table class="dep-table">
+      <thead><tr><th>Objeto</th><th>Categoría</th><th>Implementación</th></tr></thead>
+      <tbody>
+        <tr><td>HP Booster based on Strength</td><td>Modificador estático dependiente de otro stat</td><td><code>StatModifierEffectSO</code>, resuelto en <code>UnitStatsController</code></td></tr>
+        <tr><td>Glasscanon</td><td>Modificador estático puro</td><td><code>StatModifierEffectSO</code>, resuelto en <code>UnitStatsController</code></td></tr>
+        <tr><td>SP Reduction</td><td>Modificador estático sobre un valor de la capa de combate</td><td><code>StatModifierEffectSO</code>, resuelto enteramente en el proyecto — SimpleJRPG no gestiona SP</td></tr>
+        <tr><td>Magil Defense Gambling</td><td>Trigger reactivo → buff permanente</td><td><code>TriggeredEffectSO</code> en <code>OnBeforeDamage</code> (como Target); llama <code>ApplyBuff</code>, trackeado por <code>StatusBuffTracker</code></td></tr>
+        <tr><td>Steal Magic Power</td><td>Trigger reactivo → buff/debuff temporal</td><td><code>TriggeredEffectSO</code> en <code>OnDamageDealt</code> (como Source); <code>ApplyBuff</code> en ambos lados</td></tr>
+        <tr><td>On-Hit Speed Reduction</td><td>Trigger reactivo → debuff temporal</td><td><code>TriggeredEffectSO</code> en <code>OnDamageDealt</code> (como Source); <code>ApplyBuff</code> de Speed</td></tr>
+        <tr><td>Darius Passive</td><td>Trigger reactivo → status acumulable</td><td><code>TriggeredEffectSO</code> en <code>OnDamageDealt</code>; <code>ApplyStatus</code> con stacks gestionados por <code>StatusBuffTracker</code></td></tr>
+        <tr><td>Emergency SP Shield</td><td>Trigger condicional → acción directa</td><td><code>TriggeredEffectSO</code> en <code>OnDamageDealt</code> (como Target); chequea HP%, llama <code>Battle.Heal()</code></td></tr>
+        <tr><td>Heavy Stunt Armor</td><td>Estático + trigger reactivo</td><td><code>ItemSO</code> con dos efectos: <code>StatModifierEffectSO</code> (Defensa física) y <code>TriggeredEffectSO</code> en <code>OnBeforeDamage</code> que aplica <code>ApplyStatus("aturdido")</code></td></tr>
+        <tr><td>Split Shot</td><td>Override de targeting/daño de una acción</td><td>Resuelto en <code>ActionResolver</code>, antes de invocar <code>Battle.DealDamage()</code></td></tr>
+        <tr><td>Missfire</td><td>Override de targeting de una skill</td><td>Resuelto en <code>ActionResolver</code>, antes de invocar el verbo de <code>Battle</code></td></tr>
+        <tr><td>Turn Repeater</td><td>Interviene el turno actual</td><td><code>TriggeredEffectSO</code> que llama <code>TimelineTurnSystem.SetActionCost()</code> con un valor bajo antes de <code>EndTurn()</code></td></tr>
+        <tr><td>Brain Control (Único)</td><td>Estructural: reemplazo de skill</td><td>Código a medida, sin pasar por el sistema genérico de efectos</td></tr>
+        <tr><td>Turn Chainer (Único)</td><td>Estructural: reglas a nivel de encuentro</td><td>Código a medida sobre <code>TimelineTurnSystem</code>/<code>BattleController</code>, no sobre una Unit puntual</td></tr>
+      </tbody>
+    </table>
+
+    <nav class="page-nav" aria-label="Navegación entre páginas">
+    <a href="combat.html" class="page-nav-prev">
+      <span class="page-nav-dir">Anterior</span>
+      <span class="page-nav-title">Combate</span>
+    </a>
+    <a href="dialogue.html" class="page-nav-next">
+      <span class="page-nav-dir">Siguiente</span>
+      <span class="page-nav-title">Diálogo</span>
+    </a>
+    <span></span>
+    </nav>
+
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

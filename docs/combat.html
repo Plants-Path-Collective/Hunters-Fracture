@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Combate — Hunters: Fracture of Time</title>
+<title>Combate y Persistencia — Hunters: Fracture of Time</title>
 <meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,11 +31,12 @@
           <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
           <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
           <li><a href="combat.html" aria-current="page"><span class="nav-num">03</span>Combate</a></li>
-          <li><a href="dialogue.html"><span class="nav-num">04</span>Diálogo</a></li>
-          <li><a href="localization.html"><span class="nav-num">05</span>Localización</a></li>
-          <li><a href="architecture.html"><span class="nav-num">06</span>Arquitectura</a></li>
-          <li><a href="structure.html"><span class="nav-num">07</span>Directorios</a></li>
-          <li><a href="contributing.html"><span class="nav-num">08</span>Contribución</a></li>
+          <li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
+          <li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
+          <li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
+          <li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+          <li><a href="structure.html"><span class="nav-num">08</span>Directorios</a></li>
+          <li><a href="contributing.html"><span class="nav-num">09</span>Contribución</a></li>
         </ol>
       </nav>
 
@@ -48,25 +49,175 @@
 
   <main class="content" id="top">
     <p class="eyebrow">03 · SISTEMA</p>
-    <h1>Sistema de Combate</h1>
-    <p class="page-lede">Documentación del sistema ATB, las units y la resolución de daño.</p>
+    <h1>Combate y Persistencia de Progreso</h1>
+    <p class="page-lede">
+      Cómo se separan los datos que sobreviven a un combate de los que se descartan junto con él, y
+      cómo el asset SimpleJRPG orquesta cada encuentro sin conocer nada de este sistema.
+    </p>
 
-    <div class="pending-card">
-      <span class="pending-tag">Pendiente</span>
-      <p>Esta sección está en redacción. Se documentará el sistema ATB, las units, la resolución de daño y su integración con el sistema de objetos.</p>
+    <h2>Base externa: SimpleJRPG</h2>
+    <p>
+      El combate por turnos se apoya en <strong>SimpleJRPG</strong>, un asset de C# puro sin
+      dependencias de Unity en su núcleo. Aporta <code>Battle</code> (orquestador de un encuentro,
+      dispara eventos y aplica lo que se le pide), la interfaz <code>ICombatant</code>, y
+      <code>TimelineTurnSystem</code> como sistema de turnos: un timeline tick-based con costo de
+      acción variable por turno, similar al de <em>Honkai: Star Rail</em>. SimpleJRPG no calcula
+      daño, no rastrea estados ni buffs, y no gestiona objetos — todo eso lo resuelve el proyecto.
+    </p>
+
+    <h2>Dos dominios</h2>
+    <p>
+      El sistema separa un <strong>dominio persistente</strong>, que vive durante toda la run
+      independientemente de qué escena esté cargada, de un <strong>dominio de combate</strong>, que
+      se crea al entrar a <code>CombatStage</code> y se destruye por completo al salir.
+    </p>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <span class="spec-label">Dominio persistente</span>
+        <span class="spec-value">Overworld · <code>Party</code>, <code>PartyMemberData</code></span>
+      </div>
+      <div class="spec-card">
+        <span class="spec-label">Dominio de combate</span>
+        <span class="spec-value">CombatStage · <code>Unit</code>, <code>Battle</code>, controladores del encuentro</span>
+      </div>
     </div>
+
+    <h2>Qué persiste entre combates</h2>
+    <table class="dep-table">
+      <thead><tr><th>Dato</th><th>Persiste</th><th>Motivo</th></tr></thead>
+      <tbody>
+        <tr><td>Identidad (nombre, portrait, descripción, tipo)</td><td>Sí</td><td>No cambia en runtime</td></tr>
+        <tr><td>Stats base</td><td>Sí, como plantilla</td><td><code>UnitDefinitionSO</code> es un asset independiente de cualquier instancia de combate</td></tr>
+        <tr><td>HP actual</td><td>Sí</td><td>Representa el daño acumulado durante la run; no es derivable de nada más</td></tr>
+        <tr><td>SP actual</td><td>Sí</td><td>Igual que HP</td></tr>
+        <tr><td>Inventario (cantidades por ítem)</td><td>Sí</td><td>Es la progresión del roguelite; alimenta la UI del Overworld y el recálculo de stats</td></tr>
+        <tr><td>Stats derivadas (MaxHP, MaxSP, Strength, MagicPower, Defensas)</td><td>No</td><td>Se recalculan siempre desde stats base + inventario en cada combate</td></tr>
+        <tr><td>GameObjects de combate y sus controladores</td><td>No</td><td>Se crean y destruyen por encuentro</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Componentes</h2>
+    <div class="component-grid">
+      <div class="component-card">
+        <span class="component-name">Party</span>
+        <span class="component-desc">Lista de hasta 3 <code>PartyMemberData</code> (uno por slot: izquierda, centro, derecha). La porta <code>PlayerEntity</code> en el Overworld.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">PartyMemberData</span>
+        <span class="component-desc">Clase C# plana. Une una <code>UnitDefinitionSO</code> con el estado mutable fuera de combate: <code>currentHP</code>, <code>currentSP</code> e <code>inventorySnapshot</code>.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">UnitDefinitionSO</span>
+        <span class="component-desc"><code>ScriptableObject</code> con las 7 stats base y la identidad de un personaje o enemigo. Plantilla inmutable, compartida por cualquier combate que la use.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">EnemySlotData</span>
+        <span class="component-desc">Análogo a <code>PartyMemberData</code> para un enemigo del encuentro, sin HP/SP arrastrado — los enemigos siempre entran a full HP/SP. Incluye un <code>inventorySnapshot</code> opcional para variantes elite.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">CombatHandoff</span>
+        <span class="component-desc">Objeto puente de vida corta que lleva la <code>Party</code> y los <code>EnemySlotData</code> del Overworld a CombatStage. Se destruye apenas <code>BattleController</code> lo consume.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">BattleController</span>
+        <span class="component-desc">Raíz de <code>CombatStage</code>. Instancia las <code>Unit</code> del encuentro, crea <code>Battle</code> y <code>TimelineTurnSystem</code>, y vuelca HP/SP/inventario de vuelta a la <code>Party</code> al finalizar.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">Unit</span>
+        <span class="component-desc"><code>MonoBehaviour</code> que implementa <code>ICombatant</code>. Vive en un GameObject junto a <code>UnitInventory</code>, <code>UnitStatsController</code> y <code>UnitEffectController</code>, y se descarta al terminar el combate.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">UnitInventory</span>
+        <span class="component-desc">Cantidades por objeto de la Unit en combate. Se puebla desde el <code>inventorySnapshot</code> persistente al iniciar el encuentro y dispara <code>OnStackChanged</code> ante cualquier cambio.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">UnitStatsController</span>
+        <span class="component-desc">Toma la plantilla base de <code>UnitDefinitionSO</code> y recalcula las stats finales cada vez que cambia el inventario, aplicando cada <code>StatModifierEffectSO</code> activo.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">UnitEffectController</span>
+        <span class="component-desc">Engancha y desengancha los <code>TriggeredEffectSO</code> de los ítems que la Unit porta a los eventos de <code>Battle</code> correspondientes.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">StatusBuffTracker</span>
+        <span class="component-desc">Uno por encuentro. Escucha los eventos de <code>Battle</code>, lleva duración y stacks de estados/buffs, y aplica el daño por turno de efectos como veneno o hemorragia.</span>
+      </div>
+      <div class="component-card">
+        <span class="component-name">ActionResolver</span>
+        <span class="component-desc">Uno por encuentro. Resuelve la acción elegida: aplica overrides de targeting, calcula el daño con la fórmula propia, e invoca el verbo correspondiente de <code>Battle</code>.</span>
+      </div>
+    </div>
+
+    <h2>Entrada a combate</h2>
+    <pre class="ascii-flow">1. BattleLauncher crea un CombatHandoff con la Party y los EnemySlotData del encuentro.
+2. CombatStage se carga y Overworld se desactiva.
+3. BattleController lee el CombatHandoff y lo destruye.
+
+4. Por cada PartyMemberData:
+   → Instantiate(unitPrefab)
+   → Unit.InitializeFromParty(partyMemberData, battle, itemCatalog)
+   → UnitInventory.Populate(inventorySnapshot, itemCatalog)
+   → UnitStatsController.SetBase(definition) + RecalculateStats(inventory)
+   → HP = Min(currentHP, MaxHP) · SP = Min(currentSP, MaxSP) · Team = 0
+
+5. Por cada EnemySlotData:
+   → Instantiate(unitPrefab)
+   → Unit.InitializeFresh(definition, battle, itemCatalog)
+   → HP = MaxHP · SP = MaxSP · Team = 1
+
+6. BattleController crea Battle + TimelineTurnSystem y llama Start() con todas las Units.</pre>
+    <p class="flow-note">
+      El clamp <code>Min(currentHP, MaxHP)</code> evita que una Unit entre con más HP del que le
+      permite su máximo recalculado, en caso de haber perdido un ítem entre combates.
+    </p>
+
+    <h2>Salida de combate</h2>
+    <pre class="ascii-flow">1. Battle dispara OnBattleEnd(Victory | Defeat | Fled).
+2. BattleController lee HP, SP e inventario de cada Unit aliada.
+3. Esos valores se escriben en el PartyMemberData correspondiente dentro de Party.
+4. BattleController destruye todos los GameObjects de combate
+   (Units, Battle + TimelineTurnSystem, StatusBuffTracker, ActionResolver).
+5. CombatStage se descarga y Overworld se reactiva.</pre>
+
+    <h2>Ítems y recálculo de stats</h2>
+    <p>
+      Cada objeto es un <code>ItemSO</code> con una lista de <code>ItemEffectSO</code>, catalogados
+      centralmente en un único <code>ItemCatalog</code>. Un <code>StatModifierEffectSO</code>
+      contribuye un modificador estático o por fórmula a una stat, y
+      <code>UnitStatsController.RecalculateStats()</code> lo aplica una vez por stack sobre cada
+      ítem que la Unit sostiene. Un <code>TriggeredEffectSO</code> en cambio reacciona a eventos de
+      <code>Battle</code> (<code>OnBeforeDamage</code>, <code>OnDamageDealt</code>,
+      <code>OnTurnEnd</code>, etc.) mediante <code>Attach()</code>/<code>Detach()</code>, llamados
+      por <code>UnitEffectController</code> cuando la Unit gana o pierde la primera/última copia del
+      ítem correspondiente.
+    </p>
+    <p>
+      En enemigos, el <code>inventorySnapshot</code> de <code>EnemySlotData</code> es opcional: las
+      variantes elite se construyen con un <code>UnitDefinitionSO</code> de stats base más altas, sin
+      asignarles ítems.
+    </p>
+
+    <h2>Units derrotadas</h2>
+    <p>
+      Una Unit aliada que llega a HP 0 en combate queda derrotada también fuera de él: su
+      <code>PartyMemberData</code> se vuelca con <code>currentHP = 0</code> y permanece así hasta que
+      algo la revierta explícitamente. Dentro de combate, una skill de la Unit puede invocar
+      <code>Battle.Revive()</code> igual que cualquier otro verbo de SimpleJRPG. Fuera de combate, una
+      mecánica del Overworld (objeto, altar, punto de descanso) restaura <code>currentHP</code> por
+      encima de 0 en su <code>PartyMemberData</code>.
+    </p>
 
     <nav class="page-nav" aria-label="Navegación entre páginas">
     <a href="inputs.html" class="page-nav-prev">
       <span class="page-nav-dir">Anterior</span>
       <span class="page-nav-title">Inputs</span>
     </a>
-    <a href="dialogue.html" class="page-nav-next">
+    <a href="items.html" class="page-nav-next">
       <span class="page-nav-dir">Siguiente</span>
-      <span class="page-nav-title">Diálogo</span>
+      <span class="page-nav-title">Objetos</span>
     </a>
     </nav>
-    
+
   </main>
 </div>
 
