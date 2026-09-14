@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,61 +17,73 @@
   <span></span><span></span><span></span>
 </button>
 
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
 <div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-title">Hunters: Fracture of Time</span>
-      </a>
-      <p class="brand-sub">Documentación técnica · v0.1</p>
 
-      <nav class="nav" aria-label="Secciones de documentación">
-        <p class="nav-group-label">Contenidos</p>
-        <ol class="nav-list">
-          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
-          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
-          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-          <li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
-          <li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
-          <li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
-          <li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
-          <li><a href="structure.html" aria-current="page"><span class="nav-num">08</span>Directorios</a></li>
-          <li><a href="contributing.html"><span class="nav-num">09</span>Contribución</a></li>
-        </ol>
-      </nav>
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+<li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
+<li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+</ul>
+</div>
+<div class="nav-section current"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html" aria-current="page"><span class="nav-num">08</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">09</span>Contribución</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
 
-      <div class="sidebar-footer">
-        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
-        <p class="footer-hint">Para el equipo y futuros modders</p>
-      </div>
-    </div>
-  </aside>
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Directorios</div>
 
-  <main class="content" id="top">
-    <p class="eyebrow">07 · REFERENCIA</p>
-    <h1>Estructura de Directorios Clave</h1>
-    <p class="page-lede">Ubicación de los sistemas y datos principales dentro de <code>Assets/</code>.</p>
+<p class="eyebrow">08 · REFERENCIA</p>
+<h1>Estructura de Directorios Clave</h1>
+<p class="page-lede">Ubicación de los sistemas y datos principales dentro de <code>Assets/</code>.</p>
+<div class="tree-box">
+<div class="tree-row"><code>Assets/Scripts/00_Core/</code><span>Sistemas globales y gestores principales.</span></div>
+<div class="tree-row"><code>Assets/Scripts/01_Combat/</code><span>Lógica de daño, sistema de units, etc.</span></div>
+<div class="tree-row"><code>Assets/00_Units/</code><span>ScriptableObjects de Units, Skills y las diferentes Parties.</span></div>
+<div class="tree-row"><code>Assets/Inputs/</code><span>Inputs del juego.</span></div>
+</div>
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="architecture.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Arquitectura</span>
+</a>
+<a class="page-nav-next" href="contributing.html">
+<span class="page-nav-dir">Siguiente</span>
+<span class="page-nav-title">Contribución</span>
+</a>
+</nav>
 
-    <div class="tree-box">
-      <div class="tree-row"><code>Assets/Scripts/00_Core/</code><span>Sistemas globales y gestores principales.</span></div>
-      <div class="tree-row"><code>Assets/Scripts/01_Combat/</code><span>Lógica de daño, sistema de units, etc.</span></div>
-      <div class="tree-row"><code>Assets/00_Units/</code><span>ScriptableObjects de Units, Skills y las diferentes Parties.</span></div>
-      <div class="tree-row"><code>Assets/Inputs/</code><span>Inputs del juego.</span></div>
-    </div>
+</main>
 
-    <nav class="page-nav" aria-label="Navegación entre páginas">
-    <a href="architecture.html" class="page-nav-prev">
-      <span class="page-nav-dir">Anterior</span>
-      <span class="page-nav-title">Arquitectura</span>
-    </a>
-    <a href="contributing.html" class="page-nav-next">
-      <span class="page-nav-dir">Siguiente</span>
-      <span class="page-nav-title">Contribución</span>
-    </a>
-    </nav>
-    
-  </main>
+
+
 </div>
 
 <script src="js/main.js"></script>

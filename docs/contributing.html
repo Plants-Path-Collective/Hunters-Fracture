@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,115 +17,117 @@
   <span></span><span></span><span></span>
 </button>
 
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
 <div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-title">Hunters: Fracture of Time</span>
-      </a>
-      <p class="brand-sub">Documentación técnica · v0.1</p>
 
-      <nav class="nav" aria-label="Secciones de documentación">
-        <p class="nav-group-label">Contenidos</p>
-        <ol class="nav-list">
-          <li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
-          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
-          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-          <li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
-          <li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
-          <li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
-          <li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
-          <li><a href="structure.html"><span class="nav-num">08</span>Directorios</a></li>
-          <li><a href="contributing.html" aria-current="page"><span class="nav-num">09</span>Contribución</a></li>
-        </ol>
-      </nav>
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+<li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
+<li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+</ul>
+</div>
+<div class="nav-section current"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">08</span>Directorios</a></li>
+<li><a href="contributing.html" aria-current="page"><span class="nav-num">09</span>Contribución</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
 
-      <div class="sidebar-footer">
-        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
-        <p class="footer-hint">Para el equipo y futuros modders</p>
-      </div>
-    </div>
-  </aside>
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Contribución</div>
 
-  <main class="content" id="top">
-    <p class="eyebrow">08 · REFERENCIA</p>
-    <h1>Guía de Contribución y Buenas Prácticas</h1>
-
-    <div class="rule-grid">
-      <div class="rule-card" style="grid-column: 1 / -1;">
-        <span class="rule-title">Nomenclatura</span>
-
-        <p><strong>Comentarios en código:</strong> Todos los comentarios y la documentación XML (ej. <code>&lt;summary&gt;</code>, <code>&lt;param&gt;</code>, <code>&lt;returns&gt;</code>) se redactan en <strong>inglés</strong>. Utiliza <code>&lt;summary&gt;</code> para describir el propósito de clases, métodos y funciones, de modo que otros programadores puedan comprender su uso rápidamente desde el entorno de desarrollo.</p>
-
-        <p><strong>Variables en el Inspector:</strong> Para campos serializados o públicos que se muestran en el Inspector de Unity, emplea el atributo <code>[Tooltip("…")]</code> para explicar su función o el tipo de referencia esperada. Usa también <code>[Header("…")]</code> para agrupar variables relacionadas y mejorar la legibilidad del Inspector.</p>
-
-        <p><strong>Nombres de código:</strong> El código (variables, métodos, clases) se escribe en inglés, siguiendo las convenciones estándar de C#: <strong>PascalCase</strong> para métodos y clases; <strong>camelCase</strong> para variables locales.</p>
-
-        <p><strong>Documentación del proyecto:</strong> Los documentos de esta guía, las especificaciones y cualquier comentario de línea que no sea documentación XML deben redactarse en <strong>español</strong> para facilitar la comprensión de todo el equipo.</p>
-      </div>
-    </div>
-
-    <h2>Commits</h2>
-    <p>
+<p class="eyebrow">09 · REFERENCIA</p>
+<h1>Guía de Contribución y Buenas Prácticas</h1>
+<div class="rule-grid">
+<div class="rule-card" style="grid-column: 1 / -1;">
+<span class="rule-title">Nomenclatura</span>
+<p><strong>Comentarios en código:</strong> Todos los comentarios y la documentación XML (ej. <code>&lt;summary&gt;</code>, <code>&lt;param&gt;</code>, <code>&lt;returns&gt;</code>) se redactan en <strong>inglés</strong>. Utiliza <code>&lt;summary&gt;</code> para describir el propósito de clases, métodos y funciones, de modo que otros programadores puedan comprender su uso rápidamente desde el entorno de desarrollo.</p>
+<p><strong>Variables en el Inspector:</strong> Para campos serializados o públicos que se muestran en el Inspector de Unity, emplea el atributo <code>[Tooltip("…")]</code> para explicar su función o el tipo de referencia esperada. Usa también <code>[Header("…")]</code> para agrupar variables relacionadas y mejorar la legibilidad del Inspector.</p>
+<p><strong>Nombres de código:</strong> El código (variables, métodos, clases) se escribe en inglés, siguiendo las convenciones estándar de C#: <strong>PascalCase</strong> para métodos y clases; <strong>camelCase</strong> para variables locales.</p>
+<p><strong>Documentación del proyecto:</strong> Los documentos de esta guía, las especificaciones y cualquier comentario de línea que no sea documentación XML deben redactarse en <strong>español</strong> para facilitar la comprensión de todo el equipo.</p>
+</div>
+</div>
+<h2 id="commits">Commits</h2>
+<p>
       Todos los commits se escriben en inglés, siguiendo un formato basado en
       <strong>Conventional Commits</strong>. El mensaje indica el tipo de cambio, el sistema o
       archivo afectado entre paréntesis, y una descripción breve en imperativo. Al final del
       mensaje se listan los archivos editados o modificados.
     </p>
-
-    <div class="flow-chain" style="font-size: 13px;">
-      <span>type</span><span class="flow-arrow">(</span><span>scope</span><span class="flow-arrow">):</span> <span>description</span>
-    </div>
-    <p class="flow-note">El scope suele ser el sistema (<code>dialogue</code>, <code>combat</code>, <code>inputs</code>) o un archivo puntual cuando el cambio es muy acotado.</p>
-
-    <h3>Tipos</h3>
-    <table class="dep-table">
-      <thead><tr><th>Tipo</th><th>Uso</th></tr></thead>
-      <tbody>
-        <tr><td><code>feat</code></td><td>Nueva funcionalidad o mecánica.</td></tr>
-        <tr><td><code>fix</code></td><td>Corrección de un bug.</td></tr>
-        <tr><td><code>refactor</code></td><td>Cambio interno que no altera el comportamiento.</td></tr>
-        <tr><td><code>chore</code></td><td>Mantenimiento: configuración, dependencias, assets menores.</td></tr>
-        <tr><td><code>docs</code></td><td>Cambios en documentación.</td></tr>
-        <tr><td><code>style</code></td><td>Formato o nombres, sin cambios de lógica.</td></tr>
-        <tr><td><code>perf</code></td><td>Mejoras de rendimiento.</td></tr>
-        <tr><td><code>test</code></td><td>Pruebas o herramientas de testing.</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Estructura del mensaje</h3>
-    <ul>
-      <li><strong>Línea de asunto:</strong> <code>type(scope): description</code> — descripción en minúscula, imperativo, sin punto final.</li>
-      <li><strong>Cuerpo (opcional):</strong> detalle adicional del cambio, si el asunto no alcanza para explicarlo.</li>
-      <li><strong>Archivos:</strong> lista de archivos editados o modificados, bajo el encabezado <code>Files changed:</code>.</li>
-    </ul>
-
-    <h3>Ejemplos</h3>
-    <pre class="ascii-flow">feat(dialogue): add timeout fallback for unanswered prompts
+<div class="flow-chain" style="font-size: 13px;">
+<span>type</span><span class="flow-arrow">(</span><span>scope</span><span class="flow-arrow">):</span> <span>description</span>
+</div>
+<p class="flow-note">El scope suele ser el sistema (<code>dialogue</code>, <code>combat</code>, <code>inputs</code>) o un archivo puntual cuando el cambio es muy acotado.</p>
+<h3>Tipos</h3>
+<table class="dep-table">
+<thead><tr><th>Tipo</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>feat</code></td><td>Nueva funcionalidad o mecánica.</td></tr>
+<tr><td><code>fix</code></td><td>Corrección de un bug.</td></tr>
+<tr><td><code>refactor</code></td><td>Cambio interno que no altera el comportamiento.</td></tr>
+<tr><td><code>chore</code></td><td>Mantenimiento: configuración, dependencias, assets menores.</td></tr>
+<tr><td><code>docs</code></td><td>Cambios en documentación.</td></tr>
+<tr><td><code>style</code></td><td>Formato o nombres, sin cambios de lógica.</td></tr>
+<tr><td><code>perf</code></td><td>Mejoras de rendimiento.</td></tr>
+<tr><td><code>test</code></td><td>Pruebas o herramientas de testing.</td></tr>
+</tbody>
+</table>
+<h3>Estructura del mensaje</h3>
+<ul>
+<li><strong>Línea de asunto:</strong> <code>type(scope): description</code> — descripción en minúscula, imperativo, sin punto final.</li>
+<li><strong>Cuerpo (opcional):</strong> detalle adicional del cambio, si el asunto no alcanza para explicarlo.</li>
+<li><strong>Archivos:</strong> lista de archivos editados o modificados, bajo el encabezado <code>Files changed:</code>.</li>
+</ul>
+<h3>Ejemplos</h3>
+<pre class="ascii-flow">feat(dialogue): add timeout fallback for unanswered prompts
 
 Files changed:
 - Assets/Scripts/02_Dialogue/DialogueManager.cs
 - Assets/00_Dialogue/NPC_Flora_Ch2.asset</pre>
-
-    <pre class="ascii-flow">fix(combat): prevent negative HP from status ticks
+<pre class="ascii-flow">fix(combat): prevent negative HP from status ticks
 
 Files changed:
 - Assets/Scripts/01_Combat/StatusBuffTracker.cs</pre>
-
-    <pre class="ascii-flow">chore(inputs): bump Input System package to 1.19.0
+<pre class="ascii-flow">chore(inputs): bump Input System package to 1.19.0
 
 Files changed:
 - Packages/manifest.json</pre>
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="structure.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Directorios</span>
+</a>
+<span></span>
+</nav>
 
-    <nav class="page-nav" aria-label="Navegación entre páginas">
-    <a href="structure.html" class="page-nav-prev">
-      <span class="page-nav-dir">Anterior</span>
-      <span class="page-nav-title">Directorios</span>
-    </a>
-    <span></span>
-    </nav>
-  </main>
+</main>
+
+<section class="toc"><strong>En esta página</strong><a href="#commits">Commits</a></section>
+
 </div>
 
 <script src="js/main.js"></script>

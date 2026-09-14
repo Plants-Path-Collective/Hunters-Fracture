@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,97 +17,107 @@
   <span></span><span></span><span></span>
 </button>
 
-<div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-title">Hunters: Fracture of Time</span>
-      </a>
-      <p class="brand-sub">Documentación · v0.1</p>
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <input class="header-search" id="headerSearch" type="search" placeholder="⌕ Buscar en la documentación..." autocomplete="off">
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
 
-      <nav class="nav" aria-label="Secciones de documentación">
-        <p class="nav-group-label">Contenidos</p>
-        <ol class="nav-list">
-          <li><a href="index.html" aria-current="page"><span class="nav-num">·</span>Inicio</a></li>
-          <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
-          <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-          <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-          <li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
-          <li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
-          <li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
-          <li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
-          <li><a href="structure.html"><span class="nav-num">08</span>Directorios</a></li>
-          <li><a href="contributing.html"><span class="nav-num">09</span>Contribución</a></li>
-        </ol>
-      </nav>
+<div class="layout layout--single">
+<main class="dashboard" id="top">
 
-      <div class="sidebar-footer">
-        <a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
-        <p class="footer-hint">Para el equipo y futuros modders</p>
-      </div>
+  <div class="hero">
+    <p class="eyebrow">DOCUMENTACIÓN</p>
+    <h1>Hunters: Fracture of Time</h1>
+    <p class="hero-desc">
+      JRPG roguelite en 3D con cámara fija en tercera persona.
+    </p>
+    <div class="badge-row">
+      <span class="badge">Engine <strong>Unity 6000.3.8f1</strong></span>
+      <span class="badge">Pipeline <strong>URP</strong></span>
+      <span class="badge">Género <strong>JRPG · Roguelite</strong></span>
     </div>
-  </aside>
+  </div>
 
-  <main class="content" id="top">
-    <div class="hero">
-      <p class="eyebrow">DOCUMENTACIÓN</p>
-      <h1>Hunters: Fracture of Time</h1>
-      <p class="hero-desc">
-        JRPG roguelite en 3D con cámara fija en tercera persona.
-      </p>
-      <div class="badge-row">
-        <span class="badge">Engine <strong>Unity 6000.3.8f1</strong></span>
-        <span class="badge">Pipeline <strong>URP</strong></span>
-        <span class="badge">Género <strong>JRPG · Roguelite</strong></span>
-      </div>
-    
-    </div>
+  <div class="hub-meta">
+    <span><b>9</b> módulos</span>
+    <span><b>2</b> secciones</span>
+    <span><b>v0.1</b> en desarrollo</span>
+  </div>
 
-    <h2>Sistemas</h2>
-    <div class="index-grid">
-      <a href="specs.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">01</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Especificaciones</span>
-        <span class="index-card-desc">Versión de Unity, pipeline, arquitectura general y dependencias del proyecto.</span>
-      </a>
-      <a href="inputs.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">02</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Inputs</span>
-        <span class="index-card-desc">Unity Input System, InputManager y el flujo de datos hasta cada sistema consumidor.</span>
-      </a>
-      <a href="combat.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">03</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Combate</span>
-        <span class="index-card-desc">SimpleJRPG con Timeline Turn System, sistema de objetos y persistencia de progreso entre Overworld y CombatStage.</span>
-      </a>
-      <a href="dialogue.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">04</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Diálogo</span>
-        <span class="index-card-desc">ConversationSO, DialogueManager y el ciclo de conversación por NPC.</span>
-      </a>
-      <a href="localization.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">05</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Localización</span>
-        <span class="index-card-desc">Unity Localization, organización de String Tables y convención de keys.</span>
-      </a>
-      <a href="architecture.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">06</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Arquitectura</span>
-        <span class="index-card-desc">GameManager persistente, escenas aditivas y transición hacia el combate.</span>
-      </a>
-      <a href="structure.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">07</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Directorios</span>
-        <span class="index-card-desc">Estructura clave de carpetas dentro de Assets/.</span>
-      </a>
-      <a href="contributing.html" class="index-card">
-        <div class="index-card-top"><span class="index-card-num">08</span><span class="index-card-arrow">→</span></div>
-        <span class="index-card-title">Contribución</span>
-        <span class="index-card-desc">Nomenclatura de código y formato de commits.</span>
-      </a>
-    </div>
-    
-  </main>
+  <div class="filter">
+    <input id="filterInput" type="search" placeholder="Filtrar módulos y temas…" autocomplete="off">
+    <kbd>/</kbd>
+  </div>
+
+  <h2 style="margin-top:0">Sistemas</h2>
+  <div class="index-grid" id="cardGrid">
+    <a href="specs.html" class="index-card"
+       data-keywords="especificaciones unity urp render pipeline arquitectura event-driven scriptableobjects singleton dependencias input system dotween localization">
+      <div class="index-card-top"><span class="index-card-num">01</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Especificaciones</span>
+      <span class="index-card-desc">Versión de Unity, pipeline, arquitectura general y dependencias del proyecto.</span>
+    </a>
+    <a href="inputs.html" class="index-card"
+       data-keywords="inputs unity input system inputmanager action map exploration combat dialogue ui minigame">
+      <div class="index-card-top"><span class="index-card-num">02</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Inputs</span>
+      <span class="index-card-desc">Unity Input System, InputManager y el flujo de datos hasta cada sistema consumidor.</span>
+    </a>
+    <a href="combat.html" class="index-card"
+       data-keywords="combate simplejrpg timeline turn system party unit battle actionresolver statusbufftracker persistencia overworld combatstage">
+      <div class="index-card-top"><span class="index-card-num">03</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Combate</span>
+      <span class="index-card-desc">SimpleJRPG con Timeline Turn System, sistema de objetos y persistencia de progreso entre Overworld y CombatStage.</span>
+    </a>
+    <a href="items.html" class="index-card"
+       data-keywords="objetos items itemso itemcatalog statmodifiereffectso triggeredeffectso stats buffs debuffs">
+      <div class="index-card-top"><span class="index-card-num">04</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Objetos</span>
+      <span class="index-card-desc">ItemSO, ItemCatalog y cómo los efectos de objetos modifican stats o reaccionan a eventos de combate.</span>
+    </a>
+    <a href="dialogue.html" class="index-card"
+       data-keywords="dialogo conversationso dialoguemanager conversationtrigger npc speakerso answeroption">
+      <div class="index-card-top"><span class="index-card-num">05</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Diálogo</span>
+      <span class="index-card-desc">ConversationSO, DialogueManager y el ciclo de conversación por NPC.</span>
+    </a>
+    <a href="localization.html" class="index-card"
+       data-keywords="localizacion unity localization string tables locale keys google sheets localizedstring">
+      <div class="index-card-top"><span class="index-card-num">06</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Localización</span>
+      <span class="index-card-desc">Unity Localization, organización de String Tables y convención de keys.</span>
+    </a>
+    <a href="architecture.html" class="index-card"
+       data-keywords="arquitectura gamemanager escenas aditivas overworld combatstage scenesetter dontdestroyonload">
+      <div class="index-card-top"><span class="index-card-num">07</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Arquitectura</span>
+      <span class="index-card-desc">GameManager persistente, escenas aditivas y transición hacia el combate.</span>
+    </a>
+  </div>
+
+  <h2>Referencia</h2>
+  <div class="index-grid" id="cardGridRef">
+    <a href="structure.html" class="index-card"
+       data-keywords="directorios estructura carpetas assets scripts core combat units inputs">
+      <div class="index-card-top"><span class="index-card-num">08</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Directorios</span>
+      <span class="index-card-desc">Estructura clave de carpetas dentro de Assets/.</span>
+    </a>
+    <a href="contributing.html" class="index-card"
+       data-keywords="contribucion nomenclatura convenciones commits conventional commits inspector tooltip header">
+      <div class="index-card-top"><span class="index-card-num">09</span><span class="index-card-arrow">→</span></div>
+      <span class="index-card-title">Contribución</span>
+      <span class="index-card-desc">Nomenclatura de código y formato de commits.</span>
+    </a>
+  </div>
+
+  <div class="empty-state hidden" id="emptyState">
+    Ningún módulo coincide con ese filtro.
+  </div>
+
+</main>
 </div>
 
 <script src="js/main.js"></script>
