@@ -7,6 +7,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Debug/test controller for the SimpleJRPG battle system in Unity.
+/// It creates a small party and enemy roster, runs the timeline, and exposes
+/// the player commands needed to test attacking, healing, defending, reviving,
+/// and fleeing from a tactical battle UI.
+/// </summary>
 public class TimelineTurnTest : MonoBehaviour
 {
     public string hubSceneName;
@@ -74,17 +80,19 @@ public class TimelineTurnTest : MonoBehaviour
 
     private static readonly Color GoldColor = new Color(1f, 0.85f, 0.3f);
 
+    /// <summary>
+    /// Initializes the demo battle: creates party and enemy units, subscribes to battle events,
+    /// registers the UI button callbacks, and starts the turn flow.
+    /// </summary>
     void Start()
     {
-        _party.Add(new Unit("Hero", 120, 30, 10f, 0));
         _party.Add(new Unit("Warrior", 100, 0, 8f, 0));
         _party.Add(new Unit("Mage", 60, 80, 12f, 0));
         _party.Add(new Unit("Priest", 80, 60, 9f, 0));
 
-        _enemies.Add(new Unit("Transiente", 120, 30, 10f, 0));
-        _enemies.Add(new Unit("Fanatico", 100, 0, 8f, 0));
-        _enemies.Add(new Unit("Miembro del Proletareado", 60, 80, 12f, 0));
-
+        _enemies.Add(new Unit("Transiente", 120, 30, 10f, 1));
+        _enemies.Add(new Unit("Fanatico", 100, 0, 8f, 1));
+        _enemies.Add(new Unit("Miembro del Proletareado", 60, 80, 12f, 1));
 
         var all = new List<ICombatant>();
         all.AddRange(_party);
@@ -158,6 +166,11 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Advances the battle to the next actor in the timeline.
+    /// If a turn is already executing, it ends it first so the timeline can push the current
+    /// actor forward before selecting the next one.
+    /// </summary>
     private void NextTurn()
     {
         if (!IsActive()) return;
@@ -196,6 +209,10 @@ public class TimelineTurnTest : MonoBehaviour
 
     // ── Actions ──
 
+    /// <summary>
+    /// Executes a simple enemy AI turn: choose a living party member at random and deal small damage.
+    /// The enemy action then queues the next turn automatically.
+    /// </summary>
     private void EnemyAction(ICombatant actor)
     {
         var alive = _battle.GetAlive(0);
@@ -209,6 +226,9 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Opens the target selection UI when the player chooses the attack command.
+    /// </summary>
     private void OnFight()
     {
         if (!_waitingForCommand) return;
@@ -217,6 +237,9 @@ public class TimelineTurnTest : MonoBehaviour
         btnBack.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Applies the selected attack against the chosen enemy, then advances the timeline.
+    /// </summary>
     private void OnSelectTarget(int index)
     {
         if (!_waitingForCommand) return;
@@ -234,6 +257,10 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Uses a priest heal action; it checks SP, finds the lowest-HP ally, and restores health.
+    /// If nobody needs healing, it logs a miss and still advances the turn.
+    /// </summary>
     private void OnHeal()
     {
         if (!_waitingForCommand) return;
@@ -277,6 +304,9 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Marks the current actor as defending and advances the battle.
+    /// </summary>
     private void OnDefend()
     {
         if (!_waitingForCommand) return;
@@ -288,6 +318,9 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Revives the first dead ally with half HP if the caster has enough SP.
+    /// </summary>
     private void OnRevive()
     {
         if (!_waitingForCommand) return;
@@ -323,6 +356,9 @@ public class TimelineTurnTest : MonoBehaviour
         NextTurn();
     }
 
+    /// <summary>
+    /// Attempts to flee the battle. A failed escape still consumes the turn and continues the fight.
+    /// </summary>
     private void OnFlee()
     {
         if (!_waitingForCommand) return;
@@ -341,6 +377,9 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the player to the main command panel without committing an action.
+    /// </summary>
     private void OnBack()
     {
         ClearEnemyHoverMarks();
@@ -349,6 +388,10 @@ public class TimelineTurnTest : MonoBehaviour
 
     // ── UI ──
 
+    /// <summary>
+    /// Draws the battle timeline based on each combatant's current tick value.
+    /// The current actor is marked with a bold, prefixed entry to make the active turn obvious.
+    /// </summary>
     private void RefreshTimeline()
     {
         var order = _battle.GetTimeline();
@@ -374,6 +417,9 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates all HP/SP bars, name labels, and portrait colors for the party and enemies.
+    /// </summary>
     private void RefreshStatus()
     {
         for (int i = 0; i < _party.Count; i++)
@@ -407,6 +453,9 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables or disables command buttons based on the current actor's role and resource availability.
+    /// </summary>
     private void RefreshCommandButtons()
     {
         var mc = _battle.CurrentActor as Unit;
@@ -420,6 +469,9 @@ public class TimelineTurnTest : MonoBehaviour
         btnRevive.interactable = isPriest && hasDead && mc.SP >= 15;
     }
 
+    /// <summary>
+    /// Builds the enemy target selection list: dead enemies are shown but disabled.
+    /// </summary>
     private void RefreshTargetButtons()
     {
         for (int i = 0; i < targetButtons.Length; i++)
@@ -443,6 +495,9 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows or hides the action command tray while all target-selection UI is toggled in sync.
+    /// </summary>
     private void ShowCommandButtons(bool show)
     {
         btnFight.gameObject.SetActive(show);
@@ -459,6 +514,9 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Highlights the current combatant in the party or enemy roster so the active turn is visible.
+    /// </summary>
     private void UpdateTurnIndicator()
     {
         for (int i = 0; i < partySelectMarks.Length; i++)
@@ -487,18 +545,27 @@ public class TimelineTurnTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Temporarily highlights a target when the cursor hovers over its button.
+    /// </summary>
     private void OnTargetHover(int index, bool hovering)
     {
         if (index < enemySelectMarks.Length && enemySelectMarks[index] != null)
             enemySelectMarks[index].SetActive(hovering);
     }
 
+    /// <summary>
+    /// Clears the temporary target hover state when the player confirms or exits target selection.
+    /// </summary>
     private void ClearEnemyHoverMarks()
     {
         for (int i = 0; i < enemySelectMarks.Length; i++)
             if (enemySelectMarks[i] != null) enemySelectMarks[i].SetActive(false);
     }
 
+    /// <summary>
+    /// Appends a message to the combat log and scrolls it to the newest entry.
+    /// </summary>
     private void Log(string message)
     {
         if (messageContent == null) return;
@@ -522,16 +589,21 @@ public class TimelineTurnTest : MonoBehaviour
             messageScrollRect.verticalNormalizedPosition = 0f;
     }
 
+    /// <summary>
+    /// Checks whether the battle is in one of the active states where turns can proceed.
+    /// </summary>
     private bool IsActive()
     {
         return _battle.State == BattleState.WaitingForCommands ||
                _battle.State == BattleState.Executing;
     }
 
+    /// <summary>
+    /// Loads the hub scene after the battle is over.
+    /// </summary>
     public void LoadMainMenu()
     {
         if (!string.IsNullOrEmpty(hubSceneName))
             UnityEngine.SceneManagement.SceneManager.LoadScene(hubSceneName);
     }
 }
-

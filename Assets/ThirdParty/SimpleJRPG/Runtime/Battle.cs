@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace SimpleJRPG
 {
+    /// <summary>
+    /// Main battle controller. It owns combatant state, turn advancement,
+    /// damage/heal resolution, victory/defeat checks, and battle events.
+    /// </summary>
     public class Battle
     {
         public BattleState State { get; private set; } = BattleState.NotStarted;

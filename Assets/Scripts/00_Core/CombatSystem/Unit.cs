@@ -1,74 +1,105 @@
 using UnityEngine;
 using SimpleJRPG;
 using Core;
-using UnityEngine.UI;
 
-namespace CombatSystem.Unit 
-{    
+namespace CombatSystem.Unit
+{
+    /// <summary>
+    /// Pure C# combatant consumed by SimpleJRPG's Battle. This class is never a
+    /// MonoBehaviour — it is always built with `new`, either directly (tests /
+    /// prototyping, no linked components) or from an Overworld entity's own
+    /// UnitStatsController / UnitInventory / UnitEffectController when that
+    /// entity enters combat.
+    /// </summary>
     public class Unit : ICombatant
     {
-        [Header("----- Identity -----")]
-        [SerializeField] private string unitName;
-        [SerializeField] private UNITY_TYPE unitType;
+        // ----- Identity -----
+        public string Name { get; private set; }
+        public UNITY_TYPE UnitType { get; private set; }
+        public Sprite Portrait { get; private set; }
+        public string Description { get; private set; }
 
-        [Tooltip("Sprite that will be used in the Turn Timeline on combat")]
-        [SerializeField] private Sprite unitPortrait;
-        [SerializeField] private string unitDescription;
-
-        [Header("----- Battle (ICombatant) -----")]
-        [SerializeField] private int team = 0;
-        public string Name => unitName;
+        // ----- Battle (ICombatant) -----
         public bool IsAlive => HP > 0;
-        public int Team => team;
-        public int HP { get;  set; }
-        public int SP { get;  set; }
-        public int MaxHP { get;  set; }
-        public int MaxSP { get;  set; }
+        public int Team { get; private set; }
+        public int HP { get; set; }
+        public int SP { get; set; }
+        public int MaxHP { get; set; }
+        public int MaxSP { get; set; }
         public float Speed { get; set; }
 
-        [Header("----- References -----")]
+        // ----- References -----
+        // Null unless this Unit was built via the Overworld constructor below.
+        // TimelineTurnTest units (and any pure test data) simply never touch these.
         public UnitInventory inventory { get; private set; }
         public UnitEffectController effectController { get; private set; }
         public UnitStatsController statsController { get; private set; }
 
-        private TimelineTurnSystem _timeline;
-
-        private void Awake()
+        /// <summary>
+        /// Test/prototype constructor: fixed base stats, no linked components.
+        /// Used by TimelineTurnTest to seed party/enemy data without a real
+        /// Overworld entity behind it.
+        /// </summary>
+        public Unit(string name, int hp, int mp, float speed, int team,
+            UNITY_TYPE unitType = default, Sprite portrait = null, string description = "")
         {
-            //inventory = GetComponent<UnitInventory>();
-            //effectController = GetComponent<UnitEffectController>();
-            //statsController = GetComponent<UnitStatsController>();
-
-            // Explicit call instead of relying on Unity's Awake() execution
-            // order between components on the same GameObject — that order
-            // is not guaranteed, so MaxHP/MaxSP must be resolved here first.
-            //statsController.RecalculateStats(inventory);
-
-            //HP = statsController.MaxHP;
-            //SP = statsController.MaxSP;
-            //Speed = statsController.Speed;
-
-        }
-
-        public Unit(string name, int hp, int mp, float speed, int team)
-        {
-            unitName = name;
+            Name = name;
             HP = hp;
             MaxHP = hp;
             SP = mp;
             MaxSP = mp;
             Speed = speed;
+            Team = team;
+            UnitType = unitType;
+            Portrait = portrait;
+            Description = description;
         }
 
-        // ----- Iherited from ICombatant  -----
+        /// <summary>
+        /// Overworld → Combat constructor. Derives HP/SP/Speed from the real
+        /// UnitStatsController (which already includes item modifiers) and
+        /// keeps references to inventory/effects so combat systems (e.g.
+        /// StatusBuffTracker, ActionResolver) can read them mid-battle.
+        /// </summary>
+        public Unit(string name, UnitStatsController statsController, UnitInventory inventory,
+            UnitEffectController effectController, int team,
+            UNITY_TYPE unitType = default, Sprite portrait = null, string description = "")
+        {
+            Name = name;
+            this.statsController = statsController;
+            this.inventory = inventory;
+            this.effectController = effectController;
+
+            MaxHP = statsController.MaxHP;
+            MaxSP = statsController.MaxSP;
+            HP = MaxHP;
+            SP = MaxSP;
+            Speed = statsController.Speed;
+            Team = team;
+            UnitType = unitType;
+            Portrait = portrait;
+            Description = description;
+        }
+
+        // ----- ICombatant -----
+
+        /// <summary>
+        /// Applies incoming damage and prevents health from going below zero.
+        /// The battle system interprets HP 0 as a defeated unit.
+        /// </summary>
         public void TakeDamage(int amount)
         {
             HP = Mathf.Max(0, HP - amount);
         }
 
+        /// <summary>
+        /// Restores health without exceeding this Unit's own MaxHP. Uses the
+        /// Unit's own MaxHP (not statsController.MaxHP) so this works whether
+        /// or not a real UnitStatsController is linked.
+        /// </summary>
         public void Heal(int amount)
         {
-            HP = Mathf.Min(statsController.MaxHP, HP + amount);
+            HP = Mathf.Min(MaxHP, HP + amount);
         }
     }
 }
