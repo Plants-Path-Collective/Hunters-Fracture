@@ -81,9 +81,9 @@ public class TimelineTurnTest : MonoBehaviour
         _party.Add(new Unit("Mage", 60, 80, 12f, 0));
         _party.Add(new Unit("Priest", 80, 60, 9f, 0));
 
-        _enemies.Add(new Unit("Blob", 120, 30, 10f, 0));
-        _enemies.Add(new Unit("Imp", 100, 0, 8f, 0));
-        _enemies.Add(new Unit("Mimic", 60, 80, 12f, 0));
+        _enemies.Add(new Unit("Transiente", 120, 30, 10f, 0));
+        _enemies.Add(new Unit("Fanatico", 100, 0, 8f, 0));
+        _enemies.Add(new Unit("Miembro del Proletareado", 60, 80, 12f, 0));
 
 
         var all = new List<ICombatant>();

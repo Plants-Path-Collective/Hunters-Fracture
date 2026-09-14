@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace CombatSystem.Unit 
 {    
-    public class Unit : MonoBehaviour, ICombatant
+    public class Unit : ICombatant
     {
         [Header("----- Identity -----")]
         [SerializeField] private string unitName;
@@ -31,20 +31,22 @@ namespace CombatSystem.Unit
         public UnitEffectController effectController { get; private set; }
         public UnitStatsController statsController { get; private set; }
 
+        private TimelineTurnSystem _timeline;
+
         private void Awake()
         {
-            inventory = GetComponent<UnitInventory>();
-            effectController = GetComponent<UnitEffectController>();
-            statsController = GetComponent<UnitStatsController>();
+            //inventory = GetComponent<UnitInventory>();
+            //effectController = GetComponent<UnitEffectController>();
+            //statsController = GetComponent<UnitStatsController>();
 
             // Explicit call instead of relying on Unity's Awake() execution
             // order between components on the same GameObject — that order
             // is not guaranteed, so MaxHP/MaxSP must be resolved here first.
-            statsController.RecalculateStats(inventory);
+            //statsController.RecalculateStats(inventory);
 
-            HP = statsController.MaxHP;
-            SP = statsController.MaxSP;
-            Speed = statsController.Speed;
+            //HP = statsController.MaxHP;
+            //SP = statsController.MaxSP;
+            //Speed = statsController.Speed;
 
         }
 

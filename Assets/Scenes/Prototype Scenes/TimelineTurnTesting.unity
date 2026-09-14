@@ -2371,16 +2371,40 @@ MonoBehaviour:
   messageScrollRect: {fileID: 215052984}
   enemyPortraits: []
   enemyModels: []
-  enemyNameTexts: []
-  enemyHPBars: []
-  enemyHPTexts: []
+  enemyNameTexts:
+  - {fileID: 392418249}
+  - {fileID: 1875899494}
+  - {fileID: 932814728}
+  enemyHPBars:
+  - {fileID: 1908195190}
+  - {fileID: 260788070}
+  - {fileID: 321737847}
+  enemyHPTexts:
+  - {fileID: 423787686}
+  - {fileID: 1526553155}
+  - {fileID: 1690404424}
   partyPortraits: []
   partyModels: []
-  partyNameTexts: []
-  partyHPBars: []
-  partyMPBars: []
-  partyHPTexts: []
-  partyMPTexts: []
+  partyNameTexts:
+  - {fileID: 538378900}
+  - {fileID: 906812893}
+  - {fileID: 2029890488}
+  partyHPBars:
+  - {fileID: 2057875559}
+  - {fileID: 118917483}
+  - {fileID: 1324377994}
+  partyMPBars:
+  - {fileID: 1193659543}
+  - {fileID: 249704064}
+  - {fileID: 228490052}
+  partyHPTexts:
+  - {fileID: 609671272}
+  - {fileID: 318443934}
+  - {fileID: 169209225}
+  partyMPTexts:
+  - {fileID: 1451657031}
+  - {fileID: 561557488}
+  - {fileID: 1438990576}
   btnFight: {fileID: 1551656194}
   btnHeal: {fileID: 1132818681}
   btnDefend: {fileID: 1962019831}
@@ -2402,8 +2426,6 @@ MonoBehaviour:
   - {fileID: 388761260}
   - {fileID: 104690205}
   - {fileID: 1629678204}
-  _party: []
-  _enemies: []
 --- !u!1 &318443930
 GameObject:
   m_ObjectHideFlags: 0

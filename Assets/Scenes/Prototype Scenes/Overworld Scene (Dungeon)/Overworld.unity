@@ -350,7 +350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 10
+    m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -1963,7 +1963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 0
+    m_Value: 10
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -2626,33 +2626,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cinemachine Brain - Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 6783559691260328272, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
+      propertyPath: field of view
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.300001
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.05359
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.800001
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8923994
+      value: 0.81214416
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.23911767
+      value: 0.10692078
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.36964315
+      value: -0.5686694
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.099045575
+      value: 0.07486672
       objectReference: {fileID: 0}
     - target: {fileID: 7771779578962239749, guid: e8b2306bc26bebb4280bb8aeac07466f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
