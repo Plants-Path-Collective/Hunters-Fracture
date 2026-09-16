@@ -1,5 +1,4 @@
 using UnityEngine;
-using SimpleJRPG;
 using Core;
 
 namespace CombatSystem.Unit
@@ -11,7 +10,7 @@ namespace CombatSystem.Unit
     /// UnitStatsController / UnitInventory / UnitEffectController when that
     /// entity enters combat.
     /// </summary>
-    public class Unit : ICombatant
+    public class Unit : MonoBehaviour
     {
         // ----- Identity -----
         public string Name { get; private set; }
