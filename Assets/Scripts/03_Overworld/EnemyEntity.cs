@@ -1,9 +1,8 @@
 using DG.Tweening;
-using Overworld;
 using Player;
 using UnityEngine;
 
-namespace Enemy
+namespace Overworld
 {
     /// <summary>
     /// Overworld-only component. Unlike PlayerEntity, nothing here decides *when* to attack —

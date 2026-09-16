@@ -1,10 +1,9 @@
 using Core;
 using DG.Tweening;
-using Overworld;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+namespace Overworld
 {
     /// <summary>
     /// Overworld-only component. Lives alongside PlayerController on the Player GameObject,
