@@ -14,7 +14,7 @@ namespace Core
     /// ──────────────────────────────────────────
     ///   public class OverworldSceneSetter : SceneSetter
     ///   {
-    ///       protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Exploration;
+    ///       protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Overworld;
     ///
     ///       protected override void OnSceneReady()
     ///       {

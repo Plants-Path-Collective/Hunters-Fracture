@@ -7,16 +7,16 @@ using UnityEngine;
 
 namespace Core
 {
-    // ── Overworld / Exploration ───────────────────────────────────────────────
+    // ── Overworld ─────────────────────────────────────────────────────────────
 
     public class OverworldSceneSetter : SceneSetter
     {
-        protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Exploration;
+        protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Overworld;
 
         protected override void OnSceneReady()
         {
             // Example: tell GameManager we entered overworld, start ambient music, etc.
-            Debug.Log("[OverworldSceneSetter] Scene ready — Exploration map active.");
+            Debug.Log("[OverworldSceneSetter] Scene ready — Overworld map active.");
         }
     }
 }

@@ -11,7 +11,8 @@
     {
         Empty,
         UI,
-        Exploration,
+        Social,
+        Overworld,
         Dialogue,
         Combat
     }

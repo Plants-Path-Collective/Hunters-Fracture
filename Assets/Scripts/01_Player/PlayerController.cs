@@ -54,7 +54,7 @@ namespace Player
 
         private void OnEnable()
         {
-            var move = InputManager.Instance.Exploration.Move;
+            var move = InputManager.Instance.Overworld.Move;
             move.performed += OnMovePerformed;
             move.canceled  += OnMoveCanceled;   // Value actions sí disparan canceled
             move.started   += OnMovePerformed;  // por si performed no llega al primer frame
@@ -64,7 +64,7 @@ namespace Player
         {
             if (InputManager.Instance == null) return;
 
-            var move = InputManager.Instance.Exploration.Move;
+            var move = InputManager.Instance.Overworld.Move;
             move.performed -= OnMovePerformed;
             move.canceled  -= OnMoveCanceled;
             move.started   -= OnMovePerformed;

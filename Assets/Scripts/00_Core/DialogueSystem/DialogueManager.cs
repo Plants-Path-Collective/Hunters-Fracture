@@ -326,7 +326,7 @@ namespace PlantsPathCo.DialogueSystem
             currentConversation = null;
             runningCoroutine = null;
 
-            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Exploration);
+            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Overworld);
         }
     }
 }

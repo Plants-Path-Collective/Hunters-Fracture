@@ -8,7 +8,7 @@ namespace Core
     /// Lives on the persistent GameManager GameObject and survives scene loads.
     ///
     /// Usage — subscribe from any system:
-    ///   InputManager.Instance.Exploration.Move.performed += OnMove;
+    ///   InputManager.Instance.Overworld.Move.performed += OnMove;
     ///   InputManager.Instance.Combat.BasicAttack.performed += OnAttack;
     ///
     /// Switch maps:
@@ -26,12 +26,20 @@ namespace Core
         // UI
         public InputSystem_Actions.UIActions          UI          => Actions.UI;
 
-        // Exploration
+        // Social
         //   Move            → leftStick / WASD
         //   Interact        → buttonWest (□/X) / E
         //   OpenInventory   → buttonNorth (△/Y) / I
         //   OpenPauseMenu   → touchpad / select / I
-        public InputSystem_Actions.ExplorationActions Exploration => Actions.Exploration;
+        public InputSystem_Actions.SocialActions     Social      => Actions.Social;
+
+        // Overworld
+        //   Move            → leftStick / WASD
+        //   Attack          → buttonSouth / Space / Mouse1
+        //   Interact        → buttonWest (□/X) / E
+        //   OpenInventory   → buttonNorth (△/Y) / Tab
+        //   OpenPauseMenu   → touchpad / select / Escape
+        public InputSystem_Actions.OverworldActions  Overworld   => Actions.Overworld;
 
         // Dialogue
         //   Move                        → leftStick / WASD
@@ -88,7 +96,8 @@ namespace Core
             {
                 case INPUTACTION_MAP.Empty:       /* all maps disabled */         break;
                 case INPUTACTION_MAP.UI:          Actions.UI.Enable();            break;
-                case INPUTACTION_MAP.Exploration: Actions.Exploration.Enable();   break;
+                case INPUTACTION_MAP.Social:      Actions.Social.Enable();        break;
+                case INPUTACTION_MAP.Overworld:   Actions.Overworld.Enable();     break;
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
                 case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
             }
@@ -96,7 +105,7 @@ namespace Core
 
         /// <summary>
         /// Switches to UI map, remembering the previous map so PopUIMap() can restore it.
-        /// Useful for opening menus during Exploration or Combat.
+        /// Useful for opening menus during Social, Overworld, or Combat.
         /// </summary>
         public void PushUIMap()
         {
@@ -113,12 +122,13 @@ namespace Core
         }
 
         // ── Internals ─────────────────────────────────────────────────────────
-        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Exploration;
+        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Overworld;
 
         private void DisableAllMaps()
         {
             Actions.UI.Disable();
-            Actions.Exploration.Disable();
+            Actions.Social.Disable();
+            Actions.Overworld.Disable();
             Actions.Dialogue.Disable();
             Actions.Combat.Disable();
         }
