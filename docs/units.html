@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Units — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section current"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
+<li><a href="units.html" aria-current="page"><span class="nav-num">04</span>Units</a></li>
+<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
+<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
+</ul>
+</div>
+<div class="nav-section"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">09</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">10</span>Contribución</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
+
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Units</div>
+
+<p class="eyebrow">04 · SISTEMA</p>
+<h1>Units</h1>
+<p class="page-lede">
+      Una Unit es la representación de un combatiente. Existe en dos formas: una persistente que
+      sobrevive a la run (<code>PartyMemberData</code> / <code>EnemySlotData</code>) y una de
+      combate que vive y muere con <code>CombatStage</code> (<code>Unit</code> y sus
+      controladores). Esta página cubre las dos, la plantilla que las origina, y cómo se calculan
+      las stats.
+    </p>
+
+<h2 id="dos-formas">Dos formas de una misma Unit</h2>
+<p>
+      El sistema nunca guarda "una Unit" como un objeto único. La identidad y los stats base son
+      inmutables y viven en un asset. El estado mutable (HP, SP, inventario) vive en un lado u
+      otro según el dominio.
+    </p>
+<div class="spec-grid">
+<div class="spec-card">
+<span class="spec-label">Persistente (Overworld)</span>
+<span class="spec-value"><code>Party</code> + <code>PartyMemberData</code> por aliado · <code>EnemySlotData</code> por enemigo del encuentro</span>
+</div>
+<div class="spec-card">
+<span class="spec-label">Combate (CombatStage)</span>
+<span class="spec-value"><code>Unit</code> + <code>UnitInventory</code> + <code>UnitStatsController</code> + <code>UnitEffectController</code></span>
+</div>
+</div>
+<table class="dep-table">
+<thead><tr><th>Dato</th><th>Vive en</th><th>Dominio</th></tr></thead>
+<tbody>
+<tr><td>Identidad (nombre, portrait, descripción, tipo)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
+<tr><td>Stats base (7)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
+<tr><td>Skills aprendidas</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
+<tr><td><code>currentHP</code> / <code>currentSP</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld</td></tr>
+<tr><td><code>inventorySnapshot</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld</td></tr>
+<tr><td>Definición + <code>inventorySnapshot</code> opcional (enemigos)</td><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td></tr>
+<tr><td>Stats derivadas</td><td><code>UnitStatsController</code></td><td>CombatStage (se recalculan)</td></tr>
+<tr><td>Cantidades por ítem en combate</td><td><code>UnitInventory</code></td><td>CombatStage</td></tr>
+<tr><td>Estados y buffs activos</td><td><code>StatusBuffTracker</code></td><td>CombatStage</td></tr>
+</tbody>
+</table>
+
+<h2 id="unitdefinitionso">UnitDefinitionSO</h2>
+<p>
+<code>ScriptableObject</code> que actúa como plantilla inmutable de un personaje o enemigo.
+      No tiene estado por-instancia: la misma definición puede estar referenciada por cualquier
+      cantidad de combates y siempre describe lo mismo.
+    </p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">Identidad</span>
+<span class="component-desc">Nombre, portrait, descripción y tipo. El <em>tipo</em> distingue arquetipos de personaje y no debe confundirse con <code>UnitTeam</code> — un aliado y un enemigo pueden compartir tipo.</span>
+</div>
+<div class="component-card">
+<span class="component-name">Base stats</span>
+<span class="component-desc">Los 7 valores base sobre los que se recalcula todo: <code>MaxHP</code>, <code>MaxSP</code>, <code>Attack</code>, <code>MagicPower</code>, <code>PhysicalDefense</code>, <code>MagicalDefense</code>, <code>Speed</code>.</span>
+</div>
+<div class="component-card">
+<span class="component-name">Skills aprendidas</span>
+<span class="component-desc">Lista de <code>ActionSO</code> que la Unit puede elegir desde el submenú de Habilidad. Se clona al <code>Unit</code> en combate para permitir reemplazos temporales por efectos (por ejemplo, Brain Control).</span>
+</div>
+<div class="component-card">
+<span class="component-name">Parámetros de combate</span>
+<span class="component-desc">Valores que la fórmula de daño y las acciones consultan: <code>SpRegenMin</code> / <code>SpRegenMax</code> (regeneración aleatoria de Atacar y Defender) y <code>DefendingReduction</code> (porcentaje que reduce Defender).</span>
+</div>
+</div>
+
+<h2 id="stats">Stats base y derivadas</h2>
+<p>
+      El juego nunca escribe stats "finales" en el asset. <code>UnitStatsController</code> las
+      recalcula desde cero cada vez que hace falta: al inicializar la Unit en combate, y cada vez
+      que cambia el inventario o los efectos activos. Esto significa que las stats derivadas nunca
+      se persisten ni se serializan.
+    </p>
+<div class="flow-chain">
+<span>UnitDefinitionSO.BaseStats</span><span class="flow-arrow">→</span>
+<span>RecalculateStats(inventory)</span><span class="flow-arrow">→</span>
+<span>Stats finales</span>
+</div>
+<p>
+      El recálculo aplica cada <code>StatModifierEffectSO</code> activo, en dos pasadas: primero
+      los porcentuales, después los planos. Cada stack del objeto se aplica por separado. Los
+      modificadores en sí viven en <a href="items.html#statmodifiereffectso">Objetos</a>; acá
+      interesa que <strong>el recálculo siempre parte de la base</strong> y nunca acumula deltas
+      sobre un resultado anterior — eso es lo que evita el drift.
+    </p>
+<div class="note-box">
+<span class="note-tag">Clamp de entrada</span>
+<p>
+        Al inicializar una Unit aliada en combate, HP y SP se clampean contra el máximo
+        recalculado: <code>HP = Min(currentHP, MaxHP)</code>. Esto protege contra un
+        <code>PartyMemberData</code> que quedó con más HP del que el máximo actual permite, por
+        ejemplo si perdió un ítem entre combates.
+      </p>
+</div>
+
+<h2 id="party-y-partymemberdata">Party y PartyMemberData</h2>
+<p>
+<code>Party</code> es la lista de hasta 3 <code>PartyMemberData</code> del jugador, uno por
+      slot (izquierda, centro, derecha). La porta <code>PlayerEntity</code> en el Overworld y es lo
+      primero que se lee al entrar a combate y lo primero que se escribe al salir.
+    </p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">PartyMemberData · definition</span>
+<span class="component-desc">Referencia a la <code>UnitDefinitionSO</code> del personaje. Nunca se reemplaza durante la run.</span>
+</div>
+<div class="component-card">
+<span class="component-name">PartyMemberData · currentHP / currentSP</span>
+<span class="component-desc">Estado mutable que arrastra el daño y el gasto de SP a lo largo de la run. Es la única fuente de HP/SP para un aliado fuera de combate.</span>
+</div>
+<div class="component-card">
+<span class="component-name">PartyMemberData · inventorySnapshot</span>
+<span class="component-desc">Copia del inventario del aliado (cantidades por <code>itemID</code>). Se usa para poblar el <code>UnitInventory</code> al entrar a combate, y se reescribe al salir con lo que haya quedado.</span>
+</div>
+</div>
+<p class="flow-note">
+      Que la <code>Party</code> viva en el Overworld y no en <code>CombatStage</code> es lo que
+      permite volver al Overworld con los HP actualizados sin que <code>CombatController</code>
+      sepa qué es un "menú principal" o un "save file".
+    </p>
+
+<h2 id="enemyslotdata">EnemySlotData</h2>
+<p>
+      Análogo a <code>PartyMemberData</code> pero sin estado arrastrado: los enemigos siempre
+      entran a combate con HP y SP completos. Es un objeto por encuentro — se construye al armar
+      el <code>CombatSetUp</code> y se descarta al terminar.
+    </p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">definition</span>
+<span class="component-desc">La <code>UnitDefinitionSO</code> del enemigo.</span>
+</div>
+<div class="component-card">
+<span class="component-name">inventorySnapshot · opcional</span>
+<span class="component-desc">Solo para variantes elite. Los enemigos comunes van sin ítems; los elites se construyen con una <code>UnitDefinitionSO</code> de stats base más altas y, opcionalmente, un inventario que aporta efectos reactivos.</span>
+</div>
+</div>
+
+<h2 id="unit">Unit (lado combate)</h2>
+<p>
+<code>Unit</code> es un <code>MonoBehaviour</code> que vive en un GameObject instanciado desde
+      un prefab compartido. No implementa ninguna interfaz — al no depender de un asset externo,
+      no hace falta un contrato tipo <code>ICombatant</code>. En cambio, compone tres
+      controladores y expone su estado al <code>CombatController</code>.
+    </p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">UnitInventory</span>
+<span class="component-desc">Cantidades por ítem. Se puebla desde el <code>inventorySnapshot</code> al iniciar y dispara <code>OnStackChanged</code> en cada cambio. Qué es un ítem se define en <a href="items.html">Objetos</a>; acá solo importa que la Unit lo <em>sostiene</em>.</span>
+</div>
+<div class="component-card">
+<span class="component-name">UnitStatsController</span>
+<span class="component-desc">Recalcula las stats finales desde la base cada vez que el inventario o los efectos activos cambian. Ver <a href="#stats">Stats base y derivadas</a>.</span>
+</div>
+<div class="component-card">
+<span class="component-name">UnitEffectController</span>
+<span class="component-desc">Suscribe y desuscribe los <code>TriggeredEffectSO</code> que la Unit porta a los eventos de <code>CombatController</code>, ordenados por <code>Priority</code>. Los efectos en sí viven en <a href="items.html#triggeredeffectso">Objetos</a>; los eventos, en <a href="combat.html#verbos-y-eventos">Combate</a>.</span>
+</div>
+</div>
+
+<h3 id="team">Team</h3>
+<p>
+      Cada <code>Unit</code> declara un bando mediante <code>enum UnitTeam { Ally, Enemy }</code>.
+      Dos valores y nada más: el sistema nunca maneja un tercer bando. La UI, el targeting y la
+      fórmula de huida usan este enum directamente en vez de un <code>int</code>, lo que permite
+      que el compilador marque cualquier <code>switch</code> incompleto si en el futuro se agrega
+      un valor.
+    </p>
+
+<h2 id="inicializacion">Inicialización</h2>
+<p>
+      Hay dos caminos de inicialización, uno por bando. Los dos terminan con una <code>Unit</code>
+      lista para ser pasada al <code>TimelineController</code>.
+    </p>
+<pre class="ascii-flow">Aliado (PartyMemberData):
+  Instantiate(unitPrefab)
+  Unit.InitializeFromParty(partyMemberData, itemCatalog)
+  UnitInventory.Populate(inventorySnapshot, itemCatalog)
+  UnitStatsController.SetBase(definition)
+  UnitStatsController.RecalculateStats(inventory)
+  HP = Min(currentHP, MaxHP) · SP = Min(currentSP, MaxSP)
+  Team = Ally
+
+Enemigo (EnemySlotData):
+  Instantiate(unitPrefab)
+  Unit.InitializeFresh(definition, itemCatalog)
+  HP = MaxHP · SP = MaxSP
+  Team = Enemy</pre>
+<p class="flow-note">
+      Si un <code>PartyMemberData</code> llega con <code>currentHP = 0</code>, la Unit se instancia
+      con HP 0 y se la marca muerta durante la inicialización. La lógica de muerte y resurrección
+      vive en <a href="combat.html#muerte-y-resurreccion">Combate</a>.
+    </p>
+
+<h2 id="destruccion">Destrucción</h2>
+<p>
+      Al cerrar el combate, <code>CombatController</code> lee HP, SP e inventario de cada
+      <code>Unit</code> aliada y los escribe en el <code>PartyMemberData</code> correspondiente.
+      Recién después se destruyen todos los GameObjects de combate: las <code>Unit</code>, sus
+      tres controladores, y el resto de los controladores de la escena.
+    </p>
+<p>
+      En victoria, los ítems asignados en <code>RewardsScreen</code> se agregan al
+      <code>UnitInventory</code> de la Unit que los recibe y se llama
+      <code>RecalculateStats()</code> solo para esa Unit — el resto no cambia si no recibió ítems.
+      El inventario resultante queda cacheado como el nuevo <code>inventorySnapshot</code>.
+    </p>
+<div class="note-box">
+<span class="note-tag">Estados no persisten</span>
+<p>
+        Los estados y buffs activos al terminar el combate se pierden con la escena. Un veneno no
+        sobrevive al encuentro siguiente. Ver <a href="combat.html#estados-y-buffs">Estados y
+        buffs</a>.
+      </p>
+</div>
+
+<h2 id="resumen">Resumen de componentes</h2>
+<table class="dep-table">
+<thead><tr><th>Componente</th><th>Dominio</th><th>Responsabilidad</th></tr></thead>
+<tbody>
+<tr><td><code>UnitDefinitionSO</code></td><td>Asset</td><td>Identidad, stats base, skills aprendidas, parámetros de combate</td></tr>
+<tr><td><code>Party</code></td><td>Overworld</td><td>Hasta 3 <code>PartyMemberData</code> del jugador</td></tr>
+<tr><td><code>PartyMemberData</code></td><td>Overworld</td><td>Definición + <code>currentHP</code>/<code>currentSP</code> + <code>inventorySnapshot</code> de un aliado</td></tr>
+<tr><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td><td>Definición + inventario opcional de un enemigo; sin HP/SP arrastrado</td></tr>
+<tr><td><code>Unit</code></td><td>CombatStage</td><td>MonoBehaviour de combate; compone los tres controladores</td></tr>
+<tr><td><code>UnitInventory</code></td><td>CombatStage</td><td>Cantidades por ítem; dispara <code>OnStackChanged</code></td></tr>
+<tr><td><code>UnitStatsController</code></td><td>CombatStage</td><td>Recalcula stats finales desde base + modificadores activos</td></tr>
+<tr><td><code>UnitEffectController</code></td><td>CombatStage</td><td>Attach/Detach de <code>TriggeredEffectSO</code> a eventos de <code>CombatController</code></td></tr>
+</tbody>
+</table>
+
+<h2 id="pendientes">Pendientes / abierto</h2>
+<div class="pending-card">
+<span class="pending-tag">Valores</span>
+<p><strong>Los 7 stats base</strong> — la lista actual es <code>MaxHP</code>, <code>MaxSP</code>, <code>Attack</code>, <code>MagicPower</code>, <code>PhysicalDefense</code>, <code>MagicalDefense</code>, <code>Speed</code>. Confirmar si <code>Attack</code> se llama así o <code>Strength</code>, y si <code>Speed</code> cumple alguna función más allá del orden inicial.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Diseño</span>
+<p><strong>Tipo de Unit</strong> — el campo <em>tipo</em> de <code>UnitDefinitionSO</code> todavía no tiene semántica definida. Decidir qué clasifica (arquetipo, facción, raza) y si tiene efecto mecánico o es puramente cosmético.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Implementación</span>
+<p><strong>Clonado de skills aprendidas</strong> — el <code>Unit</code> debe clonar la lista de <code>ActionSO</code> de la definición al inicializarse, para permitir reemplazos temporales por efectos (Brain Control). Confirmar que efectivamente se clona y no se comparte la referencia.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Nomenclatura</span>
+<p><strong><code>UnitTeam</code> vs <code>Team</code></strong> — usar <code>UnitTeam</code> para el enum y dejar <code>Team</code> libre si en el futuro aparece un "equipo" con otra semántica. Decisión de nombre, no de diseño.</p>
+</div>
+
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="combat.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Combate</span>
+</a>
+<a class="page-nav-next" href="items.html">
+<span class="page-nav-dir">Siguiente</span>
+<span class="page-nav-title">Objetos</span>
+</a>
+</nav>
+
+</main>
+
+<section class="toc"><strong>En esta página</strong>
+<a href="#dos-formas">Dos formas de una misma Unit</a>
+<a href="#unitdefinitionso">UnitDefinitionSO</a>
+<a href="#stats">Stats base y derivadas</a>
+<a href="#party-y-partymemberdata">Party y PartyMemberData</a>
+<a href="#enemyslotdata">EnemySlotData</a>
+<a href="#unit">Unit (lado combate)</a>
+<a href="#inicializacion">Inicialización</a>
+<a href="#destruccion">Destrucción</a>
+<a href="#resumen">Resumen de componentes</a>
+<a href="#pendientes">Pendientes</a>
+</section>
+
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Combate y Persistencia — Hunters: Fracture of Time</title>
+<title>Combate — Hunters: Fracture of Time</title>
 <meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,10 +39,11 @@
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
 <li><a href="combat.html" aria-current="page"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
+<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section"><div class="section-title">Referencia</div>
@@ -61,20 +62,13 @@
 <div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Combate</div>
 
 <p class="eyebrow">03 · SISTEMA</p>
-<h1>Combate y Persistencia de Progreso</h1>
+<h1>Combate</h1>
 <p class="page-lede">
-      Cómo se separan los datos que sobreviven a un combate de los que se descartan junto con él, y
-      cómo el asset SimpleJRPG orquesta cada encuentro sin conocer nada de este sistema.
+      Sistema de combate por turnos con timeline posicional. El combate no depende de ningún
+      asset externo: <code>CombatController</code> es la raíz de la escena y absorbe tanto la
+      orquestación del encuentro como los verbos y eventos que otros sistemas consumen.
     </p>
-<h2 id="base-externa-simplejrpg">Base externa: SimpleJRPG</h2>
-<p>
-      El combate por turnos se apoya en <strong>SimpleJRPG</strong>, un asset de C# puro sin
-      dependencias de Unity en su núcleo. Aporta <code>Battle</code> (orquestador de un encuentro,
-      dispara eventos y aplica lo que se le pide), la interfaz <code>ICombatant</code>, y
-      <code>TimelineTurnSystem</code> como sistema de turnos: un timeline tick-based con costo de
-      acción variable por turno, similar al de <em>Honkai: Star Rail</em>. SimpleJRPG no calcula
-      daño, no rastrea estados ni buffs, y no gestiona objetos — todo eso lo resuelve el proyecto.
-    </p>
+
 <h2 id="dos-dominios">Dos dominios</h2>
 <p>
       El sistema separa un <strong>dominio persistente</strong>, que vive durante toda la run
@@ -84,13 +78,14 @@
 <div class="spec-grid">
 <div class="spec-card">
 <span class="spec-label">Dominio persistente</span>
-<span class="spec-value">Overworld · <code>Party</code>, <code>PartyMemberData</code></span>
+<span class="spec-value">Overworld · <code>Party</code>, <code>PartyMemberData</code>, <code>UnitDefinitionSO</code></span>
 </div>
 <div class="spec-card">
 <span class="spec-label">Dominio de combate</span>
-<span class="spec-value">CombatStage · <code>Unit</code>, <code>Battle</code>, controladores del encuentro</span>
+<span class="spec-value">CombatStage · <code>Unit</code>, <code>CombatController</code>, <code>TimelineController</code>, controladores del encuentro</span>
 </div>
 </div>
+
 <h2 id="que-persiste-entre-combates">Qué persiste entre combates</h2>
 <table class="dep-table">
 <thead><tr><th>Dato</th><th>Persiste</th><th>Motivo</th></tr></thead>
@@ -101,14 +96,16 @@
 <tr><td>SP actual</td><td>Sí</td><td>Igual que HP</td></tr>
 <tr><td>Inventario (cantidades por ítem)</td><td>Sí</td><td>Es la progresión del roguelite; alimenta la UI del Overworld y el recálculo de stats</td></tr>
 <tr><td>Stats derivadas (MaxHP, MaxSP, Strength, MagicPower, Defensas)</td><td>No</td><td>Se recalculan siempre desde stats base + inventario en cada combate</td></tr>
+<tr><td>Estados, buffs y debuffs</td><td>No</td><td><code>StatusBuffTracker</code> vive y muere con <code>CombatStage</code>; un veneno no sobrevive al combate</td></tr>
 <tr><td>GameObjects de combate y sus controladores</td><td>No</td><td>Se crean y destruyen por encuentro</td></tr>
 </tbody>
 </table>
+
 <h2 id="componentes">Componentes</h2>
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">Party</span>
-<span class="component-desc">Lista de hasta 3 <code>PartyMemberData</code> (uno por slot: izquierda, centro, derecha). La porta <code>PlayerEntity</code> en el Overworld.</span>
+<span class="component-desc">Hasta 3 <code>PartyMemberData</code> del jugador, uno por slot. La porta <code>PlayerEntity</code> en el Overworld.</span>
 </div>
 <div class="component-card">
 <span class="component-name">PartyMemberData</span>
@@ -116,27 +113,31 @@
 </div>
 <div class="component-card">
 <span class="component-name">UnitDefinitionSO</span>
-<span class="component-desc"><code>ScriptableObject</code> con las 7 stats base y la identidad de un personaje o enemigo. Plantilla inmutable, compartida por cualquier combate que la use.</span>
+<span class="component-desc"><code>ScriptableObject</code> con las stats base y la identidad de un personaje o enemigo. Plantilla inmutable, compartida por cualquier combate que la use.</span>
 </div>
 <div class="component-card">
 <span class="component-name">EnemySlotData</span>
 <span class="component-desc">Análogo a <code>PartyMemberData</code> para un enemigo del encuentro, sin HP/SP arrastrado — los enemigos siempre entran a full HP/SP. Incluye un <code>inventorySnapshot</code> opcional para variantes elite.</span>
 </div>
 <div class="component-card">
-<span class="component-name">CombatHandoff</span>
-<span class="component-desc">Objeto puente de vida corta que lleva la <code>Party</code> y los <code>EnemySlotData</code> del Overworld a CombatStage. Se destruye apenas <code>BattleController</code> lo consume.</span>
+<span class="component-name">CombatSetUp</span>
+<span class="component-desc">Objeto puente de vida corta que lleva la <code>Party</code>, los <code>EnemySlotData</code> y qué bando tiene la ventaja del Overworld a <code>CombatStage</code>. Se destruye apenas <code>CombatController</code> lo consume.</span>
 </div>
 <div class="component-card">
-<span class="component-name">BattleController</span>
-<span class="component-desc">Raíz de <code>CombatStage</code>. Instancia las <code>Unit</code> del encuentro, crea <code>Battle</code> y <code>TimelineTurnSystem</code>, y vuelca HP/SP/inventario de vuelta a la <code>Party</code> al finalizar.</span>
+<span class="component-name">CombatController</span>
+<span class="component-desc">Raíz de <code>CombatStage</code>. Instancia las <code>Unit</code>, crea el <code>TimelineController</code>, orquesta el pipeline de turno y expone los verbos y eventos. Es el único punto por el que pasan las mutaciones de estado.</span>
+</div>
+<div class="component-card">
+<span class="component-name">TimelineController</span>
+<span class="component-desc">Cola de turnos. Ordena las <code>Unit</code> por Speed + ventaja al inicio, y expone las operaciones de manipulación posicional (avanzar, atrasar, mover al frente, etc.).</span>
 </div>
 <div class="component-card">
 <span class="component-name">Unit</span>
-<span class="component-desc"><code>MonoBehaviour</code> que implementa <code>ICombatant</code>. Vive en un GameObject junto a <code>UnitInventory</code>, <code>UnitStatsController</code> y <code>UnitEffectController</code>, y se descarta al terminar el combate.</span>
+<span class="component-desc"><code>MonoBehaviour</code> de combate. Vive en un GameObject junto a <code>UnitInventory</code>, <code>UnitStatsController</code> y <code>UnitEffectController</code>, y se descarta al terminar el combate.</span>
 </div>
 <div class="component-card">
 <span class="component-name">UnitInventory</span>
-<span class="component-desc">Cantidades por objeto de la Unit en combate. Se puebla desde el <code>inventorySnapshot</code> persistente al iniciar el encuentro y dispara <code>OnStackChanged</code> ante cualquier cambio.</span>
+<span class="component-desc">Cantidades por ítem de la Unit en combate. Se puebla desde el <code>inventorySnapshot</code> persistente al iniciar el encuentro y dispara <code>OnStackChanged</code> ante cualquier cambio.</span>
 </div>
 <div class="component-card">
 <span class="component-name">UnitStatsController</span>
@@ -144,93 +145,476 @@
 </div>
 <div class="component-card">
 <span class="component-name">UnitEffectController</span>
-<span class="component-desc">Engancha y desengancha los <code>TriggeredEffectSO</code> de los ítems que la Unit porta a los eventos de <code>Battle</code> correspondientes.</span>
+<span class="component-desc">Engancha y desengancha los <code>TriggeredEffectSO</code> de los ítems que la Unit porta a los eventos de <code>CombatController</code>, ordenados por <code>Priority</code>.</span>
 </div>
 <div class="component-card">
 <span class="component-name">StatusBuffTracker</span>
-<span class="component-desc">Uno por encuentro. Escucha los eventos de <code>Battle</code>, lleva duración y stacks de estados/buffs, y aplica el daño por turno de efectos como veneno o hemorragia.</span>
+<span class="component-desc">Uno por encuentro. Lleva duración y stacks de estados y buffs, y aplica el daño por turno de efectos como veneno o hemorragia. Se limpia con la escena.</span>
 </div>
 <div class="component-card">
 <span class="component-name">ActionResolver</span>
-<span class="component-desc">Uno por encuentro. Resuelve la acción elegida: aplica overrides de targeting, calcula el daño con la fórmula propia, e invoca el verbo correspondiente de <code>Battle</code>.</span>
+<span class="component-desc">Uno por encuentro. Resuelve targeting y fórmula de daño de una acción antes de invocar el verbo correspondiente de <code>CombatController</code>.</span>
+</div>
+<div class="component-card">
+<span class="component-name">CombatLog</span>
+<span class="component-desc">Uno por encuentro. Escucha los eventos de <code>CombatController</code> durante todo el combate y arma el <code>CombatResult</code> cuando el controlador lo pide.</span>
+</div>
+<div class="component-card">
+<span class="component-name">CombatResult</span>
+<span class="component-desc">Dato plano: outcome, turnos totales, survivors. Lo produce <code>CombatLog</code>; lo consume la capa de presentación. No incluye recompensas — esas se asignan después, en <code>RewardsScreen</code>.</span>
 </div>
 </div>
+
 <h2 id="entrada-a-combate">Entrada a combate</h2>
-<pre class="ascii-flow">1. BattleLauncher crea un CombatHandoff con la Party y los EnemySlotData del encuentro.
-2. CombatStage se carga y Overworld se desactiva.
-3. BattleController lee el CombatHandoff y lo destruye.
+<pre class="ascii-flow">1. PlayerEntity o EnemyEntity detecta la colisión de Attack en el Overworld.
+   → El que inició el ataque le da ventaja de Speed a su bando.
+
+2. CombatSetUp reúne: Party (aliados), los EnemySlotData del encuentro,
+   y qué bando tiene la ventaja. Se lo entrega a CombatController y se destruye.
+
+3. CombatStage carga como escena separada; el Overworld deja de renderizarse.
 
 4. Por cada PartyMemberData:
    → Instantiate(unitPrefab)
-   → Unit.InitializeFromParty(partyMemberData, battle, itemCatalog)
+   → Unit.InitializeFromParty(partyMemberData, itemCatalog)
    → UnitInventory.Populate(inventorySnapshot, itemCatalog)
    → UnitStatsController.SetBase(definition) + RecalculateStats(inventory)
-   → HP = Min(currentHP, MaxHP) · SP = Min(currentSP, MaxSP) · Team = 0
+   → HP = Min(currentHP, MaxHP) · SP = Min(currentSP, MaxSP) · Team = Ally
 
 5. Por cada EnemySlotData:
    → Instantiate(unitPrefab)
-   → Unit.InitializeFresh(definition, battle, itemCatalog)
-   → HP = MaxHP · SP = MaxSP · Team = 1
+   → Unit.InitializeFresh(definition, itemCatalog)
+   → HP = MaxHP · SP = MaxSP · Team = Enemy
 
-6. BattleController crea Battle + TimelineTurnSystem y llama Start() con todas las Units.</pre>
+6. CombatController crea el TimelineController y le pasa todas las Units.
+   El TimelineController las ordena por Speed base y aplica la ventaja.
+
+7. El combate comienza.</pre>
 <p class="flow-note">
       El clamp <code>Min(currentHP, MaxHP)</code> evita que una Unit entre con más HP del que le
-      permite su máximo recalculado, en caso de haber perdido un ítem entre combates.
+      permite su máximo recalculado, en caso de haber perdido un ítem entre combates. Si un
+      <code>PartyMemberData</code> entra con <code>currentHP = 0</code>, su <code>Unit</code> se
+      instancia muerta (ver <a href="#muerte-y-resurreccion">Muerte y resurrección</a>).
     </p>
+
 <h2 id="salida-de-combate">Salida de combate</h2>
-<pre class="ascii-flow">1. Battle dispara OnBattleEnd(Victory | Defeat | Fled).
-2. BattleController lee HP, SP e inventario de cada Unit aliada.
-3. Esos valores se escriben en el PartyMemberData correspondiente dentro de Party.
-4. BattleController destruye todos los GameObjects de combate
-   (Units, Battle + TimelineTurnSystem, StatusBuffTracker, ActionResolver).
-5. CombatStage se descarga y Overworld se reactiva.</pre>
-<h2 id="items-y-recalculo-de-stats">Ítems y recálculo de stats</h2>
+<pre class="ascii-flow">1. CombatController termina el combate (Victoria, Derrota o Huida)
+   y le pide el resultado a CombatLog, que arma un CombatResult.
+
+2. Se muestra CombatSummaryScreen (siempre), alimentada por ese CombatResult.
+
+3. Si hubo Victoria → se muestra RewardsScreen para asignar los ítems ganados
+   a Units específicas.
+
+4. Al cerrar ambas interfaces:
+
+   VICTORIA
+   → HP y SP de cada Unit aliada se escriben en su PartyMemberData.
+   → Las Units enemigas y la EnemyEntity se destruyen.
+   → Los ítems asignados se agregan al UnitInventory de la Unit que los
+     recibió, y se llama RecalculateStats() solo para esa Unit.
+     El inventario resultante queda cacheado como el nuevo inventorySnapshot.
+   → CombatStage se descarga, el jugador vuelve al Overworld.
+
+   HUIDA
+   → Mismo flujo que Victoria, salvo que no hay RewardsScreen.
+   → La EnemyEntity del Overworld NO se destruye.
+
+   DERROTA
+   → Se muestra GameOverScreen.
+   → El jugador termina en el Main Menu (fin de la run).</pre>
+
+<h2 id="sistema-de-turnos">Sistema de turnos</h2>
 <p>
-      Cada objeto es un <code>ItemSO</code> con una lista de <code>ItemEffectSO</code>, catalogados
-      centralmente en un único <code>ItemCatalog</code>. Un <code>StatModifierEffectSO</code>
-      contribuye un modificador estático o por fórmula a una stat, y
-      <code>UnitStatsController.RecalculateStats()</code> lo aplica una vez por stack sobre cada
-      ítem que la Unit sostiene. Un <code>TriggeredEffectSO</code> en cambio reacciona a eventos de
-      <code>Battle</code> (<code>OnBeforeDamage</code>, <code>OnDamageDealt</code>,
-      <code>OnTurnEnd</code>, etc.) mediante <code>Attach()</code>/<code>Detach()</code>, llamados
-      por <code>UnitEffectController</code> cuando la Unit gana o pierde la primera/última copia del
-      ítem correspondiente.
+      El combate usa una <strong>rotación pura con manipulación posicional</strong>. La
+      <code>Speed</code> no pondera cuánto retrocede cada unidad al actuar: define únicamente el
+      orden inicial, junto con la ventaja. Después del primer ciclo, todas las unidades actúan una
+      vez por vuelta, salvo que una habilidad o consumible mueva su posición en la cola.
     </p>
 <p>
-      En enemigos, el <code>inventorySnapshot</code> de <code>EnemySlotData</code> es opcional: las
-      variantes elite se construyen con un <code>UnitDefinitionSO</code> de stats base más altas, sin
-      asignarles ítems.
+      La timeline es una <strong>lista ordenada de <code>Unit</code></strong>, donde el índice 0 es
+      la próxima unidad en actuar. La UI muestra la lista completa, con portrait e ícono de bando.
     </p>
-<h2 id="units-derrotadas">Units derrotadas</h2>
+<h3 id="ciclo-de-un-turno">Ciclo de un turno</h3>
+<pre class="ascii-flow">TurnStart(unit)
+  → OnTurnStart
+  → remover estado Defending del portador (si corresponde)
+  → [Ally]  AwaitInput → elige una de las 5 acciones
+    [Enemy] AISelect   → elige ActionSO (IA pendiente, ver sección IA enemiga)
+  → ActionResolver.Resolve(actor, action, targets)
+      → OnBeforeAction (interceptable)
+      → SpendSP / consumir recurso
+      → verbos (DealDamage / Heal / ApplyStatus / ApplyBuff / verbos de timeline)
+      → OnAfterAction
+  → StatusBuffTracker.Tick(unit)   // veneno, regen, expiración de duraciones
+  → OnTurnEnd
+  → TimelineController.Reinsert(unit)   // al final de la cola, siempre
+  → siguiente unidad</pre>
+<p class="flow-note">
+      La reinserción al final es siempre la misma: la unidad que actuó va al final de la cola. Lo
+      que puede haber cambiado antes es la posición de <strong>otras</strong> unidades, vía verbos
+      de timeline. La reinserción se ejecuta después de todos los ticks, para que una habilidad que
+      dice "después de actuar, adelantá a un aliado" no compita con la reinserción del actor.
+    </p>
+
+<h3 id="orden-inicial-y-ventaja">Orden inicial y ventaja</h3>
 <p>
-      Una Unit aliada que llega a HP 0 en combate queda derrotada también fuera de él: su
-      <code>PartyMemberData</code> se vuelca con <code>currentHP = 0</code> y permanece así hasta que
-      algo la revierta explícitamente. Dentro de combate, una skill de la Unit puede invocar
-      <code>Battle.Revive()</code> igual que cualquier otro verbo de SimpleJRPG. Fuera de combate, una
-      mecánica del Overworld (objeto, altar, punto de descanso) restaura <code>currentHP</code> por
-      encima de 0 en su <code>PartyMemberData</code>.
+      El orden inicial es una sola operación en dos pasos: primero se ordenan todas las
+      <code>Unit</code> por <code>Speed</code> base de mayor a menor; luego se aplica la ventaja
+      adelantando los turnos del bando atacante y atrasando los del bando defensor. La ventaja
+      <strong>no es un buff</strong>: no toca stats, no se muestra como estado, no tiene duración.
+      Es puramente posicional y solo afecta el orden del primer ciclo.
     </p>
+
+<h3 id="operaciones-de-timeline">Operaciones de la timeline</h3>
+<table class="dep-table">
+<thead><tr><th>Operación</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td><code>Pop</code></td><td>Saca el índice 0. Esa es la unidad que actúa.</td></tr>
+<tr><td><code>Reinsert</code></td><td>Mete la unidad al final de la cola. Se llama al cerrar el turno.</td></tr>
+<tr><td><code>Advance</code></td><td>Mueve una unidad hacia el frente N slots.</td></tr>
+<tr><td><code>Delay</code></td><td>Mueve una unidad hacia el final N slots.</td></tr>
+<tr><td><code>MoveToFront</code></td><td>Mueve una unidad al índice 0 (actúa inmediatamente después del actual).</td></tr>
+<tr><td><code>MoveToBack</code></td><td>Al final, sin importar Speed.</td></tr>
+<tr><td><code>Swap</code></td><td>Intercambia dos posiciones.</td></tr>
+<tr><td><code>InsertAfter</code></td><td>Inserta una unidad justo después de otra.</td></tr>
+<tr><td><code>GrantExtraTurn</code></td><td>La unidad actúa otra vez antes de retroceder. No se puede encadenar: un flag por ciclo impide dos extra turns consecutivos.</td></tr>
+</tbody>
+</table>
+<p class="flow-note">
+      Cada operación dispara <code>OnTimelineChanged(unit, type, delta)</code> para que la UI de la
+      cola y <code>CombatLog</code> reaccionen. Los <code>TriggeredEffectSO</code> también pueden
+      escucharlo (por ejemplo: "cuando un aliado es adelantado, ganá SP").
+    </p>
+
+<h3 id="edge-cases-de-timeline">Edge cases</h3>
+<table class="dep-table">
+<thead><tr><th>Caso</th><th>Comportamiento</th></tr></thead>
+<tbody>
+<tr><td>Unidad muere en la cola</td><td>Se remueve inmediatamente. No acumula turno.</td></tr>
+<tr><td>Unidad revivida</td><td>Se inserta al final de la cola.</td></tr>
+<tr><td>Delay a una unidad ya en el final</td><td>No hace nada.</td></tr>
+<tr><td>Advance más allá del slot 0</td><td>Clampea a 0.</td></tr>
+<tr><td>Dos unidades intentan <code>MoveToFront</code></td><td>La última resolución gana.</td></tr>
+<tr><td><code>Swap</code> con una unidad muerta</td><td>Se ignora.</td></tr>
+<tr><td>Huida exitosa</td><td>La cola se descarta entera.</td></tr>
+<tr><td><code>GrantExtraTurn</code> sobre unidad ya con extra turn este ciclo</td><td>Se ignora.</td></tr>
+</tbody>
+</table>
+
+<h2 id="acciones-del-jugador">Acciones del jugador</h2>
+<p>
+      Cinco acciones, todas consumen el turno y reinsertan al actor al final de la cola. Lo que
+      cambia es target, costo, y si tocan la timeline de otras unidades.
+    </p>
+<table class="dep-table">
+<thead><tr><th>Acción</th><th>Target</th><th>Costo</th><th>Efecto base</th><th>¿Toca timeline?</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Atacar</strong></td>
+<td>1 enemigo vivo</td>
+<td>—</td>
+<td>Daño físico (<code>Attack</code> vs <code>PhysicalDefense</code>) + regenera SP aleatorio</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Defender</strong></td>
+<td>Self</td>
+<td>—</td>
+<td>Aplica estado <code>Defending</code> + regenera SP aleatorio</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Habilidad</strong></td>
+<td>Según skill</td>
+<td>SP</td>
+<td>Abre submenú de <code>ActionSO</code> conocidas</td>
+<td>Según skill</td>
+</tr>
+<tr>
+<td><strong>Mochila</strong></td>
+<td>Según consumible</td>
+<td>1 consumible</td>
+<td>Abre submenú de la mochila global del party</td>
+<td>Según consumible</td>
+</tr>
+<tr>
+<td><strong>Escapar</strong></td>
+<td>Party</td>
+<td>—</td>
+<td>Tirada de huida</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="atacar">Atacar</h3>
+<ul>
+<li>Target: 1 enemigo vivo. No se puede targetear aliados.</li>
+<li>Daño físico: <code>Attack</code> del atacante contra <code>PhysicalDefense</code> del defensor.</li>
+<li><strong>Regenera SP aleatorio.</strong> El rango lo define la unidad (<code>SpRegenMin</code> / <code>SpRegenMax</code>). Sin críticos.</li>
+<li>Sin varianza aleatoria de daño más allá de la que explícitamente se defina en <code>ActionResolver</code>.</li>
+</ul>
+
+<h3 id="defender">Defender</h3>
+<ul>
+<li>Target: self.</li>
+<li>Aplica el estado <code>Defending</code> al <strong>final del turno actual</strong>, así protege todo el ciclo entre este turno y el siguiente. Se remueve en <code>OnTurnStart</code> del portador.</li>
+<li>Reduce el daño entrante de <strong>cualquier</strong> ataque o skill, en un porcentaje fijo (<code>DefendingReduction</code>), usando la defensa correspondiente al tipo del ataque:
+  <ul>
+  <li>Ataque/skill físico → reduce usando <code>PhysicalDefense</code>.</li>
+  <li>Ataque/skill mágico → reduce usando <code>MagicalDefense</code>.</li>
+  </ul>
+</li>
+<li>Tanto ataques básicos como skills pueden ser físicos o mágicos. El tipo lo declara la <code>ActionSO</code> para skills; Atacar es siempre físico.</li>
+<li><strong>Regenera SP aleatorio</strong> al igual que Atacar. Mismo rango, mismo perfil.</li>
+<li>No adelanta ni atrasa al portador en la timeline.</li>
+</ul>
+
+<h3 id="habilidad">Habilidad</h3>
+<ul>
+<li>Submenú con las <code>ActionSO</code> aprendidas por esa unidad.</li>
+<li>Cada skill declara: <code>SpCost</code>, <code>TargetType</code>, <code>MaxTargets</code>, <code>DamageType</code> (Físico o Mágico), <code>Element</code>, <code>Power</code>, y opcionalmente un efecto sobre la timeline.</li>
+<li>Si no alcanza el SP, la opción se ve gris y no se puede seleccionar. No es un fallo silencioso.</li>
+<li><code>ActionResolver</code> valida targets vivos antes de resolver.</li>
+<li>Las skills pueden aplicar estados o buffs, curar HP o SP, mover unidades en la timeline, o combinar varios de los anteriores.</li>
+</ul>
+
+<h3 id="mochila">Mochila</h3>
+<div class="note-box">
+<span class="note-tag">Sistema separado</span>
+<p>
+        La mochila <strong>no es el <code>UnitInventory</code></strong>. Es un sistema de
+        consumibles de combate, global para el party del jugador, a implementar más adelante. No
+        interactúa con <code>UnitStatsController</code> ni con <code>RecalculateStats</code>. Hasta
+        que exista, la acción <strong>Mochila</strong> se muestra deshabilitada en la UI.
+      </p>
+</div>
+<p>Contrato asumido para cuando se implemente:</p>
+<ul>
+<li>Es global para el party del jugador. No hay mochila por unidad.</li>
+<li>Consumir un ítem descuenta 1 del total global.</li>
+<li>Un consumible puede tener múltiples efectos (cura + buff, por ejemplo).</li>
+<li>Al usarse, sigue las mismas reglas que una skill: dispara <code>OnBeforeAction</code>, resuelve targeting, invoca verbos, dispara <code>OnAfterAction</code>.</li>
+<li>Puede tocar la timeline si el consumible lo declara.</li>
+</ul>
+
+<h3 id="escapar">Escapar</h3>
+<ul>
+<li>Disponible para <code>UnitTeam.Ally</code> en el menú del jugador.</li>
+<li>Una tirada por turno, por la unidad que elige Escapar.</li>
+<li>Fórmula: <code>chance = clamp(0.5 + (avgAllySpeed − avgEnemySpeed) * 0.02, 0.1, 0.9)</code>.</li>
+<li>Éxito → <code>CombatOutcome.Fled</code>, fin de combate, sin recompensas, HP/SP se persisten igual que en victoria. La <code>EnemyEntity</code> del Overworld <strong>no</strong> se destruye.</li>
+<li>Fracaso → la unidad va al final de la cola (pierde el turno, como cualquier otra acción).</li>
+<li><strong>Los enemigos también pueden escapar.</strong> La IA enemiga decidirá cuándo intentarlo, con la misma fórmula y los bandos invertidos.</li>
+</ul>
+
+<h2 id="resolucion-de-dano">Resolución de daño</h2>
+<p>
+      Sin críticos. Sin varianza aleatoria más allá de la que explícitamente se defina. La fórmula
+      base:
+    </p>
+<pre class="ascii-flow">raw       = (Attacker.Attack * SkillPower / 100) − Defender.Defense / 2
+defending = Defender tiene estado Defending ?
+            raw * (1 − DefendingReduction) : raw
+final     = Max(1, Round(defending))</pre>
+<p>Donde:</p>
+<ul>
+<li><code>Attacker.Attack</code> es <code>Attack</code> para skills y ataques físicos, y <code>MagicPower</code> para skills mágicas.</li>
+<li><code>Defender.Defense</code> es <code>PhysicalDefense</code> contra ataques/skills físicos, y <code>MagicalDefense</code> contra ataques/skills mágicos.</li>
+<li><code>DefendingReduction</code> es un porcentaje fijo por unidad (o por <code>UnitDefinitionSO</code>), no un delta de stats.</li>
+<li><code>Element</code> está declarado en <code>ActionSO</code> pero por ahora no tiene efecto sobre la fórmula.</li>
+</ul>
+<p class="flow-note">
+<code>ActionResolver</code> implementa la fórmula. Los <code>TriggeredEffectSO</code> que
+      modifican daño lo hacen vía <code>OnBeforeDamage</code> (sumando a
+      <code>DamageContext.Amount</code> o a un modificador porcentual), nunca reimplementando la
+      fórmula.
+    </p>
+
+<h2 id="verbos-y-eventos">Verbos y eventos de CombatController</h2>
+<p>
+<code>CombatController</code> es el único punto por el que pasan las mutaciones de estado. Ni
+      <code>Unit</code>, ni <code>UnitStatsController</code>, ni <code>StatusBuffTracker</code>
+      escriben HP, SP o estados directamente. Toda mutación entra por un verbo, y todo verbo dispara
+      los eventos correspondientes.
+    </p>
+
+<h3 id="verbos">Verbos</h3>
+<table class="dep-table">
+<thead><tr><th>Verbo</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td><code>DealDamage(source, target, amount, damageType, via)</code></td><td>Dispara <code>OnBeforeDamage</code> (mutable), aplica, dispara <code>OnAfterDamage</code>. Si <code>HP &lt;= 0</code>, llama a <code>Kill</code>.</td></tr>
+<tr><td><code>Heal(source, target, amount, via)</code></td><td>Dispara <code>OnBeforeHeal</code> (mutable), aplica, dispara <code>OnAfterHeal</code>.</td></tr>
+<tr><td><code>Kill(target, killer)</code></td><td>Marca muerto, remueve de la timeline, limpia estados y buffs, dispara <code>OnUnitKilled</code>.</td></tr>
+<tr><td><code>Revive(target, hp)</code></td><td>Marca vivo, inserta al final de la timeline, dispara <code>OnUnitRevived</code>.</td></tr>
+<tr><td><code>ApplyStatus(source, target, status, stacks, duration)</code></td><td>Dispara <code>OnStatusApplied</code>.</td></tr>
+<tr><td><code>RemoveStatus(target, status)</code></td><td>Dispara <code>OnStatusExpired</code>.</td></tr>
+<tr><td><code>ApplyBuff(source, target, buff, stacks, duration)</code></td><td>Dispara <code>OnBuffApplied</code>.</td></tr>
+<tr><td><code>RemoveBuff(target, buff)</code></td><td>Dispara <code>OnBuffExpired</code>.</td></tr>
+<tr><td><code>SpendSP(unit, amount)</code></td><td>Clampea a 0. La acción falla si no alcanza.</td></tr>
+<tr><td><code>RestoreSP(unit, amount)</code></td><td>—</td></tr>
+<tr><td><code>Advance</code> / <code>Delay</code> / <code>MoveToFront</code> / <code>MoveToBack</code> / <code>Swap</code> / <code>InsertAfter</code> / <code>GrantExtraTurn</code></td><td>Delegan en <code>TimelineController</code>.</td></tr>
+<tr><td><code>Flee(team)</code></td><td>Tirada de huida. Resuelve el outcome.</td></tr>
+</tbody>
+</table>
+<p class="flow-note">
+<code>DealDamage</code> chequea muerte internamente. Ningún llamador tiene que acordarse de
+      hacerlo.
+    </p>
+
+<h3 id="eventos">Eventos</h3>
+<p>
+      Divididos en <strong>intercepción</strong> (contexto mutable, los efectos pueden modificarlo)
+      y <strong>notificación</strong> (solo lectura, para <code>CombatLog</code> y VFX).
+    </p>
+<table class="dep-table">
+<thead><tr><th>Evento</th><th>Tipo</th><th>Contexto</th></tr></thead>
+<tbody>
+<tr><td><code>OnCombatStart</code></td><td>Notificación</td><td>—</td></tr>
+<tr><td><code>OnTurnStart</code></td><td>Notificación</td><td><code>TurnContext</code></td></tr>
+<tr><td><code>OnBeforeAction</code></td><td>Intercepción</td><td><code>ActionContext</code> (targets, power%, costo SP, cancelable)</td></tr>
+<tr><td><code>OnAfterAction</code></td><td>Notificación</td><td><code>ActionContext</code></td></tr>
+<tr><td><code>OnBeforeDamage</code></td><td>Intercepción</td><td><code>DamageContext</code> (amount, tags)</td></tr>
+<tr><td><code>OnAfterDamage</code></td><td>Notificación</td><td><code>DamageContext</code></td></tr>
+<tr><td><code>OnBeforeHeal</code></td><td>Intercepción</td><td><code>HealContext</code></td></tr>
+<tr><td><code>OnAfterHeal</code></td><td>Notificación</td><td><code>HealContext</code></td></tr>
+<tr><td><code>OnUnitKilled</code></td><td>Notificación</td><td><code>KillContext</code></td></tr>
+<tr><td><code>OnUnitRevived</code></td><td>Notificación</td><td><code>ReviveContext</code></td></tr>
+<tr><td><code>OnStatusApplied</code> / <code>OnStatusExpired</code></td><td>Notificación</td><td><code>StatusContext</code></td></tr>
+<tr><td><code>OnBuffApplied</code> / <code>OnBuffExpired</code></td><td>Notificación</td><td><code>BuffContext</code></td></tr>
+<tr><td><code>OnTimelineChanged</code></td><td>Notificación</td><td><code>TimelineContext</code> (unit, type, delta)</td></tr>
+<tr><td><code>OnFleeAttempt</code></td><td>Notificación</td><td><code>FleeContext</code> (con <code>Success</code>)</td></tr>
+<tr><td><code>OnCombatEnd</code></td><td>Notificación</td><td><code>CombatOutcome</code></td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<span class="note-tag">Prioridad de efectos</span>
+<p>
+        Los <code>TriggeredEffectSO</code> tienen un campo <code>Priority</code>.
+        <code>UnitEffectController</code> los ordena por ese campo antes de suscribirlos. Sin esto,
+        el orden de ejecución depende del orden de suscripción y no es determinístico.
+      </p>
+</div>
+
+<h2 id="estados-y-buffs">Estados y buffs</h2>
+<ul>
+<li><strong>Stacks:</strong> máximo por estado, definido en el <code>StatusSO</code>. Aplicar sobre el máximo refresca duración, no suma.</li>
+<li><strong>Duración:</strong> en turnos del portador. Se decrementa en <code>OnTurnEnd</code> de la unidad afectada.</li>
+<li><strong>Instancias:</strong> dos aplicaciones del mismo <code>StatusSO</code> suman stacks hasta el máximo. Si la nueva duración es mayor que la actual, se reemplaza.</li>
+<li><strong>Stat modifiers:</strong> <code>UnitStatsController</code> recalcula desde cero cada vez que <code>StatusBuffTracker</code> cambia. No acumula deltas sobre el resultado anterior — eso evita drift.</li>
+<li><strong>Al morir:</strong> todos los estados y buffs del portador se remueven.</li>
+<li><strong><code>Defending</code>:</strong> es un estado más, con duración de un ciclo. Se remueve en <code>OnTurnStart</code> del portador.</li>
+</ul>
+
+<h2 id="muerte-y-resurreccion">Muerte y resurrección</h2>
+<ul>
+<li>Una unidad muerta <strong>sale de la timeline</strong>. No acumula turno.</li>
+<li>Solo es targeteable por efectos con <code>TargetType.DeadAlly</code> (revive).</li>
+<li>Sus estados y buffs se limpian al morir.</li>
+<li><code>Revive</code> la inserta al final de la cola.</li>
+<li>Si un <code>PartyMemberData</code> entra al combate con <code>currentHP = 0</code>, su <code>Unit</code> se instancia con HP 0 y <code>Kill</code> se llama durante la inicialización. Puede ser revivida en combate.</li>
+<li>Fuera de combate, una mecánica del Overworld (objeto, altar, punto de descanso) restaura <code>currentHP</code> por encima de 0 en el <code>PartyMemberData</code>.</li>
+</ul>
+
+<h2 id="cierre-del-combate">Victoria, derrota y empates</h2>
+<ul>
+<li><strong>Victoria:</strong> todas las <code>Unit</code> enemigas muertas, al menos una aliada viva.</li>
+<li><strong>Derrota:</strong> todas las <code>Unit</code> aliadas muertas.</li>
+<li><strong>Huida:</strong> <code>CombatOutcome.Fled</code>, sin recompensas.</li>
+<li><strong>Victoria y derrota simultáneas:</strong> si un efecto mata al último enemigo y al último aliado en la misma resolución, gana el bando que tenga al menos una unidad viva al terminar la resolución del verbo. Si ambos bandos quedan en 0, es <strong>Derrota</strong>.</li>
+</ul>
+
+<h2 id="ia-enemiga">IA enemiga</h2>
+<div class="pending-card">
+<span class="pending-tag">Pendiente</span>
+<p>
+        No está construida. Hasta que exista, los enemigos pueden tener un comportamiento trivial
+        (atacar al azar) para permitir pruebas del resto del sistema.
+      </p>
+</div>
+<p>Contrato asumido:</p>
+<ul>
+<li>Cada <code>EnemySlotData</code> o <code>UnitDefinitionSO</code> enemigo trae una lista de acciones con un <code>weight</code> y, opcionalmente, condiciones (por ejemplo: <em>"si HP &lt; 30%, priorizar curación"</em>, <em>"si HP &lt; 20%, intentar huir"</em>).</li>
+<li>En su turno, la IA filtra acciones válidas (SP suficiente, targets vivos) y elige por peso.</li>
+<li>Los enemigos pueden elegir Escapar, con la misma fórmula que el jugador pero con los bandos invertidos.</li>
+<li>Sin pathfinding ni máquina de estados compleja: una tabla de pesos y un <code>Random.Weighted</code>.</li>
+</ul>
+
+<h2 id="interfaz">Interfaz</h2>
+<ul>
+<li><strong>Timeline completa:</strong> la UI muestra todas las <code>Unit</code> en combate, en orden, con portrait e ícono de bando. Se actualiza en cada <code>OnTimelineChanged</code>.</li>
+<li><strong>Menú de acciones:</strong> las cinco acciones (Atacar, Defender, Habilidad, Mochila, Escapar). Mochila se muestra deshabilitada hasta que el sistema exista.</li>
+<li><strong>Submenú de Habilidad:</strong> lista de <code>ActionSO</code> conocidas. SP insuficiente → gris, no seleccionable.</li>
+<li><strong>Submenú de Mochila:</strong> lista de consumibles con cantidad. Vacío → gris.</li>
+<li><strong>Selección de target:</strong> la UI resalta los targets válidos según <code>TargetType</code> y el bando del actor. No permite confirmar con target inválido.</li>
+<li><strong><code>CombatSummaryScreen</code></strong> siempre al terminar. <strong><code>RewardsScreen</code></strong> solo en victoria. <strong><code>GameOverScreen</code></strong> solo en derrota.</li>
+</ul>
+
+<h2 id="pendientes">Pendientes / abierto</h2>
+<div class="pending-card">
+<span class="pending-tag">Sistema</span>
+<p><strong>Mochila</strong> — a implementar más adelante. Contrato asumido en <a href="#mochila">Mochila</a>.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Sistema</span>
+<p><strong>IA enemiga</strong> — a implementar. Contrato asumido en <a href="#ia-enemiga">IA enemiga</a>.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Diseño</span>
+<p><strong>Diseño elemental</strong> — <code>Element</code> está declarado en <code>ActionSO</code> pero sin efecto en la fórmula. Decidir si se usa o se elimina.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Valores</span>
+<p><strong>Rangos de regeneración de SP</strong> — <code>SpRegenMin</code> / <code>SpRegenMax</code> por unidad. Definir valores concretos.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Valores</span>
+<p><strong><code>DefendingReduction</code></strong> — porcentaje fijo por unidad o por <code>UnitDefinitionSO</code>. Definir valor.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Nomenclatura</span>
+<p><strong><code>CombatLog</code> / <code>CombatResult</code></strong> — funcionales, sujetos a cambio si aparece algo mejor.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Implementación</span>
+<p><strong><code>TimelineController</code></strong> — ¿clase propia o struct dentro de <code>CombatController</code>? Recomendado: clase propia si la cola supera las ~10 operaciones; si no, struct ligero.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">UI</span>
+<p><strong>Feedback de manipulación de timeline</strong> — cuando una habilidad adelanta o atrasa una unidad, la UI debe mostrar el cambio de forma legible (animación de la cola, ícono de "adelantado"). Definir el lenguaje visual.</p>
+</div>
+
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="inputs.html">
 <span class="page-nav-dir">Anterior</span>
 <span class="page-nav-title">Inputs</span>
 </a>
-<a class="page-nav-next" href="items.html">
+<a class="page-nav-next" href="units.html">
 <span class="page-nav-dir">Siguiente</span>
-<span class="page-nav-title">Objetos</span>
+<span class="page-nav-title">Unidades</span>
 </a>
 </nav>
 
 </main>
 
-<section class="toc"><strong>En esta página</strong><a href="#base-externa-simplejrpg">Base externa: SimpleJRPG</a>
+<section class="toc"><strong>En esta página</strong>
 <a href="#dos-dominios">Dos dominios</a>
 <a href="#que-persiste-entre-combates">Qué persiste entre combates</a>
 <a href="#componentes">Componentes</a>
 <a href="#entrada-a-combate">Entrada a combate</a>
 <a href="#salida-de-combate">Salida de combate</a>
-<a href="#items-y-recalculo-de-stats">Ítems y recálculo de stats</a>
-<a href="#units-derrotadas">Units derrotadas</a></section>
+<a href="#sistema-de-turnos">Sistema de turnos</a>
+<a href="#acciones-del-jugador">Acciones del jugador</a>
+<a href="#resolucion-de-dano">Resolución de daño</a>
+<a href="#verbos-y-eventos">Verbos y eventos</a>
+<a href="#estados-y-buffs">Estados y buffs</a>
+<a href="#muerte-y-resurreccion">Muerte y resurrección</a>
+<a href="#cierre-del-combate">Victoria, derrota y empates</a>
+<a href="#ia-enemiga">IA enemiga</a>
+<a href="#interfaz">Interfaz</a>
+<a href="#pendientes">Pendientes</a>
+</section>
 
 </div>
 
