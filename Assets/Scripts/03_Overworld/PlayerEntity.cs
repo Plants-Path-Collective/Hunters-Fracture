@@ -12,9 +12,22 @@ namespace Overworld
     /// </summary>
     public class PlayerEntity : Entity
     {
+        private void Start()
+        {
+            if (InputManager.Instance == null)
+            {
+                Debug.LogWarning($"[{nameof(PlayerEntity)}] InputManager.Instance is null — " +
+                    "the persistent GameManager likely hasn't loaded yet (are you Play-ing this " +
+                    "scene directly instead of going through the boot scene?). Attack input won't work.");
+                return;
+            }
+
+            InputManager.Instance.Overworld.Attack.performed += OnAttackInput;
+        }
+
         private void OnEnable()
         {
-            InputManager.Instance.Overworld.Attack.performed += OnAttackInput;
+            
         }
 
         private void OnDisable()

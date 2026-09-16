@@ -13,7 +13,7 @@ namespace Overworld
         [Header("----- Attack Detection -----")]
         [Tooltip("Origin of the SphereCast. Defaults to this transform if left empty.")]
         [SerializeField] protected Transform attackOrigin;
-        [SerializeField] protected float attackRange = 1.5f;
+        [SerializeField] protected float attackRange = 0.5f;
         [SerializeField] protected float attackRadius = 0.5f;
 
         /// <summary>

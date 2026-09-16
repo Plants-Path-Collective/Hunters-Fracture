@@ -16,7 +16,7 @@ namespace Core
         protected override void OnSceneReady()
         {
             // Example: tell GameManager we entered overworld, start ambient music, etc.
-            Debug.Log("[OverworldSceneSetter] Scene ready — Overworld map active.");
+            Debug.Log($"[OverworldSceneSetter] Scene ready — {InitialActionMap} map active.");
         }
     }
 }

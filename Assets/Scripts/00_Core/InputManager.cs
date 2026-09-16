@@ -65,7 +65,11 @@ namespace Core
         // ── Lifecycle ─────────────────────────────────────────────────────────
         private void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(this); return; }
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -76,7 +80,17 @@ namespace Core
 
         private void OnDestroy()
         {
+            if (Instance == this)
+                Instance = null;
+
             Actions?.Dispose();
+            Actions = null;
+        }
+
+        private void Start()
+        {
+            if (Instance == null)
+                Debug.Log("[InputManager] Instance is null.");
         }
 
         // ── Public API ────────────────────────────────────────────────────────
