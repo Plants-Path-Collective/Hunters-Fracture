@@ -13,7 +13,7 @@ namespace Overworld
         [Header("----- Attack Detection -----")]
         [Tooltip("Origin of the SphereCast. Defaults to this transform if left empty.")]
         [SerializeField] protected Transform attackOrigin;
-        [SerializeField] protected float attackRange = 0.5f;
+        [SerializeField] protected float attackRange = 1.5f;
         [SerializeField] protected float attackRadius = 0.5f;
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace Overworld
             if (isAttacking) return;
 
             isAttacking = true;
+            Debug.Log($"[{GetType().Name}] {name} started an attack.");
             PlayAttackPlaceholder();
         }
 
@@ -81,13 +82,13 @@ namespace Overworld
         /// </summary>
         protected void EndAttack() => isAttacking = false;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(origin + transform.forward * attackRange, attackRadius);
         }
-        #endif
+#endif
     }
 }

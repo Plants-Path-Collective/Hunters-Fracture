@@ -1938,7 +1938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
   attackOrigin: {fileID: 282665268}
-  attackRange: 0.5
+  attackRange: 0.6
   attackRadius: 0.5
 --- !u!1 &1905486614
 GameObject:
@@ -2602,7 +2602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Overworld.PlayerEntity
   attackOrigin: {fileID: 1604693725}
-  attackRange: 0.5
+  attackRange: 0.6
   attackRadius: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
