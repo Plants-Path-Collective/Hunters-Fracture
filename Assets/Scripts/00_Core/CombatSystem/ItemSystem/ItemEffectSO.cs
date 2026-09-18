@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
     /// Abstract base for any item effect.

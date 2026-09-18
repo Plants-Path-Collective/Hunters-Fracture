@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Core;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
     /// Concrete item effect that contributes a static (or formula-based) modifier

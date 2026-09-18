@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     [CreateAssetMenu(fileName = "NewItem", menuName = "Item System/Item")]
     public class ItemSO : ScriptableObject

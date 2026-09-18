@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using CombatSystem.Unit;
+using Core.CombatSystem.Unit;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
     /// Concrete TriggeredEffectSO — equivalent to item 007 (On-Hit SPEED reduction):
@@ -22,9 +22,9 @@ namespace CombatSystem.ItemSystem
         [Range(0f, 1f)] public float speedReductionPercent = 0.15f;
         public int durationTurns = 3;
 
-        private readonly Dictionary<CombatSystem.Unit.Unit, System.Action<DamageDealtInfo>> _handlers = new();
+        private readonly Dictionary<Core.CombatSystem.Unit.Unit, System.Action<DamageDealtInfo>> _handlers = new();
 
-        public override void Attach(CombatSystem.Unit.Unit unit)
+        public override void Attach(Core.CombatSystem.Unit.Unit unit)
         {
             void Handler(DamageDealtInfo info)
             {
@@ -43,7 +43,7 @@ namespace CombatSystem.ItemSystem
             //unit.Battle.OnDamageDealt += Handler;
         }
 
-        public override void Detach(CombatSystem.Unit.Unit unit)
+        public override void Detach(Core.CombatSystem.Unit.Unit unit)
         {
             if (_handlers.TryGetValue(unit, out var handler))
             {
@@ -59,8 +59,8 @@ namespace CombatSystem.ItemSystem
     /// </summary>
     public struct DamageDealtInfo
     {
-        public CombatSystem.Unit.Unit Source;
-        public CombatSystem.Unit.Unit Target;
+        public Core.CombatSystem.Unit.Unit Source;
+        public Core.CombatSystem.Unit.Unit Target;
         public float Amount;
     }
 }

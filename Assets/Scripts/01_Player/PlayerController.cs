@@ -1,11 +1,12 @@
 using Core;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerController : MonoBehaviour
     {
         // ── Inspector ─────────────────────────────────────────────────────────
@@ -18,21 +19,16 @@ namespace Player
         [Header("Rotation")]
         [SerializeField] private float rotationSpeed = 720f;
 
-        [Header("Gravity")]
-        [SerializeField] private float gravity         = -20f;
-        [SerializeField] private float groundedGravity = -2f;
-
         [Header("Camera")]
         [SerializeField] private CinemachineBrain cinemachineBrain;
 
         // ── Private state ─────────────────────────────────────────────────────
 
-        private CharacterController _cc;
-        private Animator            _animator;
+        private NavMeshAgent _agent;
+        private Animator     _animator;
 
         private Vector2 _rawInput;
         private Vector3 _velocity;
-        private float   _verticalVelocity;
         private float   _currentSpeed;
 
         private static readonly int AnimMoveSpeed = Animator.StringToHash("MoveSpeed");
@@ -41,8 +37,13 @@ namespace Player
 
         private void Awake()
         {
-            _cc       = GetComponent<CharacterController>();
+            _agent    = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+
+            // We drive rotation ourselves (camera-relative facing); the agent should only
+            // constrain position to the NavMesh, never auto-rotate or auto-path on its own.
+            _agent.updateRotation = false;
+            _agent.updatePosition = true;
 
             if (cinemachineBrain == null)
                 cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
@@ -75,7 +76,6 @@ namespace Player
 
         private void Update()
         {
-            ApplyGravity();
             MoveAndRotate(GetCameraRelativeDirection(_rawInput));
             DriveAnimator();
         }
@@ -115,7 +115,10 @@ namespace Player
             _velocity     = Vector3.MoveTowards(_velocity, targetVelocity, rate * Time.deltaTime);
             _currentSpeed = _velocity.magnitude;
 
-            _cc.Move((_velocity + Vector3.up * _verticalVelocity) * Time.deltaTime);
+            // Agent.Move applies a relative offset while constraining the result to the
+            // NavMesh — same call shape as CharacterController.Move() had, but the surface
+            // (and what counts as "walkable") is now whatever's baked into the NavMesh.
+            _agent.Move(_velocity * Time.deltaTime);
 
             if (_velocity.sqrMagnitude > 0.01f)
             {
@@ -123,14 +126,6 @@ namespace Player
                 transform.rotation = Quaternion.RotateTowards(
                     transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
-        }
-
-        private void ApplyGravity()
-        {
-            if (_cc.isGrounded)
-                _verticalVelocity = groundedGravity;
-            else
-                _verticalVelocity += gravity * Time.deltaTime;
         }
 
         // ── Animator ──────────────────────────────────────────────────────────

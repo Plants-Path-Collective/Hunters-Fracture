@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
-using CombatSystem.ItemSystem;
+using Core.CombatSystem.ItemSystem;
 using Core;
 
-namespace CombatSystem.Unit
+namespace Core.CombatSystem.Unit
 {
     /// <summary>
     /// Controls the stats of a unit, including health, mana, and other attributes.

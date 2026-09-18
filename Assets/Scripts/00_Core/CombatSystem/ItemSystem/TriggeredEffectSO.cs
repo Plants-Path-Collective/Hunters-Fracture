@@ -1,6 +1,6 @@
-using CombatSystem.Unit;
+using Core.CombatSystem.Unit;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
     /// Abstract item effect that reacts to combat events (Battle.OnBeforeDamage,
@@ -25,13 +25,13 @@ namespace CombatSystem.ItemSystem
         /// stack of the item this effect belongs to. Subscribe to whichever
         /// Battle event this effect reacts to here.
         /// </summary>
-        public abstract void Attach(CombatSystem.Unit.Unit unit);
+        public abstract void Attach(Core.CombatSystem.Unit.Unit unit);
 
         /// <summary>
         /// Called by UnitEffectController when the owning Unit loses the last
         /// stack of the item this effect belongs to. Must unsubscribe the exact
         /// same delegate that Attach() registered.
         /// </summary>
-        public abstract void Detach(CombatSystem.Unit.Unit unit);
+        public abstract void Detach(Core.CombatSystem.Unit.Unit unit);
     }
 }

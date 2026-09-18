@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using CombatSystem.ItemSystem;
+using Core.CombatSystem.ItemSystem;
 
-namespace CombatSystem.Unit
+namespace Core.CombatSystem.Unit
 {
     /// <summary>
     /// Manages the inventory of a unit, allowing addition, removal, and query of item quantities.

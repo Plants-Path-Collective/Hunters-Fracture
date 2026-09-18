@@ -1,6 +1,6 @@
 using UnityEngine;
-using CombatSystem.ItemSystem;
-using CombatSystem.Unit;
+using Core.CombatSystem.ItemSystem;
+using Core.CombatSystem.Unit;
 
 public class ItemTest : MonoBehaviour
 {

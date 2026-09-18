@@ -1032,7 +1032,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 891217340}
-  - component: {fileID: 891217339}
+  - component: {fileID: 891217341}
   m_Layer: 0
   m_Name: '[SceneSetter]'
   m_TagString: Untagged
@@ -1040,18 +1040,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &891217339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891217338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e46f1040b96a4c34586c70a9bf8f592f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.OverworldSceneSetter
 --- !u!4 &891217340
 Transform:
   m_ObjectHideFlags: 0
@@ -1067,6 +1055,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &891217341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891217338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7437bb029516c6eadabe72cbad1b0f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.SocialSceneSetter
 --- !u!1 &919765560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,7 +1221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1406817652}
-  - component: {fileID: 1406817655}
+  - component: {fileID: 1406817653}
   - component: {fileID: 1406817654}
   m_Layer: 0
   m_Name: AreaCameraZone
@@ -1245,6 +1245,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1508357963}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1406817653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406817651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87cba6fa35a49e8408f1d2e33236fbbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.AreaCameraZone
+  cinemachineCamera: {fileID: 127486850}
+  activePriority: 10
+  inactivePriority: 0
+  playerTag: Player
 --- !u!65 &1406817654
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1266,24 +1282,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 20, y: 1, z: 20}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &1406817655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1406817651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65c580c45e43965898474fbfb1736b55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.Render.OverworldRoomRender
-  cinemachineCamera: {fileID: 127486850}
-  activePriority: 10
-  inactivePriority: 0
-  playerTag: Player
-  roomContent: {fileID: 1508357962}
-  neighbors: []
 --- !u!1 &1454346512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,15 +1603,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1681626851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65c580c45e43965898474fbfb1736b55, type: 3}
+  m_Script: {fileID: 11500000, guid: 87cba6fa35a49e8408f1d2e33236fbbf, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.Render.OverworldRoomRender
+  m_EditorClassIdentifier: Assembly-CSharp::World.AreaCameraZone
   cinemachineCamera: {fileID: 1811276294}
   activePriority: 10
   inactivePriority: 0
   playerTag: Player
-  roomContent: {fileID: 709694442}
-  neighbors: []
 --- !u!1 &1811276292
 GameObject:
   m_ObjectHideFlags: 0

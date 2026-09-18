@@ -191,9 +191,9 @@ GameObject:
   - component: {fileID: 7413021274718116223}
   - component: {fileID: 7499840620797358623}
   - component: {fileID: 837621823787099386}
-  - component: {fileID: 3159183516612821929}
   - component: {fileID: 7076314993782943862}
   - component: {fileID: 2708809965844764703}
+  - component: {fileID: 4973518119358607176}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -233,8 +233,6 @@ MonoBehaviour:
   acceleration: 10
   deceleration: 15
   rotationSpeed: 720
-  gravity: 0
-  groundedGravity: 0
   cinemachineBrain: {fileID: 0}
 --- !u!114 &837621823787099386
 MonoBehaviour:
@@ -266,31 +264,6 @@ MonoBehaviour:
   m_DefaultActionMap: Empty
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!143 &3159183516612821929
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5313629951579403049}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!136 &7076314993782943862
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -341,6 +314,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!195 &4973518119358607176
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313629951579403049}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6174706719630636231
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Core;
 
-namespace CombatSystem.Unit
+namespace Core.CombatSystem.Unit
 {
     /// <summary>
     /// Pure C# combatant consumed by SimpleJRPG's Battle. This class is never a
