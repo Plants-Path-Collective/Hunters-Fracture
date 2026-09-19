@@ -21,7 +21,7 @@ public class ItemTest : MonoBehaviour
                 return;
             }
 
-            UnitInventory playerInventory = playerUnit.inventory;
+            UnitInventory playerInventory = playerUnit.Inventory;
 
             if (playerInventory == null)
             {

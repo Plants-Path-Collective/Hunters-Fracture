@@ -23,6 +23,10 @@ namespace Core.Render
         [Tooltip("Rooms directly connected to this one. Activated alongside this room so crossing between them has no pop-in.")]
         [SerializeField] private List<OverworldRoomRender> neighbors = new();
 
+        [Header("----- Bootstrap -----")]
+        [Tooltip("Temporary until a real SceneSetter exists: self-activates on Start() so at least one room isn't permanently disabled.")]
+        [SerializeField] private bool isStartingRoom;
+
         // Every OverworldRoomRender currently loaded, so ActivateNeighborhood() knows the full
         // set to turn off. Registered/unregistered per instance — no separate manager needed.
         private static readonly List<OverworldRoomRender> allRooms = new();
@@ -36,6 +40,15 @@ namespace Core.Render
             // Mirror the camera's "start inactive" default — an external bootstrap/SceneSetter
             // is responsible for activating whichever room the Player actually starts in.
             SetContentActive(false);
+        }
+
+        private void Start()
+        {
+            // Start() is guaranteed to run only after every object's Awake()+OnEnable() in the
+            // scene — so by now every room has registered itself in allRooms, and it's safe to
+            // activate the starting one without missing any neighbors.
+            if (isStartingRoom)
+                Activate();
         }
 
         private void OnEnable()  => allRooms.Add(this);

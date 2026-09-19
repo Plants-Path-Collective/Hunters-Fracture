@@ -19,6 +19,42 @@
 
     #endregion
 
+    #region COMBAT
+
+    /// <summary>
+    /// Timeline operations that can be performed on the queue. Used to notify
+    /// subscribers of changes to the timeline.
+    /// </summary>
+    public enum TIMELINE_OPERATION
+    {
+        Initialize,
+        Pop,
+        Reinsert,
+        Advance,
+        Delay,
+        MoveToFront,
+        MoveToBack,
+        Swap,
+        InsertAfter,
+        GrantExtraTurn,
+        Remove,
+        Clear
+    }
+
+    /// <summary>
+    /// The team a Unit belongs to. Used to determine which units are allies
+    /// and which are enemies.
+    /// </summary>
+    public enum UNIT_TEAM
+    {
+        Ally,
+        Enemy
+    }
+
+    /// <summary>
+    /// The type of combatant a Unit is. Used to determine which
+    /// abilities it can use and which stats it has.
+    /// </summary>
     public enum UNITY_TYPE
     {
         Physical,
@@ -38,4 +74,6 @@
         PhysicalDefense,
         MagicalDefense
     }
+
+    #endregion
 }

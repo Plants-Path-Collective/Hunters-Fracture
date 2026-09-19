@@ -33,7 +33,7 @@ namespace Core.CombatSystem.ItemSystem
 
                 // Placeholder call — replace with the real StatusBuffTracker API
                 // once it exists.
-                info.Target.effectController.ApplyBuff(
+                info.Target.EffectController.ApplyBuff(
                     "speed_down",
                     -speedReductionPercent,
                     durationTurns);
