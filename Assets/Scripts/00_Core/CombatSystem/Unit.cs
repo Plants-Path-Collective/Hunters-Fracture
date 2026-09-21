@@ -15,7 +15,7 @@ namespace Core.CombatSystem.Unit
         public UNIT_TEAM Team { get; private set; }
 
         public bool IsAlive => HP > 0;
-        public int HP { get; set; }
+        public int HP { get; internal set; }
         public int MaxHP { get; set; }
 
         public int SP { get; set; }

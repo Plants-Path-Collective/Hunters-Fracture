@@ -8,7 +8,7 @@ namespace Editor
 {
     /// <summary>
     /// Lets a programmer see the current turn order and poke at it by hand while in Play mode —
-    /// pick a Unit by name, pick an operation, hit Aceptar. Read-only outside Play mode since
+    /// pick a Unit by name, pick an operation, hit Accept. Read-only outside Play mode since
     /// there's no queue to show yet.
     /// </summary>
     [CustomEditor(typeof(TimelineController))]
@@ -33,15 +33,15 @@ namespace Editor
 
             if (!Application.isPlaying)
             {
-                EditorGUILayout.HelpBox("Entrá en Play para ver y manipular la cola.", MessageType.Info);
+                EditorGUILayout.HelpBox("Enter Play mode to view and manipulate the queue.", MessageType.Info);
                 return;
             }
 
-            EditorGUILayout.LabelField("Timeline actual", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Current Timeline", EditorStyles.boldLabel);
             DrawQueue(controller);
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Manipular", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Manipulate", EditorStyles.boldLabel);
             DrawControls(controller);
         }
 
@@ -51,7 +51,7 @@ namespace Editor
 
             if (queue.Count == 0)
             {
-                EditorGUILayout.LabelField("(vacía)");
+                EditorGUILayout.LabelField("(empty)");
                 return;
             }
 
@@ -66,18 +66,18 @@ namespace Editor
         private void DrawControls(TimelineController controller)
         {
             unitNameInput = EditorGUILayout.TextField("Unit", unitNameInput);
-            selectedOperation = (DebugOperation)EditorGUILayout.EnumPopup("Función", selectedOperation);
+            selectedOperation = (DebugOperation)EditorGUILayout.EnumPopup("Operation", selectedOperation);
 
             if (selectedOperation is DebugOperation.Swap or DebugOperation.InsertAfter)
             {
-                string label = selectedOperation == DebugOperation.Swap ? "Unit B" : "Insertar después de";
+                string label = selectedOperation == DebugOperation.Swap ? "Unit B" : "Insert After";
                 secondaryUnitNameInput = EditorGUILayout.TextField(label, secondaryUnitNameInput);
             }
 
             if (selectedOperation is DebugOperation.Advance or DebugOperation.Delay)
-                amountInput = EditorGUILayout.IntField("N", amountInput);
+                amountInput = EditorGUILayout.IntField("Amount", amountInput);
 
-            if (GUILayout.Button("Aceptar"))
+            if (GUILayout.Button("Accept"))
                 Apply(controller);
         }
 
@@ -96,7 +96,7 @@ namespace Editor
             CombatUnit unit = FindUnit(controller, unitNameInput);
             if (unit == null)
             {
-                Debug.LogWarning($"[TimelineControllerEditor] No se encontró una Unit llamada '{unitNameInput}' en la cola.");
+                Debug.LogWarning($"[TimelineControllerEditor] Could not find a Unit named '{unitNameInput}' in the queue.");
                 return;
             }
 
@@ -126,14 +126,14 @@ namespace Editor
                 case DebugOperation.Swap:
                 {
                     CombatUnit unitB = FindUnit(controller, secondaryUnitNameInput);
-                    if (unitB == null) { Debug.LogWarning($"[TimelineControllerEditor] No se encontró '{secondaryUnitNameInput}'."); return; }
+                    if (unitB == null) { Debug.LogWarning($"[TimelineControllerEditor] Could not find '{secondaryUnitNameInput}'."); return; }
                     controller.Swap(unit, unitB);
                     break;
                 }
                 case DebugOperation.InsertAfter:
                 {
                     CombatUnit after = FindUnit(controller, secondaryUnitNameInput);
-                    if (after == null) { Debug.LogWarning($"[TimelineControllerEditor] No se encontró '{secondaryUnitNameInput}'."); return; }
+                    if (after == null) { Debug.LogWarning($"[TimelineControllerEditor] Could not find '{secondaryUnitNameInput}'."); return; }
                     controller.InsertAfter(unit, after);
                     break;
                 }

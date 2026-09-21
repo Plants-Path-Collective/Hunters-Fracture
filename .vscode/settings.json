@@ -68,5 +68,9 @@
         "*.slnx": "*.csproj"
     },
     "dotnet.defaultSolution": "Hunters-Fracture.slnx",
-    "dotnet.enableWorkspaceBasedDevelopment": false
+    "dotnet.enableWorkspaceBasedDevelopment": false,
+    "cSpell.words": [
+        "INPUTACTION",
+        "Overworld"
+    ]
 }

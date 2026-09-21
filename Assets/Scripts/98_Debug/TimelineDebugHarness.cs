@@ -34,10 +34,10 @@ namespace ExtendedDebug
 
             CombatUnit[] units =
             {
-                CreateTestUnit("Aliado A", UNIT_TEAM.Ally, speed: 12),
-                CreateTestUnit("Aliado B", UNIT_TEAM.Ally, speed: 7),
-                CreateTestUnit("Enemigo A", UNIT_TEAM.Enemy, speed: 15),
-                CreateTestUnit("Enemigo B", UNIT_TEAM.Enemy, speed: 4),
+                CreateTestUnit("Ally_A", UNIT_TEAM.Ally, speed: 12),
+                CreateTestUnit("Ally_B", UNIT_TEAM.Ally, speed: 7),
+                CreateTestUnit("Enemy_A", UNIT_TEAM.Enemy, speed: 15),
+                CreateTestUnit("Enemy_B", UNIT_TEAM.Enemy, speed: 4),
             };
 
             timeline.OnTimelineChanged += (unit, operation, delta) =>
@@ -60,7 +60,7 @@ namespace ExtendedDebug
 
         private void LogQueue()
         {
-            Debug.Log("[Timeline] Orden inicial: " + string.Join(" → ", timeline.Queue.Select(u => u.Name)));
+            Debug.Log("[Timeline] Initial order: " + string.Join(" → ", timeline.Queue.Select(u => u.Name)));
         }
     }
 }

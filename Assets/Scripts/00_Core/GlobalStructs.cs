@@ -42,6 +42,16 @@
     }
 
     /// <summary>
+    /// Result of a finished combat encounter.
+    /// </summary>
+    public enum COMBAT_OUTCOME
+    {
+        Victory,
+        Defeat,
+        Fled // not producible yet — Flee() verb not implemented
+    }
+
+    /// <summary>
     /// The team a Unit belongs to. Used to determine which units are allies
     /// and which are enemies.
     /// </summary>
