@@ -1,8 +1,10 @@
 using System.Linq;
 using UnityEngine;
+using Core;
+using Core.CombatSystem;
 using CombatUnit = Core.CombatSystem.Unit.Unit;
-
-namespace Core.CombatSystem
+ 
+namespace ExtendedDebug
 {
     /// <summary>
     /// Standalone test harness — no CombatController, no CombatSetUp, no ActionResolver.
