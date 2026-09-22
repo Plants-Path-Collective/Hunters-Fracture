@@ -54,7 +54,7 @@ namespace ExtendedDebug
             unitObject.transform.SetParent(transform);
 
             CombatUnit unit = unitObject.AddComponent<CombatUnit>();
-            unit.DebugSetup(name, team, hp: 10, speed: speed);
+            unit.DebugSetup(name, team, hp: 10, sp: 10, speed: speed);
             return unit;
         }
 

@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 854757700}
   - component: {fileID: 854757699}
   m_Layer: 0
-  m_Name: CombatController
+  m_Name: '[ CombatController ]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

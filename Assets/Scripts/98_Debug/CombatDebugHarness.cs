@@ -7,9 +7,10 @@ using CombatUnit = Core.CombatSystem.Unit.Unit;
 namespace ExtendedDebug
 {
     /// <summary>
-    /// Standalone test harness for CombatController — no ActionResolver yet, so EndTurn() is
-    /// triggered by hand from CombatDebugHarnessEditor. Spawns a few throwaway Units, starts a
-    /// combat, and logs every lifecycle event to the console. Delete once real actions exist.
+    /// Standalone test harness for CombatController — no ActionResolver yet, so EndTurn() (and
+    /// the action verbs) are triggered by hand from CombatDebugHarnessEditor. Spawns a few
+    /// throwaway Units, starts a combat, and logs every lifecycle event to the console. Delete
+    /// once real actions exist.
     /// </summary>
     [RequireComponent(typeof(CombatController))]
     public class CombatDebugHarness : MonoBehaviour
@@ -27,29 +28,32 @@ namespace ExtendedDebug
         {
             CombatUnit[] units =
             {
-                CreateTestUnit("Ally_A", UNIT_TEAM.Ally, hp: 20, speed: 12),
-                CreateTestUnit("Ally_B", UNIT_TEAM.Ally, hp: 15, speed: 7),
-                CreateTestUnit("Enemy_A", UNIT_TEAM.Enemy, hp: 18, speed: 15),
-                CreateTestUnit("Enemy_B", UNIT_TEAM.Enemy, hp: 10, speed: 4),
+                CreateTestUnit("Ally_A", UNIT_TEAM.Ally, hp: 20, sp: 12, speed: 12),
+                CreateTestUnit("Ally_B", UNIT_TEAM.Ally, hp: 15, sp: 7, speed: 7),
+                CreateTestUnit("Enemy_A", UNIT_TEAM.Enemy, hp: 18, sp: 15, speed: 15),
+                CreateTestUnit("Enemy_B", UNIT_TEAM.Enemy, hp: 10, sp: 4, speed: 4),
             };
 
-            Combat.OnCombatStart += roster => Debug.Log("[Combat] Start · " + string.Join(", ", roster.Select(u => u.Name)));
-            Combat.OnTurnStart   += unit   => Debug.Log($"[Combat] Turn start · {unit.Name}");
-            Combat.OnTurnEnd     += unit   => Debug.Log($"[Combat] Turn end · {unit.Name}");
-            Combat.OnUnitKilled  += unit   => Debug.Log($"[Combat] Killed · {unit.Name}");
-            Combat.OnUnitRevived += unit   => Debug.Log($"[Combat] Revived · {unit.Name}");
-            Combat.OnCombatEnd   += outcome => Debug.Log($"[Combat] End · {outcome}");
+            Combat.OnCombatStart  += roster  => Debug.Log("[Combat] Start · " + string.Join(", ", roster.Select(u => u.Name)));
+            Combat.OnTurnStart    += unit    => Debug.Log($"[Combat] Turn start · {unit.Name}");
+            Combat.OnTurnEnd      += unit    => Debug.Log($"[Combat] Turn end · {unit.Name}");
+            Combat.OnUnitKilled   += unit    => Debug.Log($"[Combat] Killed · {unit.Name}");
+            Combat.OnUnitRevived  += unit    => Debug.Log($"[Combat] Revived · {unit.Name}");
+            Combat.OnCombatEnd    += outcome => Debug.Log($"[Combat] End · {outcome}");
+            Combat.OnAfterDamage  += ctx     => Debug.Log($"[Combat] Damage · {ctx.Target.Name} took {ctx.Amount} ({ctx.DamageType}) via {ctx.Via} — HP now {ctx.Target.HP}");
+            Combat.OnAfterHeal    += ctx     => Debug.Log($"[Combat] Heal · {ctx.Target.Name} healed {ctx.Amount} via {ctx.Via} — HP now {ctx.Target.HP}");
+            Combat.OnFleeAttempt  += ctx     => Debug.Log($"[Combat] Flee attempt · {ctx.Team} · {(ctx.Success ? "success" : "failed")}");
 
             Combat.StartCombat(units, advantageTeam);
         }
 
-        private CombatUnit CreateTestUnit(string name, UNIT_TEAM team, int hp, float speed)
+        private CombatUnit CreateTestUnit(string name, UNIT_TEAM team, int hp, int sp, float speed)
         {
             var go = new GameObject(name);
             go.transform.SetParent(transform);
 
             CombatUnit unit = go.AddComponent<CombatUnit>();
-            unit.DebugSetup(name, team, hp, speed);
+            unit.DebugSetup(name, team, hp, sp, speed);
             return unit;
         }
 
