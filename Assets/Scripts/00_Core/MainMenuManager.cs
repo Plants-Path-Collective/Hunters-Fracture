@@ -7,16 +7,13 @@ using UnityEngine.Localization.Settings;
 
 namespace Core
 {
-    public class UIManager : MonoBehaviour
+    public class MainMenuManager : MonoBehaviour
     {
-        public static UIManager Instance;
+        public static MainMenuManager Instance;
 
         [Header("Panels")]
         [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private GameObject optionsPanel;
-
-        [Header("Scene Names")]
-        [SerializeField] private string overworldSceneName = "ItemsTester";
 
         private void Awake()
         {
@@ -32,7 +29,7 @@ namespace Core
         /// </summary>
         public void NewGame()
         {
-            SceneManager.LoadScene(overworldSceneName);
+            SceneManager.LoadScene("Social");
         }
 
         /// <summary>
@@ -41,7 +38,8 @@ namespace Core
         /// </summary>
         public void Continue()
         {
-            SceneManager.LoadScene(overworldSceneName);
+
+            throw new NotImplementedException("Save system not implemented yet. Implement a save system to load the player's progress here.");       
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace Core
 
             if (localeIndex < 0 || localeIndex >= locales.Count)
             {
-                Debug.LogWarning($"[UIManager] Locale index {localeIndex} is out of range. Available locales: {locales.Count}.");
+                Debug.LogWarning($"[MainMenuManager] Locale index {localeIndex} is out of range. Available locales: {locales.Count}.");
                 yield break;
             }
 

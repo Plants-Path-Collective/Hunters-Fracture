@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Overworld
 {
@@ -74,6 +75,10 @@ namespace Overworld
         protected virtual void OnHitConnected(Entity target)
         {
             Debug.Log($"[{GetType().Name}] {name} connected an attack on {target.name}.");
+
+            SceneManager.LoadScene("CombatStage", LoadSceneMode.Additive);
+
+            Debug.Log($"[{GetType().Name}] {name} would now trigger CombatSetUp with {target.name} as the target.");
         }
 
         /// <summary>

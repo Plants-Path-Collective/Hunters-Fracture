@@ -1435,6 +1435,7 @@ RectTransform:
   m_Children:
   - {fileID: 927481152}
   - {fileID: 2032262932}
+  - {fileID: 826367012}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2095,12 +2096,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826367009}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -959.9176, y: -540.0464, z: 0}
+  m_LocalScale: {x: 2.9672878, y: 2.9672878, z: 2.9672878}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 407835244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901205715
 GameObject:
@@ -3423,7 +3424,7 @@ GameObject:
   - component: {fileID: 2096872089}
   - component: {fileID: 2096872090}
   m_Layer: 0
-  m_Name: '[UIManager]'
+  m_Name: '[MainMenuManager]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3458,12 +3459,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.UIManager
   mainMenuPanel: {fileID: 927481151}
   optionsPanel: {fileID: 2032262931}
-  overworldSceneName: ItemsTester
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2096872089}
-  - {fileID: 826367012}
   - {fileID: 407835244}
   - {fileID: 137006050}
