@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEngine;
 using Core;
 using Core.CombatSystem;
+using Core.CombatSystem.Unit;
 using CombatUnit = Core.CombatSystem.Unit.Unit;
 
 namespace ExtendedDebug
@@ -53,8 +54,20 @@ namespace ExtendedDebug
             go.transform.SetParent(transform);
 
             CombatUnit unit = go.AddComponent<CombatUnit>();
-            unit.DebugSetup(name, team, hp, sp, speed);
+            unit.InitializeFromDefinition(CreateTestUnitDefinition(name, team, hp, sp, speed));
             return unit;
+        }
+
+        private UnitDefinitionSO CreateTestUnitDefinition(string name, UNIT_TEAM team, int hp, int sp, float speed)
+        {
+            var definition = ScriptableObject.CreateInstance<UnitDefinitionSO>();
+            definition.unitName = name;
+            definition.type = UNITY_TYPE.Magical; 
+            definition.team = team;
+            definition.maxHP = hp;
+            definition.maxSP = sp;
+            definition.speed = speed;
+            return definition;
         }
 
         // ── Convenience for the custom Editor ────────────────────────────────

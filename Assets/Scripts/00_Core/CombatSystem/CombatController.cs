@@ -75,6 +75,12 @@ namespace Core.CombatSystem
         private void AdvanceToNextTurn()
         {
             CurrentActor = timeline.Pop();
+
+            // Defensive: shouldn't happen now that Kill() always removes dead units
+            // immediately, but skip over one rather than starting a turn for it if it ever does.
+            while (CurrentActor != null && !CurrentActor.IsAlive)
+                CurrentActor = timeline.Pop();
+
             if (CurrentActor == null)
             {
                 Debug.LogWarning($"[{nameof(CombatController)}] Timeline is empty — nothing to act.");
@@ -134,10 +140,14 @@ namespace Core.CombatSystem
 
         // ── Core verbs: life & death ─────────────────────────────────────────
 
-        /// <summary>Marks a unit dead, pulls it out of the timeline entirely, notifies.</summary>
+        /// <summary>Marks a unit dead, pulls it out of the timeline entirely, notifies. No
+        /// IsAlive guard here on purpose — DealDamage already sets HP to 0 before calling this,
+        /// so checking IsAlive here would always reject exactly the calls that need to go
+        /// through. Calling Kill() twice on the same already-dead unit is harmless (Remove is a
+        /// no-op, TryResolveOutcome is idempotent) beyond a possible duplicate OnUnitKilled.</summary>
         public void Kill(CombatUnit unit)
         {
-            if (!IsCombatActive || unit == null || !unit.IsAlive) return;
+            if (!IsCombatActive || unit == null) return;
 
             unit.HP = 0;
             timeline.Remove(unit);
