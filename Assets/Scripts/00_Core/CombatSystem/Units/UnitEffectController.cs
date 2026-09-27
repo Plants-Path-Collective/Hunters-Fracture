@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.CombatSystem.Unit
+namespace Core.CombatSystem.Units
 {
     public class UnitEffectController : MonoBehaviour
     {

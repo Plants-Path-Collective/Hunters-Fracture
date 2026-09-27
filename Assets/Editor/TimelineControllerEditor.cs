@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Core.CombatSystem;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using CombatUnit = Core.CombatSystem.Units.Unit;
 
 namespace Editor
 {

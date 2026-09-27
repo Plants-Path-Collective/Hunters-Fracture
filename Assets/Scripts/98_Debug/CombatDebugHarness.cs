@@ -2,8 +2,8 @@ using System.Linq;
 using UnityEngine;
 using Core;
 using Core.CombatSystem;
-using Core.CombatSystem.Unit;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using Core.CombatSystem.Units;
+using CombatUnit = Core.CombatSystem.Units.Unit;
 
 namespace ExtendedDebug
 {
@@ -41,9 +41,9 @@ namespace ExtendedDebug
             Combat.OnUnitKilled   += unit    => Debug.Log($"[Combat] Killed · {unit.Name}");
             Combat.OnUnitRevived  += unit    => Debug.Log($"[Combat] Revived · {unit.Name}");
             Combat.OnCombatEnd    += outcome => Debug.Log($"[Combat] End · {outcome}");
-            Combat.OnAfterDamage  += ctx     => Debug.Log($"[Combat] Damage · {ctx.Target.Name} took {ctx.Amount} ({ctx.DamageType}) via {ctx.Via} — HP now {ctx.Target.HP}");
-            Combat.OnAfterHeal    += ctx     => Debug.Log($"[Combat] Heal · {ctx.Target.Name} healed {ctx.Amount} via {ctx.Via} — HP now {ctx.Target.HP}");
-            Combat.OnFleeAttempt  += ctx     => Debug.Log($"[Combat] Flee attempt · {ctx.Team} · {(ctx.Success ? "success" : "failed")}");
+            Combat.OnAfterDamage  += ctx     => Debug.Log($"[Combat] Damage · {ctx.target.Name} took {ctx.amount} ({ctx.damageType}) via {ctx.via} — HP now {ctx.target.HP}");
+            Combat.OnAfterHeal    += ctx     => Debug.Log($"[Combat] Heal · {ctx.target.Name} healed {ctx.amount} via {ctx.via} — HP now {ctx.target.HP}");
+            Combat.OnFleeAttempt  += ctx     => Debug.Log($"[Combat] Flee attempt · {ctx.team} · {(ctx.success ? "success" : "failed")}");
 
             Combat.StartCombat(units, advantageTeam);
         }

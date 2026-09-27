@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
-namespace Core
+namespace Core.UI
 {
     public class MainMenuManager : MonoBehaviour
     {
@@ -38,7 +38,6 @@ namespace Core
         /// </summary>
         public void Continue()
         {
-
             throw new NotImplementedException("Save system not implemented yet. Implement a save system to load the player's progress here.");       
         }
 

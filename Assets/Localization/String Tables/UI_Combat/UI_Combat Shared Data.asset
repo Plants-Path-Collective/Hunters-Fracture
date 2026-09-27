@@ -14,7 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: UI_Combat
   m_TableCollectionNameGuidString: 1d48d2a8c8d093f408451b51e0ffc5ab
-  m_Entries: []
+  m_Entries:
+  - m_Id: 24651885716918272
+    m_Key: ui_attack_btn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889792
+    m_Key: ui_defense_btn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889793
+    m_Key: ui_skills_btn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889794
+    m_Key: ui_backpack_btn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885742084096
+    m_Key: ui_flee_btn
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

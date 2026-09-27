@@ -17,7 +17,27 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 1d48d2a8c8d093f408451b51e0ffc5ab, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 24651885716918272
+    m_Localized: Atacar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889792
+    m_Localized: Defender
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889793
+    m_Localized: "T\xE9cnicas"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885737889794
+    m_Localized: Mochila
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24651885742084096
+    m_Localized: Huir
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

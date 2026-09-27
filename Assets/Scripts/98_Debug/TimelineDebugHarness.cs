@@ -2,8 +2,8 @@ using System.Linq;
 using UnityEngine;
 using Core;
 using Core.CombatSystem;
-using Core.CombatSystem.Unit;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using Core.CombatSystem.Units;
+using CombatUnit = Core.CombatSystem.Units.Unit;
  
 namespace ExtendedDebug
 {

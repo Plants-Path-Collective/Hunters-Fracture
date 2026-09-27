@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Core.CombatSystem.ItemSystem;
 
-namespace Core.CombatSystem.Unit
+namespace Core.CombatSystem.Units
 {
     /// <summary>
     /// Manages the inventory of a unit, allowing addition, removal, and query of item quantities.

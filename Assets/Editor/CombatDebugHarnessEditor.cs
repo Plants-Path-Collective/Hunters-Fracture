@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using Core;
 using Core.CombatSystem;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using CombatUnit = Core.CombatSystem.Units.Unit;
 
 namespace ExtendedDebug.Editor
 {

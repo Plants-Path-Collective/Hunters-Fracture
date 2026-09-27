@@ -25,8 +25,9 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 82f34e8ff59b2054f80efdeeccaa00bf
-    m_Address: Assets/Localization/String Table/Dialogue Shared Data.asset
+  - m_GUID: 95b4cff7b78839970ae88c3ff464b6cb
+    m_Address: Assets/Localization/String Tables/Dialogues/Dialogues/Dialogues Shared
+      Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

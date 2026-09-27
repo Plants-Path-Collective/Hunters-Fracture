@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Core;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem
 {
@@ -18,28 +18,28 @@ namespace Core.CombatSystem
     public class CombatController : MonoBehaviour
     {
         private TimelineController timeline;
-        private List<CombatUnit> roster = new();
+        private List<Unit> roster = new();
 
         /// <summary>Everyone in this encounter, alive or dead. Distinct from Timeline's queue,
         /// which only tracks turn order for units still waiting their turn.</summary>
-        public IReadOnlyList<CombatUnit> Roster => roster;
+        public IReadOnlyList<Unit> Roster => roster;
 
-        public CombatUnit CurrentActor { get; private set; }
+        public Unit CurrentActor { get; private set; }
         public bool IsCombatActive { get; private set; }
 
         /// <summary>Read-only pass-through of the Timeline's queue — for UI/debug. Nothing
         /// outside CombatController should ever hold a reference to TimelineController itself.</summary>
-        public IReadOnlyList<CombatUnit> UpcomingTurns => timeline.Queue;
+        public IReadOnlyList<Unit> UpcomingTurns => timeline.Queue;
 
         // ── Lifecycle events ─────────────────────────────────────────────────
-        public event Action<IReadOnlyList<CombatUnit>> OnCombatStart;
-        public event Action<CombatUnit> OnTurnStart;
-        public event Action<CombatUnit> OnTurnEnd;
+        public event Action<IReadOnlyList<Unit>> OnCombatStart;
+        public event Action<Unit> OnTurnStart;
+        public event Action<Unit> OnTurnEnd;
         public event Action<COMBAT_OUTCOME> OnCombatEnd;
 
         // ── Unit state events ────────────────────────────────────────────────
-        public event Action<CombatUnit> OnUnitKilled;
-        public event Action<CombatUnit> OnUnitRevived;
+        public event Action<Unit> OnUnitKilled;
+        public event Action<Unit> OnUnitRevived;
 
         // ── Action outcome events ────────────────────────────────────────────
         public event Action<DamageContext> OnBeforeDamage;
@@ -50,7 +50,7 @@ namespace Core.CombatSystem
 
         /// <summary>Relayed straight from TimelineController — nothing outside needs a
         /// reference to it directly.</summary>
-        public event Action<CombatUnit, TIMELINE_OPERATION, int> OnTimelineChanged;
+        public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
 
         private void Awake()
         {
@@ -61,7 +61,7 @@ namespace Core.CombatSystem
 
         // ── Flow ──────────────────────────────────────────────────────────────
 
-        public void StartCombat(IEnumerable<CombatUnit> units, UNIT_TEAM advantageTeam)
+        public void StartCombat(IEnumerable<Unit> units, UNIT_TEAM advantageTeam)
         {
             roster = units.ToList();
             IsCombatActive = true;
@@ -99,7 +99,7 @@ namespace Core.CombatSystem
         {
             if (!IsCombatActive || CurrentActor == null) return;
 
-            CombatUnit finishedActor = CurrentActor;
+            Unit finishedActor = CurrentActor;
             OnTurnEnd?.Invoke(finishedActor);
 
             // If finishedActor died mid-turn (e.g. reflected damage killed the acting unit),
@@ -145,7 +145,7 @@ namespace Core.CombatSystem
         /// so checking IsAlive here would always reject exactly the calls that need to go
         /// through. Calling Kill() twice on the same already-dead unit is harmless (Remove is a
         /// no-op, TryResolveOutcome is idempotent) beyond a possible duplicate OnUnitKilled.</summary>
-        public void Kill(CombatUnit unit)
+        public void Kill(Unit unit)
         {
             if (!IsCombatActive || unit == null) return;
 
@@ -158,7 +158,7 @@ namespace Core.CombatSystem
         }
 
         /// <summary>Revives a dead unit with the given HP, reinserting it at the back of the queue.</summary>
-        public void Revive(CombatUnit unit, int hp)
+        public void Revive(Unit unit, int hp)
         {
             if (!IsCombatActive || unit == null || unit.IsAlive) return;
 
@@ -177,7 +177,7 @@ namespace Core.CombatSystem
             if (!IsCombatActive || CurrentActor == null) return;
 
             bool success = UnityEngine.Random.value < CalculateFleeChance(team);
-            OnFleeAttempt?.Invoke(new FleeContext { Team = team, Success = success });
+            OnFleeAttempt?.Invoke(new FleeContext { team = team, success = success });
 
             if (success)
             {
@@ -197,7 +197,7 @@ namespace Core.CombatSystem
 
         private float AverageSpeed(UNIT_TEAM team)
         {
-            List<CombatUnit> members = roster.Where(u => u.Team == team && u.IsAlive).ToList();
+            List<Unit> members = roster.Where(u => u.Team == team && u.IsAlive).ToList();
             return members.Count == 0 ? 0f : members.Average(u => u.Speed);
         }
 
@@ -207,21 +207,21 @@ namespace Core.CombatSystem
         /// Fires OnBeforeDamage (mutable), applies context.Amount, fires OnAfterDamage. Calls
         /// Kill internally if HP drops to 0 — callers never have to remember to check death.
         /// </summary>
-        public void DealDamage(CombatUnit source, CombatUnit target, int amount, UNITY_TYPE damageType, string via)
+        public void DealDamage(Unit source, Unit target, int amount, UNITY_TYPE damageType, string via)
         {
             if (!IsCombatActive || target == null || !target.IsAlive) return;
 
             var context = new DamageContext
             {
-                Source = source,
-                Target = target,
-                Amount = amount,
-                DamageType = damageType,
-                Via = via
+                source = source,
+                target = target,
+                amount = amount,
+                damageType = damageType,
+                via = via
             };
 
             OnBeforeDamage?.Invoke(context);
-            target.HP = Mathf.Max(0, target.HP - context.Amount);
+            target.HP = Mathf.Max(0, target.HP - context.amount);
             OnAfterDamage?.Invoke(context);
 
             if (target.HP <= 0)
@@ -229,20 +229,20 @@ namespace Core.CombatSystem
         }
 
         /// <summary>Fires OnBeforeHeal (mutable), applies context.Amount clamped to MaxHP, fires OnAfterHeal.</summary>
-        public void Heal(CombatUnit source, CombatUnit target, int amount, string via)
+        public void Heal(Unit source, Unit target, int amount, string via)
         {
             if (!IsCombatActive || target == null || !target.IsAlive) return;
 
-            var context = new HealContext { Source = source, Target = target, Amount = amount, Via = via };
+            var context = new HealContext { source = source, target = target, amount = amount, via = via };
 
             OnBeforeHeal?.Invoke(context);
-            target.HP = Mathf.Min(target.MaxHP, target.HP + context.Amount);
+            target.HP = Mathf.Min(target.MaxHP, target.HP + context.amount);
             OnAfterHeal?.Invoke(context);
         }
 
         /// <summary>Clamped to 0 — but per spec, the action fails outright if SP isn't enough,
         /// rather than spending a partial amount. Returns false in that case.</summary>
-        public bool SpendSP(CombatUnit unit, int amount)
+        public bool SpendSP(Unit unit, int amount)
         {
             if (!IsCombatActive || unit == null) return false;
             if (unit.SP < amount) return false;
@@ -251,7 +251,7 @@ namespace Core.CombatSystem
             return true;
         }
 
-        public void RestoreSP(CombatUnit unit, int amount)
+        public void RestoreSP(Unit unit, int amount)
         {
             if (!IsCombatActive || unit == null) return;
             unit.SP = Mathf.Min(unit.MaxSP, unit.SP + amount);
@@ -259,12 +259,12 @@ namespace Core.CombatSystem
 
         // ── Timeline delegation (nothing outside touches TimelineController directly) ───────
 
-        public void Advance(CombatUnit unit, int n) => timeline.Advance(unit, n);
-        public void Delay(CombatUnit unit, int n) => timeline.Delay(unit, n);
-        public void MoveToFront(CombatUnit unit) => timeline.MoveToFront(unit);
-        public void MoveToBack(CombatUnit unit) => timeline.MoveToBack(unit);
-        public void Swap(CombatUnit a, CombatUnit b) => timeline.Swap(a, b);
-        public void InsertAfter(CombatUnit unit, CombatUnit after) => timeline.InsertAfter(unit, after);
-        public bool GrantExtraTurn(CombatUnit unit) => timeline.GrantExtraTurn(unit);
+        public void Advance(Unit unit, int n) => timeline.Advance(unit, n);
+        public void Delay(Unit unit, int n) => timeline.Delay(unit, n);
+        public void MoveToFront(Unit unit) => timeline.MoveToFront(unit);
+        public void MoveToBack(Unit unit) => timeline.MoveToBack(unit);
+        public void Swap(Unit a, Unit b) => timeline.Swap(a, b);
+        public void InsertAfter(Unit unit, Unit after) => timeline.InsertAfter(unit, after);
+        public bool GrantExtraTurn(Unit unit) => timeline.GrantExtraTurn(unit);
     }
 }

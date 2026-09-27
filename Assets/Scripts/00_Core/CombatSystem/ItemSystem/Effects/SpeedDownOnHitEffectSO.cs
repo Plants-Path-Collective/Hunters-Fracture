@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Core.CombatSystem.Unit;
+using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem.ItemSystem
 {
@@ -22,9 +22,9 @@ namespace Core.CombatSystem.ItemSystem
         [Range(0f, 1f)] public float speedReductionPercent = 0.15f;
         public int durationTurns = 3;
 
-        private readonly Dictionary<Core.CombatSystem.Unit.Unit, System.Action<DamageDealtInfo>> _handlers = new();
+        private readonly Dictionary<Core.CombatSystem.Units.Unit, System.Action<DamageDealtInfo>> _handlers = new();
 
-        public override void Attach(Core.CombatSystem.Unit.Unit unit)
+        public override void Attach(Core.CombatSystem.Units.Unit unit)
         {
             void Handler(DamageDealtInfo info)
             {
@@ -43,7 +43,7 @@ namespace Core.CombatSystem.ItemSystem
             //unit.Battle.OnDamageDealt += Handler;
         }
 
-        public override void Detach(Core.CombatSystem.Unit.Unit unit)
+        public override void Detach(Core.CombatSystem.Units.Unit unit)
         {
             if (_handlers.TryGetValue(unit, out var handler))
             {
@@ -59,8 +59,8 @@ namespace Core.CombatSystem.ItemSystem
     /// </summary>
     public struct DamageDealtInfo
     {
-        public Core.CombatSystem.Unit.Unit Source;
-        public Core.CombatSystem.Unit.Unit Target;
+        public Core.CombatSystem.Units.Unit Source;
+        public Core.CombatSystem.Units.Unit Target;
         public float Amount;
     }
 }

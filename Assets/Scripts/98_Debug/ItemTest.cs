@@ -1,6 +1,6 @@
 using UnityEngine;
 using Core.CombatSystem.ItemSystem;
-using Core.CombatSystem.Unit;
+using Core.CombatSystem.Units;
 
 namespace ExtendedDebug
 {

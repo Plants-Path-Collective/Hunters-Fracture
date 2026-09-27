@@ -1,5 +1,5 @@
 using Core;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem
 {
@@ -9,26 +9,26 @@ namespace Core.CombatSystem
     /// </summary>
     public class DamageContext
     {
-        public CombatUnit Source;
-        public CombatUnit Target;
-        public int Amount;
-        public UNITY_TYPE DamageType;
-        public string Via;
+        public Unit source;
+        public Unit target;
+        public int amount;
+        public UNITY_TYPE damageType;
+        public string via;
     }
 
     /// <summary>Mutable payload for OnBeforeHeal/OnAfterHeal, same idea as DamageContext.</summary>
     public class HealContext
     {
-        public CombatUnit Source;
-        public CombatUnit Target;
-        public int Amount;
-        public string Via;
+        public Unit source;
+        public Unit target;
+        public int amount;
+        public string via;
     }
 
     /// <summary>Notification-only payload for OnFleeAttempt.</summary>
     public class FleeContext
     {
-        public UNIT_TEAM Team;
-        public bool Success;
+        public UNIT_TEAM team;
+        public bool success;
     }
 }

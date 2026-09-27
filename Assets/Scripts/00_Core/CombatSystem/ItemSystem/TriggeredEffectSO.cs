@@ -1,4 +1,5 @@
-using Core.CombatSystem.Unit;
+using UnityEngine;
+using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem.ItemSystem
 {
@@ -21,17 +22,23 @@ namespace Core.CombatSystem.ItemSystem
     public abstract class TriggeredEffectSO : ItemEffectSO
     {
         /// <summary>
+        /// The priority of this effect relative to other effects that react to the same event.
+        /// 0 is the default priority. Higher numbers are higher priority, and will be called first.
+        /// </summary>
+        [SerializeField] private int priority = 0; public int Priority => priority;
+
+        /// <summary>
         /// Called by UnitEffectController when the owning Unit gains the first
         /// stack of the item this effect belongs to. Subscribe to whichever
         /// Battle event this effect reacts to here.
         /// </summary>
-        public abstract void Attach(Core.CombatSystem.Unit.Unit unit);
+        public abstract void Attach(Unit unit);
 
         /// <summary>
         /// Called by UnitEffectController when the owning Unit loses the last
         /// stack of the item this effect belongs to. Must unsubscribe the exact
         /// same delegate that Attach() registered.
         /// </summary>
-        public abstract void Detach(Core.CombatSystem.Unit.Unit unit);
+        public abstract void Detach(Unit unit);
     }
 }

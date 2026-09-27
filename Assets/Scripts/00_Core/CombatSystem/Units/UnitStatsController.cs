@@ -2,30 +2,28 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using Core.CombatSystem.ItemSystem;
-using Core;
 
-namespace Core.CombatSystem.Unit
+namespace Core.CombatSystem.Units
 {
     /// <summary>
-    /// Controls the stats of a unit, including health, mana, and other attributes.
+    /// Owns the 7 derived stats of a Unit (MaxHP, MaxSP, Strength, MagicPower, PhysicalDefense,
+    /// MagicalDefense, Speed). Base values come from a UnitDefinitionSO via SetBase(); "current"
+    /// values are always a full recompute from base + active item modifiers — never incremental
+    /// deltas, so stats never drift. Unit only reads these through its own pass-through
+    /// properties; nothing outside this class should write MaxHP/Strength/etc. directly.
     /// </summary>
-    /// <remarks>
-    /// <para>Holds two sets of values: the <c>base*</c> fields (tuned in the Inspector,
-    /// never touched at runtime) and the <c>current*</c> fields (base stats plus
-    /// whatever item modifiers currently apply). Everything outside this class —
-    /// combat, UI, formulas — should only ever read the public properties
-    /// (which expose the "current" values), never assume they equal the base ones.</para>
-    /// </remarks>
     public class UnitStatsController : MonoBehaviour
     {
-        [Header("----- Base Stats -----")]
-        [SerializeField] private int baseMaxHP;
-        [SerializeField] private int baseMaxSP;
-        [SerializeField] private float baseSpeed;
-        [SerializeField] private float baseStrength;
-        [SerializeField] private float baseMagicPower;
-        [SerializeField] private float basePhysicalDefense;
-        [SerializeField] private float baseMagicalDefense;
+        private UnitDefinitionSO definition;
+
+        // ----- Base (from definition, untouched at runtime) -----
+        private int baseMaxHP;
+        private int baseMaxSP;
+        private float baseSpeed;
+        private float baseStrength;
+        private float baseMagicPower;
+        private float basePhysicalDefense;
+        private float baseMagicalDefense;
 
         [Header("----- Debug UI -----")]
         [SerializeField] private TextMeshProUGUI statsDebugText;
@@ -49,8 +47,8 @@ namespace Core.CombatSystem.Unit
         public float MagicalDefense => currentMagicalDefense;
 
         /// <summary>
-        /// Invoked at the end of every <see cref="RecalculateStats"/> call, in
-        /// case UI or other systems need to refresh after stats change.
+        /// Invoked at the end of every RecalculateStats() call, in case UI or other systems
+        /// need to refresh after stats change.
         /// </summary>
         public UnityEvent OnStatsRecalculated { get; private set; } = new UnityEvent();
 
@@ -58,12 +56,39 @@ namespace Core.CombatSystem.Unit
 
         private void Awake()
         {
-            // Gives "current" a valid value even if something reads a stat
-            // before Unit.Awake() explicitly calls RecalculateStats().
+            // Gives "current" a valid value even if something reads a stat before
+            // Unit.InitializeFromDefinition() explicitly calls SetBase()/RecalculateStats().
             ResetToBase();
 
             inventory = GetComponent<UnitInventory>();
-            inventory.OnStackChanged.AddListener(() => RecalculateStats(inventory));
+
+            // Temporary shortcut, kept on purpose per team decision: ideally UnitEffectController
+            // is the one listening to OnStackChanged (attach/detach TriggeredEffectSO AND ask for
+            // a recalculation in the same callback, per items.html's diagram) — but nothing stops
+            // UnitStatsController from also subscribing independently; they're two separate
+            // listeners on the same event, not a single shared callback.
+            if (inventory != null)
+                inventory.OnStackChanged.AddListener(() => RecalculateStats(inventory));
+        }
+
+        /// <summary>
+        /// Copies the base stats from a UnitDefinitionSO and resets "current" to match.
+        /// Call RecalculateStats() right after if there's an inventory to apply
+        /// (Unit.InitializeFromDefinition does both in sequence).
+        /// </summary>
+        public void SetBase(UnitDefinitionSO definition)
+        {
+            this.definition = definition;
+
+            baseMaxHP = definition.maxHP;
+            baseMaxSP = definition.maxSP;
+            baseSpeed = definition.speed;
+            baseStrength = definition.strength;
+            baseMagicPower = definition.magicPower;
+            basePhysicalDefense = definition.physicalDefense;
+            baseMagicalDefense = definition.magicalDefense;
+
+            ResetToBase();
         }
 
         private void ResetToBase()
@@ -84,30 +109,19 @@ namespace Core.CombatSystem.Unit
         }
 
         /// <summary>
-        /// Recomputes every "current" stat from scratch: resets to base, then
-        /// re-applies every active item modifier.
+        /// Recomputes every "current" stat from scratch: resets to base, then re-applies every
+        /// active item modifier. Always a full recompute, never an incremental add/remove.
         /// </summary>
-        /// <remarks>
-        /// <para>This is always a full recompute, never an incremental add/remove.
-        /// That matches <see cref="UnitInventory.OnStackChanged"/> not carrying
-        /// which item changed or by how much, and it avoids drift bugs that come
-        /// from applying/undoing deltas over time instead of recomputing from a
-        /// known-good base.</para>
-        /// <para><b>Current state:</b> until ItemEffectSO / StatModifierEffectSO
-        /// exist, this method only resets to base — it's safe to call now and
-        /// will start doing real work once item modifiers are implemented,
-        /// without any caller needing to change.</para>
-        /// </remarks>
-        /// <param name="inventory">
-        /// This same Unit's UnitInventory — used to find which items are
-        /// currently held (quantity greater than 0) so their modifiers can be applied.
-        /// </param>
+        /// <param name="inventory">This same Unit's UnitInventory — used to find which items
+        /// are currently held (quantity greater than 0) so their modifiers can be applied. Null
+        /// is safe (e.g. no ItemCatalog assigned yet in a test context) — stats just stay at
+        /// base.</param>
         public void RecalculateStats(UnitInventory inventory)
         {
             ResetToBase();
             UpdateStatsDebugText();
 
-            if (inventory != null)
+            if (inventory != null && inventory.inventory != null)
             {
                 foreach (Item item in inventory.inventory.Values)
                 {
@@ -168,11 +182,6 @@ namespace Core.CombatSystem.Unit
             }
         }
 
-        /// <summary>
-        /// Method to get the current value of a stat based on its type. Used for debugging purposes.
-        /// </summary>
-        /// <param name="statType">The type of stat to retrieve.</param>
-        /// <returns>The current value of the specified stat.</returns>
         private float GetCurrentStatValue(STAT_TYPE statType)
         {
             return statType switch

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Core;
 
-namespace Core.CombatSystem.Unit
+namespace Core.CombatSystem.Units
 {
     public class Unit : MonoBehaviour
     {

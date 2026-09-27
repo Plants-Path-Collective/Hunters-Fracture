@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using CombatUnit = Core.CombatSystem.Unit.Unit;
+using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem
 {
@@ -13,16 +13,16 @@ namespace Core.CombatSystem
     /// </summary>
     public class TimelineController : MonoBehaviour
     {
-        private List<CombatUnit> queue = new();
+        private List<Unit> queue = new();
 
         /// <summary>Read-only view for UI/CombatLog. Never mutate through this.</summary>
-        public IReadOnlyList<CombatUnit> Queue => queue;
+        public IReadOnlyList<Unit> Queue => queue;
 
         /// <summary>
         /// Fired by every operation below. unit is null for Initialize/Clear (whole-queue
         /// events); delta carries the N for Advance/Delay, otherwise 0.
         /// </summary>
-        public event Action<CombatUnit, TIMELINE_OPERATION, int> OnTimelineChanged;
+        public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
 
         // ── Setup ─────────────────────────────────────────────────────────────
 
@@ -30,9 +30,9 @@ namespace Core.CombatSystem
         /// Sorts by Speed descending, then applies advantage: every unit on advantageTeam goes
         /// before every unit on the other team. Called once, when combat starts.
         /// </summary>
-        public void Initialize(IEnumerable<CombatUnit> units, UNIT_TEAM advantageTeam)
+        public void Initialize(IEnumerable<Unit> units, UNIT_TEAM advantageTeam)
         {
-            List<CombatUnit> sorted = units.OrderByDescending(u => u.Speed).ToList();
+            List<Unit> sorted = units.OrderByDescending(u => u.Speed).ToList();
 
             queue = sorted.Where(u => u.Team == advantageTeam)
                 .Concat(sorted.Where(u => u.Team != advantageTeam))
@@ -44,18 +44,18 @@ namespace Core.CombatSystem
         // ── Core cycle ────────────────────────────────────────────────────────
 
         /// <summary>Removes and returns index 0 — the unit whose turn it is.</summary>
-        public CombatUnit Pop()
+        public Unit Pop()
         {
             if (queue.Count == 0) return null;
 
-            CombatUnit unit = queue[0];
+            Unit unit = queue[0];
             queue.RemoveAt(0);
             RaiseChanged(unit, TIMELINE_OPERATION.Pop, 0);
             return unit;
         }
 
         /// <summary>Appends to the end. Called unconditionally when a unit's turn closes.</summary>
-        public void Reinsert(CombatUnit unit)
+        public void Reinsert(Unit unit)
         {
             queue.Add(unit);
             RaiseChanged(unit, TIMELINE_OPERATION.Reinsert, 0);
@@ -63,7 +63,7 @@ namespace Core.CombatSystem
 
         // ── Manipulation ──────────────────────────────────────────────────────
 
-        public void Advance(CombatUnit unit, int n)
+        public void Advance(Unit unit, int n)
         {
             int index = queue.IndexOf(unit);
             if (index < 0) return;
@@ -75,7 +75,7 @@ namespace Core.CombatSystem
             RaiseChanged(unit, TIMELINE_OPERATION.Advance, n);
         }
 
-        public void Delay(CombatUnit unit, int n)
+        public void Delay(Unit unit, int n)
         {
             int index = queue.IndexOf(unit);
             if (index < 0) return;
@@ -87,7 +87,7 @@ namespace Core.CombatSystem
             RaiseChanged(unit, TIMELINE_OPERATION.Delay, n);
         }
 
-        public void MoveToFront(CombatUnit unit)
+        public void MoveToFront(Unit unit)
         {
             int index = queue.IndexOf(unit);
             if (index <= 0) return; // not found, or already there
@@ -96,7 +96,7 @@ namespace Core.CombatSystem
             RaiseChanged(unit, TIMELINE_OPERATION.MoveToFront, 0);
         }
 
-        public void MoveToBack(CombatUnit unit)
+        public void MoveToBack(Unit unit)
         {
             int index = queue.IndexOf(unit);
             if (index < 0 || index == queue.Count - 1) return;
@@ -105,7 +105,7 @@ namespace Core.CombatSystem
             RaiseChanged(unit, TIMELINE_OPERATION.MoveToBack, 0);
         }
 
-        public void Swap(CombatUnit a, CombatUnit b)
+        public void Swap(Unit a, Unit b)
         {
             if (a == null || b == null) return;
             if (!a.IsAlive || !b.IsAlive) return; // swap involving a dead unit is ignored
@@ -118,7 +118,7 @@ namespace Core.CombatSystem
             RaiseChanged(a, TIMELINE_OPERATION.Swap, 0);
         }
 
-        public void InsertAfter(CombatUnit unit, CombatUnit after)
+        public void InsertAfter(Unit unit, Unit after)
         {
             if (unit == null || after == null || unit == after) return;
 
@@ -137,7 +137,7 @@ namespace Core.CombatSystem
         /// "no encadenar" means here: a unit with an extra turn already pending (or one that's
         /// simply already waiting its normal turn) can't be granted a second one right now.
         /// </summary>
-        public bool GrantExtraTurn(CombatUnit unit)
+        public bool GrantExtraTurn(Unit unit)
         {
             if (unit == null || queue.Contains(unit)) return false;
 
@@ -149,7 +149,7 @@ namespace Core.CombatSystem
         // ── Death & flee ──────────────────────────────────────────────────────
 
         /// <summary>Removes every occurrence of unit (including a pending extra-turn duplicate).</summary>
-        public void Remove(CombatUnit unit)
+        public void Remove(Unit unit)
         {
             int removed = queue.RemoveAll(u => u == unit);
             if (removed > 0)
@@ -165,13 +165,13 @@ namespace Core.CombatSystem
 
         // ── Internals ─────────────────────────────────────────────────────────
 
-        private void Reposition(int fromIndex, int toIndex, CombatUnit unit)
+        private void Reposition(int fromIndex, int toIndex, Unit unit)
         {
             queue.RemoveAt(fromIndex);
             queue.Insert(toIndex, unit);
         }
 
-        private void RaiseChanged(CombatUnit unit, TIMELINE_OPERATION operation, int delta)
+        private void RaiseChanged(Unit unit, TIMELINE_OPERATION operation, int delta)
         {
             OnTimelineChanged?.Invoke(unit, operation, delta);
         }

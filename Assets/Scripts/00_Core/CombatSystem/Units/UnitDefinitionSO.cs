@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.CombatSystem.Unit
+namespace Core.CombatSystem.Units
 {
     [CreateAssetMenu(fileName = "NewUnitDefinition", menuName = "Units/Unit Definition")]
     public class UnitDefinitionSO : ScriptableObject
@@ -23,6 +23,8 @@ namespace Core.CombatSystem.Unit
         public float magicalDefense;
 
         [Header("--- Combat Parameters ---")]
-        public int attackRange;
+        public float SPRegenMin;
+        public float SPRegenMax;
+        public float defenseReduction;
     }
 }

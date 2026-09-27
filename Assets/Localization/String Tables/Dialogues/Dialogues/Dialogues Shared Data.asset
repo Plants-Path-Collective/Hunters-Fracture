@@ -10,23 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: Dialogue_Test Shared Data
+  m_Name: Dialogues Shared Data
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
-  m_TableCollectionName: Dialogue_Test
-  m_TableCollectionNameGuidString: 82f34e8ff59b2054f80efdeeccaa00bf
-  m_Entries:
-  - m_Id: 12473620189184
-    m_Key: back
-    m_Metadata:
-      m_Items: []
+  m_TableCollectionName: Dialogues
+  m_TableCollectionNameGuidString: 95b4cff7b78839970ae88c3ff464b6cb
+  m_Entries: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 7017567448507613436
+    rid: 7128716119379279872
   references:
     version: 2
     RefIds:
-    - rid: 7017567448507613436
+    - rid: 7128716119379279872
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1784521732659
+        m_CustomEpoch: 1790403597978
