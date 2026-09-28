@@ -16,4 +16,4 @@ MonoBehaviour:
   itemName: Red Apple
   itemIcon: {fileID: 21300000, guid: 051385c355037c6479ac47612fa7a82e, type: 3}
   effects:
-  - {fileID: 11400000, guid: de7c72a62f631cf469a8b9b4e591184e, type: 2}
+  - {fileID: 11400000, guid: 99f87529955e20c2d963ee58bbb65f60, type: 2}

@@ -275,8 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dac5c7c020e87417957757d6e84bc1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtendedDebug.PartyDebugHarness
-  allyUnitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
-  enemyUnitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
   party:
     members:
     - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
@@ -285,13 +283,13 @@ MonoBehaviour:
       inventorySnapshot:
         keys: 
         values: 
-    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+    - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}
       currentHP: -1
       currentSP: -1
       inventorySnapshot:
         keys: 
         values: 
-    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+    - definition: {fileID: 11400000, guid: e1cf6ee6a7acb3fc3ae8dcdfda49653f, type: 2}
       currentHP: -1
       currentSP: -1
       inventorySnapshot:
@@ -299,6 +297,10 @@ MonoBehaviour:
         values: 
   enemies:
   - definition: {fileID: 11400000, guid: cc67159d1f26fb3048d642494ff4013a, type: 2}
+    inventorySnapshot:
+      keys: 
+      values: 
+  - definition: {fileID: 11400000, guid: b2775bd2b14124ffea58d1348cbcd76a, type: 2}
     inventorySnapshot:
       keys: 
       values: 

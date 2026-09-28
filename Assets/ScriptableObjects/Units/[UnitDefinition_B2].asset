@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
-  m_Name: '[UnitDefinition_B]'
+  m_Name: '[UnitDefinition_B2]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
-  unitName: Ogre
+  unitName: Ogre2
   type: 0
   team: 1
   portrait: {fileID: 21300000, guid: 730b9158cf081d24a8c4ad4c5d6db284, type: 3}

@@ -26,11 +26,15 @@ namespace ExtendedDebug.Editor
         private int amountInput = 1;
         private UNITY_TYPE damageTypeInput;
 
-        private void OnInspectorUpdate() => Repaint();
+        public override bool RequiresConstantRepaint() => Application.isPlaying;
 
         public override void OnInspectorGUI()
         {
             var harness = (CombatDebugHarness)target;
+
+            // Serialized fields (advantageTeam, useSetUp, party, enemies), editable before Play
+            DrawDefaultInspector();
+            EditorGUILayout.Space();
 
             if (!Application.isPlaying)
             {

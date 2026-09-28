@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
-  m_Name: '[UnitDefinition_A]'
+  m_Name: '[UnitDefinition_B1]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
-  unitName: Mage
-  type: 1
-  team: 0
+  unitName: Ogre1
+  type: 0
+  team: 1
   portrait: {fileID: 21300000, guid: 730b9158cf081d24a8c4ad4c5d6db284, type: 3}
-  description: A powerfull mage that uses darkness to manipulate his foes
-  unitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
-  maxHP: 100
-  maxSP: 100
-  speed: 10
-  strength: 0
-  magicPower: 10
+  description: An angry green ogre that beats his opponents with his mace
+  unitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
+  maxHP: 250
+  maxSP: 30
+  speed: 5
+  strength: 15
+  magicPower: 0
   physicalDefense: 10
   magicalDefense: 10
   SPRegenMin: 5
