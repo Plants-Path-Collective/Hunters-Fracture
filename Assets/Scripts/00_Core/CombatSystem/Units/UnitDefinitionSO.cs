@@ -13,6 +13,10 @@ namespace Core.CombatSystem.Units
         [TextArea(3, 5)]
         public string description;
 
+        [Header("--- Presentation ---")]
+        [Tooltip("Combat prefab: model, animations and the Unit component with its controllers. Instantiated by CombatController.")]
+        public GameObject unitPrefab;
+
         [Header("--- Stats ---")]
         public int maxHP;
         public int maxSP;
@@ -26,5 +30,11 @@ namespace Core.CombatSystem.Units
         public float SPRegenMin;
         public float SPRegenMax;
         public float defenseReduction;
+
+        private void OnValidate()
+        {
+            if (unitPrefab != null && unitPrefab.GetComponent<Unit>() == null)
+                Debug.LogWarning($"[UnitDefinitionSO] '{name}': unitPrefab has no Unit component.", this);
+        }
     }
 }

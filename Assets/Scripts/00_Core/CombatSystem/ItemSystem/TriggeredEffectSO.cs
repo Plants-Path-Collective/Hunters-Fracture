@@ -25,7 +25,8 @@ namespace Core.CombatSystem.ItemSystem
         /// The priority of this effect relative to other effects that react to the same event.
         /// 0 is the default priority. Higher numbers are higher priority, and will be called first.
         /// </summary>
-        [SerializeField] private int priority = 0; public int Priority => priority;
+        [SerializeField] private int priority = 0; 
+        [ReadOnly] public int Priority => priority;
 
         /// <summary>
         /// Called by UnitEffectController when the owning Unit gains the first

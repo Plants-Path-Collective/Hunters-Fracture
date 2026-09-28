@@ -35,7 +35,7 @@ namespace Core.CombatSystem.Units
             InitializeInventory();
         }
 
-        private void InitializeInventory()
+        public void InitializeInventory()
         {
             inventory.Clear();
 
@@ -126,7 +126,7 @@ namespace Core.CombatSystem.Units
         /// Positive number of units to subtract from the inventory. 
         /// The default value is 1. Values less than or equal to 0 are ignored.
         /// </param>
-        private void RemoveItem(ItemSO itemSO, int quantity = 1)
+        public void RemoveItem(ItemSO itemSO, int quantity = 1)
         {
             if (itemSO == null) { Debug.LogError($"[UnitInventory] {gameObject.name} is null, can not be removed from inventory"); return; }
             if (quantity <= 0) return;
@@ -178,6 +178,42 @@ namespace Core.CombatSystem.Units
         private void NotifyListeners()
         {
             OnStackChanged.Invoke();
+        }
+
+        /// <summary>
+        /// Replaces every quantity with the given snapshot (itemID → quantity); items not present
+        /// go to 0. Fires OnStackChanged once at the end, not once per item. A null snapshot just
+        /// zeroes the inventory.
+        /// </summary>
+        public void Populate(IReadOnlyDictionary<int, int> snapshot)
+        {
+            foreach (Item item in inventory.Values)
+                item.quantity = 0;
+
+            if (snapshot != null)
+            {
+                foreach (KeyValuePair<int, int> entry in snapshot)
+                {
+                    if (inventory.TryGetValue(entry.Key, out Item item))
+                        item.quantity = Mathf.Max(0, entry.Value);
+                    else
+                        Debug.LogWarning($"[UnitInventory] Snapshot has itemID {entry.Key}, which is not in the ItemCatalog.");
+                }
+            }
+
+            NotifyListeners();
+        }
+
+        /// <summary>Returns only the items with quantity greater than 0, ready to be stored as a snapshot.</summary>
+        public SerializableDictionary<int, int> ToSnapshot()
+        {
+            var snapshot = new SerializableDictionary<int, int>();
+
+            foreach (Item item in inventory.Values)
+                if (item.quantity > 0)
+                    snapshot[item.itemSO.itemID] = item.quantity;
+
+            return snapshot;
         }
     }
 }

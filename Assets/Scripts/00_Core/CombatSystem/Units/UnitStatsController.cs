@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using Core.CombatSystem.ItemSystem;
+using JetBrains.Annotations;
 
 namespace Core.CombatSystem.Units
 {
@@ -14,7 +15,6 @@ namespace Core.CombatSystem.Units
     /// </summary>
     public class UnitStatsController : MonoBehaviour
     {
-        private UnitDefinitionSO definition;
 
         // ----- Base (from definition, untouched at runtime) -----
         private int baseMaxHP;
@@ -26,7 +26,7 @@ namespace Core.CombatSystem.Units
         private float baseMagicalDefense;
 
         [Header("----- Debug UI -----")]
-        [SerializeField] private TextMeshProUGUI statsDebugText;
+        [SerializeField] [CanBeNull] private TextMeshProUGUI statsDebugText;
 
         // Cached, final values after applying item modifiers.
         // RecalculateStats() is the only method allowed to write these.
@@ -78,8 +78,6 @@ namespace Core.CombatSystem.Units
         /// </summary>
         public void SetBase(UnitDefinitionSO definition)
         {
-            this.definition = definition;
-
             baseMaxHP = definition.maxHP;
             baseMaxSP = definition.maxSP;
             baseSpeed = definition.speed;

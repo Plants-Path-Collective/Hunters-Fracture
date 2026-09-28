@@ -8,25 +8,38 @@ using CombatUnit = Core.CombatSystem.Units.Unit;
 namespace ExtendedDebug
 {
     /// <summary>
-    /// Standalone test harness for CombatController — no ActionResolver yet, so EndTurn() (and
-    /// the action verbs) are triggered by hand from CombatDebugHarnessEditor. Spawns a few
-    /// throwaway Units, starts a combat, and logs every lifecycle event to the console. Delete
-    /// once real actions exist.
+    /// Standalone test harness for CombatController. With useSetUp on, it builds a CombatSetUp
+    /// from the Inspector (same path the Overworld will use) and CombatController starts from
+    /// it. With it off, it spawns throwaway Units like before. EndTurn() and the action verbs
+    /// are driven by hand from CombatDebugHarnessEditor.
     /// </summary>
     [RequireComponent(typeof(CombatController))]
     public class CombatDebugHarness : MonoBehaviour
     {
         [SerializeField] private UNIT_TEAM advantageTeam = UNIT_TEAM.Ally;
 
+        [Header("--- Real setup path (CombatSetUp) ---")]
+        [SerializeField] private bool useSetUp = true;
+        [SerializeField] private Party party = new();
+        [SerializeField] private EnemySlotData[] enemies;
+
         public CombatController Combat { get; private set; }
 
         private void Awake()
         {
             Combat = GetComponent<CombatController>();
+            SubscribeLogs();
+
+            // Prepared in Awake so it is pending before CombatController.Start() consumes it,
+            // whatever the Start() order between components.
+            if (useSetUp)
+                CombatSetUp.Prepare(party, enemies, advantageTeam);
         }
 
         private void Start()
         {
+            if (useSetUp) return; // CombatController.Start() already started the combat
+
             CombatUnit[] units =
             {
                 CreateTestUnit("Ally_A", UNIT_TEAM.Ally, hp: 20, sp: 12, speed: 12),
@@ -35,6 +48,11 @@ namespace ExtendedDebug
                 CreateTestUnit("Enemy_B", UNIT_TEAM.Enemy, hp: 10, sp: 4, speed: 4),
             };
 
+            Combat.StartCombat(units, advantageTeam);
+        }
+
+        private void SubscribeLogs()
+        {
             Combat.OnCombatStart  += roster  => Debug.Log("[Combat] Start · " + string.Join(", ", roster.Select(u => u.Name)));
             Combat.OnTurnStart    += unit    => Debug.Log($"[Combat] Turn start · {unit.Name}");
             Combat.OnTurnEnd      += unit    => Debug.Log($"[Combat] Turn end · {unit.Name}");
@@ -44,8 +62,6 @@ namespace ExtendedDebug
             Combat.OnAfterDamage  += ctx     => Debug.Log($"[Combat] Damage · {ctx.target.Name} took {ctx.amount} ({ctx.damageType}) via {ctx.via} — HP now {ctx.target.HP}");
             Combat.OnAfterHeal    += ctx     => Debug.Log($"[Combat] Heal · {ctx.target.Name} healed {ctx.amount} via {ctx.via} — HP now {ctx.target.HP}");
             Combat.OnFleeAttempt  += ctx     => Debug.Log($"[Combat] Flee attempt · {ctx.team} · {(ctx.success ? "success" : "failed")}");
-
-            Combat.StartCombat(units, advantageTeam);
         }
 
         private CombatUnit CreateTestUnit(string name, UNIT_TEAM team, int hp, int sp, float speed)
@@ -54,7 +70,7 @@ namespace ExtendedDebug
             go.transform.SetParent(transform);
 
             CombatUnit unit = go.AddComponent<CombatUnit>();
-            unit.InitializeFromDefinition(CreateTestUnitDefinition(name, team, hp, sp, speed));
+            unit.InitializeFromDefinition(CreateTestUnitDefinition(name, team, hp, sp, speed), team);
             return unit;
         }
 
@@ -62,7 +78,7 @@ namespace ExtendedDebug
         {
             var definition = ScriptableObject.CreateInstance<UnitDefinitionSO>();
             definition.unitName = name;
-            definition.type = UNITY_TYPE.Magical; 
+            definition.type = UNITY_TYPE.Magical;
             definition.team = team;
             definition.maxHP = hp;
             definition.maxSP = sp;

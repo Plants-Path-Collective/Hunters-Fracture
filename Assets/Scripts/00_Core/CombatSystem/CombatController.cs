@@ -59,17 +59,80 @@ namespace Core.CombatSystem
                 OnTimelineChanged?.Invoke(unit, operation, delta);
         }
 
+        private void Start()
+        {
+            // Runs once per CombatStage load. If nothing is pending (e.g. a debug scene that calls
+            // StartCombat by hand), this does nothing.
+            CombatSetUp setUp = CombatSetUp.Consume();
+            if (setUp != null)
+                StartFromSetUp(setUp);
+        }
+
+        /// <summary>
+        /// Builds every Unit from the setup (party members as allies, enemy slots as fresh enemies)
+        /// and starts the combat. The setup is not stored — after this call it is no longer needed.
+        /// </summary>
+        public void StartFromSetUp(CombatSetUp setUp)
+        {
+            var units = new List<Unit>();
+
+            foreach (PartyMemberData member in setUp.Party.Members)
+            {
+                if (member == null) continue;
+
+                Unit unit = SpawnUnit(member.definition);
+                if (unit == null) continue;
+
+                unit.InitializeFromParty(member);
+                units.Add(unit);
+            }
+
+            foreach (EnemySlotData slot in setUp.Enemies)
+            {
+                if (slot == null) continue;
+
+                Unit unit = SpawnUnit(slot.definition);
+                if (unit == null) continue;
+
+                unit.InitializeFresh(slot.definition, slot.inventorySnapshot);
+                units.Add(unit);
+            }
+
+            StartCombat(units, setUp.AdvantageTeam);
+        }
+
+        /// <summary>Instantiates the combat prefab of a definition, or returns null (with an error) if it has none.</summary>
+        private Unit SpawnUnit(UnitDefinitionSO definition)
+        {
+            if (definition == null || definition.unitPrefab == null)
+            {
+                Debug.LogError($"[{nameof(CombatController)}] Definition '{(definition != null ? definition.name : "null")}' has no unitPrefab assigned.");
+                return null;
+            }
+
+            return Instantiate(definition.unitPrefab, transform).GetComponent<Unit>();
+        }
+
         // ── Flow ──────────────────────────────────────────────────────────────
 
         public void StartCombat(IEnumerable<Unit> units, UNIT_TEAM advantageTeam)
         {
             roster = units.ToList();
+            foreach (Unit unit in roster)
+                unit.EnterCombat(this);
+
             IsCombatActive = true;
 
             timeline.Initialize(roster, advantageTeam);
             OnCombatStart?.Invoke(roster);
 
-            AdvanceToNextTurn();
+            // Units that arrive with 0 HP (persisted party state) start dead: Kill removes them
+            // from the timeline and can end the combat outright if a whole side is already down.
+            foreach (Unit unit in roster.Where(u => !u.IsAlive).ToList())
+                Kill(unit);
+
+            if (IsCombatActive)
+                AdvanceToNextTurn();
         }
 
         private void AdvanceToNextTurn()
@@ -124,6 +187,10 @@ namespace Core.CombatSystem
             IsCombatActive = false;
             timeline.Clear();
             OnCombatEnd?.Invoke(outcome);
+
+            // Detach every item effect so nothing stays subscribed to this controller
+            foreach (Unit unit in roster)
+                unit.ExitCombat();
         }
 
         private bool TryResolveOutcome(out COMBAT_OUTCOME outcome)

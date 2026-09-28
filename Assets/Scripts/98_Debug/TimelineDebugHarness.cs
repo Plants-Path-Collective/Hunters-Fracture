@@ -3,7 +3,6 @@ using UnityEngine;
 using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
-using CombatUnit = Core.CombatSystem.Units.Unit;
  
 namespace ExtendedDebug
 {
@@ -33,7 +32,7 @@ namespace ExtendedDebug
                 return;
             }
 
-            CombatUnit[] units =
+            Unit[] units =
             {
                 CreateTestUnit("Ally_A", UNIT_TEAM.Ally, speed: 12),
                 CreateTestUnit("Ally_B", UNIT_TEAM.Ally, speed: 7),
@@ -49,13 +48,13 @@ namespace ExtendedDebug
             LogQueue();
         }
 
-        private CombatUnit CreateTestUnit(string name, UNIT_TEAM team, float speed)
+        private Unit CreateTestUnit(string name, UNIT_TEAM team, float speed)
         {
             GameObject unitObject = new GameObject(name);
             unitObject.transform.SetParent(transform);
 
-            CombatUnit unit = unitObject.AddComponent<CombatUnit>();
-            unit.InitializeFromDefinition(CreateTestUnitDefinition(name, team, hp: 10, sp: 10, speed: speed));
+            Unit unit = unitObject.AddComponent<Unit>();
+            unit.InitializeFromDefinition(CreateTestUnitDefinition(name, team, hp: 10, sp: 10, speed: speed), team);
             return unit;
         }
 
