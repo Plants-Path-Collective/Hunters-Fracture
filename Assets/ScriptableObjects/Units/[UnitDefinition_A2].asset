@@ -17,7 +17,7 @@ MonoBehaviour:
   team: 0
   portrait: {fileID: 21300000, guid: 730b9158cf081d24a8c4ad4c5d6db284, type: 3}
   description: A powerfull mage that uses darkness to manipulate his foes
-  unitPrefab: {fileID: 0}
+  unitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
   maxHP: 100
   maxSP: 100
   speed: 10

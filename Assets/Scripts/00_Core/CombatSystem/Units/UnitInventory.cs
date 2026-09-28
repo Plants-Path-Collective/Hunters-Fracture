@@ -194,6 +194,7 @@ namespace Core.CombatSystem.Units
             {
                 foreach (KeyValuePair<int, int> entry in snapshot)
                 {
+                    if (entry.Key < 0) continue;
                     if (inventory.TryGetValue(entry.Key, out Item item))
                         item.quantity = Mathf.Max(0, entry.Value);
                     else
@@ -205,9 +206,9 @@ namespace Core.CombatSystem.Units
         }
 
         /// <summary>Returns only the items with quantity greater than 0, ready to be stored as a snapshot.</summary>
-        public SerializableDictionary<int, int> ToSnapshot()
+        public ItemSnapshot ToSnapshot()
         {
-            var snapshot = new SerializableDictionary<int, int>();
+            var snapshot = new ItemSnapshot();
 
             foreach (Item item in inventory.Values)
                 if (item.quantity > 0)

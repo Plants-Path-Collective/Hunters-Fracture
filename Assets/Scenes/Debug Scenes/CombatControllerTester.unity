@@ -290,6 +290,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExtendedDebug.CombatDebugHarness
   advantageTeam: 0
+  useSetUp: 1
+  party:
+    members:
+    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+      currentHP: 0
+      currentSP: 0
+      inventorySnapshot:
+        entries: []
+    - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}
+      currentHP: 0
+      currentSP: 0
+      inventorySnapshot:
+        entries:
+        - key: 1
+          value: 1
+        - key: 0
+          value: 1
+    - definition: {fileID: 11400000, guid: e1cf6ee6a7acb3fc3ae8dcdfda49653f, type: 2}
+      currentHP: 0
+      currentSP: 0
+      inventorySnapshot:
+        entries: []
+  enemies:
+  - definition: {fileID: 11400000, guid: cc67159d1f26fb3048d642494ff4013a, type: 2}
+    inventorySnapshot:
+      entries: []
+  - definition: {fileID: 11400000, guid: b2775bd2b14124ffea58d1348cbcd76a, type: 2}
+    inventorySnapshot:
+      entries: []
 --- !u!114 &854757701
 MonoBehaviour:
   m_ObjectHideFlags: 0

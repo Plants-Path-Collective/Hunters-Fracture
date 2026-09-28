@@ -5,41 +5,64 @@ using UnityEngine;
 namespace Core
 {
     /// <summary>
-    /// A real Dictionary that Unity can serialize (stored as two parallel lists).
+    /// A real Dictionary that Unity can serialize, stored as a single list of key/value rows.
     /// Use it for data that must live in the Inspector / assets, like inventory snapshots.
     /// </summary>
     /// <remarks>
-    /// Rows with a repeated key are dropped on deserialize. Until a custom drawer exists,
-    /// adding several rows in the Inspector is awkward — fill entries from code instead.
+    /// <para>The rows are what the Inspector edits. A row added with "+" starts as a copy of the
+    /// last one (same key): it stays visible but has no effect until you give it a unique key.
+    /// When two rows share a key, the first one wins.</para>
+    /// <para>The rows are only rebuilt from the dictionary when the dictionary was changed from
+    /// code, so half-edited rows in the Inspector are never lost.</para>
     /// </remarks>
     [Serializable]
     public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
-        [SerializeField] private List<TKey> keys = new();
-        [SerializeField] private List<TValue> values = new();
+        [Serializable]
+        public struct Entry
+        {
+            public TKey key;
+            public TValue value;
+        }
+
+        [SerializeField] private List<Entry> entries = new();
 
         public void OnBeforeSerialize()
         {
-            keys.Clear();
-            values.Clear();
+            // Dictionary untouched since the last deserialize: keep the rows exactly as authored.
+            if (MatchesEntries()) return;
 
+            entries.Clear();
             foreach (KeyValuePair<TKey, TValue> pair in this)
-            {
-                keys.Add(pair.Key);
-                values.Add(pair.Value);
-            }
+                entries.Add(new Entry { key = pair.Key, value = pair.Value });
         }
 
         public void OnAfterDeserialize()
         {
             Clear();
 
-            int count = Mathf.Min(keys.Count, values.Count);
-            for (int i = 0; i < count; i++)
+            foreach (Entry entry in entries)
             {
-                if (keys[i] == null || ContainsKey(keys[i])) continue;
-                Add(keys[i], values[i]);
+                if (entry.key == null || ContainsKey(entry.key)) continue;
+                Add(entry.key, entry.value);
             }
+        }
+
+        /// <summary>True if the dictionary is exactly what the rows describe (first row wins per key).</summary>
+        private bool MatchesEntries()
+        {
+            var seen = new HashSet<TKey>();
+
+            foreach (Entry entry in entries)
+            {
+                if (entry.key == null || !seen.Add(entry.key)) continue;
+
+                if (!TryGetValue(entry.key, out TValue current) ||
+                    !EqualityComparer<TValue>.Default.Equals(current, entry.value))
+                    return false;
+            }
+
+            return seen.Count == Count;
         }
     }
 }

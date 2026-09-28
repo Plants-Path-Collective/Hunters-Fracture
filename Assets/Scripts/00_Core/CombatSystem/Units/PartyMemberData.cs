@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Core.CombatSystem.ItemSystem;
 
 namespace Core.CombatSystem.Units
 {
@@ -21,6 +22,6 @@ namespace Core.CombatSystem.Units
         public int currentSP = -1;
 
         [Tooltip("Item quantities by itemID. Rewritten after every combat.")]
-        public SerializableDictionary<int, int> inventorySnapshot = new();
+        public ItemSnapshot inventorySnapshot = new();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Core.CombatSystem.ItemSystem;
 
 namespace Core.CombatSystem.Units
 {
@@ -13,6 +14,6 @@ namespace Core.CombatSystem.Units
         public UnitDefinitionSO definition;
 
         [Tooltip("Optional. Leave empty for regular enemies.")]
-        public SerializableDictionary<int, int> inventorySnapshot = new();
+        public ItemSnapshot inventorySnapshot = new();
     }
 }
