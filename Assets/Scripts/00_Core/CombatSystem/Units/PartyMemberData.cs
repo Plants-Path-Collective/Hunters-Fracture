@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using Core.CombatSystem.ItemSystem;
+using UnityEngine;
 
 namespace Core.CombatSystem.Units
 {
@@ -11,11 +11,9 @@ namespace Core.CombatSystem.Units
     [Serializable]
     public class PartyMemberData
     {
-        [Header("--- Definition ---")]
         [Tooltip("Immutable template (identity, base stats). Never replaced during a run.")]
         public UnitDefinitionSO definition;
 
-        [Header("--- Persistent State ---")]
         [Tooltip("-1 = full HP (used the first time). 0 = the unit enters combat dead.")]
         public int currentHP = -1;
         [Tooltip("-1 = full SP (used the first time).")]

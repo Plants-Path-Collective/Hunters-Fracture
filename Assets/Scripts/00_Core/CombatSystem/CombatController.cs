@@ -52,6 +52,16 @@ namespace Core.CombatSystem
         /// reference to it directly.</summary>
         public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
 
+        [Header("----- Exit -----")]
+        [Tooltip("Temporary: closes the combat (write-back, destroy Units, notify) right after it ends. " +
+                "Turn it off once the summary/rewards screens exist and have them call CloseCombat().")]
+        [SerializeField] private bool autoCloseOnEnd = true;
+
+        // Filled by StartFromSetUp. The CombatSetUp itself is not kept.
+        private readonly List<(PartyMemberData data, Unit unit)> partyLinks = new();
+        private Action<COMBAT_OUTCOME> onFinished;
+        private COMBAT_OUTCOME? finishedOutcome;
+
         private void Awake()
         {
             timeline = GetComponent<TimelineController>();
@@ -75,6 +85,8 @@ namespace Core.CombatSystem
         public void StartFromSetUp(CombatSetUp setUp)
         {
             var units = new List<Unit>();
+            partyLinks.Clear();
+            onFinished = setUp.OnFinished;
 
             foreach (PartyMemberData member in setUp.Party.Members)
             {
@@ -85,6 +97,7 @@ namespace Core.CombatSystem
 
                 unit.InitializeFromParty(member);
                 units.Add(unit);
+                partyLinks.Add((member, unit));
             }
 
             foreach (EnemySlotData slot in setUp.Enemies)
@@ -117,6 +130,8 @@ namespace Core.CombatSystem
 
         public void StartCombat(IEnumerable<Unit> units, UNIT_TEAM advantageTeam)
         {
+            finishedOutcome = null;
+
             roster = units.ToList();
             foreach (Unit unit in roster)
                 unit.EnterCombat(this);
@@ -185,12 +200,60 @@ namespace Core.CombatSystem
         private void EndCombat(COMBAT_OUTCOME outcome)
         {
             IsCombatActive = false;
+            finishedOutcome = outcome;
             timeline.Clear();
             OnCombatEnd?.Invoke(outcome);
 
             // Detach every item effect so nothing stays subscribed to this controller
             foreach (Unit unit in roster)
                 unit.ExitCombat();
+
+            if (autoCloseOnEnd)
+                CloseCombat();
+        }
+
+        /// <summary>
+        /// Final step of an encounter, called once the summary/rewards screens are done (or right
+        /// away while autoCloseOnEnd is on). On Victory/Fled it writes HP, SP and inventory back to
+        /// the PartyMemberData; then it destroys every Unit and reports the outcome to whoever
+        /// started the fight. Safe to call more than once: only the first call after a combat ends
+        /// does anything.
+        /// </summary>
+        public void CloseCombat()
+        {
+            if (finishedOutcome == null) return;
+
+            COMBAT_OUTCOME outcome = finishedOutcome.Value;
+            finishedOutcome = null;
+
+            // Defeat ends the run, so nothing needs to persist.
+            if (outcome != COMBAT_OUTCOME.Defeat)
+                WriteBackToParty();
+
+            foreach (Unit unit in roster)
+                if (unit != null)
+                    Destroy(unit.gameObject);
+
+            roster = new List<Unit>();
+            CurrentActor = null;
+            partyLinks.Clear();
+
+            Action<COMBAT_OUTCOME> callback = onFinished;
+            onFinished = null;
+            callback?.Invoke(outcome);
+        }
+
+        private void WriteBackToParty()
+        {
+            foreach ((PartyMemberData data, Unit unit) in partyLinks)
+            {
+                if (data == null || unit == null) continue;
+
+                // A dead member keeps HP 0: it enters the next combat dead until something revives it.
+                data.currentHP = unit.HP;
+                data.currentSP = unit.SP;
+                data.inventorySnapshot = unit.Inventory.ToSnapshot();
+            }
         }
 
         private bool TryResolveOutcome(out COMBAT_OUTCOME outcome)

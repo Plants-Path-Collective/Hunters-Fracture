@@ -26,7 +26,26 @@ namespace ExtendedDebug.Editor
         private int amountInput = 1;
         private UNITY_TYPE damageTypeInput;
 
-        public override bool RequiresConstantRepaint() => Application.isPlaying;
+        private double nextRepaintTime;
+
+        private void OnEnable()
+        {
+            EditorApplication.update += OnEditorUpdate;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.update -= OnEditorUpdate;
+        }
+
+        private void OnEditorUpdate()
+        {
+            if (!Application.isPlaying) return;
+            if (EditorApplication.timeSinceStartup < nextRepaintTime) return;
+
+            nextRepaintTime = EditorApplication.timeSinceStartup + 0.2; // 5 refrescos/seg, de sobra para debug
+            Repaint();
+        }
 
         public override void OnInspectorGUI()
         {
@@ -56,6 +75,13 @@ namespace ExtendedDebug.Editor
             DrawUpcoming(combat);
             EditorGUILayout.Space();
             DrawControls(harness, combat);
+
+            EditorGUILayout.Space();
+            using (new EditorGUI.DisabledScope(combat.IsCombatActive))
+            {
+                if (GUILayout.Button("Start new combat (same party)"))
+                    harness.StartNewCombat();
+            }
         }
 
         private void DrawStatus(CombatController combat)

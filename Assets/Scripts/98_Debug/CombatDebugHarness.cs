@@ -33,7 +33,7 @@ namespace ExtendedDebug
             // Prepared in Awake so it is pending before CombatController.Start() consumes it,
             // whatever the Start() order between components.
             if (useSetUp)
-                CombatSetUp.Prepare(party, enemies, advantageTeam);
+                CombatSetUp.Prepare(party, enemies, advantageTeam, OnFinished);
         }
 
         private void Start()
@@ -90,5 +90,20 @@ namespace ExtendedDebug
 
         public CombatUnit FindUnit(string unitName) =>
             Combat.Roster.FirstOrDefault(u => u != null && u.Name == unitName);
+
+        private void OnFinished(COMBAT_OUTCOME outcome) =>
+            Debug.Log($"[Combat] Finished callback · {outcome}");
+
+        /// <summary>
+        /// Starts a new encounter with the same (already updated) party, to test that state
+        /// carries over between chained combats. Only when no combat is running.
+        /// </summary>
+        public void StartNewCombat()
+        {
+            if (Combat.IsCombatActive) return;
+
+            CombatSetUp.Prepare(party, enemies, advantageTeam, OnFinished);
+            Combat.StartFromSetUp(CombatSetUp.Consume());
+        }    
     }
 }

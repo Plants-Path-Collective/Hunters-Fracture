@@ -65,13 +65,7 @@ namespace Core.CombatSystem.Units
         /// </summary>
         public void InitializeFromDefinition(UnitDefinitionSO definition, UNIT_TEAM team)
         {
-            this.definition = definition;
-
-            Name = definition.unitName;
-            UnitType = definition.type;
-            Team = team;
-            Portrait = definition.portrait;
-            Description = definition.description;
+            SetIdentity(definition, team);
 
             StatsController.SetBase(definition);
             StatsController.RecalculateStats(Inventory);
@@ -102,6 +96,17 @@ namespace Core.CombatSystem.Units
             Combat = null;
         }
 
+        private void SetIdentity(UnitDefinitionSO definition, UNIT_TEAM team)
+        {
+            this.definition = definition;
+
+            Name = definition.unitName;
+            UnitType = definition.type;
+            Team = team;
+            Portrait = definition.portrait;
+            Description = definition.description;
+        }
+
         /// <summary>
         /// Builds a combat Unit from persistent party data. Inventory goes in first so the stat
         /// recompute inside InitializeFromDefinition already includes item modifiers. HP/SP are
@@ -115,18 +120,21 @@ namespace Core.CombatSystem.Units
                 return;
             }
 
+            StatsController.SetBase(member.definition);
             Inventory.Populate(member.inventorySnapshot);
-            InitializeFromDefinition(member.definition, UNIT_TEAM.Ally);
+            SetIdentity(member.definition, UNIT_TEAM.Ally);
 
             HP = member.currentHP < 0 ? MaxHP : Mathf.Min(member.currentHP, MaxHP);
             SP = member.currentSP < 0 ? MaxSP : Mathf.Min(member.currentSP, MaxSP);
         }
 
+
+
         /// <summary>
         /// Builds a Unit at full HP/SP, with an optional starting inventory (elite enemies).
         /// </summary>
-        public void InitializeFresh(UnitDefinitionSO definition, IReadOnlyDictionary<int, int> snapshot = null,
-            UNIT_TEAM team = UNIT_TEAM.Enemy)
+        public void InitializeFresh(UnitDefinitionSO definition, IReadOnlyDictionary<int, int> snapshot = null, 
+        UNIT_TEAM team = UNIT_TEAM.Enemy)
         {
             if (definition == null)
             {
@@ -134,8 +142,12 @@ namespace Core.CombatSystem.Units
                 return;
             }
 
+            StatsController.SetBase(definition);
             Inventory.Populate(snapshot);
-            InitializeFromDefinition(definition, team);
+            SetIdentity(definition, team);
+
+            HP = MaxHP;
+            SP = MaxSP;
         }
     }
 }
