@@ -10,7 +10,7 @@ namespace ExtendedDebug
     /// </summary>
     public class PartyDebugHarness : MonoBehaviour
     {
-        [SerializeField] private Party party = new();
+        [SerializeField] private AllyParty party = new();
         [SerializeField] private EnemySlotData[] enemies;
 
         [Header("--- Optional test item (added to member 0's snapshot in code) ---")]

@@ -86,4 +86,10 @@
     }
 
     #endregion
+
+    public enum ENEMY_STATE
+    {
+        Patrol,
+        Chase // not implemented yet — reserved for when perception exists
+    }
 }

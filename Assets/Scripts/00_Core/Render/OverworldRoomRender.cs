@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.Render
@@ -30,6 +31,11 @@ namespace Core.Render
         // Every OverworldRoomRender currently loaded, so ActivateNeighborhood() knows the full
         // set to turn off. Registered/unregistered per instance — no separate manager needed.
         private static readonly List<OverworldRoomRender> allRooms = new();
+
+        /// <summary>Content roots of every currently-active registered room — used by CombatTransition
+        /// to suspend and later restore exactly what was on before a fight started.</summary>
+        public static IEnumerable<GameObject> ActiveRoomContents =>
+            allRooms.Where(r => r.roomContent != null && r.roomContent.activeSelf).Select(r => r.roomContent);
 
         // ── Lifecycle ─────────────────────────────────────────────────────────
 

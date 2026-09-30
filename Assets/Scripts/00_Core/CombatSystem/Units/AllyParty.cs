@@ -9,7 +9,7 @@ namespace Core.CombatSystem.Units
     /// Carried by PlayerEntity in the Overworld.
     /// </summary>
     [Serializable]
-    public class Party
+    public class AllyParty
     {
         public const int MaxMembers = 3;
 

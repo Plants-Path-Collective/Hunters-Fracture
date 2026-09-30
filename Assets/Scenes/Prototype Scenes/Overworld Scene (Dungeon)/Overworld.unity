@@ -1663,7 +1663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1811276293
 Transform:
   m_ObjectHideFlags: 0
@@ -2056,6 +2056,11 @@ MonoBehaviour:
   attackOrigin: {fileID: 282665268}
   attackRange: 0.6
   attackRadius: 0.5
+  enemyParty:
+    slots:
+    - definition: {fileID: 11400000, guid: cc67159d1f26fb3048d642494ff4013a, type: 2}
+      inventorySnapshot:
+        entries: []
   patrolRadius: 8
   patrolPointReachedThreshold: 0.3
   navMeshSampleMaxDistance: 2
@@ -2785,6 +2790,23 @@ MonoBehaviour:
   attackOrigin: {fileID: 1604693725}
   attackRange: 0.6
   attackRadius: 0.5
+  party:
+    members:
+    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
+    - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
+    - definition: {fileID: 11400000, guid: e1cf6ee6a7acb3fc3ae8dcdfda49653f, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
 --- !u!195 &7343133755916109647
 NavMeshAgent:
   m_ObjectHideFlags: 0

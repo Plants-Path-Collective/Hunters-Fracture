@@ -1,6 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AI;
+using Core;
+using Core.CombatSystem;
+using Core.CombatSystem.Units;
 
 namespace Overworld
 {
@@ -12,11 +15,9 @@ namespace Overworld
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyEntity : Entity
     {
-        private enum EnemyState
-        {
-            Patrol,
-            Chase // not implemented yet — reserved for when perception exists
-        }
+        [Header("----- Combat -----")]
+        [SerializeField] private EnemyParty enemyParty = new();
+        public EnemyParty EnemyParty => enemyParty;
 
         [Header("----- Patrol -----")]
         [SerializeField] private float patrolRadius = 8f;
@@ -26,7 +27,7 @@ namespace Overworld
 
         private NavMeshAgent agent;
         private Vector3 patrolOrigin;
-        private EnemyState state = EnemyState.Patrol;
+        private ENEMY_STATE state = ENEMY_STATE.Patrol;
 
         private void Awake()
         {
@@ -44,10 +45,10 @@ namespace Overworld
         {
             switch (state)
             {
-                case EnemyState.Patrol:
+                case ENEMY_STATE.Patrol:
                     TickPatrol();
                     break;
-                case EnemyState.Chase:
+                case ENEMY_STATE.Chase:
                     // TODO: reacting to spotting the Player — not designed yet.
                     break;
             }
@@ -57,7 +58,7 @@ namespace Overworld
         {
             if (CanSeePlayer())
             {
-                state = EnemyState.Chase;
+                state = ENEMY_STATE.Chase;
                 return;
             }
 
@@ -95,11 +96,10 @@ namespace Overworld
 
         protected override void OnHitConnected(Entity target)
         {
-            if (target is not PlayerEntity)
-                return;
+            if (target is not PlayerEntity player) return;
 
             base.OnHitConnected(target);
-            // TODO: once CombatSetUp exists — CombatSetUp.Begin(playerAdvantage: false, this);
+            CombatTransition.Begin(player.Party, enemyParty, UNIT_TEAM.Enemy, player.gameObject, gameObject);
         }
     }
 }

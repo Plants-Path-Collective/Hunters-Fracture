@@ -2,6 +2,8 @@ using Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Core.CombatSystem;
+using Core.CombatSystem.Units;
 
 namespace Overworld
 {
@@ -12,6 +14,10 @@ namespace Overworld
     /// </summary>
     public class PlayerEntity : Entity
     {
+        [Header("----- Combat -----")]
+        [SerializeField] private AllyParty party = new();
+        public AllyParty Party => party;
+
         private void Start()
         {
             if (InputManager.Instance == null)
@@ -55,7 +61,7 @@ namespace Overworld
             if (target is not EnemyEntity enemy) return;
 
             base.OnHitConnected(target);
-            // TODO: once CombatSetUp exists — CombatSetUp.Begin(playerAdvantage: true, enemy);
+            CombatTransition.Begin(party, enemy.EnemyParty, UNIT_TEAM.Ally, gameObject, enemy.gameObject);
         }
     }
 }

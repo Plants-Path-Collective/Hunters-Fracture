@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Overworld
 {
@@ -69,16 +68,12 @@ namespace Overworld
         /// <summary>
         /// Called when this Entity's attack connects with another Entity. Whichever side calls
         /// this first is the side that gets the Speed advantage on combat entry (see
-        /// combat.html "Entrada a combate"). Default just logs — override once CombatSetUp
-        /// exists to actually trigger the transition to CombatStage.
+        /// combat.html "Entrada a combate"). Default just logs — PlayerEntity/EnemyEntity override
+        /// to actually start the fight via CombatTransition.
         /// </summary>
         protected virtual void OnHitConnected(Entity target)
         {
             Debug.Log($"[{GetType().Name}] {name} connected an attack on {target.name}.");
-
-            SceneManager.LoadScene("CombatStage", LoadSceneMode.Additive);
-
-            Debug.Log($"[{GetType().Name}] {name} would now trigger CombatSetUp with {target.name} as the target.");
         }
 
         /// <summary>

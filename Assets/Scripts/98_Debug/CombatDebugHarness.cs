@@ -20,8 +20,8 @@ namespace ExtendedDebug
 
         [Header("--- Real setup path (CombatSetUp) ---")]
         [SerializeField] private bool useSetUp = true;
-        [SerializeField] private Party party = new();
-        [SerializeField] private EnemySlotData[] enemies;
+        [SerializeField] private AllyParty allyParty = new();
+        [SerializeField] private EnemyParty enemyParty = new();
 
         public CombatController Combat { get; private set; }
 
@@ -33,7 +33,7 @@ namespace ExtendedDebug
             // Prepared in Awake so it is pending before CombatController.Start() consumes it,
             // whatever the Start() order between components.
             if (useSetUp)
-                CombatSetUp.Prepare(party, enemies, advantageTeam, OnFinished);
+                CombatSetUp.Prepare(allyParty, enemyParty, advantageTeam, OnFinished);
         }
 
         private void Start()
@@ -102,7 +102,7 @@ namespace ExtendedDebug
         {
             if (Combat.IsCombatActive) return;
 
-            CombatSetUp.Prepare(party, enemies, advantageTeam, OnFinished);
+            CombatSetUp.Prepare(allyParty, enemyParty, advantageTeam, OnFinished);
             Combat.StartFromSetUp(CombatSetUp.Consume());
         }    
     }

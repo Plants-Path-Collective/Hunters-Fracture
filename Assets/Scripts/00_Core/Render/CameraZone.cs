@@ -61,6 +61,7 @@ namespace Core.Render
         public virtual void Activate()
         {
             if (cinemachineCamera == null) return;
+            cinemachineCamera.gameObject.SetActive(true);
             cinemachineCamera.Priority = activePriority;
         }
 
@@ -71,6 +72,7 @@ namespace Core.Render
         {
             if (cinemachineCamera == null) return;
             cinemachineCamera.Priority = inactivePriority;
+            cinemachineCamera.gameObject.SetActive(false);
         }
     }
 }

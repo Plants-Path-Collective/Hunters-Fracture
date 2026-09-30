@@ -12,7 +12,7 @@ namespace Core.CombatSystem
     /// </summary>
     public class CombatSetUp
     {
-        public Party Party { get; }
+        public AllyParty Party { get; }
         public IReadOnlyList<EnemySlotData> Enemies { get; }
         public UNIT_TEAM AdvantageTeam { get; }
 
@@ -22,7 +22,7 @@ namespace Core.CombatSystem
 
         private static CombatSetUp pending;
 
-        private CombatSetUp(Party party, IReadOnlyList<EnemySlotData> enemies, UNIT_TEAM advantageTeam,
+        private CombatSetUp(AllyParty party, IReadOnlyList<EnemySlotData> enemies, UNIT_TEAM advantageTeam,
             Action<COMBAT_OUTCOME> onFinished)
         {
             Party = party;
@@ -32,10 +32,10 @@ namespace Core.CombatSystem
         }
 
         /// <summary>Stores a new pending setup, replacing any unconsumed one.</summary>
-        public static void Prepare(Party party, IReadOnlyList<EnemySlotData> enemies, UNIT_TEAM advantageTeam,
+        public static void Prepare(AllyParty allyParty, EnemyParty enemyParty, UNIT_TEAM advantageTeam,
             Action<COMBAT_OUTCOME> onFinished = null)
         {
-            pending = new CombatSetUp(party, enemies, advantageTeam, onFinished);
+            pending = new CombatSetUp(allyParty, enemyParty.Slots, advantageTeam, onFinished);
         }
 
         /// <summary>Returns the pending setup (or null) and clears the slot, so it can only be used once.</summary>
