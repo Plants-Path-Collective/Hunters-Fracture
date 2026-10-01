@@ -460,6 +460,7 @@ GameObject:
   - component: {fileID: 127349025}
   - component: {fileID: 127349027}
   - component: {fileID: 127349026}
+  - component: {fileID: 127349028}
   m_Layer: 0
   m_Name: '[CombatController]'
   m_TagString: Untagged
@@ -494,6 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d505f0fe6028bffaa62285f2ae5220d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.CombatController
+  autoCloseOnEnd: 1
 --- !u!114 &127349027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,6 +508,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e041da482240b1985fb6c7ae63967d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.TimelineController
+--- !u!114 &127349028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127349024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393f845bcc58ef58187189e106647320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ActionResolver
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0

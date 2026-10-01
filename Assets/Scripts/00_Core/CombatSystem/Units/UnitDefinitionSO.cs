@@ -31,6 +31,11 @@ namespace Core.CombatSystem.Units
         public float SPRegenMax;
         public float defenseReduction;
 
+        /// <summary>Rolls a random SP regen amount within [SPRegenMin, SPRegenMax] — Atacar and
+        /// Defender share this profile (combat.html).</summary>
+        public int RollSPRegen() =>
+            Random.Range(Mathf.RoundToInt(SPRegenMin), Mathf.RoundToInt(SPRegenMax) + 1);
+
         private void OnValidate()
         {
             if (unitPrefab != null && unitPrefab.GetComponent<Unit>() == null)

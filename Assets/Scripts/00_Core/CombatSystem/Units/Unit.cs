@@ -28,6 +28,24 @@ namespace Core.CombatSystem.Units
         public int HP { get; internal set; }
         public int SP { get; internal set; }
 
+        /// <summary>True while a Defender's guard is still up. Lasts for exactly the next turn taken
+        /// by anyone else, then clears right as the turn after that begins (so with only 2 combatants
+        /// this coincides with "my own next turn," matching combat.html's wording) — see
+        /// CombatController.Defend() / TickDefending(). Reduces incoming damage via
+        /// UnitDefinitionSO.defenseReduction (see ActionResolver.ResolveAttack).</summary>
+        public bool isDefending => defendingTurnsRemaining > 0;
+
+        /// <summary>Starts the guard. Only CombatController.Defend() should call this.</summary>
+        internal void SetDefending(int turns) => defendingTurnsRemaining = turns;
+
+        /// <summary>Counts one turn advance toward the guard's expiry. Called once per
+        /// AdvanceToNextTurn, for every Unit in the roster — see CombatController.</summary>
+        internal void TickDefending()
+        {
+            if (defendingTurnsRemaining > 0)
+                defendingTurnsRemaining--;
+        }
+
         // The 7 derived stats are owned by UnitStatsController, not copied here — this is a
         // pure pass-through, so RecalculateStats() (item pickups, buffs, etc. down the line)
         // is reflected everywhere automatically instead of going stale on a value copied once
@@ -44,6 +62,14 @@ namespace Core.CombatSystem.Units
         public UnitInventory Inventory { get; private set; }
         public UnitEffectController EffectController { get; private set; }
         public UnitStatsController StatsController { get; private set; }
+
+        // ----- Internal state -----
+        /// <summary>
+        /// turns that this unit can still defend for. 
+        /// Decremented at the start of any unit's turn, 
+        /// isDefending turns to false when it reaches 0.
+        /// </summary>
+        private int defendingTurnsRemaining;
 
         private void Awake()
         {

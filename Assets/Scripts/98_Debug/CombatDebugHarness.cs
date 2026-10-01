@@ -24,6 +24,7 @@ namespace ExtendedDebug
         [SerializeField] private EnemyParty enemyParty = new();
 
         public CombatController Combat { get; private set; }
+        public ActionResolver ActionResolver { get; private set; }
 
         private void Awake()
         {
@@ -34,6 +35,8 @@ namespace ExtendedDebug
             // whatever the Start() order between components.
             if (useSetUp)
                 CombatSetUp.Prepare(allyParty, enemyParty, advantageTeam, OnFinished);
+
+            ActionResolver = GetComponent<ActionResolver>();
         }
 
         private void Start()

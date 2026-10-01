@@ -57,10 +57,13 @@ namespace Core.CombatSystem
                 "Turn it off once the summary/rewards screens exist and have them call CloseCombat().")]
         [SerializeField] private bool autoCloseOnEnd = true;
 
+        // ── Internal State ──────────────────────────────────────────────────
+
         // Filled by StartFromSetUp. The CombatSetUp itself is not kept.
         private readonly List<(PartyMemberData data, Unit unit)> partyLinks = new();
         private Action<COMBAT_OUTCOME> onFinished;
         private COMBAT_OUTCOME? finishedOutcome;
+        private const int defendingDurationTurns = 2;
 
         private void Awake()
         {
@@ -165,7 +168,10 @@ namespace Core.CombatSystem
                 return;
             }
 
-            // TODO: clear the Defending status on CurrentActor once StatusBuffTracker exists.
+            // Tick every unit's Defending countdown once per turn advance — see Unit.TickDefending().
+            foreach (Unit unit in roster)
+                unit.TickDefending();
+
             OnTurnStart?.Invoke(CurrentActor);
         }
 
@@ -299,23 +305,26 @@ namespace Core.CombatSystem
 
         /// <summary>
         /// chance = clamp(0.5 + (avgTeamSpeed − avgOtherTeamSpeed) * 0.02, 0.1, 0.9). On success,
-        /// combat ends as Fled. On failure, behaves like any other action — the current actor
-        /// just loses this turn via the normal EndTurn() flow.
+        /// combat ends as Fled. On failure, behaves like any other action — the current actor just
+        /// loses this turn via the normal EndTurn() flow. Only the current actor can attempt it.
+        /// Returns false (and does nothing) if it's not actor's turn.
         /// </summary>
-        public void Flee(UNIT_TEAM team)
+        public bool Flee(Unit actor)
         {
-            if (!IsCombatActive || CurrentActor == null) return;
+            if (!IsCombatActive || actor == null || actor != CurrentActor) return false;
 
+            UNIT_TEAM team = actor.Team;
             bool success = UnityEngine.Random.value < CalculateFleeChance(team);
             OnFleeAttempt?.Invoke(new FleeContext { team = team, success = success });
 
             if (success)
             {
                 EndCombat(COMBAT_OUTCOME.Fled);
-                return;
+                return true;
             }
 
             EndTurn();
+            return true;
         }
 
         private float CalculateFleeChance(UNIT_TEAM team)
@@ -385,6 +394,22 @@ namespace Core.CombatSystem
         {
             if (!IsCombatActive || unit == null) return;
             unit.SP = Mathf.Min(unit.MaxSP, unit.SP + amount);
+        }
+
+        /// <summary>
+        /// Applies Defending (see Unit.SetDefending()/TickDefending() for how long it lasts) and
+        /// regenerates SP with the same profile as Atacar. Doesn't touch the timeline: Defender never
+        /// advances or delays anyone. Returns false (and does nothing) if it's not unit's turn.
+        /// </summary>
+        public bool Defend(Unit unit)
+        {
+            if (!IsCombatActive || unit == null || unit != CurrentActor) return false;
+
+            unit.SetDefending(defendingDurationTurns);
+            RestoreSP(unit, unit.Definition.RollSPRegen());
+
+            EndTurn();
+            return true;
         }
 
         // ── Timeline delegation (nothing outside touches TimelineController directly) ───────

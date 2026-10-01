@@ -17,7 +17,8 @@ namespace ExtendedDebug.Editor
         {
             EndTurn, Kill, Revive, DealDamage, Heal, Flee,
             SpendSP, RestoreSP,
-            Advance, Delay, MoveToFront, MoveToBack, Swap, InsertAfter, GrantExtraTurn
+            Advance, Delay, MoveToFront, MoveToBack, Swap, InsertAfter, GrantExtraTurn,
+            ResolveAttack, Defend
         }
 
         private DebugAction selectedAction;
@@ -100,7 +101,9 @@ namespace ExtendedDebug.Editor
                 if (unit == null) continue;
 
                 string marker = unit == combat.CurrentActor ? "→ " : "   ";
-                string status = unit.IsAlive ? $"HP {unit.HP}/{unit.MaxHP} · SP {unit.SP}/{unit.MaxSP}" : "dead";
+                string status = unit.IsAlive
+                    ? $"HP {unit.HP}/{unit.MaxHP} · SP {unit.SP}/{unit.MaxSP}" + (unit.isDefending ? " · Defending" : "")
+                    : "dead";
                 EditorGUILayout.LabelField($"{marker}{unit.Name}  ·  {unit.Team}  ·  {status}");
             }
         }
@@ -133,10 +136,15 @@ namespace ExtendedDebug.Editor
             if (needsUnit)
                 unitNameInput = EditorGUILayout.TextField("Unit", unitNameInput);
 
-            bool needsSecondaryUnit = selectedAction is DebugAction.Swap or DebugAction.InsertAfter;
+            bool needsSecondaryUnit = selectedAction is DebugAction.Swap or DebugAction.InsertAfter or DebugAction.ResolveAttack;
             if (needsSecondaryUnit)
             {
-                string label = selectedAction == DebugAction.Swap ? "Unit B" : "Insert after";
+                string label = selectedAction switch
+                {
+                    DebugAction.Swap => "Unit B",
+                    DebugAction.ResolveAttack => "Target",
+                    _ => "Insert after"
+                };
                 secondaryUnitNameInput = EditorGUILayout.TextField(label, secondaryUnitNameInput);
             }
 
@@ -170,7 +178,7 @@ namespace ExtendedDebug.Editor
                 combat.EndTurn();
                 return;
             }
-
+            
             if (selectedAction == DebugAction.Flee)
             {
                 if (combat.CurrentActor == null)
@@ -179,7 +187,7 @@ namespace ExtendedDebug.Editor
                     return;
                 }
 
-                combat.Flee(combat.CurrentActor.Team);
+                combat.Flee(combat.CurrentActor);
                 return;
             }
 
@@ -247,6 +255,27 @@ namespace ExtendedDebug.Editor
                     Debug.Log(granted
                         ? $"[Debug] Granted extra turn to {unit.Name}"
                         : $"[Debug] {unit.Name} already has one pending");
+                    break;
+                }
+                case DebugAction.ResolveAttack:
+                {
+                    if (harness.ActionResolver == null)
+                    {
+                        Debug.LogWarning("[CombatDebugHarnessEditor] No ActionResolver on this GameObject.");
+                        return;
+                    }
+
+                    CombatUnit target = harness.FindUnit(secondaryUnitNameInput);
+                    if (target == null) { Debug.LogWarning($"[CombatDebugHarnessEditor] No unit named '{secondaryUnitNameInput}' found."); return; }
+
+                    bool resolved = harness.ActionResolver.ResolveAttack(unit, target);
+                    Debug.Log(resolved ? $"[Debug] {unit.Name} attacked {target.Name}" : "[Debug] Attack rejected (invalid target)");
+                    break;
+                }
+                case DebugAction.Defend:
+                {
+                    bool defended = combat.Defend(unit);
+                    Debug.Log(defended ? $"[Debug] {unit.Name} is now Defending" : "[Debug] Defend rejected (not this unit's turn)");
                     break;
                 }
             }
