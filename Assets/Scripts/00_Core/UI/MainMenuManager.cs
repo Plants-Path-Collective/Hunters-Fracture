@@ -29,7 +29,8 @@ namespace Core.UI
         /// </summary>
         public void NewGame()
         {
-            SceneManager.LoadScene("Social");
+            // SceneManager.LoadScene("Social");
+            SceneManager.LoadScene("Overworld - Combat Demo");
         }
 
         /// <summary>

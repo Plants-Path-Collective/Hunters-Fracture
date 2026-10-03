@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-es-CL
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bfe014f855ae0e22a985ff8ac2bd06c
+    m_Address: Demos_Combat1_es-CL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es-CL
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f3de1e5f758c2924e97adc6e83e5bc27
     m_Address: UI_Common_es-CL
     m_ReadOnly: 1

@@ -6,14 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/MainMenu.unity
-    guid: def58fb23fd83db47b943fcb204c7e8e
+    path: Assets/Scenes/Combat Demo/Main Menu - CombatDemo.unity
+    guid: 503c2ce407e6bc424abeaf1793342017
   - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/Social Scene/Social.unity
-    guid: b1bc987bac712775283fd1cdc5b6e542
-  - enabled: 1
-    path: Assets/Scenes/Prototype Scenes/Overworld Scene (Dungeon)/Overworld.unity
-    guid: ed0cf8abd57b1f949ac0fa959104e3dd
+    path: Assets/Scenes/Combat Demo/Overworld Scene (Dungeon)/Overworld - CombatDemo1.unity
+    guid: c7c4084c71ded9cc180ed27030b5b642
   - enabled: 1
     path: Assets/Scenes/Prototype Scenes/CombatStage.unity
     guid: bb896772c28d18a25acb98e12c5f2494

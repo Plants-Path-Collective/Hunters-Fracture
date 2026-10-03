@@ -52,7 +52,7 @@ namespace Core.CombatSystem
         /// reference to it directly.</summary>
         public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
 
-        [Header("----- Exit -----")]
+        [Header("──────────── Exit ────────────")]
         [Tooltip("Temporary: closes the combat (write-back, destroy Units, notify) right after it ends. " +
                 "Turn it off once the summary/rewards screens exist and have them call CloseCombat().")]
         [SerializeField] private bool autoCloseOnEnd = true;
@@ -64,6 +64,14 @@ namespace Core.CombatSystem
         private Action<COMBAT_OUTCOME> onFinished;
         private COMBAT_OUTCOME? finishedOutcome;
         private const int defendingDurationTurns = 2;
+
+        // ── Positioning ─────────────────────────────────────────────────────
+        [Header("──────────── Positioning ────────────")]
+        public List<Transform> alliesDefensePositions = new(3);
+        public List<Transform> enemiesDefensePositions = new(3);
+        public List<Transform> alliesAttackPositions = new(3);
+        public List<Transform> enemiesAttackPositions = new(3);
+
 
         private void Awake()
         {
@@ -91,26 +99,32 @@ namespace Core.CombatSystem
             partyLinks.Clear();
             onFinished = setUp.OnFinished;
 
-            foreach (PartyMemberData member in setUp.Party.Members)
+            IReadOnlyList<PartyMemberData> members = setUp.Party.Members;
+            for (int i = 0; i < members.Count; i++)
             {
+                PartyMemberData member = members[i];
                 if (member == null) continue;
 
                 Unit unit = SpawnUnit(member.definition);
                 if (unit == null) continue;
 
                 unit.InitializeFromParty(member);
+                unit.SlotIndex = i;
                 units.Add(unit);
                 partyLinks.Add((member, unit));
             }
 
-            foreach (EnemySlotData slot in setUp.Enemies)
+            IReadOnlyList<EnemySlotData> enemies = setUp.Enemies;
+            for (int i = 0; i < enemies.Count; i++)
             {
+                EnemySlotData slot = enemies[i];
                 if (slot == null) continue;
 
                 Unit unit = SpawnUnit(slot.definition);
                 if (unit == null) continue;
 
                 unit.InitializeFresh(slot.definition, slot.inventorySnapshot);
+                unit.SlotIndex = i;
                 units.Add(unit);
             }
 

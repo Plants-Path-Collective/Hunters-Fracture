@@ -29,7 +29,10 @@ namespace Core.CombatSystem.Units
         [Header("--- Combat Parameters ---")]
         public float SPRegenMin;
         public float SPRegenMax;
-        public float defenseReduction;
+
+        [Tooltip("Multiplier applied to the matching defense stat (Physical/Magical) while the Unit is Defending.")]
+        [Min(1f)]
+        public float defendMultiplier = 1.5f;
 
         /// <summary>Rolls a random SP regen amount within [SPRegenMin, SPRegenMax] — Atacar and
         /// Defender share this profile (combat.html).</summary>

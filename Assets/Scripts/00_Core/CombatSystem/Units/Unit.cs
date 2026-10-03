@@ -28,11 +28,14 @@ namespace Core.CombatSystem.Units
         public int HP { get; internal set; }
         public int SP { get; internal set; }
 
-        /// <summary>True while a Defender's guard is still up. Lasts for exactly the next turn taken
-        /// by anyone else, then clears right as the turn after that begins (so with only 2 combatants
-        /// this coincides with "my own next turn," matching combat.html's wording) — see
-        /// CombatController.Defend() / TickDefending(). Reduces incoming damage via
-        /// UnitDefinitionSO.defenseReduction (see ActionResolver.ResolveAttack).</summary>
+        /// <summary>True if the Unit is currently guarding. Guarding is a temporary state that
+        /// lasts for a number of turns, and is set by CombatController.Defend(). While
+        /// defending, the Unit's effective defense stats are multiplied by UnitDefinitionSO.defendMultiplier
+        /// (see EffectivePhysicalDefense / EffectiveMagicalDefense). Guarding is not a permanent
+        /// state, and is reset to false at the start of any Unit's turn. Guarding is not a status effect, 
+        /// and is not affected by buffs or debuffs.
+        /// Multiplies the matching defense stat by UnitDefinitionSO.defendMultiplier
+        /// (see EffectivePhysicalDefense / EffectiveMagicalDefense).</summary>
         public bool isDefending => defendingTurnsRemaining > 0;
 
         /// <summary>Starts the guard. Only CombatController.Defend() should call this.</summary>
@@ -58,12 +61,26 @@ namespace Core.CombatSystem.Units
         public float PhysicalDefense => StatsController.PhysicalDefense;
         public float MagicalDefense => StatsController.MagicalDefense;
 
+        /// <summary>Physical defense including the Defending multiplier. Use this (not PhysicalDefense)
+        /// whenever damage is being mitigated.</summary>
+        public float EffectivePhysicalDefense =>
+            isDefending ? PhysicalDefense * Definition.defendMultiplier : PhysicalDefense;
+
+        /// <summary>Magical defense including the Defending multiplier.</summary>
+        public float EffectiveMagicalDefense =>
+            isDefending ? MagicalDefense * Definition.defendMultiplier : MagicalDefense;
+
         // ----- References -----
         public UnitInventory Inventory { get; private set; }
         public UnitEffectController EffectController { get; private set; }
         public UnitStatsController StatsController { get; private set; }
 
         // ----- Internal state -----
+        /// <summary>Index into the Party/EnemyParty this Unit was spawned from — matches the index of
+        /// its position Transforms in CombatController's positioning lists. -1 until CombatController
+        /// assigns it (e.g. a Unit created outside StartFromSetUp, like the old debug-only path).</summary>
+        public int SlotIndex { get; internal set; } = -1;
+
         /// <summary>
         /// turns that this unit can still defend for. 
         /// Decremented at the start of any unit's turn, 

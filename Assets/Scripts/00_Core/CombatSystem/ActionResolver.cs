@@ -70,22 +70,22 @@ namespace Core.CombatSystem
             if (!actor.IsAlive || !target.IsAlive) return false;
             return target.Team != actor.Team;
         }
-
-        /// <summary>raw = Attack − Defense/2, using the stat
-        /// pair that matches the attack's damage type, reduced by DefendingReduction if the
-        /// target is Defending, floored at 1.</summary>
+        
+        /// <summary>
+        /// Damage Received = Base Damage / (1 + Defense), where Defense is a decimal (1.0 = 100%).
+        /// Base Damage is Strength for Physical attacks and MagicPower for Magical ones. Defense
+        /// already includes the Defending multiplier. Floored at 1.
+        /// </summary>
         private int CalculateAttackDamage(Unit actor, Unit target, UNITY_TYPE damageType)
         {
-            float attackStat = damageType == UNITY_TYPE.Magical ? actor.MagicPower : actor.Strength;
-            float defenseStat = damageType == UNITY_TYPE.Magical ? target.MagicalDefense : target.PhysicalDefense;
+            float baseDamage = damageType == UNITY_TYPE.Magical ? actor.MagicPower : actor.Strength;
+            float defense = damageType == UNITY_TYPE.Magical
+                ? target.EffectiveMagicalDefense
+                : target.EffectivePhysicalDefense;
 
-            float raw = attackStat - defenseStat / 2f;
+            float received = baseDamage / (1f + Mathf.Max(0f, defense));
 
-            float final = target.isDefending
-                ? raw * (1f - target.Definition.defenseReduction)
-                : raw;
-
-            return Mathf.Max(1, Mathf.RoundToInt(final));
+            return Mathf.Max(1, Mathf.RoundToInt(received));
         }
     }
 }

@@ -1312,6 +1312,15 @@ namespace InputSystem
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Flee"",
+                    ""type"": ""Button"",
+                    ""id"": ""0682aefe-4861-415e-910f-f2aca7247209"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=3)"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Basic Attack"",
                     ""type"": ""Button"",
                     ""id"": ""eccb539a-f27c-4e9f-b184-bbbf17fae7a7"",
@@ -1321,7 +1330,7 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Open Skills Menu"",
+                    ""name"": ""Defend"",
                     ""type"": ""Button"",
                     ""id"": ""c833ce8d-9b4a-4211-8c34-e313f6133235"",
                     ""expectedControlType"": """",
@@ -1330,7 +1339,16 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Open Inventory"",
+                    ""name"": ""Skills"",
+                    ""type"": ""Button"",
+                    ""id"": ""e9f77916-2fea-4490-a958-1b91c5aed822"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Backpack"",
                     ""type"": ""Button"",
                     ""id"": ""aa4de805-b111-43b8-a438-0aa3e68e0858"",
                     ""expectedControlType"": """",
@@ -1339,7 +1357,7 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move in Menu"",
+                    ""name"": ""Move in Skills/Backpack"",
                     ""type"": ""Value"",
                     ""id"": ""c2384ff7-8569-455f-829f-45875bfc5c4a"",
                     ""expectedControlType"": ""Vector2"",
@@ -1348,12 +1366,12 @@ namespace InputSystem
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Back from Menu"",
+                    ""name"": ""Confirm Action"",
                     ""type"": ""Button"",
-                    ""id"": ""65aae14f-9c38-49fa-9ff4-1f5e29507094"",
+                    ""id"": ""75113449-0bd9-43e7-ada8-b9177c316f10"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1364,42 +1382,18 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cast Ultimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""66a929f9-e1d3-4ffb-84fc-b017aae7ce53"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=3)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""Left Stick Gamepad 2D Vector"",
-                    ""id"": ""7a015f3c-476a-4ea0-a643-4634e0f770af"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Target  Selection"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""127e89d5-48cd-483a-8709-7c7039844ed9"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Target  Selection"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""406245f4-5035-4a81-bfa6-eb1fd2fe4022"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Target  Selection"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": ""Keyboard (AS)"",
                     ""id"": ""5a19a869-142d-41a2-9880-1e114fa29bd3"",
@@ -1457,34 +1451,34 @@ namespace InputSystem
                 },
                 {
                     ""name"": ""Left Stick Gamepad 2D Vector"",
-                    ""id"": ""6376596b-f15b-4fbd-9602-7d73acb55920"",
+                    ""id"": ""7a015f3c-476a-4ea0-a643-4634e0f770af"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Target  Selection"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""right"",
-                    ""id"": ""9d1afc0a-4a8a-47a1-9387-fc5d4c72af87"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""name"": ""left"",
+                    ""id"": ""127e89d5-48cd-483a-8709-7c7039844ed9"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Target  Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""4e8d55ca-de50-404b-a60d-6014e2ee63eb"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""name"": ""right"",
+                    ""id"": ""406245f4-5035-4a81-bfa6-eb1fd2fe4022"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Target  Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1495,7 +1489,7 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1506,7 +1500,7 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1517,7 +1511,7 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1528,7 +1522,7 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1539,7 +1533,40 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move in Menu"",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left Stick Gamepad 2D Vector"",
+                    ""id"": ""6376596b-f15b-4fbd-9602-7d73acb55920"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9d1afc0a-4a8a-47a1-9387-fc5d4c72af87"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4e8d55ca-de50-404b-a60d-6014e2ee63eb"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1567,23 +1594,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9faa6d75-6c6b-4a80-9162-35e055eb7ff4"",
-                    ""path"": ""<Keyboard>/backspace"",
+                    ""id"": ""b357defd-22b6-4681-beb4-1c9533de4aae"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Back from Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2fa923a1-f11b-4155-ab61-d0a527b4b74a"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Back from Menu"",
+                    ""groups"": """",
+                    ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1621,15 +1637,70 @@ namespace InputSystem
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""b357defd-22b6-4681-beb4-1c9533de4aae"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""name"": ""One Modifier"",
+                    ""id"": ""c00209a0-5eed-4b71-9935-a737f76b36c7"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""Hold(duration=3)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""359356c0-055a-4b13-90de-afb9b4eb6b94"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""1d1ade36-2684-4b9c-bb57-0348ecf95c3d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""d50a1be7-2bb9-4e35-b40d-36a9dbcfc88c"",
+                    ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Open Pause Menu"",
-                    ""isComposite"": false,
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""e4fcf1d0-db8b-4566-b8b2-8d78c64514c7"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""6a9fdf29-7b9f-4f1d-a451-8761f55c24f5"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Cast Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -1638,18 +1709,62 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Open Skills Menu"",
+                    ""action"": ""Defend"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""e5b02047-823e-41c5-9fb5-6880b8290375"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Defend"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1af0173-f703-4772-a5d1-c69e09563bad"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""action"": ""Skills"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b5c45c3-6642-4034-be04-6da70d4e20f1"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Open Skills Menu"",
+                    ""action"": ""Skills"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12db38a2-e017-4047-81f0-6c0e51888cda"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""action"": ""Flee"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""615c8eeb-9ea4-4b46-81aa-37f2fcb1a00d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Flee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1660,7 +1775,7 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Open Inventory"",
+                    ""action"": ""Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1671,7 +1786,29 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Open Inventory"",
+                    ""action"": ""Backpack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8974d40f-cf37-42fa-bc3b-8ab8a549c895"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Confirm Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39a8ec75-3f68-43e0-a33b-a7b43c6d5744"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Confirm Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1774,12 +1911,15 @@ namespace InputSystem
             // Combat
             m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
             m_Combat_TargetSelection = m_Combat.FindAction("Target  Selection", throwIfNotFound: true);
+            m_Combat_Flee = m_Combat.FindAction("Flee", throwIfNotFound: true);
             m_Combat_BasicAttack = m_Combat.FindAction("Basic Attack", throwIfNotFound: true);
-            m_Combat_OpenSkillsMenu = m_Combat.FindAction("Open Skills Menu", throwIfNotFound: true);
-            m_Combat_OpenInventory = m_Combat.FindAction("Open Inventory", throwIfNotFound: true);
-            m_Combat_MoveinMenu = m_Combat.FindAction("Move in Menu", throwIfNotFound: true);
-            m_Combat_BackfromMenu = m_Combat.FindAction("Back from Menu", throwIfNotFound: true);
+            m_Combat_Defend = m_Combat.FindAction("Defend", throwIfNotFound: true);
+            m_Combat_Skills = m_Combat.FindAction("Skills", throwIfNotFound: true);
+            m_Combat_Backpack = m_Combat.FindAction("Backpack", throwIfNotFound: true);
+            m_Combat_MoveinSkillsBackpack = m_Combat.FindAction("Move in Skills/Backpack", throwIfNotFound: true);
+            m_Combat_ConfirmAction = m_Combat.FindAction("Confirm Action", throwIfNotFound: true);
             m_Combat_OpenPauseMenu = m_Combat.FindAction("Open Pause Menu", throwIfNotFound: true);
+            m_Combat_CastUltimate = m_Combat.FindAction("Cast Ultimate", throwIfNotFound: true);
         }
 
         ~@InputSystem_Actions()
@@ -2511,12 +2651,15 @@ namespace InputSystem
         private readonly InputActionMap m_Combat;
         private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
         private readonly InputAction m_Combat_TargetSelection;
+        private readonly InputAction m_Combat_Flee;
         private readonly InputAction m_Combat_BasicAttack;
-        private readonly InputAction m_Combat_OpenSkillsMenu;
-        private readonly InputAction m_Combat_OpenInventory;
-        private readonly InputAction m_Combat_MoveinMenu;
-        private readonly InputAction m_Combat_BackfromMenu;
+        private readonly InputAction m_Combat_Defend;
+        private readonly InputAction m_Combat_Skills;
+        private readonly InputAction m_Combat_Backpack;
+        private readonly InputAction m_Combat_MoveinSkillsBackpack;
+        private readonly InputAction m_Combat_ConfirmAction;
         private readonly InputAction m_Combat_OpenPauseMenu;
+        private readonly InputAction m_Combat_CastUltimate;
         /// <summary>
         /// Provides access to input actions defined in input action map "Combat".
         /// </summary>
@@ -2533,29 +2676,41 @@ namespace InputSystem
             /// </summary>
             public InputAction @TargetSelection => m_Wrapper.m_Combat_TargetSelection;
             /// <summary>
+            /// Provides access to the underlying input action "Combat/Flee".
+            /// </summary>
+            public InputAction @Flee => m_Wrapper.m_Combat_Flee;
+            /// <summary>
             /// Provides access to the underlying input action "Combat/BasicAttack".
             /// </summary>
             public InputAction @BasicAttack => m_Wrapper.m_Combat_BasicAttack;
             /// <summary>
-            /// Provides access to the underlying input action "Combat/OpenSkillsMenu".
+            /// Provides access to the underlying input action "Combat/Defend".
             /// </summary>
-            public InputAction @OpenSkillsMenu => m_Wrapper.m_Combat_OpenSkillsMenu;
+            public InputAction @Defend => m_Wrapper.m_Combat_Defend;
             /// <summary>
-            /// Provides access to the underlying input action "Combat/OpenInventory".
+            /// Provides access to the underlying input action "Combat/Skills".
             /// </summary>
-            public InputAction @OpenInventory => m_Wrapper.m_Combat_OpenInventory;
+            public InputAction @Skills => m_Wrapper.m_Combat_Skills;
             /// <summary>
-            /// Provides access to the underlying input action "Combat/MoveinMenu".
+            /// Provides access to the underlying input action "Combat/Backpack".
             /// </summary>
-            public InputAction @MoveinMenu => m_Wrapper.m_Combat_MoveinMenu;
+            public InputAction @Backpack => m_Wrapper.m_Combat_Backpack;
             /// <summary>
-            /// Provides access to the underlying input action "Combat/BackfromMenu".
+            /// Provides access to the underlying input action "Combat/MoveinSkillsBackpack".
             /// </summary>
-            public InputAction @BackfromMenu => m_Wrapper.m_Combat_BackfromMenu;
+            public InputAction @MoveinSkillsBackpack => m_Wrapper.m_Combat_MoveinSkillsBackpack;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/ConfirmAction".
+            /// </summary>
+            public InputAction @ConfirmAction => m_Wrapper.m_Combat_ConfirmAction;
             /// <summary>
             /// Provides access to the underlying input action "Combat/OpenPauseMenu".
             /// </summary>
             public InputAction @OpenPauseMenu => m_Wrapper.m_Combat_OpenPauseMenu;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/CastUltimate".
+            /// </summary>
+            public InputAction @CastUltimate => m_Wrapper.m_Combat_CastUltimate;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2585,24 +2740,33 @@ namespace InputSystem
                 @TargetSelection.started += instance.OnTargetSelection;
                 @TargetSelection.performed += instance.OnTargetSelection;
                 @TargetSelection.canceled += instance.OnTargetSelection;
+                @Flee.started += instance.OnFlee;
+                @Flee.performed += instance.OnFlee;
+                @Flee.canceled += instance.OnFlee;
                 @BasicAttack.started += instance.OnBasicAttack;
                 @BasicAttack.performed += instance.OnBasicAttack;
                 @BasicAttack.canceled += instance.OnBasicAttack;
-                @OpenSkillsMenu.started += instance.OnOpenSkillsMenu;
-                @OpenSkillsMenu.performed += instance.OnOpenSkillsMenu;
-                @OpenSkillsMenu.canceled += instance.OnOpenSkillsMenu;
-                @OpenInventory.started += instance.OnOpenInventory;
-                @OpenInventory.performed += instance.OnOpenInventory;
-                @OpenInventory.canceled += instance.OnOpenInventory;
-                @MoveinMenu.started += instance.OnMoveinMenu;
-                @MoveinMenu.performed += instance.OnMoveinMenu;
-                @MoveinMenu.canceled += instance.OnMoveinMenu;
-                @BackfromMenu.started += instance.OnBackfromMenu;
-                @BackfromMenu.performed += instance.OnBackfromMenu;
-                @BackfromMenu.canceled += instance.OnBackfromMenu;
+                @Defend.started += instance.OnDefend;
+                @Defend.performed += instance.OnDefend;
+                @Defend.canceled += instance.OnDefend;
+                @Skills.started += instance.OnSkills;
+                @Skills.performed += instance.OnSkills;
+                @Skills.canceled += instance.OnSkills;
+                @Backpack.started += instance.OnBackpack;
+                @Backpack.performed += instance.OnBackpack;
+                @Backpack.canceled += instance.OnBackpack;
+                @MoveinSkillsBackpack.started += instance.OnMoveinSkillsBackpack;
+                @MoveinSkillsBackpack.performed += instance.OnMoveinSkillsBackpack;
+                @MoveinSkillsBackpack.canceled += instance.OnMoveinSkillsBackpack;
+                @ConfirmAction.started += instance.OnConfirmAction;
+                @ConfirmAction.performed += instance.OnConfirmAction;
+                @ConfirmAction.canceled += instance.OnConfirmAction;
                 @OpenPauseMenu.started += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
+                @CastUltimate.started += instance.OnCastUltimate;
+                @CastUltimate.performed += instance.OnCastUltimate;
+                @CastUltimate.canceled += instance.OnCastUltimate;
             }
 
             /// <summary>
@@ -2617,24 +2781,33 @@ namespace InputSystem
                 @TargetSelection.started -= instance.OnTargetSelection;
                 @TargetSelection.performed -= instance.OnTargetSelection;
                 @TargetSelection.canceled -= instance.OnTargetSelection;
+                @Flee.started -= instance.OnFlee;
+                @Flee.performed -= instance.OnFlee;
+                @Flee.canceled -= instance.OnFlee;
                 @BasicAttack.started -= instance.OnBasicAttack;
                 @BasicAttack.performed -= instance.OnBasicAttack;
                 @BasicAttack.canceled -= instance.OnBasicAttack;
-                @OpenSkillsMenu.started -= instance.OnOpenSkillsMenu;
-                @OpenSkillsMenu.performed -= instance.OnOpenSkillsMenu;
-                @OpenSkillsMenu.canceled -= instance.OnOpenSkillsMenu;
-                @OpenInventory.started -= instance.OnOpenInventory;
-                @OpenInventory.performed -= instance.OnOpenInventory;
-                @OpenInventory.canceled -= instance.OnOpenInventory;
-                @MoveinMenu.started -= instance.OnMoveinMenu;
-                @MoveinMenu.performed -= instance.OnMoveinMenu;
-                @MoveinMenu.canceled -= instance.OnMoveinMenu;
-                @BackfromMenu.started -= instance.OnBackfromMenu;
-                @BackfromMenu.performed -= instance.OnBackfromMenu;
-                @BackfromMenu.canceled -= instance.OnBackfromMenu;
+                @Defend.started -= instance.OnDefend;
+                @Defend.performed -= instance.OnDefend;
+                @Defend.canceled -= instance.OnDefend;
+                @Skills.started -= instance.OnSkills;
+                @Skills.performed -= instance.OnSkills;
+                @Skills.canceled -= instance.OnSkills;
+                @Backpack.started -= instance.OnBackpack;
+                @Backpack.performed -= instance.OnBackpack;
+                @Backpack.canceled -= instance.OnBackpack;
+                @MoveinSkillsBackpack.started -= instance.OnMoveinSkillsBackpack;
+                @MoveinSkillsBackpack.performed -= instance.OnMoveinSkillsBackpack;
+                @MoveinSkillsBackpack.canceled -= instance.OnMoveinSkillsBackpack;
+                @ConfirmAction.started -= instance.OnConfirmAction;
+                @ConfirmAction.performed -= instance.OnConfirmAction;
+                @ConfirmAction.canceled -= instance.OnConfirmAction;
                 @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
+                @CastUltimate.started -= instance.OnCastUltimate;
+                @CastUltimate.performed -= instance.OnCastUltimate;
+                @CastUltimate.canceled -= instance.OnCastUltimate;
             }
 
             /// <summary>
@@ -2928,6 +3101,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTargetSelection(InputAction.CallbackContext context);
             /// <summary>
+            /// Method invoked when associated input action "Flee" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnFlee(InputAction.CallbackContext context);
+            /// <summary>
             /// Method invoked when associated input action "Basic Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2935,33 +3115,40 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnBasicAttack(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Open Skills Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Defend" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnOpenSkillsMenu(InputAction.CallbackContext context);
+            void OnDefend(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Open Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Skills" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnOpenInventory(InputAction.CallbackContext context);
+            void OnSkills(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Move in Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Backpack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnMoveinMenu(InputAction.CallbackContext context);
+            void OnBackpack(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Back from Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Move in Skills/Backpack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnBackfromMenu(InputAction.CallbackContext context);
+            void OnMoveinSkillsBackpack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Confirm Action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnConfirmAction(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Open Pause Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2969,6 +3156,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenPauseMenu(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Cast Ultimate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCastUltimate(InputAction.CallbackContext context);
         }
     }
 }
