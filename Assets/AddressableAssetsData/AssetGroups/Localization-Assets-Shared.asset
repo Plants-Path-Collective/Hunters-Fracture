@@ -20,6 +20,12 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b0a85a50a308e526b7f7cea9bf19c9d
+    m_Address: Assets/Localization/String Tables/UI_Items/UI_Items/UI_Items Shared
+      Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 43b97c49dd8e5b50298536a14238ce6d
     m_Address: Assets/Localization/String Tables/Combat Demo/Demos_Combat1/Demos_Combat1
       Shared Data.asset
@@ -34,6 +40,12 @@ MonoBehaviour:
   - m_GUID: 95b4cff7b78839970ae88c3ff464b6cb
     m_Address: Assets/Localization/String Tables/Dialogues/Dialogues/Dialogues Shared
       Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea6460fe53286597b82b6f84075f75c6
+    m_Address: Assets/Localization/String Tables/UI_Consumables/UI_Consumables/UI_Consumables
+      Shared Data.asset
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

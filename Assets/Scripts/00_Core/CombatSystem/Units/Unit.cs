@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
-using Core;
 
 namespace Core.CombatSystem.Units
 {
@@ -22,11 +22,39 @@ namespace Core.CombatSystem.Units
         // ----- Stats -----
         public bool IsAlive => HP > 0;
 
+        // ----- Resource events -----
+
+        /// <summary>Fired whenever HP or SP change, and whenever stats are recalculated (MaxHP/MaxSP may
+        /// have changed). Subscribers read HP/MaxHP/SP/MaxSP from the Unit; bars bind to this per Unit.</summary>
+        public event Action<Unit> OnResourcesChanged;
+
+        private int hp;
+        private int sp;
+
         // Current HP/SP are the only stats Unit actually owns — they're persisted state, not
         // derived. Only CombatController should write these (Kill/Revive/DealDamage/Heal/
         // SpendSP/RestoreSP).
-        public int HP { get; internal set; }
-        public int SP { get; internal set; }
+        public int HP
+        {
+            get => hp;
+            internal set
+            {
+                if (hp == value) return;
+                hp = value;
+                OnResourcesChanged?.Invoke(this);
+            }
+        }
+
+        public int SP
+        {
+            get => sp;
+            internal set
+            {
+                if (sp == value) return;
+                sp = value;
+                OnResourcesChanged?.Invoke(this);
+            }
+        }
 
         /// <summary>True if the Unit is currently guarding. Guarding is a temporary state that
         /// lasts for a number of turns, and is set by CombatController.Defend(). While
@@ -94,11 +122,7 @@ namespace Core.CombatSystem.Units
             EffectController = GetComponent<UnitEffectController>();
             StatsController = GetComponent<UnitStatsController>();
 
-            // Deliberately NOT calling InitializeFromDefinition here: AddComponent<Unit>()
-            // fires Awake() synchronously, before whoever creates this Unit dynamically (a test
-            // harness, CombatController) has a chance to assign a definition. Initialization is
-            // always an explicit call from the creator, matching combat.html's
-            // "Instantiate → Unit.InitializeFresh(...)" flow — never automatic.
+            StatsController.OnStatsRecalculated.AddListener(() => OnResourcesChanged?.Invoke(this));
         }
 
         /// <summary>

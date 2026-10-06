@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35ed1960babfe9d868c0b30d7cfb5bbb
+    m_Address: UI_Consumables_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b391e1e0d7cb2c51888ff11ceeb862e
     m_Address: Dialogues_en
     m_ReadOnly: 1
@@ -29,6 +35,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58a9d0db6900f1f41a91ac097c255a88
     m_Address: UI_Menus_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7dde62a08c8bafd7a835f68a24c61c6f
+    m_Address: UI_Items_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

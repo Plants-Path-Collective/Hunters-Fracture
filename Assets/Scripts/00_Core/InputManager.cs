@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using InputSystem;
 
@@ -18,6 +21,9 @@ namespace Core
     {
         // ── Singleton ─────────────────────────────────────────────────────────
         public static InputManager Instance { get; private set; }
+
+        [Header("── Debug ────────────────")]
+        [SerializeField] private bool logMapChanges = true;
 
         // ── Generated asset ───────────────────────────────────────────────────
         public InputSystem_Actions Actions { get; private set; }
@@ -97,10 +103,17 @@ namespace Core
 
         /// <summary>
         /// Disables every map, then enables only the requested one.
-        /// Safe to call multiple times with the same map.
+        /// Safe to call multiple times with the same map. The caller parameters are filled in by the
+        /// compiler (they only feed the debug log), so existing calls stay unchanged.
         /// </summary>
-        public void ChangeActionMap(INPUTACTION_MAP newMap)
+        public void ChangeActionMap(INPUTACTION_MAP newMap,
+            [CallerMemberName] string caller = "", [CallerFilePath] string callerFile = "")
         {
+            if (logMapChanges)
+                Debug.Log($"[InputManager] ChangeActionMap({newMap}) requested by " +
+                        $"{Path.GetFileNameWithoutExtension(callerFile)}.{caller}() — current: {CurrentMap}" +
+                        (CurrentMap == newMap ? " → IGNORED (already current)" : ""));
+
             if (CurrentMap == newMap) return;
 
             DisableAllMaps();
@@ -115,8 +128,22 @@ namespace Core
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
                 case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
             }
+
+            if (logMapChanges)
+                Debug.Log($"[InputManager] Map is now {CurrentMap}. Actually enabled: {EnabledMapsSummary()}");
         }
 
+        private string EnabledMapsSummary()
+        {
+            var names = new List<string>();
+            if (Actions.UI.enabled) names.Add("UI");
+            if (Actions.Social.enabled) names.Add("Social");
+            if (Actions.Overworld.enabled) names.Add("Overworld");
+            if (Actions.Dialogue.enabled) names.Add("Dialogue");
+            if (Actions.Combat.enabled) names.Add("Combat");
+            return names.Count == 0 ? "none" : string.Join(", ", names);
+        }
+        
         /// <summary>
         /// Switches to UI map, remembering the previous map so PopUIMap() can restore it.
         /// Useful for opening menus during Social, Overworld, or Combat.

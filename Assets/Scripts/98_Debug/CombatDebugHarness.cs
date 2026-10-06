@@ -26,14 +26,18 @@ namespace ExtendedDebug
         public CombatController Combat { get; private set; }
         public ActionResolver ActionResolver { get; private set; }
 
+        private bool realSetUpPending;
+
         private void Awake()
         {
             Combat = GetComponent<CombatController>();
             SubscribeLogs();
 
-            // Prepared in Awake so it is pending before CombatController.Start() consumes it,
-            // whatever the Start() order between components.
-            if (useSetUp)
+            // A fight coming from the Overworld (CombatTransition.Begin) already has a real setup
+            // pending: replacing it would swap the roster and the OnFinished callback for the debug ones.
+            realSetUpPending = CombatSetUp.HasPending;
+
+            if (useSetUp && !realSetUpPending)
                 CombatSetUp.Prepare(allyParty, enemyParty, advantageTeam, OnFinished);
 
             ActionResolver = GetComponent<ActionResolver>();
@@ -41,7 +45,9 @@ namespace ExtendedDebug
 
         private void Start()
         {
-            if (useSetUp) return; // CombatController.Start() already started the combat
+            // useSetUp: CombatController.Start() already starts the combat.
+            // realSetUpPending: same, but from the real setup (the throwaway Units would clash with it).
+            if (useSetUp || realSetUpPending) return;
 
             CombatUnit[] units =
             {

@@ -128,6 +128,9 @@ namespace Core.CombatSystem
                 units.Add(unit);
             }
 
+            Debug.Log($"[{nameof(CombatController)}] Starting with {units.Count} unit(s) " +
+                $"({members.Count} party slot(s), {enemies.Count} enemy slot(s)).");
+
             StartCombat(units, setUp.AdvantageTeam);
         }
 
