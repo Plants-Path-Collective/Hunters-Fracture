@@ -25,10 +25,11 @@ namespace Core.CombatSystem
         private enum InputState { Locked, Ready }
 
         [Header("── Target Selection ───────────────────────────")]
+        [Tooltip("Flip the stick direction. By default right (D) moves forward along the ring: " +
+                "enemies left → right, then allies right → left.")]
+        [SerializeField] private bool invertTargetDirection;
         [Tooltip("How far the stick must be pushed before it counts as one step left/right.")]
         [SerializeField, Range(0.1f, 0.9f)] private float stickThreshold = 0.5f;
-        [Tooltip("Flip left/right if a lower SlotIndex is not on the left side of the screen.")]
-        [SerializeField] private bool invertTargetDirection;
 
         /// <summary>Fired when the highlighted target changes. Null = highlight closed.</summary>
         public event Action<Unit> OnTargetChanged;
@@ -44,12 +45,22 @@ namespace Core.CombatSystem
         private ActionResolver resolver;
 
         private InputState state = InputState.Locked;
+
+        /// <summary>Every living unit of both sides in ring order (see CombatSlots.RingPosition).</summary>
         private List<Unit> targets = new();
         private int targetIndex;
         private int lastTargetDirection;
 
-        /// <summary>Last highlighted target. The next ally turn starts on it if it is still alive.</summary>
-        private Unit lastTarget;
+        /// <summary>Last highlighted ENEMY. The next ally turn starts on it if it is still alive, since
+        /// Basic Attack (the most common action) can only hit enemies.</summary>
+        private Unit lastEnemyTarget;
+
+        private Unit CurrentTarget =>
+            targetIndex >= 0 && targetIndex < targets.Count ? targets[targetIndex] : null;
+
+        /// <summary>An action was attempted on a target it cannot hit (e.g. Basic Attack on an ally).
+        /// Hook for UI feedback; the turn is not spent.</summary>
+        public event Action<Unit> OnTargetRejected;
 
         private void Awake()
         {
@@ -137,7 +148,7 @@ namespace Core.CombatSystem
 
         private void OnCombatEnd(COMBAT_OUTCOME outcome)
         {
-            lastTarget = null;
+            lastEnemyTarget = null;
             Lock();
         }
 
@@ -155,10 +166,17 @@ namespace Core.CombatSystem
 
         private void OnBasicAttack(InputAction.CallbackContext context)
         {
-            if (state == InputState.Locked || targets.Count == 0) return;
+            Unit target = CurrentTarget;
+            if (state == InputState.Locked || target == null) return;
 
             Unit actor = combat.CurrentActor;
-            Unit target = targets[targetIndex];
+
+            // The cursor can rest on any unit, but Basic Attack only hits enemies.
+            if (target.Team == actor.Team)
+            {
+                OnTargetRejected?.Invoke(target);
+                return;
+            }
 
             // Lock BEFORE calling: EndTurn() runs synchronously inside ResolveAttack(), and the
             // next OnTurnStart (if it is an ally) must be the one that unlocks us again.
@@ -208,18 +226,20 @@ namespace Core.CombatSystem
         // ── Target selection ──────────────────────────────────────────────────
 
         /// <summary>
-        /// Rebuilds the list of valid enemy targets and highlights one: the previous target if it
-        /// is still alive, otherwise the first by slot.
+        /// Builds the ring of living units and highlights one: the previous enemy target if it is
+        /// still alive, otherwise the first enemy. Dead allies are left out until a DeadAlly target
+        /// type exists (revive skills).
         /// </summary>
         private void OpenTargetSelection()
         {
-            Unit actor = combat.CurrentActor;
-            if (actor == null) return;
+            if (combat.CurrentActor == null) return;
 
-            targets = combat.Roster
-                .Where(u => u.Team != actor.Team && u.IsAlive)
-                .OrderBy(u => u.SlotIndex)
-                .ToList();
+            List<Unit> allies = AliveOf(UNIT_TEAM.Ally);
+            List<Unit> enemies = AliveOf(UNIT_TEAM.Enemy);
+
+            // One flat ring around the arena as seen from the camera: the enemy row left → right, then
+            // the ally row right → left, wrapping back to the first enemy.
+            targets = AliveOf(UNIT_TEAM.Enemy).Concat(AliveOf(UNIT_TEAM.Ally)).ToList();
 
             state = InputState.Ready;
 
@@ -229,33 +249,46 @@ namespace Core.CombatSystem
                 return;
             }
 
-            int remembered = lastTarget != null ? targets.IndexOf(lastTarget) : -1;
-            targetIndex = remembered >= 0 ? remembered : 0;
-            lastTarget = targets[targetIndex];
+            int remembered = lastEnemyTarget != null ? targets.IndexOf(lastEnemyTarget) : -1;
+            int firstEnemy = targets.FindIndex(u => u.Team == UNIT_TEAM.Enemy);
 
-            OnTargetChanged?.Invoke(lastTarget);
+            SetTarget(remembered >= 0 ? remembered : Mathf.Max(0, firstEnemy));
+        }
+
+        private List<Unit> AliveOf(UNIT_TEAM team) =>
+            combat.Roster
+                .Where(u => u.Team == team && u.IsAlive)
+                // Units without a slot (debug-only path) go last instead of silently disappearing.
+                .OrderBy(u => u.Slot.HasValue ? CombatSlots.RingPosition(team, u.Slot.Value) : int.MaxValue)
+                .ToList();
+
+        private void SetTarget(int index)
+        {
+            targetIndex = index;
+            Unit target = targets[index];
+
+            if (target.Team == UNIT_TEAM.Enemy)
+                lastEnemyTarget = target;
+
+            OnTargetChanged?.Invoke(target);
         }
 
         private void OnTargetSelection(InputAction.CallbackContext context)
         {
-            // Value action: a held stick fires performed repeatedly, so only a fresh push past
-            // the threshold counts as one step (edge detection). canceled reads (0,0) and resets it.
+            // Value action: a held stick fires performed repeatedly, so only a fresh push past the
+            // threshold counts as one step (edge detection). canceled reads (0,0) and resets it.
             float x = context.ReadValue<Vector2>().x;
             int direction = x > stickThreshold ? 1 : x < -stickThreshold ? -1 : 0;
 
             bool isNewStep = direction != 0 && direction != lastTargetDirection;
             lastTargetDirection = direction;
 
-            if (!isNewStep || state != InputState.Ready || targets.Count == 0) return;
+            if (!isNewStep || state != InputState.Ready || targets.Count < 2) return;
 
             if (invertTargetDirection) direction = -direction;
 
-            int next = Mathf.Clamp(targetIndex + direction, 0, targets.Count - 1);
-            if (next == targetIndex) return;
-
-            targetIndex = next;
-            lastTarget = targets[targetIndex];
-            OnTargetChanged?.Invoke(lastTarget);
+            // Wraps around: the row is a ring.
+            SetTarget((targetIndex + direction + targets.Count) % targets.Count);
         }
 
         // ── Hold feedback ─────────────────────────────────────────────────────

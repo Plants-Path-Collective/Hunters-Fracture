@@ -67,11 +67,53 @@ namespace Core.CombatSystem
 
         // ── Positioning ─────────────────────────────────────────────────────
         [Header("──────────── Positioning ────────────")]
-        public List<Transform> alliesDefensePositions = new(3);
-        public List<Transform> enemiesDefensePositions = new(3);
-        public List<Transform> alliesAttackPositions = new(3);
-        public List<Transform> enemiesAttackPositions = new(3);
+        public SlotAnchors alliesDefense;
+        public SlotAnchors enemiesDefense;
+        public SlotAnchors alliesAttack;
+        public SlotAnchors enemiesAttack;
 
+        // One-time migration from the old index-based lists. They keep their old serialized names, so
+        // the existing scene assignments load here and get copied into the labeled anchors above.
+        // Once the scene has been migrated and saved, delete these four fields and the region below.
+        [SerializeField, HideInInspector] private List<Transform> alliesDefensePositions;
+        [SerializeField, HideInInspector] private List<Transform> enemiesDefensePositions;
+        [SerializeField, HideInInspector] private List<Transform> alliesAttackPositions;
+        [SerializeField, HideInInspector] private List<Transform> enemiesAttackPositions;
+
+        #region LegacyMigration
+        #if UNITY_EDITOR
+        private void OnValidate() => MigrateLegacyPositions();
+
+        [ContextMenu("Migrate legacy positions")]
+        private void MigrateLegacyPositions()
+        {
+            bool migrated = false;
+            migrated |= Migrate(alliesDefensePositions, ref alliesDefense);
+            migrated |= Migrate(enemiesDefensePositions, ref enemiesDefense);
+            migrated |= Migrate(alliesAttackPositions, ref alliesAttack);
+            migrated |= Migrate(enemiesAttackPositions, ref enemiesAttack);
+
+            if (migrated)
+                UnityEditor.EditorUtility.SetDirty(this);
+        }
+
+        /// <summary>Copies list element i into the slot that index maps to, only where the slot is
+        /// still empty, then empties the list so this runs once.</summary>
+        private static bool Migrate(List<Transform> legacy, ref SlotAnchors target)
+        {
+            if (legacy == null || legacy.Count == 0) return false;
+
+            for (int i = 0; i < legacy.Count; i++)
+            {
+                if (!CombatSlots.TryFromIndex(i, out COMBAT_SLOT slot)) break;
+                if (target.Get(slot) == null) target.Set(slot, legacy[i]);
+            }
+
+            legacy.Clear();
+            return true;
+        }
+        #endif
+        #endregion
 
         private void Awake()
         {
@@ -105,11 +147,18 @@ namespace Core.CombatSystem
                 PartyMemberData member = members[i];
                 if (member == null) continue;
 
+                if (!CombatSlots.TryFromIndex(i, out COMBAT_SLOT memberSlot))
+                {
+                    Debug.LogError($"[{nameof(CombatController)}] Party member {i} has no slot " +
+                                $"(max {CombatSlots.MaxPerTeam} per team).");
+                    continue;
+                }
+
                 Unit unit = SpawnUnit(member.definition);
                 if (unit == null) continue;
 
                 unit.InitializeFromParty(member);
-                unit.SlotIndex = i;
+                unit.Slot = memberSlot;
                 units.Add(unit);
                 partyLinks.Add((member, unit));
             }
@@ -117,14 +166,21 @@ namespace Core.CombatSystem
             IReadOnlyList<EnemySlotData> enemies = setUp.Enemies;
             for (int i = 0; i < enemies.Count; i++)
             {
-                EnemySlotData slot = enemies[i];
-                if (slot == null) continue;
+                EnemySlotData enemy = enemies[i];
+                if (enemy == null) continue;
 
-                Unit unit = SpawnUnit(slot.definition);
+                if (!CombatSlots.TryFromIndex(i, out COMBAT_SLOT enemySlot))
+                {
+                    Debug.LogError($"[{nameof(CombatController)}] Enemy {i} has no slot " +
+                                $"(max {CombatSlots.MaxPerTeam} per team).");
+                    continue;
+                }
+
+                Unit unit = SpawnUnit(enemy.definition);
                 if (unit == null) continue;
 
-                unit.InitializeFresh(slot.definition, slot.inventorySnapshot);
-                unit.SlotIndex = i;
+                unit.InitializeFresh(enemy.definition, enemy.inventorySnapshot);
+                unit.Slot = enemySlot;
                 units.Add(unit);
             }
 

@@ -25,6 +25,7 @@ namespace Core.CombatSystem
         [SerializeField] private float gizmoRadius = 0.3f;
         [SerializeField] private Color allyColor = new(0.25f, 0.6f, 1f);
         [SerializeField] private Color enemyColor = new(1f, 0.35f, 0.3f);
+        private static readonly COMBAT_SLOT[] AllSlots = { COMBAT_SLOT.Left, COMBAT_SLOT.Mid, COMBAT_SLOT.Right };
 
         [Header("----- Movement -----")]
         [Tooltip("Seconds to move to/from the attack position. 0 disables the attack hop entirely " +
@@ -86,17 +87,15 @@ namespace Core.CombatSystem
         // ── Lookup ────────────────────────────────────────────────────────────
 
         private Transform GetDefensePosition(Unit unit) =>
-            GetPosition(unit, combat.alliesDefensePositions, combat.enemiesDefensePositions);
+            GetAnchor(unit, combat.alliesDefense, combat.enemiesDefense);
 
         private Transform GetAttackPosition(Unit unit) =>
-            GetPosition(unit, combat.alliesAttackPositions, combat.enemiesAttackPositions);
+            GetAnchor(unit, combat.alliesAttack, combat.enemiesAttack);
 
-        private static Transform GetPosition(Unit unit, List<Transform> allyList, List<Transform> enemyList)
+        private static Transform GetAnchor(Unit unit, SlotAnchors allies, SlotAnchors enemies)
         {
-            if (unit.SlotIndex < 0) return null;
-
-            List<Transform> list = unit.Team == UNIT_TEAM.Ally ? allyList : enemyList;
-            return unit.SlotIndex < list.Count ? list[unit.SlotIndex] : null;
+            if (unit.Slot is not COMBAT_SLOT slot) return null;
+            return (unit.Team == UNIT_TEAM.Ally ? allies : enemies).Get(slot);
         }
 
         // ── Movement ──────────────────────────────────────────────────────────
@@ -141,8 +140,8 @@ namespace Core.CombatSystem
 
         // ── Gizmos ────────────────────────────────────────────────────────────
 
-        /// <summary>Always visible in the Scene View (not only when selected). The number is the slot
-        /// index, which matches Unit.SlotIndex and the index in Party/EnemyParty.</summary>
+        /// <summary>Always visible in the Scene View (not only when selected). Labels show the slot name
+        /// (MID / LEFT / RIGHT), which matches Unit.Slot.</summary>
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
@@ -151,27 +150,25 @@ namespace Core.CombatSystem
             CombatController controller = combat != null ? combat : GetComponent<CombatController>();
             if (controller == null) return;
 
-            DrawPositions(controller.alliesDefensePositions, "ALLY DEF", allyColor, solid: true);
-            DrawPositions(controller.enemiesDefensePositions, "ENEMY DEF", enemyColor, solid: true);
+            DrawPositions(controller.alliesDefense, "ALLY DEF", allyColor, solid: true);
+            DrawPositions(controller.enemiesDefense, "ENEMY DEF", enemyColor, solid: true);
 
             if (!drawAttackPositions) return;
 
-            DrawPositions(controller.alliesAttackPositions, "ALLY ATK", allyColor, solid: false);
-            DrawPositions(controller.enemiesAttackPositions, "ENEMY ATK", enemyColor, solid: false);
+            DrawPositions(controller.alliesAttack, "ALLY ATK", allyColor, solid: false);
+            DrawPositions(controller.enemiesAttack, "ENEMY ATK", enemyColor, solid: false);
 
-            DrawHopLines(controller.alliesDefensePositions, controller.alliesAttackPositions, allyColor);
-            DrawHopLines(controller.enemiesDefensePositions, controller.enemiesAttackPositions, enemyColor);
+            DrawHopLines(controller.alliesDefense, controller.alliesAttack, allyColor);
+            DrawHopLines(controller.enemiesDefense, controller.enemiesAttack, enemyColor);
         }
 
-        private void DrawPositions(List<Transform> positions, string label, Color color, bool solid)
+        private void DrawPositions(SlotAnchors anchors, string label, Color color, bool solid)
         {
-            if (positions == null) return;
-
             Gizmos.color = color;
 
-            for (int i = 0; i < positions.Count; i++)
+            foreach (COMBAT_SLOT slot in AllSlots)
             {
-                Transform anchor = positions[i];
+                Transform anchor = anchors.Get(slot);
                 if (anchor == null) continue;
 
                 if (solid) Gizmos.DrawSphere(anchor.position, gizmoRadius);
@@ -183,22 +180,23 @@ namespace Core.CombatSystem
         #if UNITY_EDITOR
                 var style = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleCenter };
                 style.normal.textColor = color;
-                Handles.Label(anchor.position + Vector3.up * (gizmoRadius + 0.25f), $"{label} {i}", style);
+                Handles.Label(anchor.position + Vector3.up * (gizmoRadius + 0.25f),
+                    $"{label} {slot.ToString().ToUpperInvariant()}", style);
         #endif
             }
         }
 
-        private void DrawHopLines(List<Transform> defense, List<Transform> attack, Color color)
+        private void DrawHopLines(SlotAnchors defense, SlotAnchors attack, Color color)
         {
-            if (defense == null || attack == null) return;
-
             Gizmos.color = new Color(color.r, color.g, color.b, 0.4f);
 
-            int count = Mathf.Min(defense.Count, attack.Count);
-            for (int i = 0; i < count; i++)
+            foreach (COMBAT_SLOT slot in AllSlots)
             {
-                if (defense[i] == null || attack[i] == null) continue;
-                Gizmos.DrawLine(defense[i].position, attack[i].position);
+                Transform from = defense.Get(slot);
+                Transform to = attack.Get(slot);
+                if (from == null || to == null) continue;
+
+                Gizmos.DrawLine(from.position, to.position);
             }
         }
     }

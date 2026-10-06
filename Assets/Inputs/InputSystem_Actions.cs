@@ -678,17 +678,6 @@ namespace InputSystem
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""155390a3-ec80-46af-9f2d-87b87cd24365"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""WASD"",
                     ""id"": ""030339ca-73e2-4d03-99e1-ccbe84feecdb"",
                     ""path"": ""Dpad"",
@@ -711,31 +700,9 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""24777b35-787b-48bc-a544-48edac605c3f"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""down"",
                     ""id"": ""48698970-e6ea-4004-95e5-daeaac7482c2"",
                     ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""562f0b6c-43b7-4667-a911-096c17cf0729"",
-                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -755,17 +722,6 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""98b279f6-4f5b-4ebc-8431-d08ef1931d1e"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""right"",
                     ""id"": ""d11e411a-8dbf-45a7-a334-858683b8dc88"",
                     ""path"": ""<Keyboard>/d"",
@@ -777,24 +733,13 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
-                    ""id"": ""92430b8a-78a3-4459-837e-eebe03e015af"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
-                    ""id"": ""f0164438-9ad5-4024-9dc6-dce643f34707"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""id"": ""155390a3-ec80-46af-9f2d-87b87cd24365"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Interact"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -811,6 +756,28 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f0164438-9ad5-4024-9dc6-dce643f34707"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f44e6676-b865-46a2-a20b-159c8dc455a5"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Open Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7ed282ac-d22a-489b-85bb-b0b6f1de488c"",
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
@@ -822,12 +789,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f44e6676-b865-46a2-a20b-159c8dc455a5"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""id"": ""bbd24f09-8f84-422e-8dce-3ec99674bfad"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Open Inventory"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -848,7 +815,7 @@ namespace InputSystem
                     ""path"": ""<SwitchProControllerHID>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -859,30 +826,8 @@ namespace InputSystem
                     ""path"": ""<XInputController>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Open Pause Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bbd24f09-8f84-422e-8dce-3ec99674bfad"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Open Pause Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""23fe076a-6295-4f06-954c-d47cac596998"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -899,11 +844,11 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c05170ba-c856-4435-a614-c2daeffb5b69"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""23fe076a-6295-4f06-954c-d47cac596998"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -989,17 +934,6 @@ namespace InputSystem
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""3999ef02-e7f9-4d3d-b4ae-65133b2a0001"",
-                    ""path"": ""<Gamepad>/leftStick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""WASD"",
                     ""id"": ""da83c823-0b71-4c50-a026-5573f393630a"",
                     ""path"": ""Dpad"",
@@ -1022,31 +956,9 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""be3d7a44-15df-46e9-815c-f71485a935f4"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""down"",
                     ""id"": ""3b98dd37-db2d-457f-9ed3-9ba5591b3e78"",
                     ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""c608085c-0358-42e0-9661-61d7962e7fdc"",
-                    ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -1066,17 +978,6 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""fec00187-724e-451c-b574-fcd07c775523"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""right"",
                     ""id"": ""04731c44-dde4-4874-8d72-45a40eacd93a"",
                     ""path"": ""<Keyboard>/d"",
@@ -1088,15 +989,15 @@ namespace InputSystem
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
-                    ""id"": ""2c0020e0-56b1-44e5-9e2d-28b40131f606"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""name"": """",
+                    ""id"": ""3999ef02-e7f9-4d3d-b4ae-65133b2a0001"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -1166,28 +1067,6 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1d830fb6-b66d-4abe-812b-a96869b60622"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""78050b74-5af8-493a-86a5-bfeb3e1aeda5"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""96974a05-5ec8-4fcf-875a-d6342046caa2"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
@@ -1199,23 +1078,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""32c11628-4f96-4757-88f6-f2fc9c081744"",
-                    ""path"": """",
+                    ""id"": ""1d830fb6-b66d-4abe-812b-a96869b60622"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c9772592-c0ab-48fc-8f4a-d26f48963a6f"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer2"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Answer1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1232,23 +1100,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3261a1f0-5496-477d-9234-659008d078a8"",
-                    ""path"": """",
+                    ""id"": ""32c11628-4f96-4757-88f6-f2fc9c081744"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c29df935-30a6-471c-897f-294bbb5818e4"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer3"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Answer2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1265,23 +1122,12 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""75bde026-592c-43be-a1cd-398031c45e33"",
-                    ""path"": """",
+                    ""id"": ""3261a1f0-5496-477d-9234-659008d078a8"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d0dae320-0d38-45a0-a871-2f4498e9a16e"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Answer4"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Answer3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1292,6 +1138,17 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Answer4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75bde026-592c-43be-a1cd-398031c45e33"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Answer4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1466,7 +1323,7 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Target  Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -1477,7 +1334,40 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Target  Selection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Dpad Gamepad 2D Vector"",
+                    ""id"": ""d8279c8d-e040-4259-be55-1e6d946aea2b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Target  Selection"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""c2117b10-5edf-4e61-a74b-6e35dea1f916"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Target  Selection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8142588c-f5d3-4918-949e-6933b756e215"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Target  Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -1554,7 +1444,7 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -1565,7 +1455,40 @@ namespace InputSystem
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Dpad Gamepad 2D Vector"",
+                    ""id"": ""00380d16-4031-4c0b-9f6b-fd3a740efdee"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9839e88e-837a-43a0-a6ff-afdb7c97d536"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Move in Skills/Backpack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4bfaa575-ebe7-4f4d-b043-9c5e826c8cbb"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Move in Skills/Backpack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -1598,7 +1521,7 @@ namespace InputSystem
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1620,7 +1543,7 @@ namespace InputSystem
                     ""path"": ""<SwitchProControllerHID>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1631,7 +1554,7 @@ namespace InputSystem
                     ""path"": ""<XInputController>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1730,7 +1653,7 @@ namespace InputSystem
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Skills"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1752,7 +1675,7 @@ namespace InputSystem
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Flee"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

@@ -21,6 +21,13 @@
 
     #region COMBAT
 
+    public enum COMBAT_SLOT
+    {
+        Left,
+        Mid,
+        Right
+    }
+
     /// <summary>
     /// Timeline operations that can be performed on the queue. Used to notify
     /// subscribers of changes to the timeline.

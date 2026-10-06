@@ -103,11 +103,11 @@ namespace Core.CombatSystem.Units
         public UnitEffectController EffectController { get; private set; }
         public UnitStatsController StatsController { get; private set; }
 
-        // ----- Internal state -----
-        /// <summary>Index into the Party/EnemyParty this Unit was spawned from — matches the index of
-        /// its position Transforms in CombatController's positioning lists. -1 until CombatController
-        /// assigns it (e.g. a Unit created outside StartFromSetUp, like the old debug-only path).</summary>
-        public int SlotIndex { get; internal set; } = -1;
+        /// <summary>Position label of this Unit (Mid/Left/Right) within its team. Comes from its index in
+        /// Party/EnemyParty (see CombatSlots.TryFromIndex) and picks its anchors in CombatController.
+        /// Null until CombatController assigns it (e.g. a Unit created outside StartFromSetUp, like the
+        /// old debug-only path).</summary>
+        public COMBAT_SLOT? Slot { get; internal set; }
 
         /// <summary>
         /// turns that this unit can still defend for. 
