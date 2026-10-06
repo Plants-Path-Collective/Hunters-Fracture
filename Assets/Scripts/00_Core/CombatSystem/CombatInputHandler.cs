@@ -4,8 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using InputSystem;
 using Core.CombatSystem.Units;
+using InputSystem;
 
 namespace Core.CombatSystem
 {
@@ -15,14 +15,14 @@ namespace Core.CombatSystem
     /// action maps: CombatTransition (or a SceneSetter) owns that.
     /// </summary>
     /// <remarks>
-    /// Flow: Locked (enemy turn / resolving) → Root (ally's turn, waiting for a hotkey) →
-    /// SelectingTarget (after Basic Attack) → Confirm resolves the attack. Every action is a
-    /// direct hotkey, so pressing another one while selecting a target simply switches to it.
+    /// Target-first flow: Locked (enemy turn / resolving) → Ready (ally's turn). While Ready, a
+    /// target is always highlighted from the first frame of the turn; the stick moves it, and an
+    /// action hotkey (Basic Attack) is applied to whatever is highlighted. Defend and Flee ignore it.
     /// </remarks>
     [RequireComponent(typeof(CombatController), typeof(ActionResolver))]
     public class CombatInputHandler : MonoBehaviour
     {
-        private enum InputState { Locked, Root, SelectingTarget }
+        private enum InputState { Locked, Ready }
 
         [Header("── Target Selection ───────────────────────────")]
         [Tooltip("How far the stick must be pushed before it counts as one step left/right.")]
@@ -30,7 +30,7 @@ namespace Core.CombatSystem
         [Tooltip("Flip left/right if a lower SlotIndex is not on the left side of the screen.")]
         [SerializeField] private bool invertTargetDirection;
 
-        /// <summary>Fired when the highlighted target changes. Null = selection closed.</summary>
+        /// <summary>Fired when the highlighted target changes. Null = highlight closed.</summary>
         public event Action<Unit> OnTargetChanged;
 
         /// <summary>A hold-to-confirm action started being held. The float is the hold duration in
@@ -47,6 +47,9 @@ namespace Core.CombatSystem
         private List<Unit> targets = new();
         private int targetIndex;
         private int lastTargetDirection;
+
+        /// <summary>Last highlighted target. The next ally turn starts on it if it is still alive.</summary>
+        private Unit lastTarget;
 
         private void Awake()
         {
@@ -65,13 +68,14 @@ namespace Core.CombatSystem
 
             var input = InputManager.Instance.Combat;
 
-            input.Flee.performed += OnFlee;
             input.BasicAttack.performed += OnBasicAttack;
             input.Defend.performed += OnDefend;
             input.Skills.performed += OnSkills;
             input.Backpack.performed += OnBackpack;
-            input.ConfirmAction.performed += OnConfirmAction;
+            input.Flee.performed += OnFlee;
             input.CastUltimate.performed += OnCastUltimate;
+            // ConfirmAction is intentionally not subscribed: with target-first, the action
+            // hotkey itself confirms. Remove it from the asset, or repurpose it later.
 
             input.TargetSelection.performed += OnTargetSelection;
             input.TargetSelection.canceled += OnTargetSelection; // resets the edge detection
@@ -104,12 +108,11 @@ namespace Core.CombatSystem
 
             var input = InputManager.Instance.Combat;
 
-            input.Flee.performed -= OnFlee;
             input.BasicAttack.performed -= OnBasicAttack;
             input.Defend.performed -= OnDefend;
             input.Skills.performed -= OnSkills;
             input.Backpack.performed -= OnBackpack;
-            input.ConfirmAction.performed -= OnConfirmAction;
+            input.Flee.performed -= OnFlee;
             input.CastUltimate.performed -= OnCastUltimate;
 
             input.TargetSelection.performed -= OnTargetSelection;
@@ -127,47 +130,43 @@ namespace Core.CombatSystem
         private void OnTurnStart(Unit actor)
         {
             if (actor.Team == UNIT_TEAM.Ally)
-            {
-                CloseTargetSelection();
-                state = InputState.Root;
-            }
+                OpenTargetSelection(); // target-first: the highlight is up from the start of the turn
             else
-            {
                 Lock(); // enemy turn: no player input
-            }
         }
 
-        private void OnCombatEnd(COMBAT_OUTCOME outcome) => Lock();
+        private void OnCombatEnd(COMBAT_OUTCOME outcome)
+        {
+            lastTarget = null;
+            Lock();
+        }
 
         private void Lock()
         {
-            CloseTargetSelection();
+            if (state == InputState.Ready)
+                OnTargetChanged?.Invoke(null);
+
+            targets.Clear();
+            targetIndex = 0;
             state = InputState.Locked;
         }
 
         // ── Actions ───────────────────────────────────────────────────────────
 
-        private void OnFlee(InputAction.CallbackContext context)
-        {
-            if (state == InputState.Locked) return;
-
-            Unit actor = combat.CurrentActor;
-            // Lock BEFORE calling: success ends the combat and failure ends the turn,
-            // both synchronously, so the next OnTurnStart must be what unlocks us.
-            Lock();
-            combat.Flee(actor);
-        }
-        
-        // TEMP: debug logs. Remove once target selection is confirmed working.
         private void OnBasicAttack(InputAction.CallbackContext context)
         {
-            if (state == InputState.Locked)
-            {
-                Debug.Log($"[{nameof(CombatInputHandler)}] BasicAttack ignored: Locked " +
-                        $"(current actor: {combat.CurrentActor?.Name}).");
-                return;
-            }
-            OpenTargetSelection();
+            if (state == InputState.Locked || targets.Count == 0) return;
+
+            Unit actor = combat.CurrentActor;
+            Unit target = targets[targetIndex];
+
+            // Lock BEFORE calling: EndTurn() runs synchronously inside ResolveAttack(), and the
+            // next OnTurnStart (if it is an ally) must be the one that unlocks us again.
+            Lock();
+
+            // Invalid target (e.g. died in the meantime): reopen the highlight, keep the turn.
+            if (!resolver.ResolveAttack(actor, target))
+                OpenTargetSelection();
         }
 
         private void OnDefend(InputAction.CallbackContext context)
@@ -175,10 +174,17 @@ namespace Core.CombatSystem
             if (state == InputState.Locked) return;
 
             Unit actor = combat.CurrentActor;
-            // Lock BEFORE calling: Defend() ends the turn synchronously, and the next
-            // OnTurnStart (if it is an ally) must be the one that unlocks us again.
-            Lock();
+            Lock(); // same reasoning as OnBasicAttack: Defend() ends the turn synchronously
             combat.Defend(actor);
+        }
+
+        private void OnFlee(InputAction.CallbackContext context)
+        {
+            if (state == InputState.Locked) return;
+
+            Unit actor = combat.CurrentActor;
+            Lock(); // success ends the combat and failure ends the turn, both synchronously
+            combat.Flee(actor);
         }
 
         private void OnSkills(InputAction.CallbackContext context)
@@ -199,26 +205,12 @@ namespace Core.CombatSystem
             Debug.Log($"[{nameof(CombatInputHandler)}] Ultimate not implemented yet.");
         }
 
-        private void OnConfirmAction(InputAction.CallbackContext context)
-        {
-            if (state != InputState.SelectingTarget)
-            {
-                Debug.Log($"[{nameof(CombatInputHandler)}] Confirm ignored: state is {state}.");
-                return;
-            }
-
-            Unit actor = combat.CurrentActor;
-            Unit target = targets[targetIndex];
-
-            Lock(); // same reasoning as OnDefend: EndTurn() runs inside ResolveAttack()
-
-            // Invalid target (e.g. died in the meantime): reopen the selection, keep the turn.
-            if (!resolver.ResolveAttack(actor, target))
-                OpenTargetSelection();
-        }
-
         // ── Target selection ──────────────────────────────────────────────────
 
+        /// <summary>
+        /// Rebuilds the list of valid enemy targets and highlights one: the previous target if it
+        /// is still alive, otherwise the first by slot.
+        /// </summary>
         private void OpenTargetSelection()
         {
             Unit actor = combat.CurrentActor;
@@ -229,24 +221,19 @@ namespace Core.CombatSystem
                 .OrderBy(u => u.SlotIndex)
                 .ToList();
 
-            if (targets.Count == 0) return;
+            state = InputState.Ready;
 
-            Debug.Log($"[{nameof(CombatInputHandler)}] Target selection: {targets.Count} target(s).");
-
-            targetIndex = 0;
-            state = InputState.SelectingTarget;
-            OnTargetChanged?.Invoke(targets[targetIndex]);
-        }
-
-        private void CloseTargetSelection()
-        {
-            bool wasSelecting = state == InputState.SelectingTarget;
-
-            targets.Clear();
-            targetIndex = 0;
-
-            if (wasSelecting)
+            if (targets.Count == 0)
+            {
                 OnTargetChanged?.Invoke(null);
+                return;
+            }
+
+            int remembered = lastTarget != null ? targets.IndexOf(lastTarget) : -1;
+            targetIndex = remembered >= 0 ? remembered : 0;
+            lastTarget = targets[targetIndex];
+
+            OnTargetChanged?.Invoke(lastTarget);
         }
 
         private void OnTargetSelection(InputAction.CallbackContext context)
@@ -259,7 +246,7 @@ namespace Core.CombatSystem
             bool isNewStep = direction != 0 && direction != lastTargetDirection;
             lastTargetDirection = direction;
 
-            if (!isNewStep || state != InputState.SelectingTarget) return;
+            if (!isNewStep || state != InputState.Ready || targets.Count == 0) return;
 
             if (invertTargetDirection) direction = -direction;
 
@@ -267,10 +254,8 @@ namespace Core.CombatSystem
             if (next == targetIndex) return;
 
             targetIndex = next;
-            Debug.Log($"[{nameof(CombatInputHandler)}] Target → {targets[targetIndex].Name} " +
-                $"(slot {targets[targetIndex].SlotIndex}).");
-
-            OnTargetChanged?.Invoke(targets[targetIndex]);
+            lastTarget = targets[targetIndex];
+            OnTargetChanged?.Invoke(lastTarget);
         }
 
         // ── Hold feedback ─────────────────────────────────────────────────────
@@ -278,11 +263,11 @@ namespace Core.CombatSystem
 
         private static IEnumerable<InputAction> HoldActions(InputSystem_Actions.CombatActions input)
         {
-            yield return input.Flee;
             yield return input.BasicAttack;
             yield return input.Defend;
             yield return input.Skills;
             yield return input.Backpack;
+            yield return input.Flee;
             yield return input.CastUltimate;
         }
 

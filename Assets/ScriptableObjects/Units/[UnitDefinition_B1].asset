@@ -21,10 +21,10 @@ MonoBehaviour:
   maxHP: 250
   maxSP: 30
   speed: 5
-  strength: 35
+  strength: 45
   magicPower: 0
   physicalDefense: 10
-  magicalDefense: 10
+  magicalDefense: 0
   SPRegenMin: 5
   SPRegenMax: 10
   defendMultiplier: 1.5

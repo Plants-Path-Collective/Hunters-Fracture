@@ -243,6 +243,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyEntity (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+      propertyPath: enemyParty.slots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+      propertyPath: enemyParty.slots.Array.data[1].definition
+      value: 
+      objectReference: {fileID: 11400000, guid: b2775bd2b14124ffea58d1348cbcd76a, type: 2}
     - target: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.21

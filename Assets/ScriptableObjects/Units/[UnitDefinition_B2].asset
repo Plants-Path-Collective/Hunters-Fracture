@@ -24,7 +24,7 @@ MonoBehaviour:
   strength: 45
   magicPower: 0
   physicalDefense: 10
-  magicalDefense: 10
+  magicalDefense: 0
   SPRegenMin: 5
   SPRegenMax: 10
   defendMultiplier: 1.5

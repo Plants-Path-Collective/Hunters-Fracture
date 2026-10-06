@@ -22,8 +22,8 @@ MonoBehaviour:
   maxSP: 100
   speed: 10
   strength: 0
-  magicPower: 35
-  physicalDefense: 10
+  magicPower: 45
+  physicalDefense: 5
   magicalDefense: 10
   SPRegenMin: 5
   SPRegenMax: 10
