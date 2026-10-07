@@ -55,7 +55,9 @@ namespace Core.CombatSystem
                 combat.OnBeforeDamage -= OnBeforeDamage;
             }
 
-            foreach (Sequence hop in activeHops.Values)
+            // Kill() fires each sequence's OnKill, which removes it from activeHops while we iterate:
+            // walk a copy instead.
+            foreach (Sequence hop in new List<Sequence>(activeHops.Values))
                 hop.Kill();
             activeHops.Clear();
         }

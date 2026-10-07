@@ -501,20 +501,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.CombatController
   autoCloseOnEnd: 1
   alliesDefense:
-    mid: {fileID: 1295899886}
     left: {fileID: 771198214}
+    mid: {fileID: 1295899886}
     right: {fileID: 771147757}
   enemiesDefense:
-    mid: {fileID: 77394871}
     left: {fileID: 2076489693}
+    mid: {fileID: 77394871}
     right: {fileID: 2063824155}
   alliesAttack:
-    mid: {fileID: 1416114856}
     left: {fileID: 560755523}
+    mid: {fileID: 1416114856}
     right: {fileID: 1416608338}
   enemiesAttack:
-    mid: {fileID: 1672242543}
     left: {fileID: 1747167827}
+    mid: {fileID: 1672242543}
     right: {fileID: 1331759311}
   alliesDefensePositions: []
   enemiesDefensePositions: []
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0488343b0fa6011f9ce5ddefa199213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  invertTargetDirection: 0
+  invertTargetDirection: 1
   stickThreshold: 0.5
 --- !u!114 &127349032
 MonoBehaviour:
