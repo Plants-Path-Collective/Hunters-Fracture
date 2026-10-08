@@ -2,46 +2,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-public class PartyBackpack : MonoBehaviour
+namespace Core.CombatSystem.Backpack
 {
-    public static PartyBackpack Instance { get; private set; }
-    public List<BackpackSlot> backpackSlots = new List<BackpackSlot>();
-
-    private void Awake()
+    public class PartyBackpack : MonoBehaviour
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-    }
+        public static PartyBackpack Instance { get; private set; }
+        public List<BackpackSlot> backpackSlots = new List<BackpackSlot>();
 
-    public void AddConsumable(ConsumableSO consumable, int quantity = 1)
-    {
-        BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
-        if (existingSlot.consumableSO != null)
+        private void Awake()
         {
-            existingSlot.quantity += quantity;
-        }
-        else
-        {
-            backpackSlots.Add(new BackpackSlot { consumableSO = consumable, quantity = quantity });
-        }
-    }
-
-    public void RemoveConsumable(ConsumableSO consumable, int quantity = 1)
-    {
-        BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
-        if (existingSlot.consumableSO != null)
-        {
-            existingSlot.quantity -= quantity;
-            if (existingSlot.quantity <= 0)
+            if (Instance != null && Instance != this)
             {
-                backpackSlots.Remove(existingSlot);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+        }
+
+        public void AddConsumable(ConsumableSO consumable, int quantity = 1)
+        {
+            BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
+            if (existingSlot.consumableSO != null)
+            {
+                existingSlot.quantity += quantity;
+            }
+            else
+            {
+                backpackSlots.Add(new BackpackSlot { consumableSO = consumable, quantity = quantity });
+            }
+        }
+
+        public void RemoveConsumable(ConsumableSO consumable, int quantity = 1)
+        {
+            BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
+            if (existingSlot.consumableSO != null)
+            {
+                existingSlot.quantity -= quantity;
+                if (existingSlot.quantity <= 0)
+                {
+                    backpackSlots.Remove(existingSlot);
+                }
             }
         }
     }

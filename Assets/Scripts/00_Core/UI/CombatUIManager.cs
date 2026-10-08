@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Core.CombatSystem.Backpack;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
 
@@ -51,6 +52,9 @@ namespace Core.UI
         [SerializeField] private float cursorHeightPadding = 0.5f;
         [Tooltip("Seconds the cursor takes to slide to a new target. 0 = snap.")]
         [SerializeField] private float cursorMoveDuration = 0.1f;
+
+        [Header("--- Backapack ---")]
+        [SerializeField] private GameObject backpackSlotPrefab;
 
         private readonly Dictionary<Image, Tween> holdTweens = new();
         private Tween cursorTween;
@@ -108,6 +112,11 @@ namespace Core.UI
                 inputHandler.OnHoldStarted -= HandleHoldStarted;
                 inputHandler.OnHoldCanceled -= HandleHoldCanceled;
             }
+        }
+
+        void Start()
+        {
+            
         }
 
         // ── Turn Panel ─────────────────────────────────────────────────────────────
@@ -171,6 +180,7 @@ namespace Core.UI
         // ── Backpack panel ─────────────────────────────────────────────────────
         public void OpenBackpackPanel()
         {
+            RenderBackpackSlots();
             if (backpackPanel != null) backpackPanel.SetActive(true);
         }
 
@@ -189,6 +199,67 @@ namespace Core.UI
 
             if (backpackPanel.activeSelf) CloseBackpackPanel();
             else OpenBackpackPanel();
+        }
+
+        private void RenderBackpackSlots()
+        {
+            if (backpackPanel == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Backpack panel is not assigned.");
+                return;
+            }
+
+            VerticalLayoutGroup slotsLayout = backpackPanel.GetComponentInChildren<VerticalLayoutGroup>(true);
+            if (slotsLayout == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Backpack panel has no " +
+                               $"{nameof(VerticalLayoutGroup)} to contain item slots.");
+                return;
+            }
+
+            if (backpackSlotPrefab == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Backpack slot prefab is not assigned.");
+                return;
+            }
+
+            Transform slotsContainer = slotsLayout.transform;
+            for (int i = slotsContainer.childCount - 1; i >= 0; i--)
+                Destroy(slotsContainer.GetChild(i).gameObject);
+
+            if (PartyBackpack.Instance == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] No {nameof(PartyBackpack)} instance is available.");
+                return;
+            }
+
+            foreach (BackpackSlot slot in PartyBackpack.Instance.backpackSlots)
+            {
+                if (slot.consumableSO == null)
+                {
+                    Debug.LogWarning($"[{nameof(CombatUIManager)}] Skipping a backpack slot with no consumable.");
+                    continue;
+                }
+
+                GameObject slotObject = Instantiate(backpackSlotPrefab, slotsContainer, false);
+                BackpackSlotUI slotUI = slotObject.GetComponent<BackpackSlotUI>();
+                if (slotUI == null ||
+                    slotUI.consumableIcon == null ||
+                    slotUI.consumableNameText == null ||
+                    slotUI.quantityText == null ||
+                    slotUI.effectText == null)
+                {
+                    Debug.LogError($"[{nameof(CombatUIManager)}] Backpack slot prefab must have a " +
+                                   $"{nameof(BackpackSlotUI)} with all UI fields assigned.");
+                    Destroy(slotObject);
+                    return;
+                }
+
+                slotUI.consumableIcon.sprite = slot.consumableSO.itemIcon;
+                slotUI.consumableNameText.text = slot.consumableSO.itemName;
+                slotUI.quantityText.text = $"x {slot.quantity}";
+                slotUI.effectText.text = slot.consumableSO.effect;
+            }
         }
 
         // ── Target cursor ─────────────────────────────────────────────────────

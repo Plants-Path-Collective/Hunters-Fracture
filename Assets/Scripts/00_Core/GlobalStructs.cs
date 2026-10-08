@@ -1,4 +1,6 @@
-﻿namespace Core
+﻿using Core.CombatSystem.Backpack;
+
+namespace Core
 {
     #region INPUT
 
@@ -104,6 +106,7 @@
 
     #region SOCIAL
 
+    [System.Serializable]
     public struct BackpackSlot
     {
         public ConsumableSO consumableSO;

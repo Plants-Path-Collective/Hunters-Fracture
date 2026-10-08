@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2730033684326986306}
   - component: {fileID: 6073577517078600201}
   - component: {fileID: 605386163924564926}
+  - component: {fileID: 7611040669741959228}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -45,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6b7249f53b41b4a967bf28f8558831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.InputManager
+  logMapChanges: 1
 --- !u!114 &605386163924564926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,3 +91,16 @@ MonoBehaviour:
   onChoiceSelected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7611040669741959228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587788151947633200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571604528fa889050b69288fa43db9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Backpack.PartyBackpack
+  backpackSlots: []

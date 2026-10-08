@@ -1,10 +1,14 @@
 using UnityEngine;
 
-public class ConsumableSO : ScriptableObject
+namespace Core.CombatSystem.Backpack
 {
-    public string itemName;
-    public Sprite itemIcon;
-    public string description;
+    [CreateAssetMenu(fileName = "New Consumable", menuName = "Combat System/Backpack/Consumable")]
+    public class ConsumableSO : ScriptableObject
+    {
+        public string itemName;
+        public Sprite itemIcon;
+        public string effect;
 
-    // Add any other properties or methods related to consumables here
+        // Add any other properties or methods related to consumables here
+    }
 }

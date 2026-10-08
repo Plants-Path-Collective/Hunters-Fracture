@@ -21953,6 +21953,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[GameManager]'
       objectReference: {fileID: 0}
+    - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: backpackSlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: backpackSlots.Array.data[0].quantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: backpackSlots.Array.data[1].quantity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: backpackSlots.Array.data[0].consumableSO
+      value: 
+      objectReference: {fileID: 11400000, guid: be85c4800a8c7a1b1a40883b114ba703, type: 2}
+    - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: backpackSlots.Array.data[1].consumableSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 1dd8b4c5929214759a45c25f2ffb7a99, type: 2}
     m_RemovedComponents:
     - {fileID: 2892240965244473777, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
     m_RemovedGameObjects: []
