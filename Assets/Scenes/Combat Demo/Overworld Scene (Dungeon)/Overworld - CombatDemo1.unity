@@ -4693,7 +4693,6 @@ Transform:
   - {fileID: 1086130810}
   - {fileID: 1282671985}
   - {fileID: 582759864}
-  - {fileID: 1052900544}
   m_Father: {fileID: 970224710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &703203688
@@ -15481,11 +15480,11 @@ Transform:
   m_GameObject: {fileID: 1052900540}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.7152, y: 0, z: -1.9855099}
+  m_LocalPosition: {x: 6.6000004, y: 0, z: 3.1}
   m_LocalScale: {x: 3.988073, y: 1, z: 3.344282}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 701449492}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &1053139791
 NavMeshObstacle:
@@ -22079,11 +22078,6 @@ MonoBehaviour:
       currentSP: -1
       inventorySnapshot:
         entries: []
-    - definition: {fileID: 11400000, guid: e1cf6ee6a7acb3fc3ae8dcdfda49653f, type: 2}
-      currentHP: -1
-      currentSP: -1
-      inventorySnapshot:
-        entries: []
 --- !u!195 &7343133755916109647
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -22117,6 +22111,7 @@ SceneRoots:
   - {fileID: 3374580110090363931}
   - {fileID: 127486851}
   - {fileID: 970224710}
+  - {fileID: 1052900544}
   - {fileID: 745838053}
   - {fileID: 7343133755916109638}
   - {fileID: 80039916}
