@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5002060332845912192
@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 3.9488297, y: -2.7641754}
-  m_SizeDelta: {x: -81.792, y: -81.792}
+  m_AnchoredPosition: {x: 3, y: -4}
+  m_SizeDelta: {x: -85, y: -85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6623051217312312976
 CanvasRenderer:
@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 8773523801971469788}
   - component: {fileID: 9180197846353879826}
   - component: {fileID: 1731490115088923780}
+  - component: {fileID: 2968679822513779211}
   m_Layer: 5
   m_Name: '[TimelineEntryView]'
   m_TagString: Untagged
@@ -322,11 +323,11 @@ RectTransform:
   - {fileID: 5577164260673933685}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 150}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!222 &9180197846353879826
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -354,3 +355,15 @@ MonoBehaviour:
   allyColor: {r: 0.25, g: 0.6, b: 1, a: 1}
   enemyColor: {r: 1, g: 0.35, b: 0.3, a: 1}
   currentScale: 1.15
+--- !u!225 &2968679822513779211
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920814088505167182}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
