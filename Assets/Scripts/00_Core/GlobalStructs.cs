@@ -94,9 +94,21 @@
 
     #endregion
 
+    #region DUNGEON
     public enum ENEMY_STATE
     {
         Patrol,
         Chase // not implemented yet — reserved for when perception exists
     }
+    #endregion
+
+    #region SOCIAL
+
+    public struct BackpackSlot
+    {
+        public ConsumableSO consumableSO;
+        public int quantity;
+    }
+
+    #endregion
 }

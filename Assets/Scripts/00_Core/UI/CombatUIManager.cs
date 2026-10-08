@@ -24,6 +24,8 @@ namespace Core.UI
 
         [Header("--- Panels ---")]
         [SerializeField] private GameObject combatUIPanel;
+        [SerializeField] private GameObject skillsPanel;
+        [SerializeField] private GameObject backpackPanel;
 
         [Header("--- Actions Buttons ---")]
         [SerializeField] private GameObject attackButton;
@@ -108,7 +110,7 @@ namespace Core.UI
             }
         }
 
-        // ── Panel ─────────────────────────────────────────────────────────────
+        // ── Turn Panel ─────────────────────────────────────────────────────────────
 
         /// <summary>Opens the Combat UI panel by enabling it.</summary>
         public void OpenCombatUI()
@@ -140,6 +142,53 @@ namespace Core.UI
         {
             CloseCombatUI();
             HideCursor();
+        }
+
+        // ── Skills panel ─────────────────────────────────────────────────────
+
+        public void OpenSkillsPanel()
+        {
+            if (skillsPanel != null) skillsPanel.SetActive(true);
+        }
+
+        public void CloseSkillsPanel()
+        {
+            if (skillsPanel != null) skillsPanel.SetActive(false);
+        }
+
+        public void ToggleSkillsPanel()
+        {
+            if (skillsPanel == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Skills panel is not assigned.");
+                return;
+            }
+
+            if (skillsPanel.activeSelf) CloseSkillsPanel();
+            else OpenSkillsPanel();
+        }
+
+        // ── Backpack panel ─────────────────────────────────────────────────────
+        public void OpenBackpackPanel()
+        {
+            if (backpackPanel != null) backpackPanel.SetActive(true);
+        }
+
+        public void CloseBackpackPanel()
+        {
+            if (backpackPanel != null) backpackPanel.SetActive(false);
+        }
+
+        public void ToggleBackpackPanel()
+        {
+            if (backpackPanel == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Backpack panel is not assigned.");
+                return;
+            }
+
+            if (backpackPanel.activeSelf) CloseBackpackPanel();
+            else OpenBackpackPanel();
         }
 
         // ── Target cursor ─────────────────────────────────────────────────────

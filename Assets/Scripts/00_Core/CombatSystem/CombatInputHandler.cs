@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using Core.CombatSystem.Units;
+using Core.UI;
 using InputSystem;
 
 namespace Core.CombatSystem
@@ -208,13 +209,27 @@ namespace Core.CombatSystem
         private void OnSkills(InputAction.CallbackContext context)
         {
             if (state == InputState.Locked) return;
-            Debug.Log($"[{nameof(CombatInputHandler)}] Skills menu not implemented yet (needs ActionSO).");
+
+            if (CombatUIManager.Instance == null)
+            {
+                Debug.LogError($"[{nameof(CombatInputHandler)}] {nameof(CombatUIManager)}.Instance is null.");
+                return;
+            }
+
+            CombatUIManager.Instance.ToggleSkillsPanel();
         }
 
         private void OnBackpack(InputAction.CallbackContext context)
         {
             if (state == InputState.Locked) return;
-            Debug.Log($"[{nameof(CombatInputHandler)}] Backpack is disabled until the system exists.");
+
+            if (CombatUIManager.Instance == null)
+            {
+                Debug.LogError($"[{nameof(CombatInputHandler)}] {nameof(CombatUIManager)}.Instance is null.");
+                return;
+            }
+
+            CombatUIManager.Instance.ToggleBackpackPanel();
         }
 
         private void OnCastUltimate(InputAction.CallbackContext context)
