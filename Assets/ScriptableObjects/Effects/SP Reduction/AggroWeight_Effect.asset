@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5893ec57595416133a1ee13901ac2575, type: 3}
-  m_Name: Sleep_SkipTurnStatus
-  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.SkipTurnStatusSO
-  statusName: Sleep
-  icon: {fileID: 0}
-  isDebuff: 0
+  m_Script: {fileID: 11500000, guid: e595c5980f032e5f5acd35a200b0dfbe, type: 3}
+  m_Name: AggroWeight_Effect
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.AggroWeightEffectSO
+  priority: 0
+  aggroBonus: 0.25
+  perStackAggroBonus: 0.1

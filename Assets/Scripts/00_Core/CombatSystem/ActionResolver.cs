@@ -104,7 +104,9 @@ namespace Core.CombatSystem
                 return false;
             }
 
-            if (action == null || actor.SP < action.spCost) return false;
+            if (action == null) return false;
+            int spCost = actor.GetEffectiveSpCost(action);
+            if (actor.SP < spCost) return false;
 
             if (!IsValidTarget(actor, action, pickedTarget))
             {
@@ -113,7 +115,7 @@ namespace Core.CombatSystem
                 return false;
             }
 
-            var context = new ActionContext { actor = actor, action = action, spCost = action.spCost };
+            var context = new ActionContext { actor = actor, action = action, spCost = spCost };
             context.targets.AddRange(ResolveTargets(actor, action, pickedTarget));
 
             combat.NotifyBeforeAction(context);

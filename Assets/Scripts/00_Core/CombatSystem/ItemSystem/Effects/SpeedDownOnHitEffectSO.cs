@@ -1,66 +1,37 @@
-using System.Collections.Generic;
 using UnityEngine;
+using Core.CombatSystem.StatusSystem;
 using Core.CombatSystem.Units;
 
 namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
-    /// Concrete TriggeredEffectSO — equivalent to item 007 (On-Hit SPEED reduction):
-    /// on landing a hit, has a chance to apply a temporary Speed debuff to the target.
+    /// Item 007 (Bag with Fish): on landing a direct hit, rolls a chance to apply a temporary
+    /// Speed debuff to the target. The debuff is a StatModifierStatusSO (stat = Speed, isDebuff on).
     /// </summary>
-    /// <remarks>
-    /// This is the class that actually implements Attach()/Detach(), since
-    /// TriggeredEffectSO only declares their shape. Notice the per-Unit
-    /// dictionary of handlers: since this asset is shared across every Unit
-    /// that owns this item, we can't store "which unit owns me" in a field —
-    /// each Attach() call captures its own Unit in a closure instead.
-    /// </remarks>
     [CreateAssetMenu(fileName = "NewSpeedDownOnHitEffect", menuName = "Item System/Effects/Types/Speed Down On Hit")]
-    public class SpeedDownOnHitEffectSO : TriggeredEffectSO
+    public class SpeedDownOnHitEffectSO : AfterDamageEffectSO
     {
-        [Range(0f, 1f)] public float chance = 0.2f;
-        [Range(0f, 1f)] public float speedReductionPercent = 0.15f;
+        [Header("----- Trigger -----")]
+        [Range(0f, 1f)] public float chance = 0.1f;
+
+        [Header("----- Debuff -----")]
+        [Tooltip("StatModifierStatusSO with stat = Speed and isDebuff enabled.")]
+        public StatusSO speedDownStatus;
+        [Tooltip("Reduction with a single copy. 0.05 = -5%.")]
+        [Range(0f, 1f)] public float speedReductionPercent = 0.05f;
+        [Tooltip("Extra reduction per additional copy. 0.015 = -1.5%.")]
+        [Range(0f, 1f)] public float perStackReductionPercent = 0.015f;
+        [Tooltip("Turns of the target.")]
         public int durationTurns = 3;
 
-        private readonly Dictionary<Core.CombatSystem.Units.Unit, System.Action<DamageDealtInfo>> _handlers = new();
-
-        public override void Attach(Core.CombatSystem.Units.Unit unit)
+        protected override void OnOwnerDamage(Unit owner, DamageContext context)
         {
-            void Handler(DamageDealtInfo info)
-            {
-                if (info.Source != unit) return;
-                if (Random.value > chance) return;
+            if (speedDownStatus == null || context.source != owner) return;
+            if (!IsDirectHit(context) || !context.target.IsAlive) return;
+            if (Random.value >= chance) return;
 
-                // Placeholder call — replace with the real StatusBuffTracker API
-                // once it exists.
-                // info.Target.EffectController.ApplyBuff(
-                //     "speed_down",
-                //     -speedReductionPercent,
-                //     durationTurns);
-            }
-
-            _handlers[unit] = Handler;
-            //unit.Battle.OnDamageDealt += Handler;
+            float reduction = speedReductionPercent + perStackReductionPercent * (GetStacks(owner) - 1);
+            owner.Combat.ApplyStatus(owner, context.target, speedDownStatus, reduction, durationTurns);
         }
-
-        public override void Detach(Core.CombatSystem.Units.Unit unit)
-        {
-            if (_handlers.TryGetValue(unit, out var handler))
-            {
-                //unit.Battle.OnDamageDealt -= handler;
-                _handlers.Remove(unit);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Placeholder — replace with SimpleJRPG's actual event payload type for
-    /// Battle.OnDamageDealt.
-    /// </summary>
-    public struct DamageDealtInfo
-    {
-        public Core.CombatSystem.Units.Unit Source;
-        public Core.CombatSystem.Units.Unit Target;
-        public float Amount;
     }
 }

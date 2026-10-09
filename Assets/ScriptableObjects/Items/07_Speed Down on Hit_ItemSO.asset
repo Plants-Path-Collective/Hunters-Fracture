@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
-  m_Name: Glasscanon_ItemSO
+  m_Name: 07_Speed Down on Hit_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
-  itemID: 4
-  itemName: "Mu\xF1eca de Porcelana"
-  itemIcon: {fileID: 21300000, guid: 94eace61d2161ff89b39bba14d6a409d, type: 3}
+  itemID: 7
+  itemName: Bolsa con Pescado
+  itemIcon: {fileID: 21300000, guid: 4eb946077f3c7378e9bea2fb38d7cffd, type: 3}
   effects:
-  - {fileID: 11400000, guid: 6f2d3a1b17e13635d992239b3f58ccc6, type: 2}
-  - {fileID: 11400000, guid: 50116b05e7c98f45abf9f95525f61e04, type: 2}
-  - {fileID: 11400000, guid: 5e4307bcb93f2ea3683c12f13fa7a1fd, type: 2}
+  - {fileID: 11400000, guid: 8052cb341ed26ae0d864618cbc5ad51f, type: 2}

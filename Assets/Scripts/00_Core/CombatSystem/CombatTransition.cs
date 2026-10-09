@@ -44,6 +44,7 @@ namespace Core.CombatSystem
             suspendedCamera?.SetActive(false);
 
             GameManager.Instance.cmCameraActive.SetActive(false);
+            GameManager.Instance.inputsHints.SetActive(false);
 
             suspendedPlayer = playerObject;
             suspendedPlayer?.SetActive(false);
@@ -71,6 +72,7 @@ namespace Core.CombatSystem
             suspendedRoomContents = null;
 
             GameManager.Instance.cmCameraActive.SetActive(true);
+            GameManager.Instance.inputsHints.SetActive(true);
 
             suspendedCamera?.SetActive(true);
             suspendedCamera = null;

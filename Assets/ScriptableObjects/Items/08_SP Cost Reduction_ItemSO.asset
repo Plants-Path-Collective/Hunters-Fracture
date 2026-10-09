@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
+  m_Name: 08_SP Cost Reduction_ItemSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  itemID: 8
+  itemName: "Billete fuera de Circulaci\xF3n"
+  itemIcon: {fileID: 21300000, guid: c0e5c10adea937b629d8b446f8f4ac23, type: 3}
+  effects:
+  - {fileID: 11400000, guid: a3557704270f9ca19ba25ca2f1b3eb7e, type: 2}
+  - {fileID: 11400000, guid: bc4c549b022db06b3a87465afd489ec6, type: 2}

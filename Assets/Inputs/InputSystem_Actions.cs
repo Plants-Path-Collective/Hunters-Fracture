@@ -385,6 +385,343 @@ namespace InputSystem
             ]
         },
         {
+            ""name"": ""Rewards"",
+            ""id"": ""3b230f26-6b0b-4d85-a353-f4e6c47cfb11"",
+            ""actions"": [
+                {
+                    ""name"": ""Navigate"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d43ec35e-0927-471a-8266-e10ee2146ba4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""39d58145-a48a-4af7-bbc1-4e26c6a03c4b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel / Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""d79814bd-d4b7-4838-bb2c-792fb54d2df3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Asign to Unit Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""74dde2e7-cb3a-4d34-844b-f9b5ff97971b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Asign to Unit Mid"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b4f7245-645a-47d5-87ee-28c05cbf926e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Asign to Unit Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""391ed0bd-1615-4eef-917b-9ed68af83732"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""Stick [Gamepad]"",
+                    ""id"": ""ef6e1db2-e768-4bd3-8894-3876ba7b6c33"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""90bf539c-9013-4dc5-ae2c-e00a7b71d8f4"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""4ebf4028-8afa-40a4-9c79-5f6df4db636e"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""56ceeb83-541f-4175-b009-e9f395d4fbd1"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""dd036282-a93f-4cce-be48-9470e8afa16e"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""96aa64a0-de02-4fdf-9fb5-14c0d9c9ae5b"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""fd26fc4f-7a28-4915-8cc9-cf77fe1e1eb3"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2006718e-ab13-44c7-a7e9-40c636c266ac"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""6051120e-6c80-467c-a619-624dead23605"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afd3acb7-1fae-4fc9-8b77-38ff640ba979"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""3489797e-38ca-498e-9d89-bd69942d18ae"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""5c5b2be0-be4f-49bc-bfb4-a24a50f3727a"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""23670d3e-ebbd-4416-9299-4fab1cc060fd"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""eb04ef14-2c89-4705-adbe-2a19340dff67"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2c9226ed-89db-4c89-a43b-e34d64c96735"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93352f65-d94a-4155-b68f-2e453dc09e15"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eabe701f-05ee-4b50-958b-485854f919d6"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb66e451-96ce-44db-a398-11f0599fc15e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Cancel / Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c806e1a4-a895-4f5f-94e7-f99b791a1b59"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Cancel / Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""056bffa0-f635-4405-9c38-2edb93b41286"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Asign to Unit Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a03994de-fcea-4b72-a76c-04283b423319"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Asign to Unit Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a667513-31ee-46c9-8d2a-31968e7c28aa"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Asign to Unit Mid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee4d9fca-94f6-4b96-80fd-e988c7652ebf"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Asign to Unit Mid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94a91349-c68f-4906-af39-3447520f9c12"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Asign to Unit Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4eb538ef-9659-47f9-b0b7-8bad5133ac5c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Asign to Unit Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Social"",
             ""id"": ""df70fa95-8a34-4494-b137-73ab6b9c7d37"",
             ""actions"": [
@@ -1808,6 +2145,14 @@ namespace InputSystem
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
             m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
             m_UI_CancelBack = m_UI.FindAction("Cancel / Back", throwIfNotFound: true);
+            // Rewards
+            m_Rewards = asset.FindActionMap("Rewards", throwIfNotFound: true);
+            m_Rewards_Navigate = m_Rewards.FindAction("Navigate", throwIfNotFound: true);
+            m_Rewards_Confirm = m_Rewards.FindAction("Confirm", throwIfNotFound: true);
+            m_Rewards_CancelBack = m_Rewards.FindAction("Cancel / Back", throwIfNotFound: true);
+            m_Rewards_AsigntoUnitLeft = m_Rewards.FindAction("Asign to Unit Left", throwIfNotFound: true);
+            m_Rewards_AsigntoUnitMid = m_Rewards.FindAction("Asign to Unit Mid", throwIfNotFound: true);
+            m_Rewards_AsigntoUnitRight = m_Rewards.FindAction("Asign to Unit Right", throwIfNotFound: true);
             // Social
             m_Social = asset.FindActionMap("Social", throwIfNotFound: true);
             m_Social_Move = m_Social.FindAction("Move", throwIfNotFound: true);
@@ -1849,6 +2194,7 @@ namespace InputSystem
         {
             UnityEngine.Debug.Assert(!m_Empty.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Empty.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Rewards.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Rewards.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Social.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Social.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Overworld.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Overworld.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Dialogue.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Dialogue.Disable() has not been called.");
@@ -2127,6 +2473,157 @@ namespace InputSystem
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
         public UIActions @UI => new UIActions(this);
+
+        // Rewards
+        private readonly InputActionMap m_Rewards;
+        private List<IRewardsActions> m_RewardsActionsCallbackInterfaces = new List<IRewardsActions>();
+        private readonly InputAction m_Rewards_Navigate;
+        private readonly InputAction m_Rewards_Confirm;
+        private readonly InputAction m_Rewards_CancelBack;
+        private readonly InputAction m_Rewards_AsigntoUnitLeft;
+        private readonly InputAction m_Rewards_AsigntoUnitMid;
+        private readonly InputAction m_Rewards_AsigntoUnitRight;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Rewards".
+        /// </summary>
+        public struct RewardsActions
+        {
+            private @InputSystem_Actions m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public RewardsActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/Navigate".
+            /// </summary>
+            public InputAction @Navigate => m_Wrapper.m_Rewards_Navigate;
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/Confirm".
+            /// </summary>
+            public InputAction @Confirm => m_Wrapper.m_Rewards_Confirm;
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/CancelBack".
+            /// </summary>
+            public InputAction @CancelBack => m_Wrapper.m_Rewards_CancelBack;
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/AsigntoUnitLeft".
+            /// </summary>
+            public InputAction @AsigntoUnitLeft => m_Wrapper.m_Rewards_AsigntoUnitLeft;
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/AsigntoUnitMid".
+            /// </summary>
+            public InputAction @AsigntoUnitMid => m_Wrapper.m_Rewards_AsigntoUnitMid;
+            /// <summary>
+            /// Provides access to the underlying input action "Rewards/AsigntoUnitRight".
+            /// </summary>
+            public InputAction @AsigntoUnitRight => m_Wrapper.m_Rewards_AsigntoUnitRight;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Rewards; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="RewardsActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(RewardsActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="RewardsActions" />
+            public void AddCallbacks(IRewardsActions instance)
+            {
+                if (instance == null || m_Wrapper.m_RewardsActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_RewardsActionsCallbackInterfaces.Add(instance);
+                @Navigate.started += instance.OnNavigate;
+                @Navigate.performed += instance.OnNavigate;
+                @Navigate.canceled += instance.OnNavigate;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+                @CancelBack.started += instance.OnCancelBack;
+                @CancelBack.performed += instance.OnCancelBack;
+                @CancelBack.canceled += instance.OnCancelBack;
+                @AsigntoUnitLeft.started += instance.OnAsigntoUnitLeft;
+                @AsigntoUnitLeft.performed += instance.OnAsigntoUnitLeft;
+                @AsigntoUnitLeft.canceled += instance.OnAsigntoUnitLeft;
+                @AsigntoUnitMid.started += instance.OnAsigntoUnitMid;
+                @AsigntoUnitMid.performed += instance.OnAsigntoUnitMid;
+                @AsigntoUnitMid.canceled += instance.OnAsigntoUnitMid;
+                @AsigntoUnitRight.started += instance.OnAsigntoUnitRight;
+                @AsigntoUnitRight.performed += instance.OnAsigntoUnitRight;
+                @AsigntoUnitRight.canceled += instance.OnAsigntoUnitRight;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="RewardsActions" />
+            private void UnregisterCallbacks(IRewardsActions instance)
+            {
+                @Navigate.started -= instance.OnNavigate;
+                @Navigate.performed -= instance.OnNavigate;
+                @Navigate.canceled -= instance.OnNavigate;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+                @CancelBack.started -= instance.OnCancelBack;
+                @CancelBack.performed -= instance.OnCancelBack;
+                @CancelBack.canceled -= instance.OnCancelBack;
+                @AsigntoUnitLeft.started -= instance.OnAsigntoUnitLeft;
+                @AsigntoUnitLeft.performed -= instance.OnAsigntoUnitLeft;
+                @AsigntoUnitLeft.canceled -= instance.OnAsigntoUnitLeft;
+                @AsigntoUnitMid.started -= instance.OnAsigntoUnitMid;
+                @AsigntoUnitMid.performed -= instance.OnAsigntoUnitMid;
+                @AsigntoUnitMid.canceled -= instance.OnAsigntoUnitMid;
+                @AsigntoUnitRight.started -= instance.OnAsigntoUnitRight;
+                @AsigntoUnitRight.performed -= instance.OnAsigntoUnitRight;
+                @AsigntoUnitRight.canceled -= instance.OnAsigntoUnitRight;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="RewardsActions.UnregisterCallbacks(IRewardsActions)" />.
+            /// </summary>
+            /// <seealso cref="RewardsActions.UnregisterCallbacks(IRewardsActions)" />
+            public void RemoveCallbacks(IRewardsActions instance)
+            {
+                if (m_Wrapper.m_RewardsActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="RewardsActions.AddCallbacks(IRewardsActions)" />
+            /// <seealso cref="RewardsActions.RemoveCallbacks(IRewardsActions)" />
+            /// <seealso cref="RewardsActions.UnregisterCallbacks(IRewardsActions)" />
+            public void SetCallbacks(IRewardsActions instance)
+            {
+                foreach (var item in m_Wrapper.m_RewardsActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_RewardsActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="RewardsActions" /> instance referencing this action map.
+        /// </summary>
+        public RewardsActions @Rewards => new RewardsActions(this);
 
         // Social
         private readonly InputActionMap m_Social;
@@ -2865,6 +3362,56 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCancelBack(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Rewards" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="RewardsActions.AddCallbacks(IRewardsActions)" />
+        /// <seealso cref="RewardsActions.RemoveCallbacks(IRewardsActions)" />
+        public interface IRewardsActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNavigate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Confirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnConfirm(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Cancel / Back" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCancelBack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Asign to Unit Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAsigntoUnitLeft(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Asign to Unit Mid" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAsigntoUnitMid(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Asign to Unit Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAsigntoUnitRight(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Social" which allows adding and removing callbacks.

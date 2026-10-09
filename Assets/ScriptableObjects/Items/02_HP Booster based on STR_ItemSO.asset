@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
-  m_Name: HP Booster based on STR_ItemSO
+  m_Name: 02_HP Booster based on STR_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   itemID: 2
   itemName: Completo Italiano
-  itemIcon: {fileID: 0}
-  effects: []
+  itemIcon: {fileID: 21300000, guid: 673708677251705d2966bdd7f5f018a8, type: 3}
+  effects:
+  - {fileID: 11400000, guid: 39d1b379eeb3256ad8c343f9beec5ce9, type: 2}

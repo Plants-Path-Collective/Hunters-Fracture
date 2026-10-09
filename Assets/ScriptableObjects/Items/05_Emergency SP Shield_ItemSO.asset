@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
+  m_Name: 05_Emergency SP Shield_ItemSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  itemID: 5
+  itemName: Silbato Antiguo
+  itemIcon: {fileID: 21300000, guid: 95fc5ef5b1a615426a865735bf8e59fc, type: 3}
+  effects:
+  - {fileID: 11400000, guid: 3f08dcee92530dc1c98d676fa1f95980, type: 2}

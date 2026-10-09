@@ -64,7 +64,11 @@ namespace Core.UI
             {
                 bool used = i < list.Count;
                 rows[i].gameObject.SetActive(used);
-                if (used) rows[i].Bind(list[i], affordable: actor.SP >= list[i].spCost);
+                if (used)
+                {
+                    int cost = actor.GetEffectiveSpCost(list[i]);
+                    rows[i].Bind(list[i], cost, affordable: actor.SP >= cost);
+                }
             }
 
             panel.SetActive(true);

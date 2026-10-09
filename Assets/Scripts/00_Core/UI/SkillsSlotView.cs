@@ -16,10 +16,10 @@ namespace Core.UI
         [SerializeField] private CanvasGroup group;
         [SerializeField, Range(0f, 1f)] private float unaffordableAlpha = 0.4f;
 
-        public void Bind(ActionSO action, bool affordable)
+        public void Bind(ActionSO action, int cost, bool affordable)
         {
             nameLabel.text = action.actionName;
-            costLabel.text = $"{action.spCost} SP";
+            costLabel.text = $"{cost} SP";
 
             if (icon != null)
             {

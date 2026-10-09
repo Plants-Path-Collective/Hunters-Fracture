@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: ItemCatalog
   m_EditorClassIdentifier: Assembly-CSharp::CombatSystem.ItemSystem.ItemCatalog
   items:
-  - {fileID: 11400000, guid: 2f0a78345fdfade42a8ca3c8b16590aa, type: 2}
-  - {fileID: 11400000, guid: c497c152a87dc7444a04a1b6e2d41a07, type: 2}
+  - {fileID: 11400000, guid: 572e20f593f71de638f5e9443d9bcfb4, type: 2}
+  - {fileID: 11400000, guid: 815d74fc9943395839d57af9462b7672, type: 2}
+  - {fileID: 11400000, guid: 18ae6ac459d8dc3c5962a7236f4d6a8e, type: 2}
+  - {fileID: 11400000, guid: 2d80c1244ec712dd48da5c5014ff2de8, type: 2}
+  - {fileID: 11400000, guid: d3d1db6fb15a691a683addb1bc226088, type: 2}
+  - {fileID: 11400000, guid: 07c7a37f5648acc20a15cd0d028d706e, type: 2}
+  - {fileID: 11400000, guid: 91de2153b5193ef42a9e1d0bba7eeb8d, type: 2}
+  - {fileID: 11400000, guid: 2051da5fe9205246682c502409569dbe, type: 2}

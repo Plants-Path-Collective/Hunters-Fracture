@@ -41,5 +41,32 @@ namespace Core.CombatSystem.ItemSystem
         /// same delegate that Attach() registered.
         /// </summary>
         public abstract void Detach(Unit unit);
+
+        /// <summary>Copies of the item that owns this effect held by the unit (1 for unit passives).</summary>
+        protected int GetStacks(Unit unit)
+        {
+            if (unit == null || unit.Inventory == null || unit.Inventory.inventory == null) return 1;
+
+            foreach (Item item in unit.Inventory.inventory.Values)
+            {
+                if (item == null || item.quantity <= 0 || item.itemSO == null || item.itemSO.effects == null)
+                    continue;
+                if (item.itemSO.effects.Contains(this)) return item.quantity;
+            }
+
+            return 1;
+        }
+
+        /// <summary>True for damage dealt by the acting unit to an enemy. Excludes burns/poison (their
+        /// source is not the current actor) and friendly fire.</summary>
+        protected static bool IsDirectHit(DamageContext context)
+        {
+            Unit source = context.source;
+            Unit target = context.target;
+            return source != null && target != null
+                && source.Combat != null
+                && source == source.Combat.CurrentActor
+                && source.Team != target.Team;
+        }
     }
 }

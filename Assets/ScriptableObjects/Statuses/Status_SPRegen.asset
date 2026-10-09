@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e461aa3bcb81ca7bd107f058dbbea7, type: 3}
-  m_Name: DamageDealtStatus
-  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.DamageDealtStatusSO
-  statusName: 
+  m_Script: {fileID: 11500000, guid: a20c985ef5059a07fba9f154d5470a9b, type: 3}
+  m_Name: Status_SPRegen
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.SpRegenStatusSO
+  statusName: SP Regen
   icon: {fileID: 0}
   isDebuff: 0

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Core.CombatSystem.Units;
@@ -58,13 +59,28 @@ namespace Core.CombatSystem
 
             if (targets.Count > 0)
             {
-                Unit target = targets[Random.Range(0, targets.Count)];
+                Unit target = PickWeighted(targets);
                 if (resolver.ResolveAttack(actor, target))
                     yield break; // ResolveAttack already ended the turn
             }
 
             // No valid action: pass the turn instead of freezing the whole combat.
             combat.EndTurn();
+        }
+
+        private static Unit PickWeighted(List<Unit> candidates)
+        {
+            float total = 0f;
+            foreach (Unit unit in candidates) total += unit.AggroWeight;
+            if (total <= 0f) return candidates[Random.Range(0, candidates.Count)];
+
+            float roll = Random.value * total;
+            foreach (Unit unit in candidates)
+            {
+                roll -= unit.AggroWeight;
+                if (roll <= 0f) return unit;
+            }
+            return candidates[candidates.Count - 1];
         }
     }
 }

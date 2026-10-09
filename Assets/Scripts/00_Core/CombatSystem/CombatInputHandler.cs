@@ -282,10 +282,10 @@ namespace Core.CombatSystem
             Unit actor = combat.CurrentActor;
             Unit target = CurrentTarget;
 
-            if (actor.SP < action.spCost)
+            int cost = actor.GetEffectiveSpCost(action);
+            if (actor.SP < cost)
             {
-                Debug.Log($"[{nameof(CombatInputHandler)}] Not enough SP for {action.actionName} " +
-                        $"({actor.SP}/{action.spCost}).");
+                Debug.Log($"[{nameof(CombatInputHandler)}] Not enough SP for {action.actionName} ({actor.SP}/{cost}).");
                 return;
             }
 

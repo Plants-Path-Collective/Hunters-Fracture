@@ -139,6 +139,17 @@ namespace Core.CombatSystem.Units
                         ApplyModifier(statModifier, item.quantity, item.itemSO.itemName);
                     }
                 }
+
+                // Second pass: effects that scale with another stat (they read the stats after all flat/percent items).
+                foreach (Item item in inventory.inventory.Values)
+                {
+                    if (item == null || item.itemSO == null || item.quantity <= 0 || item.itemSO.effects == null)
+                        continue;
+
+                    foreach (ItemEffectSO effect in item.itemSO.effects)
+                        if (effect is StatScalingEffectSO scaling)
+                            ApplyScaling(scaling, item.quantity);
+                }
             }
 
             ApplyTemporaryModifiers();  
@@ -184,6 +195,23 @@ namespace Core.CombatSystem.Units
             if (modifier.statType == STAT_TYPE.HP && statsDebugText != null)
             {
                 statsDebugText.text = $"[HP] {currentMaxHP}\n[Item Pick Up] {itemName} {changeText}HP = {currentMaxHP} HP";
+            }
+        }
+
+        private void ApplyScaling(StatScalingEffectSO scaling, int stackCount)
+        {
+            float bonus = scaling.Evaluate(GetCurrentStatValue(scaling.sourceStat), stackCount);
+            if (Mathf.Approximately(bonus, 0f)) return;
+
+            switch (scaling.targetStat)
+            {
+                case STAT_TYPE.HP:              currentMaxHP += Mathf.RoundToInt(bonus); break;
+                case STAT_TYPE.SP:              currentMaxSP += Mathf.RoundToInt(bonus); break;
+                case STAT_TYPE.Speed:           currentSpeed += bonus; break;
+                case STAT_TYPE.Strength:        currentStrength += bonus; break;
+                case STAT_TYPE.MagicPower:      currentMagicPower += bonus; break;
+                case STAT_TYPE.PhysicalDefense: currentPhysicalDefense += bonus; break;
+                case STAT_TYPE.MagicalDefense:  currentMagicalDefense += bonus; break;
             }
         }
 

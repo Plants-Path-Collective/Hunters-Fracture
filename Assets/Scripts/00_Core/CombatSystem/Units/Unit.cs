@@ -27,6 +27,35 @@ namespace Core.CombatSystem.Units
         public List<ActionSO> Skills { get; private set; } = new();
         public ActionSO Ultimate { get; private set; }
 
+        // ----- Item-driven modifiers (keyed by source so they can be replaced, never accumulated) -----
+        private readonly Dictionary<object, float> spCostReductions = new();
+        private readonly Dictionary<object, float> aggroBonuses = new();
+
+        public void SetSpCostReduction(object source, float fraction) => spCostReductions[source] = fraction;
+        public void ClearSpCostReduction(object source) => spCostReductions.Remove(source);
+        public void SetAggroBonus(object source, float bonus) => aggroBonuses[source] = bonus;
+        public void ClearAggroBonus(object source) => aggroBonuses.Remove(source);
+
+        /// <summary>SP cost of an action for this unit, after item reductions.</summary>
+        public int GetEffectiveSpCost(ActionSO action)
+        {
+            float reduction = 0f;
+            foreach (float value in spCostReductions.Values) reduction += value;
+
+            return Mathf.Max(0, Mathf.RoundToInt(action.spCost * (1f - Mathf.Clamp01(reduction))));
+        }
+
+        /// <summary>Relative chance of being picked as a target. 1 = default.</summary>
+        public float AggroWeight
+        {
+            get
+            {
+                float weight = 1f;
+                foreach (float bonus in aggroBonuses.Values) weight += bonus;
+                return Mathf.Max(0f, weight);
+            }
+        }
+
         /// <summary>Current value of any of the 7 derived stats (items and statuses included). HP and SP
         /// return the maximums.</summary>
         public float GetStat(STAT_TYPE stat) => stat switch

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d1e5c4f9c59a50568d397e612932fa2, type: 3}
-  m_Name: PDef Up_StatModifierStatus
+  m_Name: Status_PhysicalDefDown
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.StatModifierStatusSO
-  statusName: PDef Up
+  statusName: Physical Defense Down
   icon: {fileID: 0}
-  isDebuff: 0
+  isDebuff: 1
   stat: 5

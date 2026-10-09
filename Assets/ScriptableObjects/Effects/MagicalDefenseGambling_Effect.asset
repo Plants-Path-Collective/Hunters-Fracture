@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793eb46808f5a786098edb35eef3dc76, type: 3}
+  m_Name: MagicalDefenseGambling_Effect
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.MagicalDefenseGamblingEffectSO
+  priority: 0
+  chance: 0.05
+  buffStatus: {fileID: 11400000, guid: c0a3681166e083c9cb07f14b58f49853, type: 2}
+  minMagnitude: 0.05
+  maxMagnitude: 0.1
+  perStackBonus: 0.05
+  durationTurns: 999
