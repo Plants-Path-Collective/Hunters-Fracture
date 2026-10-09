@@ -23627,11 +23627,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: backpackSlots.Array.data[0].quantity
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: backpackSlots.Array.data[1].quantity
-      value: 2
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7611040669741959228, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: backpackSlots.Array.data[0].consumableSO

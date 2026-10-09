@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using Core.CombatSystem.Units;
 using Core.CombatSystem.SkillSystem;
+using Core.CombatSystem.Backpack;
 using Core.UI;
 using InputSystem;
 
@@ -69,6 +70,7 @@ namespace Core.CombatSystem
         public event Action OnSkillsMenuClosed;
 
         private bool skillsOpen;
+        private bool backpackOpen;
         private int skillIndex;
         private int lastMenuDirection;
 
@@ -257,24 +259,49 @@ namespace Core.CombatSystem
             bool isNewStep = direction != 0 && direction != lastMenuDirection;
             lastMenuDirection = direction;
 
-            if (!isNewStep || !skillsOpen) return;
+            if (!isNewStep) return;
 
-            Unit actor = combat.CurrentActor;
-            if (actor == null || actor.Skills.Count == 0) return;
+            if (skillsOpen)
+            {
+                Unit actor = combat.CurrentActor;
+                if (actor == null || actor.Skills.Count == 0) return;
 
-            int count = actor.Skills.Count;
-            skillIndex = (skillIndex + direction + count) % count;
-            OnSkillsMenuIndexChanged?.Invoke(skillIndex);
+                int count = actor.Skills.Count;
+                skillIndex = (skillIndex + direction + count) % count;
+                OnSkillsMenuIndexChanged?.Invoke(skillIndex);
+                return;
+            }
+
+            if (backpackOpen)
+            {
+                if (CombatUIManager.Instance == null) return;
+
+                int count = PartyBackpack.Instance != null ? PartyBackpack.Instance.backpackSlots.Count : 0;
+                if (count <= 0) return;
+
+                int currentIndex = CombatUIManager.Instance.GetSelectedBackpackIndex();
+                int nextIndex = (currentIndex + direction + count) % count;
+                CombatUIManager.Instance.SelectBackpackSlotIndex(nextIndex);
+            }
         }
 
         private void OnConfirmAction(InputAction.CallbackContext context)
         {
-            if (state == InputState.Locked || !skillsOpen) return;
+            if (state == InputState.Locked) return;
 
-            Unit actor = combat.CurrentActor;
-            if (actor == null || skillIndex < 0 || skillIndex >= actor.Skills.Count) return;
+            if (skillsOpen)
+            {
+                Unit actor = combat.CurrentActor;
+                if (actor == null || skillIndex < 0 || skillIndex >= actor.Skills.Count) return;
 
-            UseSkill(actor.Skills[skillIndex]);
+                UseSkill(actor.Skills[skillIndex]);
+                return;
+            }
+
+            if (backpackOpen && CombatUIManager.Instance != null)
+            {
+                CombatUIManager.Instance.TryConsumeSelectedBackpackItem(this);
+            }
         }
 
         private void UseSkill(ActionSO action)
@@ -314,7 +341,43 @@ namespace Core.CombatSystem
                 return;
             }
 
-            CombatUIManager.Instance.ToggleBackpackPanel();
+            if (skillsOpen) CloseSkillsMenu();
+
+            if (backpackOpen)
+            {
+                backpackOpen = false;
+                CombatUIManager.Instance.CloseBackpackPanel();
+                return;
+            }
+
+            backpackOpen = true;
+            CombatUIManager.Instance.OpenBackpackPanel();
+        }
+
+        public bool ConsumeSelectedItem(ConsumableSO consumable)
+        {
+            Unit actor = combat.CurrentActor;
+            Unit target = CurrentTarget;
+
+            if (state == InputState.Locked || actor == null || consumable == null)
+                return false;
+
+            if (target == null || target.Team != UNIT_TEAM.Ally)
+            {
+                Debug.LogWarning($"[{nameof(CombatInputHandler)}] Cannot consume '{consumable.name}' on a non-ally target.");
+                return false;
+            }
+
+            if (!PartyBackpack.Instance.TryConsume(actor, target, consumable))
+                return false;
+
+            backpackOpen = false;
+            if (CombatUIManager.Instance != null)
+                CombatUIManager.Instance.CloseBackpackPanel();
+
+            Lock();
+            combat.EndTurn();
+            return true;
         }
 
         private void OnCastUltimate(InputAction.CallbackContext context)

@@ -58,8 +58,11 @@ namespace Core.UI
         [Header("--- Backapack ---")]
         [SerializeField] private GameObject backpackSlotPrefab;
 
+        private readonly List<BackpackSlotUI> backpackSlotViews = new();
+        private BackpackSlotUI selectedBackpackSlot;
         private readonly Dictionary<Image, Tween> holdTweens = new();
         private Tween cursorTween;
+        private int backpackIndex;
 
         private void Awake()
         {
@@ -212,11 +215,55 @@ namespace Core.UI
         {
             RenderBackpackSlots();
             if (backpackPanel != null) backpackPanel.SetActive(true);
+            SelectBackpackSlotIndex(0);
         }
 
         public void CloseBackpackPanel()
         {
             if (backpackPanel != null) backpackPanel.SetActive(false);
+            selectedBackpackSlot = null;
+            foreach (BackpackSlotUI slotUI in backpackSlotViews)
+                if (slotUI != null) slotUI.SetSelected(false);
+        }
+
+        public void SelectBackpackSlotIndex(int index)
+        {
+            if (backpackSlotViews.Count == 0)
+            {
+                selectedBackpackSlot = null;
+                backpackIndex = 0;
+                return;
+            }
+
+            index = Mathf.Clamp(index, 0, backpackSlotViews.Count - 1);
+            backpackIndex = index;
+
+            BackpackSlotUI slotUI = backpackSlotViews[index];
+            SelectBackpackSlot(slotUI);
+        }
+
+        public int GetSelectedBackpackIndex() => backpackIndex;
+
+        public ConsumableSO GetSelectedConsumable()
+        {
+            return selectedBackpackSlot != null ? selectedBackpackSlot.consumable : null;
+        }
+
+        public bool TryConsumeSelectedBackpackItem(CombatInputHandler inputHandler)
+        {
+            ConsumableSO consumable = GetSelectedConsumable();
+            if (consumable == null || inputHandler == null) return false;
+            return inputHandler.ConsumeSelectedItem(consumable);
+        }
+
+        private void SelectBackpackSlot(BackpackSlotUI slotUI)
+        {
+            if (selectedBackpackSlot == slotUI) return;
+
+            foreach (BackpackSlotUI other in backpackSlotViews)
+                if (other != null) other.SetSelected(other == slotUI);
+
+            selectedBackpackSlot = slotUI;
         }
 
         public void ToggleBackpackPanel()
@@ -256,6 +303,7 @@ namespace Core.UI
             Transform slotsContainer = slotsLayout.transform;
             for (int i = slotsContainer.childCount - 1; i >= 0; i--)
                 Destroy(slotsContainer.GetChild(i).gameObject);
+            backpackSlotViews.Clear();
 
             if (PartyBackpack.Instance == null)
             {
@@ -289,7 +337,20 @@ namespace Core.UI
                 slotUI.consumableNameText.text = slot.consumableSO.itemName;
                 slotUI.quantityText.text = $"x {slot.quantity}";
                 slotUI.effectText.text = slot.consumableSO.effect;
+                slotUI.SetConsumable(slot.consumableSO);
+                slotUI.SetSelected(false);
+
+                Button button = slotObject.GetComponent<Button>();
+                if (button != null)
+                    button.onClick.AddListener(() => SelectBackpackSlot(slotUI));
+                else
+                    slotObject.AddComponent<Button>().onClick.AddListener(() => SelectBackpackSlot(slotUI));
+
+                backpackSlotViews.Add(slotUI);
             }
+
+            if (backpackSlotViews.Count > 0)
+                SelectBackpackSlot(backpackSlotViews[0]);
         }
 
         // ── Target cursor ─────────────────────────────────────────────────────
