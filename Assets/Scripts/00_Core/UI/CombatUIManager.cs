@@ -29,6 +29,7 @@ namespace Core.UI
         [SerializeField] private CombatPanelUI rightPanel;
         //[SerializeField] private GameObject skillsPanel;
         [SerializeField] private GameObject backpackPanel;
+        [SerializeField] private GameObject gameoverScreen;
 
         [System.Serializable]
         private class CombatPanelUI

@@ -95,9 +95,9 @@ namespace Core.CombatSystem
             input.Backpack.performed += OnBackpack;
             input.Flee.performed += OnFlee;
             input.CastUltimate.performed += OnCastUltimate;
+            input.MoveinSkillsBackpack.performed += OnMenuNavigate;
             input.MoveinSkillsBackpack.canceled += OnMenuNavigate;
-            // ConfirmAction is intentionally not subscribed: with target-first, the action
-            // hotkey itself confirms. Remove it from the asset, or repurpose it later.
+            input.ConfirmAction.performed += OnConfirmAction;
 
             input.TargetSelection.performed += OnTargetSelection;
             input.TargetSelection.canceled += OnTargetSelection; // resets the edge detection
@@ -136,7 +136,9 @@ namespace Core.CombatSystem
             input.Backpack.performed -= OnBackpack;
             input.Flee.performed -= OnFlee;
             input.CastUltimate.performed -= OnCastUltimate;
+            input.MoveinSkillsBackpack.performed -= OnMenuNavigate;
             input.MoveinSkillsBackpack.canceled -= OnMenuNavigate;
+            input.ConfirmAction.performed -= OnConfirmAction;
 
             input.TargetSelection.performed -= OnTargetSelection;
             input.TargetSelection.canceled -= OnTargetSelection;
@@ -257,7 +259,10 @@ namespace Core.CombatSystem
 
             if (!isNewStep || !skillsOpen) return;
 
-            int count = combat.CurrentActor.Skills.Count;
+            Unit actor = combat.CurrentActor;
+            if (actor == null || actor.Skills.Count == 0) return;
+
+            int count = actor.Skills.Count;
             skillIndex = (skillIndex + direction + count) % count;
             OnSkillsMenuIndexChanged?.Invoke(skillIndex);
         }
@@ -265,7 +270,11 @@ namespace Core.CombatSystem
         private void OnConfirmAction(InputAction.CallbackContext context)
         {
             if (state == InputState.Locked || !skillsOpen) return;
-            UseSkill(combat.CurrentActor.Skills[skillIndex]);
+
+            Unit actor = combat.CurrentActor;
+            if (actor == null || skillIndex < 0 || skillIndex >= actor.Skills.Count) return;
+
+            UseSkill(actor.Skills[skillIndex]);
         }
 
         private void UseSkill(ActionSO action)

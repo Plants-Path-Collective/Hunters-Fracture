@@ -56,11 +56,11 @@ namespace Core
 
         // Combat
         //   TargetSelection  → navigate targets
-        //   MoveinMenu       → navigate action menu
-        //   BasicAttack      → confirm / attack shortcut
-        //   BackfromMenu     → cancel / go back in menu
-        //   OpenSkillsMenu   → open skill selection
-        //   OpenInventory    → open item inventory
+        //   MoveinSkillsBackpack → navigate the skills/backpack lists
+        //   Skills           → toggle skill selection
+        //   ConfirmAction    → use the selected skill
+        //   BasicAttack      → attack
+        //   Backpack         → toggle item inventory
         //   LeftShoulder     → used combined with RightShoulder to charge Ultimate (5s hold)
         //   RightShoulder    → used combined with LeftShoulder to charge Ultimate (5s hold)
         public InputSystem_Actions.CombatActions      Combat      => Actions.Combat;

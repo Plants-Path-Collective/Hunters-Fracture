@@ -15,16 +15,19 @@ MonoBehaviour:
   unitName: Ogre2
   type: 0
   team: 1
-  portrait: {fileID: 21300000, guid: 730b9158cf081d24a8c4ad4c5d6db284, type: 3}
+  portrait: {fileID: 21300000, guid: c954941584132582c861348d7aae90d6, type: 3}
   description: An angry green ogre that beats his opponents with his mace
+  skills: []
+  ultimate: {fileID: 0}
+  passives: []
   unitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
-  maxHP: 250
-  maxSP: 30
+  maxHP: 100
+  maxSP: 0
   speed: 5
-  strength: 45
+  strength: 15
   magicPower: 0
-  physicalDefense: 10
-  magicalDefense: 0
+  physicalDefense: 0.05
+  magicalDefense: 0.05
   SPRegenMin: 5
   SPRegenMax: 10
   defendMultiplier: 1.5
