@@ -24,25 +24,26 @@ namespace Core.UI
         [SerializeField] private Camera worldCamera;
 
         [Header("--- Panels ---")]
-        [SerializeField] private GameObject combatUIPanel;
+        [SerializeField] private CombatPanelUI leftPanel;
+        [SerializeField] private CombatPanelUI midPanel;
+        [SerializeField] private CombatPanelUI rightPanel;
         //[SerializeField] private GameObject skillsPanel;
         [SerializeField] private GameObject backpackPanel;
 
-        [Header("--- Actions Buttons ---")]
-        [SerializeField] private GameObject attackButton;
-        [SerializeField] private GameObject defendButton;
-        [SerializeField] private GameObject skillsButton;
-        [SerializeField] private GameObject backpackButton;
-        [SerializeField] private GameObject fleeButton;
+        [System.Serializable]
+        private class CombatPanelUI
+        {
+            public GameObject panel;
+            public GameObject attackButton;
+            public GameObject defendButton;
+            public GameObject skillsButton;
+            public GameObject backpackButton;
+            public GameObject fleeButton;
+        }
 
         [Header("--- Hold Indicators ---")]
-        [Tooltip("One Image (Type = Filled) per hold action. They are hidden until the hold starts.")]
-        [SerializeField] private Image attackHoldFill;
-        [SerializeField] private Image defendHoldFill;
-        [SerializeField] private Image skillsHoldFill;
-        [SerializeField] private Image backpackHoldFill;
-        [SerializeField] private Image fleeHoldFill;
-        [SerializeField] private Image ultimateHoldFill;
+        [Tooltip("Shared Image (Type = Filled) used for every hold action. Hidden until a hold starts.")]
+        [SerializeField] private Image holdFill;
 
         [Header("--- Combat Extras ---")]
         [Tooltip("Marker over the highlighted target. A UI element (RectTransform) is placed in " +
@@ -121,23 +122,51 @@ namespace Core.UI
 
         // ── Turn Panel ─────────────────────────────────────────────────────────────
 
-        /// <summary>Opens the Combat UI panel by enabling it.</summary>
-        public void OpenCombatUI()
+        /// <summary>Opens the left combat action panel by default.</summary>
+        public void OpenCombatUI() => OpenCombatUI(COMBAT_SLOT.Left);
+
+        /// <summary>Opens the combat action panel for the given ally slot.</summary>
+        public void OpenCombatUI(COMBAT_SLOT slot)
         {
-            if (combatUIPanel != null) combatUIPanel.SetActive(true);
+            CloseCombatUI();
+            CombatPanelUI panel = GetPanelForSlot(slot);
+            if (panel != null && panel.panel != null) panel.panel.SetActive(true);
         }
 
-        /// <summary>Closes the Combat UI panel and cancels any hold indicator still filling.</summary>
+        /// <summary>Closes every ally action panel and cancels any hold indicator still filling.</summary>
         public void CloseCombatUI()
         {
             HideAllHolds();
-            if (combatUIPanel != null) combatUIPanel.SetActive(false);
+            ClosePanel(leftPanel);
+            ClosePanel(midPanel);
+            ClosePanel(rightPanel);
         }
 
         private void HandleTurnStart(Unit actor)
         {
-            if (actor.Team == UNIT_TEAM.Ally) OpenCombatUI();
+            if (actor.Team == UNIT_TEAM.Ally)
+            {
+                if (actor.Slot.HasValue) OpenCombatUI(actor.Slot.Value);
+                else OpenCombatUI(COMBAT_SLOT.Left);
+            }
             else CloseCombatUI();
+        }
+
+        private CombatPanelUI GetPanelForSlot(COMBAT_SLOT slot)
+        {
+            return slot switch
+            {
+                COMBAT_SLOT.Left => leftPanel,
+                COMBAT_SLOT.Mid => midPanel,
+                COMBAT_SLOT.Right => rightPanel,
+                _ => null
+            };
+        }
+
+        private static void ClosePanel(CombatPanelUI panel)
+        {
+            if (panel != null && panel.panel != null)
+                panel.panel.SetActive(false);
         }
 
         // The action was resolved (or the turn was lost): the panel closes until the next ally turn.
@@ -370,14 +399,13 @@ namespace Core.UI
 
         private Image FillFor(InputAction action)
         {
+            // All hold actions share the same visual indicator to keep the HUD consistent.
             var input = InputManager.Instance.Combat;
+            if (action == input.BasicAttack || action == input.Defend ||
+                action == input.Skills || action == input.Backpack ||
+                action == input.Flee || action == input.CastUltimate)
+                return holdFill;
 
-            if (action == input.BasicAttack) return attackHoldFill;
-            if (action == input.Defend) return defendHoldFill;
-            if (action == input.Skills) return skillsHoldFill;
-            if (action == input.Backpack) return backpackHoldFill;
-            if (action == input.Flee) return fleeHoldFill;
-            if (action == input.CastUltimate) return ultimateHoldFill;
             return null;
         }
 
@@ -399,10 +427,8 @@ namespace Core.UI
             foreach (Image fill in new List<Image>(holdTweens.Keys))
                 HideHold(fill);
 
-            // Also covers fills left active in the scene at design time.
-            foreach (Image fill in new[] { attackHoldFill, defendHoldFill, skillsHoldFill,
-                         backpackHoldFill, fleeHoldFill, ultimateHoldFill })
-                if (fill != null) fill.gameObject.SetActive(false);
+            // Also covers the shared fill left active in the scene at design time.
+            if (holdFill != null) holdFill.gameObject.SetActive(false);
         }
     }
 }
