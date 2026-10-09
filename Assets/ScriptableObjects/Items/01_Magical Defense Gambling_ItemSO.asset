@@ -15,5 +15,7 @@ MonoBehaviour:
   itemID: 1
   itemName: Revista Aniki
   itemIcon: {fileID: 21300000, guid: fcaba107fd9910772a54e75850edc8af, type: 3}
+  itemDescription: 'Al ser atacado, probabilidad del 5% de aumentar entre un 5-10%
+    la MAGICAL DEFENSE (+5% por copia), dependiendo de la vida faltante. '
   effects:
   - {fileID: 11400000, guid: 597ec0a9b1eeb003db2118fd5273ac5f, type: 2}

@@ -209,7 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 17408062}
   m_Layer: 5
-  m_Name: '[Inputs]'
+  m_Name: '[Inputs - Hints]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2767,6 +2767,37 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: -0.34800002, y: -0.49100003, z: -2.996}
   m_TimeToStationary: 0.5
+--- !u!1 &374376043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 374376044}
+  m_Layer: 0
+  m_Name: '[HealStation]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &374376044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374376043}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &375461441
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -23288,6 +23319,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: inputsHints
+      value: 
+      objectReference: {fileID: 17408061}
+    - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: cmCameraActive
       value: 
       objectReference: {fileID: 127486849}
@@ -23476,3 +23511,4 @@ SceneRoots:
   - {fileID: 745838053}
   - {fileID: 7343133755916109638}
   - {fileID: 80039916}
+  - {fileID: 374376044}

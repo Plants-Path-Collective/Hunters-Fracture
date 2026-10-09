@@ -15,6 +15,8 @@ MonoBehaviour:
   itemID: 8
   itemName: "Billete fuera de Circulaci\xF3n"
   itemIcon: {fileID: 21300000, guid: c0e5c10adea937b629d8b446f8f4ac23, type: 3}
+  itemDescription: Reduce el costo de SP en 10% (+3% por copia) de las habilidades
+    del portador. Aumenta la probabilidad de ser objetivo de un ataque.
   effects:
   - {fileID: 11400000, guid: a3557704270f9ca19ba25ca2f1b3eb7e, type: 2}
   - {fileID: 11400000, guid: bc4c549b022db06b3a87465afd489ec6, type: 2}

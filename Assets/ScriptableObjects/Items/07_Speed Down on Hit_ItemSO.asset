@@ -15,5 +15,7 @@ MonoBehaviour:
   itemID: 7
   itemName: Bolsa con Pescado
   itemIcon: {fileID: 21300000, guid: 4eb946077f3c7378e9bea2fb38d7cffd, type: 3}
+  itemDescription: Al impactar, 10% de probabilidad de reducir la SPEED del objetivo
+    en 5% (+1.5% por copia).
   effects:
   - {fileID: 11400000, guid: 8052cb341ed26ae0d864618cbc5ad51f, type: 2}

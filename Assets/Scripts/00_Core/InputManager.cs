@@ -32,6 +32,9 @@ namespace Core
         // UI
         public InputSystem_Actions.UIActions          UI          => Actions.UI;
 
+        // Rewards
+        public InputSystem_Actions.RewardsActions     Rewards     => Actions.Rewards;
+
         // Social
         //   Move            → leftStick / WASD
         //   Interact        → buttonWest (□/X) / E
@@ -123,6 +126,7 @@ namespace Core
             {
                 case INPUTACTION_MAP.Empty:       /* all maps disabled */         break;
                 case INPUTACTION_MAP.UI:          Actions.UI.Enable();            break;
+                case INPUTACTION_MAP.Rewards:     Actions.Rewards.Enable();       break;
                 case INPUTACTION_MAP.Social:      Actions.Social.Enable();        break;
                 case INPUTACTION_MAP.Overworld:   Actions.Overworld.Enable();     break;
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
@@ -137,6 +141,7 @@ namespace Core
         {
             var names = new List<string>();
             if (Actions.UI.enabled) names.Add("UI");
+            if (Actions.Rewards.enabled) names.Add("Rewards");
             if (Actions.Social.enabled) names.Add("Social");
             if (Actions.Overworld.enabled) names.Add("Overworld");
             if (Actions.Dialogue.enabled) names.Add("Dialogue");
@@ -168,6 +173,7 @@ namespace Core
         private void DisableAllMaps()
         {
             Actions.UI.Disable();
+            Actions.Rewards.Disable();
             Actions.Social.Disable();
             Actions.Overworld.Disable();
             Actions.Dialogue.Disable();

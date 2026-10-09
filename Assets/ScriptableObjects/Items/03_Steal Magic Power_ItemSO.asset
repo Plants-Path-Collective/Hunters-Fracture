@@ -15,5 +15,7 @@ MonoBehaviour:
   itemID: 3
   itemName: "Gorro de Cumplea\xF1ero"
   itemIcon: {fileID: 21300000, guid: 77395c7b0f9cbc7c69c8bb940bac92d8, type: 3}
+  itemDescription: Al atacar, roba un 10% (+5% por copia) de su MAGIC POWER por el
+    resto del combate al objetivo.
   effects:
   - {fileID: 11400000, guid: a8fa12cb5f6b24f3fb2965c3dcaa4bb3, type: 2}

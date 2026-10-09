@@ -13,6 +13,7 @@ namespace Core
     {
         Empty,
         UI,
+        Rewards,
         Social,
         Overworld,
         Dialogue,

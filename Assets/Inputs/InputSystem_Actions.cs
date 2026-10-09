@@ -656,7 +656,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""056bffa0-f635-4405-9c38-2edb93b41286"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -678,7 +678,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""0a667513-31ee-46c9-8d2a-31968e7c28aa"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -700,7 +700,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""94a91349-c68f-4906-af39-3447520f9c12"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
