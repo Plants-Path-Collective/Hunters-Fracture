@@ -17,6 +17,11 @@ MonoBehaviour:
   team: 0
   portrait: {fileID: 21300000, guid: 730b9158cf081d24a8c4ad4c5d6db284, type: 3}
   description: "Envolvente | Control | Kuroy\u016B "
+  skills:
+  - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+  - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
+  passives: []
   unitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
   maxHP: 100
   maxSP: 100

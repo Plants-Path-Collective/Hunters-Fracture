@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: Miasma_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Miasma
+  icon: {fileID: 0}
+  description: "Esparce un \xE1rea de Kuroy\u016B por el campo, afectando a las Units,
+    del bando Aliado, la Unit de MID adelanta 1 turno, mientras que a las Units LEFT
+    y RIGHT del bando Enemigo se atrasan 1 turno c/u."
+  spCost: 30
+  targetType: 0
+  effects:
+  - {fileID: 11400000, guid: 6b36050cf1691ec26a10d3803155b157, type: 2}
+  - {fileID: 11400000, guid: f80c8ee4e4e4422b6996b4d39645e894, type: 2}

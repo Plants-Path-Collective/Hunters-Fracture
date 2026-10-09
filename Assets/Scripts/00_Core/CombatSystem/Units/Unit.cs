@@ -1,6 +1,7 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using Core.CombatSystem.SkillSystem;
 
 namespace Core.CombatSystem.Units
 {
@@ -18,6 +19,27 @@ namespace Core.CombatSystem.Units
         public UNIT_TEAM Team { get; private set; }
         public Sprite Portrait { get; private set; }
         public string Description { get; private set; }
+
+        // ----- Skills -----
+
+        /// <summary>Skills of this Unit in combat. Cloned from the definition so effects can swap them
+        /// temporarily without touching the shared asset.</summary>
+        public List<ActionSO> Skills { get; private set; } = new();
+        public ActionSO Ultimate { get; private set; }
+
+        /// <summary>Current value of any of the 7 derived stats (items and statuses included). HP and SP
+        /// return the maximums.</summary>
+        public float GetStat(STAT_TYPE stat) => stat switch
+        {
+            STAT_TYPE.HP => MaxHP,
+            STAT_TYPE.SP => MaxSP,
+            STAT_TYPE.Speed => Speed,
+            STAT_TYPE.Strength => Strength,
+            STAT_TYPE.MagicPower => MagicPower,
+            STAT_TYPE.PhysicalDefense => PhysicalDefense,
+            STAT_TYPE.MagicalDefense => MagicalDefense,
+            _ => 0f
+        };
 
         // ----- Stats -----
         public bool IsAlive => HP > 0;
@@ -172,6 +194,9 @@ namespace Core.CombatSystem.Units
             Team = team;
             Portrait = definition.portrait;
             Description = definition.description;
+
+            Skills = definition.skills != null ? new List<ActionSO>(definition.skills) : new List<ActionSO>();
+            Ultimate = definition.ultimate;
         }
 
         /// <summary>

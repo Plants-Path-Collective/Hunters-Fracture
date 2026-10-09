@@ -43,6 +43,8 @@ namespace Core.CombatSystem
             suspendedCamera = Camera.main != null ? Camera.main.gameObject : null;
             suspendedCamera?.SetActive(false);
 
+            GameManager.Instance.cmCameraActive.SetActive(false);
+
             suspendedPlayer = playerObject;
             suspendedPlayer?.SetActive(false);
 
@@ -67,6 +69,8 @@ namespace Core.CombatSystem
                 if (content != null)
                     content.SetActive(true);
             suspendedRoomContents = null;
+
+            GameManager.Instance.cmCameraActive.SetActive(true);
 
             suspendedCamera?.SetActive(true);
             suspendedCamera = null;

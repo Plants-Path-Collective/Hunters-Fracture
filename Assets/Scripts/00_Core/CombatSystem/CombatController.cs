@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Core;
 using Core.CombatSystem.Units;
+using Core.CombatSystem.SkillSystem;
+using Core.CombatSystem.StatusSystem;
 
 namespace Core.CombatSystem
 {
@@ -18,6 +20,7 @@ namespace Core.CombatSystem
     public class CombatController : MonoBehaviour
     {
         private TimelineController timeline;
+        private StatusBuffTracker statuses;
         private List<Unit> roster = new();
 
         /// <summary>Everyone in this encounter, alive or dead. Distinct from Timeline's queue,
@@ -47,6 +50,27 @@ namespace Core.CombatSystem
         public event Action<HealContext> OnBeforeHeal;
         public event Action<HealContext> OnAfterHeal;
         public event Action<FleeContext> OnFleeAttempt;
+
+        /// <summary>Fired before a skill pays its cost and runs its effects. Mutable: interceptors
+        /// can change effectScale or spCost, or set cancelled.</summary>
+        public event Action<ActionContext> OnBeforeAction;
+        public event Action<ActionContext> OnAfterAction;
+
+        // ActionResolver raises these through us: events can only be invoked from the declaring class.
+        internal void NotifyBeforeAction(ActionContext context) => OnBeforeAction?.Invoke(context);
+        internal void NotifyAfterAction(ActionContext context) => OnAfterAction?.Invoke(context);
+
+        // ── Status events ────────────────────────────────────────────────────
+
+        public event Action<StatusContext> OnStatusApplied;
+        public event Action<StatusContext> OnStatusExpired;
+
+        /// <summary>A unit lost its turn to a skip-turn status (sleep, freeze). Hook for UI feedback.</summary>
+        public event Action<Unit> OnTurnSkipped;
+        [Tooltip("Seconds a skipped turn lasts before the next one starts (feedback time).")]
+        [SerializeField, Min(0f)] private float skippedTurnDelay = 0.8f;
+
+        // ── Timeline events ────────────────────────────────────────────────
 
         /// <summary>Relayed straight from TimelineController — nothing outside needs a
         /// reference to it directly.</summary>
@@ -80,46 +104,13 @@ namespace Core.CombatSystem
         [SerializeField, HideInInspector] private List<Transform> alliesAttackPositions;
         [SerializeField, HideInInspector] private List<Transform> enemiesAttackPositions;
 
-        #region LegacyMigration
-        #if UNITY_EDITOR
-        private void OnValidate() => MigrateLegacyPositions();
-
-        [ContextMenu("Migrate legacy positions")]
-        private void MigrateLegacyPositions()
-        {
-            bool migrated = false;
-            migrated |= Migrate(alliesDefensePositions, ref alliesDefense);
-            migrated |= Migrate(enemiesDefensePositions, ref enemiesDefense);
-            migrated |= Migrate(alliesAttackPositions, ref alliesAttack);
-            migrated |= Migrate(enemiesAttackPositions, ref enemiesAttack);
-
-            if (migrated)
-                UnityEditor.EditorUtility.SetDirty(this);
-        }
-
-        /// <summary>Copies list element i into the slot that index maps to, only where the slot is
-        /// still empty, then empties the list so this runs once.</summary>
-        private static bool Migrate(List<Transform> legacy, ref SlotAnchors target)
-        {
-            if (legacy == null || legacy.Count == 0) return false;
-
-            for (int i = 0; i < legacy.Count; i++)
-            {
-                if (!CombatSlots.TryFromIndex(i, out COMBAT_SLOT slot)) break;
-                if (target.Get(slot) == null) target.Set(slot, legacy[i]);
-            }
-
-            legacy.Clear();
-            return true;
-        }
-        #endif
-        #endregion
-
         private void Awake()
         {
             timeline = GetComponent<TimelineController>();
             timeline.OnTimelineChanged += (unit, operation, delta) =>
                 OnTimelineChanged?.Invoke(unit, operation, delta);
+
+            statuses = new StatusBuffTracker(this);
         }
 
         private void Start()
@@ -207,6 +198,7 @@ namespace Core.CombatSystem
         public void StartCombat(IEnumerable<Unit> units, UNIT_TEAM advantageTeam)
         {
             finishedOutcome = null;
+            statuses.Clear();
 
             roster = units.ToList();
             foreach (Unit unit in roster)
@@ -245,7 +237,25 @@ namespace Core.CombatSystem
             foreach (Unit unit in roster)
                 unit.TickDefending();
 
+            // A sleeping/frozen unit loses its turn. No OnTurnStart: neither the input handler nor the
+            // enemy AI act. The turn still closes normally, so its other statuses tick and expire.
+            if (statuses.ConsumeSkip(CurrentActor))
+            {
+                OnTurnSkipped?.Invoke(CurrentActor);
+                StartCoroutine(EndSkippedTurn(CurrentActor));
+                return;
+            }
+
             OnTurnStart?.Invoke(CurrentActor);
+        }
+
+        private IEnumerator EndSkippedTurn(Unit actor)
+        {
+            yield return new WaitForSeconds(skippedTurnDelay);
+
+            // The combat may have ended while we were waiting.
+            if (IsCombatActive && CurrentActor == actor)
+                EndTurn();
         }
 
         /// <summary>
@@ -257,6 +267,12 @@ namespace Core.CombatSystem
             if (!IsCombatActive || CurrentActor == null) return;
 
             Unit finishedActor = CurrentActor;
+
+            // End-of-turn status effects (burn, SP regen) and the duration countdown. A burn can kill the
+            // actor and even end the combat, so check before going on.
+            statuses.TickTurnEnd(finishedActor);
+            if (!IsCombatActive) return;
+
             OnTurnEnd?.Invoke(finishedActor);
 
             // If finishedActor died mid-turn (e.g. reflected damage killed the acting unit),
@@ -360,6 +376,7 @@ namespace Core.CombatSystem
 
             unit.HP = 0;
             timeline.Remove(unit);
+            statuses.ClearAll(unit);
             OnUnitKilled?.Invoke(unit);
 
             if (TryResolveOutcome(out COMBAT_OUTCOME outcome))
@@ -484,6 +501,32 @@ namespace Core.CombatSystem
             EndTurn();
             return true;
         }
+
+        // ── Status verbs ──────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Applies (or refreshes) a status on a living unit. magnitude is a positive number whose meaning
+        /// depends on the status (fraction for stat/damage modifiers, amount for burn and SP regen);
+        /// duration counts the target's own turns.
+        /// </summary>
+        public void ApplyStatus(Unit source, Unit target, StatusSO status, float magnitude, int duration)
+        {
+            if (!IsCombatActive || target == null || !target.IsAlive || status == null) return;
+            statuses.Apply(source, target, status, magnitude, duration);
+        }
+
+        public void RemoveStatus(Unit target, StatusSO status)
+        {
+            if (!IsCombatActive || target == null || status == null) return;
+            statuses.Remove(target, status);
+        }
+
+        /// <summary>Read-only view of a unit's active statuses, for UI/debug.</summary>
+        public IReadOnlyList<StatusInstance> GetStatuses(Unit unit) => statuses.GetStatuses(unit);
+
+        // The tracker raises these through us: events can only be invoked from the declaring class.
+        internal void NotifyStatusApplied(StatusContext context) => OnStatusApplied?.Invoke(context);
+        internal void NotifyStatusExpired(StatusContext context) => OnStatusExpired?.Invoke(context);
 
         // ── Timeline delegation (nothing outside touches TimelineController directly) ───────
 

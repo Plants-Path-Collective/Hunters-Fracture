@@ -25,7 +25,7 @@ namespace Core.UI
 
         [Header("--- Panels ---")]
         [SerializeField] private GameObject combatUIPanel;
-        [SerializeField] private GameObject skillsPanel;
+        //[SerializeField] private GameObject skillsPanel;
         [SerializeField] private GameObject backpackPanel;
 
         [Header("--- Actions Buttons ---")]
@@ -155,27 +155,27 @@ namespace Core.UI
 
         // ── Skills panel ─────────────────────────────────────────────────────
 
-        public void OpenSkillsPanel()
-        {
-            if (skillsPanel != null) skillsPanel.SetActive(true);
-        }
+        // public void OpenSkillsPanel()
+        // {
+        //     if (skillsPanel != null) skillsPanel.SetActive(true);
+        // }
 
-        public void CloseSkillsPanel()
-        {
-            if (skillsPanel != null) skillsPanel.SetActive(false);
-        }
+        // public void CloseSkillsPanel()
+        // {
+        //     if (skillsPanel != null) skillsPanel.SetActive(false);
+        // }
 
-        public void ToggleSkillsPanel()
-        {
-            if (skillsPanel == null)
-            {
-                Debug.LogError($"[{nameof(CombatUIManager)}] Skills panel is not assigned.");
-                return;
-            }
+        // public void ToggleSkillsPanel()
+        // {
+        //     if (skillsPanel == null)
+        //     {
+        //         Debug.LogError($"[{nameof(CombatUIManager)}] Skills panel is not assigned.");
+        //         return;
+        //     }
 
-            if (skillsPanel.activeSelf) CloseSkillsPanel();
-            else OpenSkillsPanel();
-        }
+        //     if (skillsPanel.activeSelf) CloseSkillsPanel();
+        //     else OpenSkillsPanel();
+        // }
 
         // ── Backpack panel ─────────────────────────────────────────────────────
         public void OpenBackpackPanel()

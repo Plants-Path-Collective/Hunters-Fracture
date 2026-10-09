@@ -94,6 +94,24 @@ namespace Core
         MagicalDefense
     }
 
+    /// <summary>Who an ActionSO needs the player to pick (or resolves by itself).</summary>
+    public enum TARGET_TYPE
+    {
+        None,        // no pick: its effects choose by side and slot
+        Self,
+        SingleEnemy,
+        SingleAlly,  // alive ally, the actor included
+        SingleAny,   // any living unit of either side
+        AllEnemies,
+        AllAllies
+    }
+
+    /// <summary>Side of an effect's targets, relative to the actor.</summary>
+    public enum RELATIVE_SIDE { Allies, Enemies }
+
+    [System.Flags]
+    public enum SLOT_MASK { None = 0, Left = 1, Mid = 2, Right = 4 }
+
     #endregion
 
     #region DUNGEON

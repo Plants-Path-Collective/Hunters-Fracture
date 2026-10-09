@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using Core.CombatSystem.Units;
+using Core.CombatSystem.SkillSystem;
 using Core.UI;
 using InputSystem;
 
@@ -63,6 +64,14 @@ namespace Core.CombatSystem
         /// Hook for UI feedback; the turn is not spent.</summary>
         public event Action<Unit> OnTargetRejected;
 
+        public event Action<Unit, IReadOnlyList<ActionSO>, int> OnSkillsMenuOpened; // actor, skills, highlighted index
+        public event Action<int> OnSkillsMenuIndexChanged;
+        public event Action OnSkillsMenuClosed;
+
+        private bool skillsOpen;
+        private int skillIndex;
+        private int lastMenuDirection;
+
         private void Awake()
         {
             combat = GetComponent<CombatController>();
@@ -86,6 +95,7 @@ namespace Core.CombatSystem
             input.Backpack.performed += OnBackpack;
             input.Flee.performed += OnFlee;
             input.CastUltimate.performed += OnCastUltimate;
+            input.MoveinSkillsBackpack.canceled += OnMenuNavigate;
             // ConfirmAction is intentionally not subscribed: with target-first, the action
             // hotkey itself confirms. Remove it from the asset, or repurpose it later.
 
@@ -126,6 +136,7 @@ namespace Core.CombatSystem
             input.Backpack.performed -= OnBackpack;
             input.Flee.performed -= OnFlee;
             input.CastUltimate.performed -= OnCastUltimate;
+            input.MoveinSkillsBackpack.canceled -= OnMenuNavigate;
 
             input.TargetSelection.performed -= OnTargetSelection;
             input.TargetSelection.canceled -= OnTargetSelection;
@@ -155,8 +166,11 @@ namespace Core.CombatSystem
 
         private void Lock()
         {
+            CloseSkillsMenu();
+
             if (state == InputState.Ready)
                 OnTargetChanged?.Invoke(null);
+
 
             targets.Clear();
             targetIndex = 0;
@@ -210,13 +224,75 @@ namespace Core.CombatSystem
         {
             if (state == InputState.Locked) return;
 
-            if (CombatUIManager.Instance == null)
+            if (skillsOpen) CloseSkillsMenu();
+            else OpenSkillsMenu();
+        }
+
+        private void OpenSkillsMenu()
+        {
+            Unit actor = combat.CurrentActor;
+            if (actor == null || actor.Skills.Count == 0) return;
+
+            skillsOpen = true;
+            skillIndex = 0;
+            OnSkillsMenuOpened?.Invoke(actor, actor.Skills, skillIndex);
+        }
+
+        private void CloseSkillsMenu()
+        {
+            if (!skillsOpen) return;
+
+            skillsOpen = false;
+            OnSkillsMenuClosed?.Invoke();
+        }
+
+        private void OnMenuNavigate(InputAction.CallbackContext context)
+        {
+            // Same edge detection as target selection, on the vertical axis (W/S, stick up/down).
+            float y = context.ReadValue<Vector2>().y;
+            int direction = y > stickThreshold ? -1 : y < -stickThreshold ? 1 : 0; // up = previous row
+
+            bool isNewStep = direction != 0 && direction != lastMenuDirection;
+            lastMenuDirection = direction;
+
+            if (!isNewStep || !skillsOpen) return;
+
+            int count = combat.CurrentActor.Skills.Count;
+            skillIndex = (skillIndex + direction + count) % count;
+            OnSkillsMenuIndexChanged?.Invoke(skillIndex);
+        }
+
+        private void OnConfirmAction(InputAction.CallbackContext context)
+        {
+            if (state == InputState.Locked || !skillsOpen) return;
+            UseSkill(combat.CurrentActor.Skills[skillIndex]);
+        }
+
+        private void UseSkill(ActionSO action)
+        {
+            Unit actor = combat.CurrentActor;
+            Unit target = CurrentTarget;
+
+            if (actor.SP < action.spCost)
             {
-                Debug.LogError($"[{nameof(CombatInputHandler)}] {nameof(CombatUIManager)}.Instance is null.");
+                Debug.Log($"[{nameof(CombatInputHandler)}] Not enough SP for {action.actionName} " +
+                        $"({actor.SP}/{action.spCost}).");
                 return;
             }
 
-            CombatUIManager.Instance.ToggleSkillsPanel();
+            // The cursor can rest on any unit, but each technique accepts its own kind of target.
+            if (!resolver.IsValidTarget(actor, action, target))
+            {
+                OnTargetRejected?.Invoke(target);
+                return;
+            }
+
+            // Lock BEFORE calling: EndTurn() runs synchronously inside ResolveSkill().
+            Lock();
+
+            // Could not be used after all: reopen the highlight, keep the turn.
+            if (!resolver.ResolveSkill(actor, action, target))
+                OpenTargetSelection();
         }
 
         private void OnBackpack(InputAction.CallbackContext context)
@@ -235,7 +311,15 @@ namespace Core.CombatSystem
         private void OnCastUltimate(InputAction.CallbackContext context)
         {
             if (state == InputState.Locked) return;
-            Debug.Log($"[{nameof(CombatInputHandler)}] Ultimate not implemented yet.");
+
+            ActionSO ultimate = combat.CurrentActor.Ultimate;
+            if (ultimate == null)
+            {
+                Debug.Log($"[{nameof(CombatInputHandler)}] {combat.CurrentActor.Name} has no ultimate.");
+                return;
+            }
+
+            UseSkill(ultimate);
         }
 
         // ── Target selection ──────────────────────────────────────────────────

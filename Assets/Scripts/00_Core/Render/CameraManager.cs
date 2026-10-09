@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    static List<CinemachineCamera> cameras = new List<CinemachineCamera>();
+    public static List<CinemachineCamera> cameras = new List<CinemachineCamera>();
 
     public static CinemachineCamera ActiveCamera = null;
 

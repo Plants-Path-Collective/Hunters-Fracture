@@ -49,6 +49,7 @@ namespace Core.CombatSystem.Units
         /// <summary>
         /// Recomputes the set of TriggeredEffectSO that should be attached to this Unit, and
         /// attaches/detaches them as necessary. Called whenever the Unit's inventory changes.
+        /// Also used to attach the Unit's own passives (from its UnitDefinitionSO) when entering combat.
         /// </summary>
         private void Reconcile()
         {
@@ -58,19 +59,24 @@ namespace Core.CombatSystem.Units
                 effect.Detach(unit);
             attachedEffects.Clear();
 
-            if (inventory == null || inventory.inventory == null)
-                return;
-
             var toAttach = new List<TriggeredEffectSO>();
 
-            foreach (Item item in inventory.inventory.Values)
-            {
-                if (item?.itemSO?.effects == null || item.quantity <= 0)
-                    continue;
+            // The unit's own passives: always on, independent of its inventory.
+            if (unit.Definition != null && unit.Definition.passives != null)
+                foreach (TriggeredEffectSO passive in unit.Definition.passives)
+                    if (passive != null) toAttach.Add(passive);
 
-                foreach (ItemEffectSO effect in item.itemSO.effects)
-                    if (effect is TriggeredEffectSO triggered)
-                        toAttach.Add(triggered);
+            if (inventory != null && inventory.inventory != null)
+            {
+                foreach (Item item in inventory.inventory.Values)
+                {
+                    if (item?.itemSO?.effects == null || item.quantity <= 0)
+                        continue;
+
+                    foreach (ItemEffectSO effect in item.itemSO.effects)
+                        if (effect is TriggeredEffectSO triggered)
+                            toAttach.Add(triggered);
+                }
             }
 
             // Higher priority first.

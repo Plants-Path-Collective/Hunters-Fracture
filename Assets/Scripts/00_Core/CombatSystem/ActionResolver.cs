@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Core.CombatSystem.Units;
-
+using Core.CombatSystem.SkillSystem;
 namespace Core.CombatSystem
 {
     /// <summary>
@@ -86,6 +89,68 @@ namespace Core.CombatSystem
             float received = baseDamage / (1f + Mathf.Max(0f, defense));
 
             return Mathf.Max(1, Mathf.RoundToInt(received));
+        }
+
+        /// <summary>
+        /// Resolves a technique (skill or ultimate): validates turn, SP and target, resolves who the
+        /// action touches, lets OnBeforeAction interceptors adjust it, pays the SP, runs every effect in
+        /// order and closes the turn. Returns false without doing anything if it cannot be used.
+        /// </summary>
+        public bool ResolveSkill(Unit actor, ActionSO action, Unit pickedTarget)
+        {
+            if (!IsActorsTurn(actor))
+            {
+                Debug.LogWarning($"[{nameof(ActionResolver)}] {actor?.Name} tried to act out of turn.");
+                return false;
+            }
+
+            if (action == null || actor.SP < action.spCost) return false;
+
+            if (!IsValidTarget(actor, action, pickedTarget))
+            {
+                Debug.LogWarning($"[{nameof(ActionResolver)}] Invalid target for {action.actionName}: " +
+                                $"{actor.Name} → {pickedTarget?.Name}.");
+                return false;
+            }
+
+            var context = new ActionContext { actor = actor, action = action, spCost = action.spCost };
+            context.targets.AddRange(ResolveTargets(actor, action, pickedTarget));
+
+            combat.NotifyBeforeAction(context);
+            if (context.cancelled || !combat.SpendSP(actor, context.spCost)) return false;
+
+            foreach (ActionEffectSO effect in action.effects)
+                if (effect != null) effect.Apply(context, combat);
+
+            combat.NotifyAfterAction(context);
+            combat.EndTurn();
+            return true;
+        }
+
+        /// <summary>Whether the picked unit is acceptable for this action. Self, None and All* actions ignore it.</summary>
+        public bool IsValidTarget(Unit actor, ActionSO action, Unit target)
+        {
+            switch (action.targetType)
+            {
+                case TARGET_TYPE.SingleEnemy: return target != null && target.IsAlive && target.Team != actor.Team;
+                case TARGET_TYPE.SingleAlly:  return target != null && target.IsAlive && target.Team == actor.Team;
+                case TARGET_TYPE.SingleAny:   return target != null && target.IsAlive;
+                default: return true;
+            }
+        }
+
+        private IEnumerable<Unit> ResolveTargets(Unit actor, ActionSO action, Unit picked)
+        {
+            switch (action.targetType)
+            {
+                case TARGET_TYPE.Self: return new[] { actor };
+                case TARGET_TYPE.SingleEnemy:
+                case TARGET_TYPE.SingleAlly:
+                case TARGET_TYPE.SingleAny: return new[] { picked };
+                case TARGET_TYPE.AllEnemies: return combat.Roster.Where(u => u.IsAlive && u.Team != actor.Team);
+                case TARGET_TYPE.AllAllies: return combat.Roster.Where(u => u.IsAlive && u.Team == actor.Team);
+                default: return Array.Empty<Unit>();
+            }
         }
     }
 }

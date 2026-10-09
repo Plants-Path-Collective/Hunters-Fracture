@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using Core.CombatSystem.ItemSystem;
-using JetBrains.Annotations;
+using Core.CombatSystem.StatusSystem;
 
 namespace Core.CombatSystem.Units
 {
@@ -26,7 +27,7 @@ namespace Core.CombatSystem.Units
         private float baseMagicalDefense;
 
         [Header("----- Debug UI -----")]
-        [SerializeField] [CanBeNull] private TextMeshProUGUI statsDebugText;
+        [SerializeField] private TextMeshProUGUI statsDebugText;
 
         // Cached, final values after applying item modifiers.
         // RecalculateStats() is the only method allowed to write these.
@@ -51,6 +52,10 @@ namespace Core.CombatSystem.Units
         /// need to refresh after stats change.
         /// </summary>
         public UnityEvent OnStatsRecalculated { get; private set; } = new UnityEvent();
+
+        // Temporary changes owned by active statuses (see StatusBuffTracker). Kept apart from items:
+        // they are replaced as a whole every time the tracker changes.
+        private readonly List<TemporaryStatModifier> temporaryModifiers = new();
 
         private UnitInventory inventory;
 
@@ -136,6 +141,8 @@ namespace Core.CombatSystem.Units
                 }
             }
 
+            ApplyTemporaryModifiers();  
+            
             OnStatsRecalculated.Invoke();
         }
 
@@ -193,6 +200,45 @@ namespace Core.CombatSystem.Units
                 STAT_TYPE.MagicalDefense => currentMagicalDefense,
                 _ => 0f
             };
+        }
+
+        /// <summary>Replaces this unit's status modifiers and recomputes the stats from scratch.</summary>
+        public void SetTemporaryModifiers(IReadOnlyList<TemporaryStatModifier> modifiers)
+        {
+            temporaryModifiers.Clear();
+            for (int i = 0; i < modifiers.Count; i++)
+                temporaryModifiers.Add(modifiers[i]);
+
+            RecalculateStats(inventory);
+        }
+
+        /// <summary>Statuses add up per stat (+0.8 and -0.3 → ×1.5), apply after every item modifier,
+        /// and never take a stat below 0.</summary>
+        private void ApplyTemporaryModifiers()
+        {
+            if (temporaryModifiers.Count == 0) return;
+
+            foreach (STAT_TYPE stat in System.Enum.GetValues(typeof(STAT_TYPE)))
+            {
+                float sum = 0f;
+                foreach (TemporaryStatModifier modifier in temporaryModifiers)
+                    if (modifier.stat == stat) sum += modifier.fraction;
+
+                if (Mathf.Approximately(sum, 0f)) continue;
+
+                float factor = Mathf.Max(0f, 1f + sum);
+
+                switch (stat)
+                {
+                    case STAT_TYPE.HP:              currentMaxHP = Mathf.RoundToInt(currentMaxHP * factor); break;
+                    case STAT_TYPE.SP:              currentMaxSP = Mathf.RoundToInt(currentMaxSP * factor); break;
+                    case STAT_TYPE.Speed:           currentSpeed *= factor; break;
+                    case STAT_TYPE.Strength:        currentStrength *= factor; break;
+                    case STAT_TYPE.MagicPower:      currentMagicPower *= factor; break;
+                    case STAT_TYPE.PhysicalDefense: currentPhysicalDefense *= factor; break;
+                    case STAT_TYPE.MagicalDefense:  currentMagicalDefense *= factor; break;
+                }
+            }
         }
     }
 }

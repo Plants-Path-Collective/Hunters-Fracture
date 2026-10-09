@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Core.CombatSystem.SkillSystem;
+using Core.CombatSystem.ItemSystem;
 
 namespace Core.CombatSystem.Units
 {
@@ -12,6 +15,14 @@ namespace Core.CombatSystem.Units
         public Sprite portrait;
         [TextArea(3, 5)]
         public string description;
+
+        [Header("--- Skills ---")]
+        [Tooltip("Skills shown in the Skills menu, in order.")]
+        public List<ActionSO> skills = new();
+        [Tooltip("Cast with the Ultimate input (hold). Optional.")]
+        public ActionSO ultimate;
+        [Tooltip("Always-on triggered effects of this unit (e.g. Fasila's resonance). Attached like item effects.")]
+        public List<TriggeredEffectSO> passives = new();
 
         [Header("--- Presentation ---")]
         [Tooltip("Combat prefab: model, animations and the Unit component with its controllers. Instantiated by CombatController.")]

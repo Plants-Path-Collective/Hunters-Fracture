@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: Envolver_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Envolver
+  icon: {fileID: 0}
+  description: "Selecciona una Unit, luego castea y manda una corriente de Kuroy\u016B
+    hacia ella. Si es Aliada, se endurece y otorga PDef en X%, por 3 turnos. Mientras
+    que si es Enemiga, reduce la Pdef en X% y quema a la unit con da\xF1o Magical
+    por 3 rondas.\n\nX = 0.1 + (1- (MP / 100)) "
+  spCost: 20
+  targetType: 4
+  effects:
+  - {fileID: 11400000, guid: 9ce8a900264a94bdb96424859f943cd4, type: 2}
+  - {fileID: 11400000, guid: c6183cdee75ebf6a19c882be882c8de5, type: 2}
+  - {fileID: 11400000, guid: f93bd101d382fe959a274c8e064d5660, type: 2}
