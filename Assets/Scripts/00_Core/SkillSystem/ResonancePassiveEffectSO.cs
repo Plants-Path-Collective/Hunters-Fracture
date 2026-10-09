@@ -49,9 +49,12 @@ namespace Core.CombatSystem.SkillSystem
 
                 if (state.doubling) { state.fragments = 0; state.doubling = false; }
                 else state.fragments = Mathf.Min(fragmentsNeeded, state.fragments + 1);
+
+                unit.SetResonanceCharges(state.fragments);
             };
 
             states[unit] = state;
+            unit.SetResonanceCharges(state.fragments);
             unit.Combat.OnBeforeAction += state.before;
             unit.Combat.OnAfterAction += state.after;
         }
@@ -67,6 +70,7 @@ namespace Core.CombatSystem.SkillSystem
             }
 
             states.Remove(unit);
+            unit.SetResonanceCharges(0);
         }
     }
 }

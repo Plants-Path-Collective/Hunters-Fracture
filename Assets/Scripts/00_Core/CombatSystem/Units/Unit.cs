@@ -9,6 +9,8 @@ namespace Core.CombatSystem.Units
     public class Unit : MonoBehaviour
     {
         [SerializeField] private UnitDefinitionSO definition;
+        [SerializeField, Tooltip("Resonance charge indicators, ordered from the first charge to the last.")]
+        private GameObject[] resonanceChargeIndicators = new GameObject[3];
         public UnitDefinitionSO Definition => definition;
 
         public CombatController Combat { get; private set; }
@@ -35,6 +37,16 @@ namespace Core.CombatSystem.Units
         public void ClearSpCostReduction(object source) => spCostReductions.Remove(source);
         public void SetAggroBonus(object source, float bonus) => aggroBonuses[source] = bonus;
         public void ClearAggroBonus(object source) => aggroBonuses.Remove(source);
+
+        internal void SetResonanceCharges(int charges)
+        {
+            for (int i = 0; i < resonanceChargeIndicators.Length; i++)
+            {
+                GameObject indicator = resonanceChargeIndicators[i];
+                if (indicator != null)
+                    indicator.SetActive(i < charges);
+            }
+        }
 
         /// <summary>SP cost of an action for this unit, after item reductions.</summary>
         public int GetEffectiveSpCost(ActionSO action)
