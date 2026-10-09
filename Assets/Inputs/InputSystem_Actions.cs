@@ -1585,6 +1585,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=3)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inspect Unit"",
+                    ""type"": ""Button"",
+                    ""id"": ""f2b30935-d2dc-4760-a41a-d4428e9d9e88"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2071,6 +2080,17 @@ namespace InputSystem
                     ""action"": ""Confirm Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8175c6c-edd9-4209-a1a5-c008b5a4d077"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Inspect Unit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -2188,6 +2208,7 @@ namespace InputSystem
             m_Combat_ConfirmAction = m_Combat.FindAction("Confirm Action", throwIfNotFound: true);
             m_Combat_OpenPauseMenu = m_Combat.FindAction("Open Pause Menu", throwIfNotFound: true);
             m_Combat_CastUltimate = m_Combat.FindAction("Cast Ultimate", throwIfNotFound: true);
+            m_Combat_InspectUnit = m_Combat.FindAction("Inspect Unit", throwIfNotFound: true);
         }
 
         ~@InputSystem_Actions()
@@ -3080,6 +3101,7 @@ namespace InputSystem
         private readonly InputAction m_Combat_ConfirmAction;
         private readonly InputAction m_Combat_OpenPauseMenu;
         private readonly InputAction m_Combat_CastUltimate;
+        private readonly InputAction m_Combat_InspectUnit;
         /// <summary>
         /// Provides access to input actions defined in input action map "Combat".
         /// </summary>
@@ -3131,6 +3153,10 @@ namespace InputSystem
             /// Provides access to the underlying input action "Combat/CastUltimate".
             /// </summary>
             public InputAction @CastUltimate => m_Wrapper.m_Combat_CastUltimate;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/InspectUnit".
+            /// </summary>
+            public InputAction @InspectUnit => m_Wrapper.m_Combat_InspectUnit;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -3187,6 +3213,9 @@ namespace InputSystem
                 @CastUltimate.started += instance.OnCastUltimate;
                 @CastUltimate.performed += instance.OnCastUltimate;
                 @CastUltimate.canceled += instance.OnCastUltimate;
+                @InspectUnit.started += instance.OnInspectUnit;
+                @InspectUnit.performed += instance.OnInspectUnit;
+                @InspectUnit.canceled += instance.OnInspectUnit;
             }
 
             /// <summary>
@@ -3228,6 +3257,9 @@ namespace InputSystem
                 @CastUltimate.started -= instance.OnCastUltimate;
                 @CastUltimate.performed -= instance.OnCastUltimate;
                 @CastUltimate.canceled -= instance.OnCastUltimate;
+                @InspectUnit.started -= instance.OnInspectUnit;
+                @InspectUnit.performed -= instance.OnInspectUnit;
+                @InspectUnit.canceled -= instance.OnInspectUnit;
             }
 
             /// <summary>
@@ -3633,6 +3665,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCastUltimate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Inspect Unit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnInspectUnit(InputAction.CallbackContext context);
         }
     }
 }

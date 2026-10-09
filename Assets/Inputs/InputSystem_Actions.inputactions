@@ -1497,6 +1497,15 @@
                     "processors": "",
                     "interactions": "Hold(duration=3)",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Inspect Unit",
+                    "type": "Button",
+                    "id": "f2b30935-d2dc-4760-a41a-d4428e9d9e88",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1981,6 +1990,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Confirm Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8175c6c-edd9-4209-a1a5-c008b5a4d077",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Inspect Unit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

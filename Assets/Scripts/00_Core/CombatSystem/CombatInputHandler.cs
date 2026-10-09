@@ -44,6 +44,9 @@ namespace Core.CombatSystem
         /// <summary>The hold ended: released early, or finished (hide the charge indicator).</summary>
         public event Action<InputAction> OnHoldCanceled;
 
+        /// <summary>Fired when the player requests inspection of the currently highlighted unit.</summary>
+        public event Action<Unit> OnInspectUnit;
+
         private CombatController combat;
         private ActionResolver resolver;
 
@@ -100,6 +103,7 @@ namespace Core.CombatSystem
             input.MoveinSkillsBackpack.performed += OnMenuNavigate;
             input.MoveinSkillsBackpack.canceled += OnMenuNavigate;
             input.ConfirmAction.performed += OnConfirmAction;
+            input.InspectUnit.performed += OnInspectUnitPerformed;
 
             input.TargetSelection.performed += OnTargetSelection;
             input.TargetSelection.canceled += OnTargetSelection; // resets the edge detection
@@ -141,6 +145,7 @@ namespace Core.CombatSystem
             input.MoveinSkillsBackpack.performed -= OnMenuNavigate;
             input.MoveinSkillsBackpack.canceled -= OnMenuNavigate;
             input.ConfirmAction.performed -= OnConfirmAction;
+            input.InspectUnit.performed -= OnInspectUnitPerformed;
 
             input.TargetSelection.performed -= OnTargetSelection;
             input.TargetSelection.canceled -= OnTargetSelection;
@@ -302,6 +307,13 @@ namespace Core.CombatSystem
             {
                 CombatUIManager.Instance.TryConsumeSelectedBackpackItem(this);
             }
+        }
+
+        private void OnInspectUnitPerformed(InputAction.CallbackContext context)
+        {
+            if (state != InputState.Ready || CurrentTarget == null) return;
+
+            OnInspectUnit?.Invoke(CurrentTarget);
         }
 
         private void UseSkill(ActionSO action)

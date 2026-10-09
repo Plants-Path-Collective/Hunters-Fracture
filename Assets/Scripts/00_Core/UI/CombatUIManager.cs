@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -30,6 +31,14 @@ namespace Core.UI
         //[SerializeField] private GameObject skillsPanel;
         [SerializeField] private GameObject backpackPanel;
         [SerializeField] private GameObject gameoverScreen;
+
+        [Header("--- Unit Inspection ---")]
+        [SerializeField] private GameObject inspectionPanel;
+        [SerializeField] private TMP_Text inspectionNameText;
+        [SerializeField] private Image inspectionPortrait;
+        [SerializeField] private TMP_Text inspectionUnitTypeText;
+        [SerializeField] private TMP_Text inspectionTeamText;
+        [SerializeField] private TMP_Text inspectionStatsText;
 
         [System.Serializable]
         private class CombatPanelUI
@@ -95,11 +104,13 @@ namespace Core.UI
                 inputHandler.OnTargetChanged += HandleTargetChanged;
                 inputHandler.OnHoldStarted += HandleHoldStarted;
                 inputHandler.OnHoldCanceled += HandleHoldCanceled;
+                inputHandler.OnInspectUnit += ToggleInspectionPanel;
             }
 
             // Everything starts hidden; the first ally turn opens the panel.
             CloseCombatUI();
             HideCursor();
+            HideInspectionPanel();
         }
 
         private void OnDisable()
@@ -116,6 +127,7 @@ namespace Core.UI
                 inputHandler.OnTargetChanged -= HandleTargetChanged;
                 inputHandler.OnHoldStarted -= HandleHoldStarted;
                 inputHandler.OnHoldCanceled -= HandleHoldCanceled;
+                inputHandler.OnInspectUnit -= ToggleInspectionPanel;
             }
         }
 
@@ -178,12 +190,14 @@ namespace Core.UI
         {
             CloseCombatUI();
             HideCursor();
+            HideInspectionPanel();
         }
 
         private void HandleCombatEnd(COMBAT_OUTCOME outcome)
         {
             CloseCombatUI();
             HideCursor();
+            HideInspectionPanel();
         }
 
         // ── Skills panel ─────────────────────────────────────────────────────
@@ -357,6 +371,15 @@ namespace Core.UI
 
         private void HandleTargetChanged(Unit target)
         {
+            if (target == null)
+            {
+                HideInspectionPanel();
+            }
+            else if (inspectionPanel != null && inspectionPanel.activeSelf)
+            {
+                ShowInspectionPanel(target);
+            }
+
             if (cursor == null) return;
 
             if (target == null)
@@ -378,6 +401,60 @@ namespace Core.UI
                 cursorTween = cursor.transform.DOMove(position, cursorMoveDuration)
                     .SetEase(Ease.OutQuad)
                     .SetLink(cursor);
+        }
+
+        private void ToggleInspectionPanel(Unit target)
+        {
+            if (inspectionPanel == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Inspection panel is not assigned.", this);
+                return;
+            }
+
+            if (inspectionPanel.activeSelf) HideInspectionPanel();
+            else ShowInspectionPanel(target);
+        }
+
+        private void ShowInspectionPanel(Unit target)
+        {
+            if (target == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Cannot inspect a null unit.", this);
+                return;
+            }
+
+            if (inspectionPanel == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Inspection panel is not assigned.", this);
+                return;
+            }
+
+            if (inspectionNameText == null || inspectionPortrait == null || inspectionUnitTypeText == null ||
+                inspectionTeamText == null || inspectionStatsText == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Assign all inspection panel text and portrait references.", this);
+                return;
+            }
+
+            inspectionNameText.text = target.Name;
+            inspectionPortrait.sprite = target.Portrait;
+            inspectionPortrait.enabled = target.Portrait != null;
+            inspectionUnitTypeText.text = target.UnitType.ToString();
+            inspectionTeamText.text = target.Team.ToString();
+            inspectionStatsText.text =
+                $"HP: {target.HP}/{target.MaxHP}\n" +
+                $"SP: {target.SP}/{target.MaxSP}\n" +
+                $"Speed: {target.Speed:0.##}\n" +
+                $"Strength: {target.Strength:0.##}\n" +
+                $"Magic Power: {target.MagicPower:0.##}\n" +
+                $"Physical Defense: {target.PhysicalDefense:0.##}\n" +
+                $"Magical Defense: {target.MagicalDefense:0.##}";
+            inspectionPanel.SetActive(true);
+        }
+
+        private void HideInspectionPanel()
+        {
+            if (inspectionPanel != null) inspectionPanel.SetActive(false);
         }
 
         /// <summary>Point just above the top of the unit's visible renderers, so it works for any
