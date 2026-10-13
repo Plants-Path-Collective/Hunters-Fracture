@@ -1160,7 +1160,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""e8f5bf6d-1f06-4025-95a6-ebcbcd45838d"",
-                    ""path"": ""<XInputController>/select"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
@@ -2088,6 +2088,17 @@ namespace InputSystem
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Inspect Unit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a31f90ff-6440-4b56-9814-fa6f67f216d2"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Inspect Unit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

@@ -456,6 +456,7 @@ GameObject:
   - component: {fileID: 33043522}
   - component: {fileID: 33043524}
   - component: {fileID: 33043523}
+  - component: {fileID: 33043525}
   m_Layer: 5
   m_Name: '[Input_C]'
   m_TagString: Untagged
@@ -520,6 +521,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33043521}
   m_CullTransparentMesh: 1
+--- !u!114 &33043525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33043521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 33043523}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 092b94c8dd7e8a799950ce6b320a738c, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: e01e337c2cdf1fe86af9d43ea071ae91, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 3928f4968057a098a87d5315b1d3356d, type: 3}
 --- !u!208 &35991352
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -728,6 +746,43 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &59100585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 59100586}
+  m_Layer: 5
+  m_Name: '[Inventory - InputContainer]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &59100586
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59100585}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1406267196}
+  - {fileID: 839922772}
+  m_Father: {fileID: 2006489882}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 159.161, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!208 &59955698
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -5748,6 +5803,7 @@ GameObject:
   - component: {fileID: 717881941}
   - component: {fileID: 717881943}
   - component: {fileID: 717881942}
+  - component: {fileID: 717881944}
   m_Layer: 5
   m_Name: '[Input_D]'
   m_TagString: Untagged
@@ -5812,6 +5868,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717881940}
   m_CullTransparentMesh: 1
+--- !u!114 &717881944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717881940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 717881942}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 3864b5b6d781fc1d5a1c25f2dec5e22f, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 0b4ad33e0d93579a99958f278774fe5b, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 2a07f127a478c1d4695eb3b86a1d35d7, type: 3}
 --- !u!208 &718260040
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -15698,6 +15771,143 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &839922771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 839922772}
+  - component: {fileID: 839922774}
+  - component: {fileID: 839922773}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &839922772
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839922771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 59100586}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 21.925568, y: 0}
+  m_SizeDelta: {x: -43.851, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &839922773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839922771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Inventario
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4283371027
+  m_fontColor: {r: 0.07406689, g: 0.054334287, b: 0.31132078, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 25
+  m_fontSizeBase: 25
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &839922774
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839922771}
+  m_CullTransparentMesh: 1
 --- !u!208 &840261662
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -16363,7 +16573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 931330965}
   m_Layer: 5
-  m_Name: '[Targeting - InputContainer]'
+  m_Name: '[Movement - InputContainer]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16797,7 +17007,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 151.535, y: 40}
+  m_SizeDelta: {x: 129.927, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!208 &992132879
 NavMeshObstacle:
@@ -18698,6 +18908,7 @@ GameObject:
   - component: {fileID: 1228405254}
   - component: {fileID: 1228405256}
   - component: {fileID: 1228405255}
+  - component: {fileID: 1228405257}
   m_Layer: 5
   m_Name: '[Input_B]'
   m_TagString: Untagged
@@ -18762,6 +18973,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1228405253}
   m_CullTransparentMesh: 1
+--- !u!114 &1228405257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1228405253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1228405255}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 1cd377422fef584a697be35902e9c35a, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 81c9121a483ae1fb4830e4bae30315e4, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 62055502e65b79285b226f77cebd148f, type: 3}
 --- !u!208 &1231440794
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -18885,6 +19113,7 @@ GameObject:
   - component: {fileID: 1255068256}
   - component: {fileID: 1255068258}
   - component: {fileID: 1255068257}
+  - component: {fileID: 1255068259}
   m_Layer: 5
   m_Name: '[Input_A]'
   m_TagString: Untagged
@@ -18949,6 +19178,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1255068255}
   m_CullTransparentMesh: 1
+--- !u!114 &1255068259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255068255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1255068257}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: fd844fa14bab8734987f0077f4d0c3c6, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: d53f82f54816db94ea85b27f03906b01, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: be8a5ed3ac4085189923970f0b452446, type: 3}
 --- !u!208 &1257361928
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -19217,6 +19463,7 @@ GameObject:
   - component: {fileID: 1302370519}
   - component: {fileID: 1302370521}
   - component: {fileID: 1302370520}
+  - component: {fileID: 1302370522}
   m_Layer: 5
   m_Name: '[Input_A]'
   m_TagString: Untagged
@@ -19281,6 +19528,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302370518}
   m_CullTransparentMesh: 1
+--- !u!114 &1302370522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302370518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1302370520}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 3864b5b6d781fc1d5a1c25f2dec5e22f, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 15d69fbb748724bb7a8c4cb00ea9fd4c, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: ac5b31aca68d08b45964ce7ffdfadf08, type: 3}
 --- !u!208 &1303221586
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -20074,6 +20338,99 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &1406267195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1406267196}
+  - component: {fileID: 1406267199}
+  - component: {fileID: 1406267198}
+  - component: {fileID: 1406267197}
+  m_Layer: 5
+  m_Name: '[Input_A]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1406267196
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406267195}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 59100586}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -0.000022888184, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &1406267197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406267195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1406267198}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 2a04e3b56f0b4fa01aa631aff5d222a4, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 062ac1806a35f0aa1a08c470136f317a, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 9da30e18a3edbf7beb620becd8693fa5, type: 3}
+--- !u!114 &1406267198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406267195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: be8a5ed3ac4085189923970f0b452446, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1406267199
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406267195}
+  m_CullTransparentMesh: 1
 --- !u!1 &1406817651
 GameObject:
   m_ObjectHideFlags: 0
@@ -24257,7 +24614,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 151.535, y: 40}
+  m_SizeDelta: {x: 123.889, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!208 &2004128123
 NavMeshObstacle:
@@ -24325,12 +24682,13 @@ RectTransform:
   - {fileID: 931330965}
   - {fileID: 986597667}
   - {fileID: 2003476512}
+  - {fileID: 59100586}
   m_Father: {fileID: 17408062}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: -0.000035938698, y: 25}
-  m_SizeDelta: {x: 696.408, y: 50}
+  m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2006489883
 MonoBehaviour:
@@ -25471,6 +25829,7 @@ GameObject:
   - component: {fileID: 2135591543}
   - component: {fileID: 2135591545}
   - component: {fileID: 2135591544}
+  - component: {fileID: 2135591546}
   m_Layer: 5
   m_Name: '[Input_A]'
   m_TagString: Untagged
@@ -25535,6 +25894,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135591542}
   m_CullTransparentMesh: 1
+--- !u!114 &2135591546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135591542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 2135591544}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 37421897c48f3c9c58560915e0c8c6a7, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: ecaaa9c73dc309678b3d45c1ae67252a, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 8566d13c609e56917a4e316eb16a7e9a, type: 3}
 --- !u!208 &2139977358
 NavMeshObstacle:
   m_ObjectHideFlags: 0
