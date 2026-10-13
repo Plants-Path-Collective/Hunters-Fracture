@@ -29,8 +29,9 @@ namespace Overworld
         private Vector3 patrolOrigin;
         private ENEMY_STATE state = ENEMY_STATE.Patrol;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             agent = GetComponent<NavMeshAgent>();
         }
 
@@ -86,7 +87,7 @@ namespace Overworld
 
         protected override void PlayAttackPlaceholder()
         {
-            transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 1, 0.5f)
+            transform.DOPunchScale(Vector3.one * 0.2f, AttackDuration, 1, 0.5f)
                 .OnComplete(() =>
                 {
                     OnAttackHitFrame();

@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: Demo de Combate 1A
     m_Metadata:
       m_Items: []
+  - m_Id: 2556948435390464
+    m_Localized: Demo de Combate 1B
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

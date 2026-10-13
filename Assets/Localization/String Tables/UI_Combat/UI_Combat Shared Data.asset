@@ -27,6 +27,10 @@ MonoBehaviour:
     m_Key: ui_skills_btn
     m_Metadata:
       m_Items: []
+  - m_Id: 29737118149595136
+    m_Key: ui_ultimate
+    m_Metadata:
+      m_Items: []
   - m_Id: 24651885737889794
     m_Key: ui_backpack_btn
     m_Metadata:

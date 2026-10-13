@@ -38,6 +38,10 @@ MonoBehaviour:
     m_Localized: Flee
     m_Metadata:
       m_Items: []
+  - m_Id: 29737118149595136
+    m_Localized: Ultimate Skill
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

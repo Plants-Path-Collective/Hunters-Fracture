@@ -14,6 +14,9 @@ namespace Core.UI
     [RequireComponent(typeof(Canvas))]
     public class UnitBarsView : MonoBehaviour
     {
+        [Header("--- Identity ---")]
+        [SerializeField] private TMP_Text nameLabel;
+
         [Header("--- HP ---")]
         [SerializeField] private Image hpFill;
         [Tooltip("Optional.")]
@@ -59,6 +62,7 @@ namespace Core.UI
         private void Start()
         {
             if (unit != null) Refresh(unit);
+            if (nameLabel != null) nameLabel.text = unit.Name;
         }
 
         private void OnDisable()

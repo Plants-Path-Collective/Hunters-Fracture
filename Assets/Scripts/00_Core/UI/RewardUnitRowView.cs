@@ -15,10 +15,7 @@ namespace Core.UI
     {
         [SerializeField] private Image portrait;
         [SerializeField] private TMP_Text nameLabel;
-        [Tooltip("Parent of the item icons. Give it a HorizontalLayoutGroup.")]
-        [SerializeField] private RectTransform itemsRoot;
-
-        private readonly List<RewardItemView> icons = new();
+        [SerializeField] private List<GameObject> items = new();
 
         public void Bind(Unit unit)
         {
@@ -35,17 +32,31 @@ namespace Core.UI
 
         public void Hide() => gameObject.SetActive(false);
 
-        /// <summary>Shows exactly these items, in order. Icons are pooled.</summary>
-        public void SetItems(IReadOnlyList<(ItemSO item, int quantity)> items, RewardItemView prefab)
+        /// <summary>Shows exactly these items, in order, using the row's preconfigured item views.</summary>
+        public void SetItems(IReadOnlyList<(ItemSO item, int quantity)> itemStacks)
         {
-            while (icons.Count < items.Count)
-                icons.Add(Instantiate(prefab, itemsRoot));
-
-            for (int i = 0; i < icons.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                bool used = i < items.Count;
-                icons[i].gameObject.SetActive(used);
-                if (used) icons[i].Bind(items[i].item, items[i].quantity);
+                bool used = i < itemStacks.Count
+                    && itemStacks[i].item != null
+                    && itemStacks[i].quantity > 0;
+                GameObject itemObject = items[i];
+                itemObject.SetActive(used);
+                if (!used) continue;
+
+                if (itemObject.TryGetComponent(out ItemInInventoryView inventoryView))
+                {
+                    inventoryView.Bind(itemStacks[i].item, itemStacks[i].quantity);
+                    continue;
+                }
+
+                if (itemObject.TryGetComponent(out RewardItemView rewardItemView))
+                {
+                    rewardItemView.Bind(itemStacks[i].item, itemStacks[i].quantity);
+                    continue;
+                }
+
+                Debug.LogError($"Reward item GameObject '{itemObject.name}' is missing an ItemInInventoryView or RewardItemView.", itemObject);
             }
         }
     }

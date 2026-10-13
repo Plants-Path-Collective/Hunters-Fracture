@@ -6,8 +6,7 @@ using Core.CombatSystem.ItemSystem;
 namespace Core.UI
 {
     /// <summary>
-    /// One item icon of the rewards screen. The same prefab is used for the unassigned list
-    /// (selectable) and for the icons inside each unit row (with a stack count).
+    /// One item icon of the rewards screen. Is used for the unassigned list
     /// </summary>
     public class RewardItemView : MonoBehaviour
     {

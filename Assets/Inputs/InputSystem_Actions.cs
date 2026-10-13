@@ -1520,7 +1520,7 @@ namespace InputSystem
                     ""id"": ""eccb539a-f27c-4e9f-b184-bbbf17fae7a7"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1529,7 +1529,7 @@ namespace InputSystem
                     ""id"": ""c833ce8d-9b4a-4211-8c34-e313f6133235"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1538,7 +1538,7 @@ namespace InputSystem
                     ""id"": ""e9f77916-2fea-4490-a958-1b91c5aed822"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1547,7 +1547,7 @@ namespace InputSystem
                     ""id"": ""aa4de805-b111-43b8-a438-0aa3e68e0858"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1592,7 +1592,7 @@ namespace InputSystem
                     ""id"": ""f2b30935-d2dc-4760-a41a-d4428e9d9e88"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],

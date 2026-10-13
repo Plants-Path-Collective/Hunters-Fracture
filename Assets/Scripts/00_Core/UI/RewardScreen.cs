@@ -325,7 +325,7 @@ namespace Core.UI
             }
 
             row.Bind(unit);
-            row.SetItems(BuildRowItems(unit), itemPrefab);
+            row.SetItems(BuildRowItems(unit));
         }
 
         /// <summary>What the unit holds now, plus the items assigned to it on this screen.</summary>

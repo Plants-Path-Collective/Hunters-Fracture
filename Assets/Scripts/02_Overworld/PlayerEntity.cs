@@ -65,7 +65,7 @@ namespace Overworld
         {
             // Placeholder lunge — swap for a real animation + Animation Event later,
             // calling OnAttackHitFrame() at the same relative point.
-            transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 1, 0.5f)
+            transform.DOPunchScale(Vector3.one * 0.2f, AttackDuration, 1, 0.5f)
                 .OnComplete(() =>
                 {
                     OnAttackHitFrame();

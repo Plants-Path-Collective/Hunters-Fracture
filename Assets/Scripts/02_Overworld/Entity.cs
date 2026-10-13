@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace Overworld
@@ -15,6 +16,21 @@ namespace Overworld
         [SerializeField] protected Transform attackOrigin;
         [SerializeField] protected float attackRange = 1.5f;
         [SerializeField] protected float attackRadius = 0.5f;
+        [Tooltip("Optional dedicated unit-sized sphere shown at the end of the attack SphereCast.")]
+        [SerializeField] private GameObject attackRadiusFeedback;
+        [SerializeField] private float attackFeedbackDuration = 0.3f;
+
+        private Tween attackFeedbackTween;
+        protected float AttackDuration => attackFeedbackDuration;
+
+        protected virtual void Awake()
+        {
+            if (attackRadiusFeedback != null)
+            {
+                attackRadiusFeedback.transform.localScale = Vector3.zero;
+                attackRadiusFeedback.SetActive(false);
+            }
+        }
 
         /// <summary>
         /// True while an attack is mid-flight (placeholder animation running). Prevents the
@@ -33,6 +49,7 @@ namespace Overworld
 
             isAttacking = true;
             Debug.Log($"[{GetType().Name}] {name} started an attack.");
+            BeginAttackRadiusFeedback();
             PlayAttackPlaceholder();
         }
 
@@ -53,16 +70,59 @@ namespace Overworld
         protected void OnAttackHitFrame()
         {
             Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
+            ShowAttackRadiusFeedbackAtImpact(origin);
 
+            Entity target = null;
             if (Physics.SphereCast(origin, attackRadius, transform.forward, out RaycastHit hit, attackRange))
             {
                 // GetComponentInParent in case the collider that got hit lives on a child
                 // (e.g. a dedicated hitbox) rather than on the Entity's own root.
-                Entity target = hit.collider.GetComponentInParent<Entity>();
-
-                if (target != null && target != this)
-                    OnHitConnected(target);
+                target = hit.collider.GetComponentInParent<Entity>();
             }
+
+            RetractAttackRadiusFeedback();
+
+            if (target != null && target != this)
+                OnHitConnected(target);
+        }
+
+        private void BeginAttackRadiusFeedback()
+        {
+            if (attackRadiusFeedback == null) return;
+
+            Transform feedbackTransform = attackRadiusFeedback.transform;
+            attackFeedbackTween?.Kill();
+            Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
+            feedbackTransform.position = origin + transform.forward * attackRange;
+            feedbackTransform.localScale = Vector3.zero;
+            attackRadiusFeedback.SetActive(true);
+
+            attackFeedbackTween = feedbackTransform
+                .DOScale(Vector3.one * (attackRadius * 2f), attackFeedbackDuration)
+                .SetEase(Ease.OutCubic)
+                .SetLink(attackRadiusFeedback);
+        }
+
+        private void ShowAttackRadiusFeedbackAtImpact(Vector3 origin)
+        {
+            if (attackRadiusFeedback == null) return;
+
+            attackFeedbackTween?.Kill();
+            Transform feedbackTransform = attackRadiusFeedback.transform;
+            feedbackTransform.position = origin + transform.forward * attackRange;
+            feedbackTransform.localScale = Vector3.one * (attackRadius * 2f);
+        }
+
+        private void RetractAttackRadiusFeedback()
+        {
+            if (attackRadiusFeedback == null) return;
+
+            Transform feedbackTransform = attackRadiusFeedback.transform;
+            attackFeedbackTween = feedbackTransform
+                .DOScale(Vector3.zero, 0.15f)
+                .SetEase(Ease.InCubic)
+                .SetLink(attackRadiusFeedback)
+                .OnComplete(() => attackRadiusFeedback.SetActive(false));
         }
 
         /// <summary>
