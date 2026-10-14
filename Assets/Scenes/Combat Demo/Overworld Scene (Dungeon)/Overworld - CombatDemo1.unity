@@ -26236,7 +26236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Overworld.PlayerEntity
   attackOrigin: {fileID: 1604693725}
   attackRange: 0.6
-  attackRadius: 0.5
+  attackRadius: 1
   attackRadiusFeedback: {fileID: 1105482275}
   attackFeedbackDuration: 0.3
   party:
