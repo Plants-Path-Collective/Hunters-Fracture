@@ -1,8 +1,13 @@
 using System;
 using System.Collections;
+using InputSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 
 namespace Core.UI
 {
@@ -13,6 +18,15 @@ namespace Core.UI
         [Header("Panels")]
         [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private GameObject optionsPanel;
+        [SerializeField] private Selectable mainMenuFirstSelection;
+        [SerializeField] private Selectable optionsFirstSelection;
+        [SerializeField] private Selectable optionsReturnSelection;
+
+        private InputSystem_Actions inputActions;
+        private EventSystem eventSystem;
+        private InputActionReference navigateReference;
+        private InputActionReference confirmReference;
+        private InputActionReference cancelReference;
 
         private void Awake()
         {
@@ -20,6 +34,82 @@ namespace Core.UI
             if (Instance != null && Instance != this) { Destroy(this); return; }
 
             Instance = this;
+        }
+
+        private void Start()
+        {
+            inputActions = new InputSystem_Actions();
+            eventSystem = EventSystem.current;
+
+            if (eventSystem == null)
+            {
+                Debug.LogError($"[{nameof(MainMenuManager)}] No {nameof(EventSystem)} is available.", this);
+            }
+            else
+            {
+                InputSystemUIInputModule uiInputModule =
+                    eventSystem.GetComponent<InputSystemUIInputModule>();
+                if (uiInputModule == null)
+                {
+                    Debug.LogError($"[{nameof(MainMenuManager)}] The EventSystem has no " +
+                                   $"{nameof(InputSystemUIInputModule)}.", this);
+                }
+                else
+                {
+                    navigateReference = InputActionReference.Create(inputActions.UI.Navigate);
+                    confirmReference = InputActionReference.Create(inputActions.UI.Confirm);
+                    cancelReference = InputActionReference.Create(inputActions.UI.CancelBack);
+
+                    uiInputModule.enabled = false;
+                    uiInputModule.move = navigateReference;
+                    uiInputModule.submit = confirmReference;
+                    uiInputModule.cancel = cancelReference;
+                    uiInputModule.enabled = true;
+                }
+            }
+
+            inputActions.UI.Enable();
+            inputActions.UI.CancelBack.performed += HandleCancelBack;
+            Select(mainMenuFirstSelection);
+        }
+
+        private void OnDestroy()
+        {
+            if (inputActions != null)
+            {
+                inputActions.UI.CancelBack.performed -= HandleCancelBack;
+                inputActions.Disable();
+                inputActions.Dispose();
+                inputActions = null;
+            }
+
+            if (navigateReference != null) Destroy(navigateReference);
+            if (confirmReference != null) Destroy(confirmReference);
+            if (cancelReference != null) Destroy(cancelReference);
+
+            if (Instance == this)
+                Instance = null;
+        }
+
+        private void HandleCancelBack(InputAction.CallbackContext context)
+        {
+            if (optionsPanel != null && optionsPanel.activeSelf)
+                CloseOptions();
+        }
+
+        private void Select(Selectable selectable)
+        {
+            if (selectable == null || !selectable.gameObject.activeInHierarchy ||
+                !selectable.IsInteractable())
+                return;
+
+            if (eventSystem == null)
+            {
+                Debug.LogError($"[{nameof(MainMenuManager)}] No {nameof(EventSystem)} is available.");
+                return;
+            }
+
+            eventSystem.SetSelectedGameObject(selectable.gameObject);
         }
 
         /// <summary>
@@ -49,6 +139,7 @@ namespace Core.UI
         {
             if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
             if (optionsPanel != null) optionsPanel.SetActive(true);
+            Select(optionsFirstSelection);
         }
 
         /// <summary>
@@ -59,6 +150,7 @@ namespace Core.UI
         {
             if (optionsPanel != null) optionsPanel.SetActive(false);
             if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+            Select(optionsReturnSelection);
         }
 
         /// <summary>

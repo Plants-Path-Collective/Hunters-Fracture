@@ -179,9 +179,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -203,7 +203,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: SetLanguageEnglish
         m_Mode: 1
         m_Arguments:
@@ -702,9 +702,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -726,7 +726,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
@@ -1371,7 +1371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 269687144}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &826367012
@@ -2056,9 +2056,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2080,7 +2080,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -2367,9 +2367,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2391,7 +2391,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: OpenOptions
         m_Mode: 1
         m_Arguments:
@@ -2711,9 +2711,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2735,7 +2735,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: CloseOptions
         m_Mode: 1
         m_Arguments:
@@ -2844,9 +2844,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_NormalColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.027940515, b: 0, a: 1}
+    m_PressedColor: {r: 0.039775774, g: 0, b: 0.735849, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2868,7 +2868,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2096872090}
-        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Core.UI.MainMenuManager, Assembly-CSharp
         m_MethodName: SetLanguageSpanish
         m_Mode: 1
         m_Arguments:
@@ -2960,9 +2960,14 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 894d5688c1aa4a65a3fa7c8d433c4b05, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.UIManager
+  m_EditorClassIdentifier: Assembly-CSharp::Core.UI.MainMenuManager
   mainMenuPanel: {fileID: 927481151}
   optionsPanel: {fileID: 2032262931}
+  mainMenuFirstSelection: {fileID: 269687146}
+  optionsFirstSelection: {fileID: 3702352}
+  optionsReturnSelection: {fileID: 1919687077}
+  navigationRepeatDelay: 0.5
+  navigationRepeatRate: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
