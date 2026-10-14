@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3198ef1263b5541a1b3ad7b08ce894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.Unit
-  definition: {fileID: 0}
+  definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
   resonanceChargeIndicators:
   - {fileID: 0}
   - {fileID: 0}

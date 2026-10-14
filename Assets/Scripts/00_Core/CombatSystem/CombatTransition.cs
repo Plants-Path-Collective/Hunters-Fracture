@@ -90,15 +90,20 @@ namespace Core.CombatSystem
             SceneManager.UnloadSceneAsync(CombatStageScene);
         }
 
-        /// <summary>
-        /// TODO: replace with GameOverScreen (stats summary, quick reset, main menu) once it
-        /// exists. For now just logs and leaves everything — CombatStage, the input map, the
-        /// hidden Player/Enemy/rooms — exactly as it was when the fight ended, so the state is
-        /// inspectable.
-        /// </summary>
+        /// <summary>Leaves CombatStage loaded so its game-over UI can offer a fresh run or main menu.</summary>
         private static void HandleDefeat()
         {
-            Debug.Log("[CombatTransition] Defeat — TODO: show GameOverScreen instead of this log.");
+            ClearDefeatState();
+            Debug.Log("[CombatTransition] Defeat — waiting for a game-over screen choice.");
+        }
+
+        public static void ClearDefeatState()
+        {
+            suspendedRoomContents?.Clear();
+            suspendedRoomContents = null;
+            suspendedCamera = null;
+            suspendedPlayer = null;
+            suspendedEnemy = null;
         }
     }
 }

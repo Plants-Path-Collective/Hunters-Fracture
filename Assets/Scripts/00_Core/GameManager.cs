@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Core;
@@ -51,5 +52,28 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
             return (true);
         }
+    }
+
+        private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
+    public static void DestroyPersistentGameObjects()
+    {
+        List<GameObject> persistentRoots = new();
+        foreach (GameObject gameObject in Resources.FindObjectsOfTypeAll<GameObject>())
+        {
+            if (gameObject.scene.IsValid() &&
+                gameObject.scene.name == "DontDestroyOnLoad" &&
+                gameObject.transform.parent == null)
+            {
+                persistentRoots.Add(gameObject);
+            }
+        }
+
+        foreach (GameObject root in persistentRoots)
+            Destroy(root);
     }
 }

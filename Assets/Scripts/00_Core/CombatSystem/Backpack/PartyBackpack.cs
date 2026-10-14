@@ -23,6 +23,12 @@ namespace Core.CombatSystem.Backpack
             }
         }
 
+        private void OnDestroy()
+        {
+            if (Instance == this)
+                Instance = null;
+        }
+
         public void AddConsumable(ConsumableSO consumable, int quantity = 1)
         {
             BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
@@ -34,6 +40,11 @@ namespace Core.CombatSystem.Backpack
             {
                 backpackSlots.Add(new BackpackSlot { consumableSO = consumable, quantity = quantity });
             }
+        }
+
+        public void Clear()
+        {
+            backpackSlots.Clear();
         }
 
         public void RemoveConsumable(ConsumableSO consumable, int quantity = 1)

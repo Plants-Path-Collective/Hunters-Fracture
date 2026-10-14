@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Core.CombatSystem.Backpack;
 using Core.CombatSystem;
@@ -30,7 +32,8 @@ namespace Core.UI
         [SerializeField] private CombatPanelUI rightPanel;
         //[SerializeField] private GameObject skillsPanel;
         [SerializeField] private GameObject backpackPanel;
-        [SerializeField] private GameObject gameoverScreen;
+        [SerializeField] private CanvasGroup gameoverScreen;
+        [SerializeField, Min(0f)] private float gameOverFadeDuration = 0.5f;
 
         [Header("--- Unit Inspection ---")]
         [SerializeField] private GameObject inspectionPanel;
@@ -71,6 +74,10 @@ namespace Core.UI
         private BackpackSlotUI selectedBackpackSlot;
         private readonly Dictionary<Image, Tween> holdTweens = new();
         private Tween cursorTween;
+        private Tween gameOverTween;
+        private InputAction gameOverConfirmAction;
+        private InputAction gameOverCancelAction;
+        private bool gameOverChoiceMade;
         private int backpackIndex;
 
         private void Awake()
@@ -79,6 +86,17 @@ namespace Core.UI
             if (Instance != null && Instance != this) { Destroy(this); return; }
 
             Instance = this;
+
+            if (gameoverScreen != null)
+            {
+                gameoverScreen.alpha = 0f;
+                gameoverScreen.interactable = false;
+                gameoverScreen.blocksRaycasts = false;
+            }
+            else
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Game over CanvasGroup is not assigned.", this);
+            }
 
             if (combat == null || inputHandler == null)
                 Debug.LogError($"[{nameof(CombatUIManager)}] Assign CombatController and " +
@@ -115,6 +133,9 @@ namespace Core.UI
 
         private void OnDisable()
         {
+            gameOverTween?.Kill();
+            UnsubscribeGameOverInput();
+
             if (combat != null)
             {
                 combat.OnTurnStart -= HandleTurnStart;
@@ -129,11 +150,6 @@ namespace Core.UI
                 inputHandler.OnHoldCanceled -= HandleHoldCanceled;
                 inputHandler.OnInspectUnit -= ToggleInspectionPanel;
             }
-        }
-
-        void Start()
-        {
-            
         }
 
         // ── Turn Panel ─────────────────────────────────────────────────────────────
@@ -198,31 +214,96 @@ namespace Core.UI
             CloseCombatUI();
             HideCursor();
             HideInspectionPanel();
+
+            if (outcome == COMBAT_OUTCOME.Defeat)
+                ShowGameOverScreen();
         }
 
-        // ── Skills panel ─────────────────────────────────────────────────────
+        private void ShowGameOverScreen()
+        {
+            if (gameoverScreen == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Cannot show game over screen: " +
+                               "CanvasGroup is not assigned.", this);
+                return;
+            }
 
-        // public void OpenSkillsPanel()
-        // {
-        //     if (skillsPanel != null) skillsPanel.SetActive(true);
-        // }
+            if (InputManager.Instance == null)
+            {
+                Debug.LogError($"[{nameof(CombatUIManager)}] Game-over input is unavailable: " +
+                               $"{nameof(InputManager)} is not available.", this);
+            }
+            else
+            {
+                gameOverChoiceMade = false;
+                SubscribeGameOverInput();
+                InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.UI);
+            }
 
-        // public void CloseSkillsPanel()
-        // {
-        //     if (skillsPanel != null) skillsPanel.SetActive(false);
-        // }
+            gameOverTween?.Kill();
+            gameoverScreen.interactable = false;
+            gameoverScreen.blocksRaycasts = true;
+            gameOverTween = gameoverScreen
+                .DOFade(1f, gameOverFadeDuration)
+                .SetEase(Ease.OutQuad)
+                .SetLink(gameoverScreen.gameObject)
+                .OnComplete(() => gameoverScreen.interactable = true);
+        }
 
-        // public void ToggleSkillsPanel()
-        // {
-        //     if (skillsPanel == null)
-        //     {
-        //         Debug.LogError($"[{nameof(CombatUIManager)}] Skills panel is not assigned.");
-        //         return;
-        //     }
+        private void SubscribeGameOverInput()
+        {
+            UnsubscribeGameOverInput();
 
-        //     if (skillsPanel.activeSelf) CloseSkillsPanel();
-        //     else OpenSkillsPanel();
-        // }
+            gameOverConfirmAction = InputManager.Instance.UI.Confirm;
+            gameOverCancelAction = InputManager.Instance.UI.CancelBack;
+            gameOverConfirmAction.performed += HandleGameOverConfirm;
+            gameOverCancelAction.performed += HandleGameOverCancel;
+        }
+
+        private void UnsubscribeGameOverInput()
+        {
+            if (gameOverConfirmAction != null)
+                gameOverConfirmAction.performed -= HandleGameOverConfirm;
+            if (gameOverCancelAction != null)
+                gameOverCancelAction.performed -= HandleGameOverCancel;
+
+            gameOverConfirmAction = null;
+            gameOverCancelAction = null;
+        }
+
+        private void HandleGameOverConfirm(InputAction.CallbackContext context)
+        {
+            if (gameoverScreen != null && gameoverScreen.interactable)
+                LeaveGameOver("Overworld - CombatDemo1");
+        }
+
+        private void HandleGameOverCancel(InputAction.CallbackContext context)
+        {
+            if (gameoverScreen != null && gameoverScreen.interactable)
+                LeaveGameOver("Main Menu - CombatDemo");
+        }
+
+        private void LeaveGameOver(string destinationScene)
+        {
+            if (gameOverChoiceMade) return;
+            gameOverChoiceMade = true;
+
+            UnsubscribeGameOverInput();
+            gameOverTween?.Kill();
+
+            if (PartyBackpack.Instance != null)
+                PartyBackpack.Instance.Clear();
+
+            CombatTransition.ClearDefeatState();
+            StartCoroutine(LoadFreshScene(destinationScene));
+        }
+
+        private IEnumerator LoadFreshScene(string destinationScene)
+        {
+            GameManager.DestroyPersistentGameObjects();
+            yield return null;
+            SceneManager.LoadScene(destinationScene, LoadSceneMode.Single);
+        }
 
         // ── Backpack panel ─────────────────────────────────────────────────────
         public void OpenBackpackPanel()

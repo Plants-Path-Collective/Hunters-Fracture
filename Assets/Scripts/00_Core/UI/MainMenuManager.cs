@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
 namespace Core.UI
