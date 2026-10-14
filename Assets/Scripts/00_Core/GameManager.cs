@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public bool paused = false;
     public static GameManager Instance { get; private set; }
     public GameObject cmCameraActive;
+    public GameObject globalVisuals;
     public GameObject inputsHints;
     public GameObject pauseMenu;
 

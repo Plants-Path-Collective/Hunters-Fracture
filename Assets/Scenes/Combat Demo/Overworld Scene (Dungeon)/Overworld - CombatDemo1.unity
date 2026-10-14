@@ -25921,6 +25921,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 17408061}
     - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: globalVisuals
+      value: 
+      objectReference: {fileID: 134136824}
+    - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: cmCameraActive
       value: 
       objectReference: {fileID: 127486849}

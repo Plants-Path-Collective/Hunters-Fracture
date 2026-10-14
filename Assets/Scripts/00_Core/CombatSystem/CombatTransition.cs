@@ -39,6 +39,8 @@ namespace Core.CombatSystem
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
 
+            GameManager.Instance.globalVisuals.SetActive(false);
+
             // need to adapt it to cinemachinecamera (currently not working as intended)
             suspendedCamera = Camera.main != null ? Camera.main.gameObject : null;
             suspendedCamera?.SetActive(false);
@@ -70,6 +72,8 @@ namespace Core.CombatSystem
                 if (content != null)
                     content.SetActive(true);
             suspendedRoomContents = null;
+
+            GameManager.Instance.globalVisuals.SetActive(true);
 
             GameManager.Instance.cmCameraActive.SetActive(true);
             GameManager.Instance.inputsHints.SetActive(true);
