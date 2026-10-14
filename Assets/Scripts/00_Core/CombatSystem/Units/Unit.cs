@@ -11,6 +11,7 @@ namespace Core.CombatSystem.Units
     {
         private const float damageAnimationDuration = 0.22f;
         internal const float DeathAnimationDuration = 0.35f;
+        internal const float PhysicalAttackAnimationDuration = 0.35f;
 
         [SerializeField] private UnitDefinitionSO definition;
         [SerializeField, Tooltip("Resonance charge indicators, ordered from the first charge to the last.")]
@@ -18,7 +19,9 @@ namespace Core.CombatSystem.Units
 
         private Transform animationTarget;
         private Vector3 animationTargetBaseScale;
+        private Quaternion animationTargetBaseRotation;
         private Tween animationTween;
+        private Tween physicalAttackTween;
         private bool deathAnimationPlayed;
 
         public UnitDefinitionSO Definition => definition;
@@ -199,8 +202,21 @@ namespace Core.CombatSystem.Units
             if (animationTarget == null)
                 animationTarget = transform;
             animationTargetBaseScale = animationTarget.localScale;
+            animationTargetBaseRotation = animationTarget.localRotation;
 
             StatsController.OnStatsRecalculated.AddListener(() => OnResourcesChanged?.Invoke(this));
+        }
+
+        internal void PlayPhysicalAttackAnimation()
+        {
+            if (deathAnimationPlayed || animationTarget == null) return;
+
+            physicalAttackTween?.Kill();
+            animationTarget.localRotation = animationTargetBaseRotation;
+            physicalAttackTween = animationTarget
+                .DOLocalRotate(Vector3.up * 360f, PhysicalAttackAnimationDuration, RotateMode.LocalAxisAdd)
+                .SetEase(Ease.OutQuad)
+                .SetLink(gameObject);
         }
 
         internal void PlayDamageAnimation()
@@ -221,9 +237,11 @@ namespace Core.CombatSystem.Units
             deathAnimationPlayed = true;
 
             animationTween?.Kill();
+            physicalAttackTween?.Kill();
             if (animationTarget == null) return 0f;
 
             animationTarget.localScale = animationTargetBaseScale;
+            animationTarget.localRotation = animationTargetBaseRotation;
             animationTween = animationTarget
                 .DOScale(Vector3.zero, DeathAnimationDuration)
                 .SetEase(Ease.InCubic)
@@ -234,8 +252,12 @@ namespace Core.CombatSystem.Units
         internal void ResetAnimation()
         {
             animationTween?.Kill();
+            physicalAttackTween?.Kill();
             if (animationTarget != null)
+            {
                 animationTarget.localScale = animationTargetBaseScale;
+                animationTarget.localRotation = animationTargetBaseRotation;
+            }
             deathAnimationPlayed = false;
         }
 

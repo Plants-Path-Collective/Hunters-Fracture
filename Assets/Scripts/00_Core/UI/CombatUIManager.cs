@@ -73,6 +73,7 @@ namespace Core.UI
         private readonly List<BackpackSlotUI> backpackSlotViews = new();
         private BackpackSlotUI selectedBackpackSlot;
         private readonly Dictionary<Image, Tween> holdTweens = new();
+        private Unit cursorTarget;
         private Tween cursorTween;
         private Tween gameOverTween;
         private InputAction gameOverConfirmAction;
@@ -180,8 +181,13 @@ namespace Core.UI
             {
                 if (actor.Slot.HasValue) OpenCombatUI(actor.Slot.Value);
                 else OpenCombatUI(COMBAT_SLOT.Left);
+                ResetCursorToLivingEnemy();
             }
-            else CloseCombatUI();
+            else
+            {
+                CloseCombatUI();
+                HideCursor();
+            }
         }
 
         private CombatPanelUI GetPanelForSlot(COMBAT_SLOT slot)
@@ -213,6 +219,7 @@ namespace Core.UI
         {
             CloseCombatUI();
             HideCursor();
+            cursorTarget = null;
             HideInspectionPanel();
 
             if (outcome == COMBAT_OUTCOME.Defeat)
@@ -452,6 +459,8 @@ namespace Core.UI
 
         private void HandleTargetChanged(Unit target)
         {
+            cursorTarget = target;
+
             if (target == null)
             {
                 HideInspectionPanel();
@@ -482,6 +491,54 @@ namespace Core.UI
                 cursorTween = cursor.transform.DOMove(position, cursorMoveDuration)
                     .SetEase(Ease.OutQuad)
                     .SetLink(cursor);
+        }
+
+        private void ResetCursorToLivingEnemy()
+        {
+            if (cursor == null) return;
+
+            Unit target = cursorTarget != null && cursorTarget.IsAlive &&
+                          cursorTarget.Team == UNIT_TEAM.Enemy
+                ? cursorTarget
+                : FindFirstLivingEnemy();
+
+            if (target == null)
+            {
+                cursorTarget = null;
+                HideCursor();
+                return;
+            }
+
+            cursorTarget = target;
+            cursorTween?.Kill();
+            cursor.transform.position = GetCursorPosition(target);
+            cursor.SetActive(true);
+        }
+
+        private Unit FindFirstLivingEnemy()
+        {
+            if (combat == null) return null;
+
+            Unit firstEnemy = null;
+            int firstEnemyPosition = int.MaxValue;
+
+            foreach (Unit unit in combat.Roster)
+            {
+                if (unit == null || !unit.IsAlive || unit.Team != UNIT_TEAM.Enemy)
+                    continue;
+
+                int position = unit.Slot.HasValue
+                    ? CombatSlots.RingPosition(UNIT_TEAM.Enemy, unit.Slot.Value)
+                    : int.MaxValue;
+
+                if (position >= firstEnemyPosition)
+                    continue;
+
+                firstEnemy = unit;
+                firstEnemyPosition = position;
+            }
+
+            return firstEnemy;
         }
 
         private void ToggleInspectionPanel(Unit target)
@@ -538,8 +595,8 @@ namespace Core.UI
             if (inspectionPanel != null) inspectionPanel.SetActive(false);
         }
 
-        /// <summary>Point just above the top of the unit's visible renderers, so it works for any
-        /// model size or pivot placement.</summary>
+        /// <summary>Point above the unit's defense slot, so the cursor stays put while the unit
+        /// moves to its attack position. Renderer bounds provide a model-size-aware height offset.</summary>
         private Vector3 GetCursorAnchor(Unit target)
         {
             Bounds bounds = default;
@@ -553,10 +610,27 @@ namespace Core.UI
                 else bounds.Encapsulate(renderer.bounds);
             }
 
-            if (!hasBounds)
-                return target.transform.position + Vector3.up * (1f + cursorHeightPadding);
+            Transform defenseAnchor = GetDefenseAnchor(target);
+            Vector3 basePosition = defenseAnchor != null
+                ? defenseAnchor.position
+                : target.transform.position;
 
-            return new Vector3(bounds.center.x, bounds.max.y + cursorHeightPadding, bounds.center.z);
+            if (!hasBounds)
+                return basePosition + Vector3.up * (1f + cursorHeightPadding);
+
+            float heightAboveUnit = bounds.max.y - target.transform.position.y;
+            return basePosition + Vector3.up * (heightAboveUnit + cursorHeightPadding);
+        }
+
+        private Transform GetDefenseAnchor(Unit unit)
+        {
+            if (combat == null || unit == null || unit.Slot is not COMBAT_SLOT slot)
+                return null;
+
+            SlotAnchors anchors = unit.Team == UNIT_TEAM.Ally
+                ? combat.alliesDefense
+                : combat.enemiesDefense;
+            return anchors.Get(slot);
         }
 
         private Vector3 GetCursorPosition(Unit target)

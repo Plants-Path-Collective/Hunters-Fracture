@@ -83,7 +83,8 @@ namespace Core.CombatSystem
             if (defense == null || attack == null) return;
 
             bool isRanged = context.damageType == UNITY_TYPE.Magical;
-            PlayAttackHop(attacker, defense, attack, matchRotation: isRanged);
+            bool isPhysical = context.damageType == UNITY_TYPE.Physical;
+            PlayAttackHop(attacker, defense, attack, matchRotation: isRanged, spinAtAttackSite: isPhysical);
         }
 
         // ── Lookup ────────────────────────────────────────────────────────────
@@ -118,13 +119,24 @@ namespace Core.CombatSystem
             return GetAttackPosition(anchorOwner);
         }
 
-        private void PlayAttackHop(Unit unit, Transform defense, Transform attack, bool matchRotation)
+        private void PlayAttackHop(
+            Unit unit,
+            Transform defense,
+            Transform attack,
+            bool matchRotation,
+            bool spinAtAttackSite)
         {
             Sequence sequence = DOTween.Sequence();
 
             sequence.Append(unit.transform.DOMove(attack.position, moveDuration));
             if (matchRotation)
                 sequence.Join(unit.transform.DORotateQuaternion(attack.rotation, moveDuration));
+
+            if (spinAtAttackSite)
+            {
+                sequence.AppendCallback(unit.PlayPhysicalAttackAnimation);
+                sequence.AppendInterval(Unit.PhysicalAttackAnimationDuration);
+            }
 
             sequence.AppendInterval(pauseAtAttackPosition);
 
