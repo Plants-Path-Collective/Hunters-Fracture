@@ -67,7 +67,7 @@ namespace Core.UI
         [Tooltip("Seconds the cursor takes to slide to a new target. 0 = snap.")]
         [SerializeField] private float cursorMoveDuration = 0.1f;
 
-        [Header("--- Backapack ---")]
+        [Header("--- Backpack ---")]
         [SerializeField] private GameObject backpackSlotPrefab;
 
         private readonly List<BackpackSlotUI> backpackSlotViews = new();

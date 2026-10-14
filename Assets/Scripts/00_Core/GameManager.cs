@@ -1,11 +1,14 @@
+using Core;
+using Core.CombatSystem;
+using Core.CombatSystem.Backpack;
+using Core.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Core;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +31,13 @@ public class GameManager : MonoBehaviour
     private InputActionReference navigateReference;
     private InputActionReference confirmReference;
     private InputActionReference cancelReference;
+
+    [Header("--- Backpack ---")]
+    private readonly List<BackpackSlotUI> backpackSlotViews = new();
+    private BackpackSlotUI selectedBackpackSlot;
+    [SerializeField] private GameObject backpackPanel;
+    [SerializeField] private GameObject backpackSlotPrefab;
+    private int backpackIndex;
 
     private void Awake()
     {
@@ -117,9 +127,24 @@ public class GameManager : MonoBehaviour
 
     public void OpenPartyBackpack()
     {
+        RenderBackpackSlots();
         SetPauseMenuPanelActive(partyBackpackPanel, nameof(partyBackpackPanel));
     }
+    public void SelectBackpackSlotIndex(int index)
+    {
+        if (backpackSlotViews.Count == 0)
+        {
+            selectedBackpackSlot = null;
+            backpackIndex = 0;
+            return;
+        }
 
+        index = Mathf.Clamp(index, 0, backpackSlotViews.Count - 1);
+        backpackIndex = index;
+
+        BackpackSlotUI slotUI = backpackSlotViews[index];
+        SelectBackpackSlot(slotUI);
+    }
     public void OpenOptions()
     {
         SetPauseMenuPanelActive(optionsPanel, nameof(optionsPanel));
@@ -260,6 +285,104 @@ public class GameManager : MonoBehaviour
 
         Debug.LogWarning($"[{nameof(GameManager)}] Pause menu sidebar has no active, interactable " +
                          $"{nameof(Selectable)} to focus for gamepad navigation.", this);
+    }
+
+    private void RenderBackpackSlots()
+    {
+        if (backpackPanel == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Backpack panel is not assigned.");
+            return;
+        }
+
+        VerticalLayoutGroup slotsLayout = backpackPanel.GetComponentInChildren<VerticalLayoutGroup>(true);
+        if (slotsLayout == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Backpack panel has no " +
+                           $"{nameof(VerticalLayoutGroup)} to contain item slots.");
+            return;
+        }
+
+        if (backpackSlotPrefab == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Backpack slot prefab is not assigned.");
+            return;
+        }
+
+        Transform slotsContainer = slotsLayout.transform;
+        for (int i = slotsContainer.childCount - 1; i >= 0; i--)
+            Destroy(slotsContainer.GetChild(i).gameObject);
+        backpackSlotViews.Clear();
+
+        if (PartyBackpack.Instance == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] No {nameof(PartyBackpack)} instance is available.");
+            return;
+        }
+
+        foreach (BackpackSlot slot in PartyBackpack.Instance.backpackSlots)
+        {
+            if (slot.consumableSO == null)
+            {
+                Debug.LogWarning($"[{nameof(GameManager)}] Skipping a backpack slot with no consumable.");
+                continue;
+            }
+
+            GameObject slotObject = Instantiate(backpackSlotPrefab, slotsContainer, false);
+            BackpackSlotUI slotUI = slotObject.GetComponent<BackpackSlotUI>();
+            if (slotUI == null ||
+                slotUI.consumableIcon == null ||
+                slotUI.consumableNameText == null ||
+                slotUI.quantityText == null ||
+                slotUI.effectText == null)
+            {
+                Debug.LogError($"[{nameof(GameManager)}] Backpack slot prefab must have a " +
+                               $"{nameof(BackpackSlotUI)} with all UI fields assigned.");
+                Destroy(slotObject);
+                return;
+            }
+
+            slotUI.consumableIcon.sprite = slot.consumableSO.itemIcon;
+            slotUI.consumableNameText.text = slot.consumableSO.itemName;
+            slotUI.quantityText.text = $"x {slot.quantity}";
+            slotUI.effectText.text = slot.consumableSO.effect;
+            slotUI.SetConsumable(slot.consumableSO);
+            slotUI.SetSelected(false);
+
+            Button button = slotObject.GetComponent<Button>();
+            if (button != null)
+                button.onClick.AddListener(() => SelectBackpackSlot(slotUI));
+            else
+                slotObject.AddComponent<Button>().onClick.AddListener(() => SelectBackpackSlot(slotUI));
+
+            backpackSlotViews.Add(slotUI);
+        }
+
+        if (backpackSlotViews.Count > 0)
+            SelectBackpackSlot(backpackSlotViews[0]);
+    }
+
+    public int GetSelectedBackpackIndex() => backpackIndex;
+
+    public ConsumableSO GetSelectedConsumable()
+    {
+        return selectedBackpackSlot != null ? selectedBackpackSlot.consumable : null;
+    }
+
+    /*public bool TryConsumeSelectedBackpackItem(InputManager inputHandler)
+    {
+        ConsumableSO consumable = GetSelectedConsumable();
+        if (consumable == null || inputHandler == null) return false;
+        return inputHandler.ConsumeSelectedItem(consumable);
+    }*/
+    private void SelectBackpackSlot(BackpackSlotUI slotUI)
+    {
+        if (selectedBackpackSlot == slotUI) return;
+
+        foreach (BackpackSlotUI other in backpackSlotViews)
+            if (other != null) other.SetSelected(other == slotUI);
+
+        selectedBackpackSlot = slotUI;
     }
 
     private void SelectFirstControl(GameObject selectionRoot)
