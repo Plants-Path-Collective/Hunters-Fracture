@@ -315,7 +315,7 @@
                     "id": "39d58145-a48a-4af7-bbc1-4e26c6a03c4b",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 },
                 {
@@ -524,7 +524,7 @@
                 {
                     "name": "",
                     "id": "93352f65-d94a-4155-b68f-2e453dc09e15",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -546,7 +546,7 @@
                 {
                     "name": "",
                     "id": "eb66e451-96ce-44db-a398-11f0599fc15e",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -1697,7 +1697,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "right",
+                    "name": "Up",
                     "id": "9d1afc0a-4a8a-47a1-9387-fc5d4c72af87",
                     "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
@@ -1708,7 +1708,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
+                    "name": "Down",
                     "id": "4e8d55ca-de50-404b-a60d-6014e2ee63eb",
                     "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
@@ -1730,9 +1730,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "right",
+                    "name": "Up",
                     "id": "9839e88e-837a-43a0-a6ff-afdb7c97d536",
-                    "path": "<Gamepad>/dpad/right",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -1741,9 +1741,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
+                    "name": "Down",
                     "id": "4bfaa575-ebe7-4f4d-b043-9c5e826c8cbb",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "<Gamepad>/dpad/down",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",

@@ -918,7 +918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -94.6936}
+  m_AnchoredPosition: {x: 0, y: -95}
   m_SizeDelta: {x: 700, y: 170}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &70933304
@@ -943,8 +943,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Game Over
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
+  m_sharedMaterial: {fileID: -9198151940197514948, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -968,10 +968,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 72
   m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -2123,7 +2123,7 @@ MonoBehaviour:
     backpackButton: {fileID: 4482102490285914367}
     fleeButton: {fileID: 4482102490285914366}
   backpackPanel: {fileID: 338452602}
-  gameoverScreen: {fileID: 0}
+  gameoverScreen: {fileID: 554783582}
   inspectionPanel: {fileID: 149539098}
   inspectionNameText: {fileID: 2010602001}
   inspectionPortrait: {fileID: 827610637}
@@ -2975,6 +2975,143 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186340938}
+  m_CullTransparentMesh: 1
+--- !u!1 &199580363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 199580364}
+  - component: {fileID: 199580366}
+  - component: {fileID: 199580365}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &199580364
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199580363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 481368638}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 35.101555, y: 0}
+  m_SizeDelta: {x: -70.203, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &199580365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199580363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Deshacer
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4283371027
+  m_fontColor: {r: 0.07406689, g: 0.054334287, b: 0.31132078, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 25
+  m_fontSizeBase: 25
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &199580366
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199580363}
   m_CullTransparentMesh: 1
 --- !u!1 &202882540
 GameObject:
@@ -5796,9 +5933,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
-  targetImage: {fileID: 0}
+  targetImage: {fileID: 405551309}
   gamepadSprite: {fileID: 0}
-  xboxGamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 092b94c8dd7e8a799950ce6b320a738c, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: e01e337c2cdf1fe86af9d43ea071ae91, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: ec42044fbdbcfcd51a28c8907dcb1bae, type: 3}
 --- !u!1 &406507060
@@ -6676,6 +6813,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479294863}
   m_CullTransparentMesh: 1
+--- !u!1 &481368637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 481368638}
+  m_Layer: 5
+  m_Name: '[Unequip - InputContainer] (1)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &481368638
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481368637}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1166721959}
+  - {fileID: 199580364}
+  m_Father: {fileID: 1125947949}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 220, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &484009265
 GameObject:
   m_ObjectHideFlags: 0
@@ -10807,7 +10981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
   targetImage: {fileID: 707150777}
   gamepadSprite: {fileID: 0}
-  xboxGamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: c8d9eba0f05096cda89e10e08b813101, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: b8223fa2711280b46bff155e6ce2ecfc, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: 2a07f127a478c1d4695eb3b86a1d35d7, type: 3}
 --- !u!1 &709158414
@@ -15027,7 +15201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
   targetImage: {fileID: 921759808}
   gamepadSprite: {fileID: 0}
-  xboxGamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 2a04e3b56f0b4fa01aa631aff5d222a4, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: 062ac1806a35f0aa1a08c470136f317a, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: ac5b31aca68d08b45964ce7ffdfadf08, type: 3}
 --- !u!1 &932344393
@@ -17504,7 +17678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
   targetImage: {fileID: 1042446882}
   gamepadSprite: {fileID: 0}
-  xboxGamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 7647ed59a7e698054a5b8c461fe925ae, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: 140f0cd362a22d7858038affe4540556, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: 62055502e65b79285b226f77cebd148f, type: 3}
 --- !u!1 &1049813739
@@ -17868,6 +18042,7 @@ GameObject:
   - component: {fileID: 1086756913}
   - component: {fileID: 1086756915}
   - component: {fileID: 1086756914}
+  - component: {fileID: 1086756916}
   m_Layer: 5
   m_Name: '[Input_W]'
   m_TagString: Untagged
@@ -17932,6 +18107,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086756912}
   m_CullTransparentMesh: 1
+--- !u!114 &1086756916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086756912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1086756914}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 2a04e3b56f0b4fa01aa631aff5d222a4, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 062ac1806a35f0aa1a08c470136f317a, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: ac5b31aca68d08b45964ce7ffdfadf08, type: 3}
 --- !u!1 &1089515662
 GameObject:
   m_ObjectHideFlags: 0
@@ -18456,12 +18648,13 @@ RectTransform:
   - {fileID: 764446050}
   - {fileID: 397433609}
   - {fileID: 118105183}
+  - {fileID: 481368638}
   m_Father: {fileID: 1918690162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: -59.580627, y: 23.196777}
-  m_SizeDelta: {x: 627.617, y: 50}
+  m_SizeDelta: {x: 850, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1125947950
 MonoBehaviour:
@@ -19004,6 +19197,99 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1152715486}
+  m_CullTransparentMesh: 1
+--- !u!1 &1166721958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1166721959}
+  - component: {fileID: 1166721962}
+  - component: {fileID: 1166721961}
+  - component: {fileID: 1166721960}
+  m_Layer: 5
+  m_Name: '[Input_A]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1166721959
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166721958}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 481368638}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -0.000022888184, y: 0}
+  m_SizeDelta: {x: 70, y: 40}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &1166721960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166721958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1166721961}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 37e5918211ca5b4fb91d2c2257b7cf8f, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 649ed625535e89945a4740b0636d4ced, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 574505a28c0ffb24d9ce831d0b23634c, type: 3}
+--- !u!114 &1166721961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166721958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 574505a28c0ffb24d9ce831d0b23634c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1166721962
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166721958}
   m_CullTransparentMesh: 1
 --- !u!1 &1175860673
 GameObject:
@@ -20983,6 +21269,7 @@ GameObject:
   - component: {fileID: 1277093624}
   - component: {fileID: 1277093626}
   - component: {fileID: 1277093625}
+  - component: {fileID: 1277093627}
   m_Layer: 5
   m_Name: '[Input_A]'
   m_TagString: Untagged
@@ -21047,6 +21334,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277093623}
   m_CullTransparentMesh: 1
+--- !u!114 &1277093627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277093623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1277093625}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 7647ed59a7e698054a5b8c461fe925ae, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 140f0cd362a22d7858038affe4540556, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 62055502e65b79285b226f77cebd148f, type: 3}
 --- !u!1 &1277933601
 GameObject:
   m_ObjectHideFlags: 0
@@ -24890,6 +25194,7 @@ GameObject:
   - component: {fileID: 1515642476}
   - component: {fileID: 1515642478}
   - component: {fileID: 1515642477}
+  - component: {fileID: 1515642479}
   m_Layer: 5
   m_Name: '[Input_D]'
   m_TagString: Untagged
@@ -24954,6 +25259,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515642475}
   m_CullTransparentMesh: 1
+--- !u!114 &1515642479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515642475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1515642477}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: c8d9eba0f05096cda89e10e08b813101, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: b8223fa2711280b46bff155e6ce2ecfc, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 2a07f127a478c1d4695eb3b86a1d35d7, type: 3}
 --- !u!1 &1515783655
 GameObject:
   m_ObjectHideFlags: 0
@@ -26653,6 +26975,7 @@ GameObject:
   - component: {fileID: 1631603749}
   - component: {fileID: 1631603751}
   - component: {fileID: 1631603750}
+  - component: {fileID: 1631603752}
   m_Layer: 5
   m_Name: '[Input_A]'
   m_TagString: Untagged
@@ -26717,6 +27040,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1631603748}
   m_CullTransparentMesh: 1
+--- !u!114 &1631603752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631603748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 1631603750}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 03bb86f8255f7feda8544af7f41d4057, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: a48aedd0c44030ac98a9dd9ee909e9be, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: d6009eecd95b00e1a8a857679a9e8b2d, type: 3}
 --- !u!1 &1639773299
 GameObject:
   m_ObjectHideFlags: 0
@@ -33441,7 +33781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
   targetImage: {fileID: 2070836872}
   gamepadSprite: {fileID: 0}
-  xboxGamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 3864b5b6d781fc1d5a1c25f2dec5e22f, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: 15d69fbb748724bb7a8c4cb00ea9fd4c, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: 8f9554ad4864623b88708ecf6e1a96a3, type: 3}
 --- !u!1 &2072907085

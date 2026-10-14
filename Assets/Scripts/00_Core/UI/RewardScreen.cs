@@ -168,9 +168,7 @@ namespace Core.UI
                     allies[unit.Slot.Value] = unit;
 
             unassigned = RollRewards();
-            assignments.Clear();
-            selectedIndex = 0;
-            lastDirection = 0;
+            ClearAssignmentHistory();
 
             if (unassigned.Count == 0)
             {
@@ -204,6 +202,8 @@ namespace Core.UI
 
             foreach (Assignment assignment in assignments)
                 assignment.unit.Inventory.AddItem(assignment.item);
+
+            ClearAssignmentHistory();
 
             state = ScreenState.Closing;
             if (panel != null) panel.SetActive(false);
@@ -281,10 +281,13 @@ namespace Core.UI
             RefreshDescription();
         }
 
-        /// <summary>Undoes the last assignment: the item goes back to the unassigned list.</summary>
-        private void UndoLastAssignment()
+        /// <summary>
+        /// Removes the last item assigned in this reward session and returns it to the unassigned list.
+        /// This behaves like a browser history stack: only the latest assignment can be undone.
+        /// </summary>
+        private bool TryRemoveLastAssignedItem()
         {
-            if (state != ScreenState.Active || assignments.Count == 0) return;
+            if (state != ScreenState.Active || assignments.Count == 0) return false;
 
             Assignment last = assignments[assignments.Count - 1];
             assignments.RemoveAt(assignments.Count - 1);
@@ -296,6 +299,14 @@ namespace Core.UI
             RefreshRows();
             RefreshUnassigned();
             RefreshDescription();
+            return true;
+        }
+
+        private void ClearAssignmentHistory()
+        {
+            assignments.Clear();
+            selectedIndex = 0;
+            lastDirection = 0;
         }
 
         // ── View refresh ──────────────────────────────────────────────────────
@@ -394,7 +405,11 @@ namespace Core.UI
         private void OnAssignMid(InputAction.CallbackContext context) => Assign(COMBAT_SLOT.Mid);
         private void OnAssignRight(InputAction.CallbackContext context) => Assign(COMBAT_SLOT.Right);
 
-        private void OnCancel(InputAction.CallbackContext context) => UndoLastAssignment();
+        private void OnCancel(InputAction.CallbackContext context)
+        {
+            if (state != ScreenState.Active) return;
+            TryRemoveLastAssignedItem();
+        }
 
         // Confirm is a Hold in the asset: started = pressed, performed = held long enough,
         // canceled = released (also after performed).

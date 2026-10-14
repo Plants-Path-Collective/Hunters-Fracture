@@ -538,11 +538,9 @@ namespace Core.UI
 
         private Image FillFor(InputAction action)
         {
-            // All hold actions share the same visual indicator to keep the HUD consistent.
+            // Only Flee and Ultimate use the shared hold indicator; other actions should not show hold feedback.
             var input = InputManager.Instance.Combat;
-            if (action == input.BasicAttack || action == input.Defend ||
-                action == input.Skills || action == input.Backpack ||
-                action == input.Flee || action == input.CastUltimate)
+            if (action == input.Flee || action == input.CastUltimate)
                 return holdFill;
 
             return null;

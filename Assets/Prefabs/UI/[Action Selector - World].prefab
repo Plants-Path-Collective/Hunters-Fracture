@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 5668477814561414370}
   - component: {fileID: 1365012131827012447}
   - component: {fileID: 2469802231806485037}
+  - component: {fileID: 6439232394742056565}
   m_Layer: 0
   m_Name: '[Input]'
   m_TagString: Untagged
@@ -499,6 +500,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6439232394742056565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352000076448599963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 2469802231806485037}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 37421897c48f3c9c58560915e0c8c6a7, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: ecaaa9c73dc309678b3d45c1ae67252a, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 8566d13c609e56917a4e316eb16a7e9a, type: 3}
 --- !u!1 &1407870264475067654
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +528,7 @@ GameObject:
   - component: {fileID: 5835300480520469698}
   - component: {fileID: 1609652798805459560}
   - component: {fileID: 4451632244352160806}
+  - component: {fileID: 4325189109314691277}
   m_Layer: 0
   m_Name: '[Input]'
   m_TagString: Untagged
@@ -574,6 +593,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4325189109314691277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407870264475067654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 4451632244352160806}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 2a04e3b56f0b4fa01aa631aff5d222a4, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 062ac1806a35f0aa1a08c470136f317a, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 9da30e18a3edbf7beb620becd8693fa5, type: 3}
 --- !u!1 &1730888255319315804
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,6 +621,7 @@ GameObject:
   - component: {fileID: 1948991984484641855}
   - component: {fileID: 806261352897843362}
   - component: {fileID: 5027004091117745797}
+  - component: {fileID: 9143930069747189812}
   m_Layer: 0
   m_Name: '[Input]'
   m_TagString: Untagged
@@ -649,6 +686,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9143930069747189812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730888255319315804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 5027004091117745797}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 7647ed59a7e698054a5b8c461fe925ae, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 140f0cd362a22d7858038affe4540556, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 63fb938782ca64a3ba2bcb80d54e5a87, type: 3}
 --- !u!1 &2839816353447386956
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,6 +714,7 @@ GameObject:
   - component: {fileID: 8583489099146741399}
   - component: {fileID: 3421958488210193985}
   - component: {fileID: 6887323601722566088}
+  - component: {fileID: 9145991463337209172}
   m_Layer: 0
   m_Name: '[Input]'
   m_TagString: Untagged
@@ -724,6 +779,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9145991463337209172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2839816353447386956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 6887323601722566088}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: c8d9eba0f05096cda89e10e08b813101, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: b8223fa2711280b46bff155e6ce2ecfc, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: b13922f1732109c3e860461517f54563, type: 3}
 --- !u!1 &2927737312962961053
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,6 +985,7 @@ GameObject:
   - component: {fileID: 375575431742503233}
   - component: {fileID: 5331447623490058226}
   - component: {fileID: 9207118641473963287}
+  - component: {fileID: 8015710826701224380}
   m_Layer: 0
   m_Name: '[Input]'
   m_TagString: Untagged
@@ -977,6 +1050,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8015710826701224380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764953306112385264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919126105056939e8bededae172c512b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputEvent
+  targetImage: {fileID: 9207118641473963287}
+  gamepadSprite: {fileID: 0}
+  xboxGamepadSprite: {fileID: 21300000, guid: 37e5918211ca5b4fb91d2c2257b7cf8f, type: 3}
+  playStationGamepadSprite: {fileID: 21300000, guid: 649ed625535e89945a4740b0636d4ced, type: 3}
+  keyboardMouseSprite: {fileID: 21300000, guid: 32a00f4732e2fc539bb3f1c0e990e8a7, type: 3}
 --- !u!1 &4078948859112081444
 GameObject:
   m_ObjectHideFlags: 0
