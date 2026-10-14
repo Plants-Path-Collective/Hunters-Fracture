@@ -2007,7 +2007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d505f0fe6028bffaa62285f2ae5220d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.CombatController
-  skippedTurnDelay: 0.8
+  skippedTurnDelay: 1
   autoCloseOnEnd: 0
   alliesDefense:
     left: {fileID: 771198214}
@@ -2148,7 +2148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5ff3b8d3f084731bb0ca9e0e77b34bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.CombatEnemyAI
-  actionDelay: 3
+  actionDelay: 1.5
 --- !u!1 &134037561
 GameObject:
   m_ObjectHideFlags: 0

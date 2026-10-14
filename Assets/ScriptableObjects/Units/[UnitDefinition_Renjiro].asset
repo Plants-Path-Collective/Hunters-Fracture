@@ -17,7 +17,10 @@ MonoBehaviour:
   team: 0
   portrait: {fileID: 21300000, guid: a030ed2e95fc5b997a3a55e933ac16f4, type: 3}
   partyPortrait: {fileID: 21300000, guid: dd88caa8fc2712f64ab88f6505e0b526, type: 3}
-  description: "Envolvente | Control | Kuroy\u016B "
+  description: 
+  tag1: Envolvente
+  tag2: Control
+  tag3: "Kuroy\u016B"
   skills:
   - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
   - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}

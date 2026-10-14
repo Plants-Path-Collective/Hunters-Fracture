@@ -16,6 +16,9 @@ namespace Core.CombatSystem.Units
         public Sprite partyPortrait;
         [TextArea(3, 5)]
         public string description;
+        public string tag1;
+        public string tag2;
+        public string tag3;
 
         [Header("--- Skills ---")]
         [Tooltip("Skills shown in the Skills menu, in order.")]

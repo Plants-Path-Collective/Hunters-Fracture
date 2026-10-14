@@ -68,6 +68,9 @@ public class InspectionPanel : MonoBehaviour
         }
         if (combatSlotText != null) combatSlotText.text = slot.ToString();
         if (unitTypeText != null) unitTypeText.text = member.definition.type.ToString();
+        if (tag1Text != null) tag1Text.text = member.definition.tag1;
+        if (tag2Text != null) tag2Text.text = member.definition.tag2;
+        if (tag3Text != null) tag3Text.text = member.definition.tag3;
 
         UnitStatValues baseStats = UnitStatValues.From(member.definition);
         SetStat(HPText, baseStats.HP, adjustedStats.HP, true);
