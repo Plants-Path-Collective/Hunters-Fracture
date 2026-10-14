@@ -40,7 +40,7 @@ MonoBehaviour:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dde62a08c8bafd7a835f68a24c61c6f
-    m_Address: UI_Items_en
+    m_Address: UI_Units_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

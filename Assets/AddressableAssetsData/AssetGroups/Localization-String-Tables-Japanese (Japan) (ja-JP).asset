@@ -40,7 +40,7 @@ MonoBehaviour:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49a1db01c9c20850a342bee49e212dc
-    m_Address: UI_Items_ja-JP
+    m_Address: UI_Units_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP

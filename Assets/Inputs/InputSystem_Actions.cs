@@ -744,15 +744,6 @@ namespace InputSystem
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Open Inventory"",
-                    ""type"": ""Button"",
-                    ""id"": ""45919f40-f961-4163-bc12-21cc636de2cc"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Open Pause Menu"",
                     ""type"": ""Button"",
                     ""id"": ""90316fda-826f-47d8-96cb-4e37ee9f9418"",
@@ -897,28 +888,6 @@ namespace InputSystem
                 },
                 {
                     ""name"": """",
-                    ""id"": ""14b3dd63-fdb9-4749-a693-fe4fe49c12f5"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Open Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""70025f78-f2ef-4a46-866a-f028040d55b8"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Open Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""62bc48ed-ce1a-443b-a9d9-6473b0e0c89a"",
                     ""path"": ""<DualShockGamepad>/touchpadButton"",
                     ""interactions"": """",
@@ -992,15 +961,6 @@ namespace InputSystem
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Open Inventory"",
-                    ""type"": ""Button"",
-                    ""id"": ""4d6ab4da-4a5e-4af9-bad8-f97a34615aa2"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1099,28 +1059,6 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f44e6676-b865-46a2-a20b-159c8dc455a5"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Open Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7ed282ac-d22a-489b-85bb-b0b6f1de488c"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Open Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2188,14 +2126,12 @@ namespace InputSystem
             m_Social = asset.FindActionMap("Social", throwIfNotFound: true);
             m_Social_Move = m_Social.FindAction("Move", throwIfNotFound: true);
             m_Social_Interact = m_Social.FindAction("Interact", throwIfNotFound: true);
-            m_Social_OpenInventory = m_Social.FindAction("Open Inventory", throwIfNotFound: true);
             m_Social_OpenPauseMenu = m_Social.FindAction("Open Pause Menu", throwIfNotFound: true);
             // Overworld
             m_Overworld = asset.FindActionMap("Overworld", throwIfNotFound: true);
             m_Overworld_Move = m_Overworld.FindAction("Move", throwIfNotFound: true);
             m_Overworld_Attack = m_Overworld.FindAction("Attack", throwIfNotFound: true);
             m_Overworld_Interact = m_Overworld.FindAction("Interact", throwIfNotFound: true);
-            m_Overworld_OpenInventory = m_Overworld.FindAction("Open Inventory", throwIfNotFound: true);
             m_Overworld_OpenPauseMenu = m_Overworld.FindAction("Open Pause Menu", throwIfNotFound: true);
             // Dialogue
             m_Dialogue = asset.FindActionMap("Dialogue", throwIfNotFound: true);
@@ -2662,7 +2598,6 @@ namespace InputSystem
         private List<ISocialActions> m_SocialActionsCallbackInterfaces = new List<ISocialActions>();
         private readonly InputAction m_Social_Move;
         private readonly InputAction m_Social_Interact;
-        private readonly InputAction m_Social_OpenInventory;
         private readonly InputAction m_Social_OpenPauseMenu;
         /// <summary>
         /// Provides access to input actions defined in input action map "Social".
@@ -2683,10 +2618,6 @@ namespace InputSystem
             /// Provides access to the underlying input action "Social/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_Social_Interact;
-            /// <summary>
-            /// Provides access to the underlying input action "Social/OpenInventory".
-            /// </summary>
-            public InputAction @OpenInventory => m_Wrapper.m_Social_OpenInventory;
             /// <summary>
             /// Provides access to the underlying input action "Social/OpenPauseMenu".
             /// </summary>
@@ -2723,9 +2654,6 @@ namespace InputSystem
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @OpenInventory.started += instance.OnOpenInventory;
-                @OpenInventory.performed += instance.OnOpenInventory;
-                @OpenInventory.canceled += instance.OnOpenInventory;
                 @OpenPauseMenu.started += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
@@ -2746,9 +2674,6 @@ namespace InputSystem
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
-                @OpenInventory.started -= instance.OnOpenInventory;
-                @OpenInventory.performed -= instance.OnOpenInventory;
-                @OpenInventory.canceled -= instance.OnOpenInventory;
                 @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
@@ -2792,7 +2717,6 @@ namespace InputSystem
         private readonly InputAction m_Overworld_Move;
         private readonly InputAction m_Overworld_Attack;
         private readonly InputAction m_Overworld_Interact;
-        private readonly InputAction m_Overworld_OpenInventory;
         private readonly InputAction m_Overworld_OpenPauseMenu;
         /// <summary>
         /// Provides access to input actions defined in input action map "Overworld".
@@ -2817,10 +2741,6 @@ namespace InputSystem
             /// Provides access to the underlying input action "Overworld/Interact".
             /// </summary>
             public InputAction @Interact => m_Wrapper.m_Overworld_Interact;
-            /// <summary>
-            /// Provides access to the underlying input action "Overworld/OpenInventory".
-            /// </summary>
-            public InputAction @OpenInventory => m_Wrapper.m_Overworld_OpenInventory;
             /// <summary>
             /// Provides access to the underlying input action "Overworld/OpenPauseMenu".
             /// </summary>
@@ -2860,9 +2780,6 @@ namespace InputSystem
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @OpenInventory.started += instance.OnOpenInventory;
-                @OpenInventory.performed += instance.OnOpenInventory;
-                @OpenInventory.canceled += instance.OnOpenInventory;
                 @OpenPauseMenu.started += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
@@ -2886,9 +2803,6 @@ namespace InputSystem
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
-                @OpenInventory.started -= instance.OnOpenInventory;
-                @OpenInventory.performed -= instance.OnOpenInventory;
-                @OpenInventory.canceled -= instance.OnOpenInventory;
                 @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
@@ -3478,13 +3392,6 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Open Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnOpenInventory(InputAction.CallbackContext context);
-            /// <summary>
             /// Method invoked when associated input action "Open Pause Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -3520,13 +3427,6 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnInteract(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Open Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnOpenInventory(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Open Pause Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>

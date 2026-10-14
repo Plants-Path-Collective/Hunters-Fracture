@@ -10,11 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: UI_Items Shared Data
+  m_Name: UI_Units Shared Data
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
-  m_TableCollectionName: UI_Items
+  m_TableCollectionName: UI_Units
   m_TableCollectionNameGuidString: 3b0a85a50a308e526b7f7cea9bf19c9d
-  m_Entries: []
+  m_Entries:
+  - m_Id: 3053137404579840
+    m_Key: ui_units_equiped_items
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3053881557995520
+    m_Key: ui_units_stats
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

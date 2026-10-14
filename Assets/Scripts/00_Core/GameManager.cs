@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Core;
 
 public class GameManager : MonoBehaviour
@@ -13,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject inputsHints;
     public GameObject pauseMenu;
 
+    private InputManager inputManager;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,41 +26,110 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        var input = InputManager.Instance.Overworld;
-        input.OpenPauseMenu.performed += TogglePauseMenu;
     }
 
-    private void TogglePauseMenu(InputAction.CallbackContext context)
+    private void Start()
     {
-        if (!paused)
+        // Resolve the sibling singleton after every scene object's Awake has run.
+        inputManager = InputManager.Instance;
+        if (inputManager == null)
         {
-            pauseMenu.SetActive(true);
-            togglePause();
+            Debug.LogError($"[{nameof(GameManager)}] {nameof(InputManager)} is not available.", this);
+            return;
+        }
+
+        inputManager.Overworld.OpenPauseMenu.performed += OnOpenPauseMenu;
+        inputManager.Combat.OpenPauseMenu.performed += OnOpenPauseMenu;
+        inputManager.Social.OpenPauseMenu.performed += OnOpenPauseMenu;
+        inputManager.UI.CancelBack.performed += OnPauseMenuCancel;
+
+        if (pauseMenu == null)
+            Debug.LogError($"[{nameof(GameManager)}] Pause menu is not assigned. " +
+                           "Assign the scene's Pause Menu object in the Inspector.", this);
+    }
+
+    private void OnOpenPauseMenu(InputAction.CallbackContext context) => TogglePauseMenu();
+
+    private void OnPauseMenuCancel(InputAction.CallbackContext context)
+    {
+        if (paused)
+            TogglePauseMenu();
+    }
+
+    public void TogglePauseMenu()
+    {
+        if (pauseMenu == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Pause menu is not assigned.", this);
+            return;
+        }
+
+        if (inputManager == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Cannot toggle pause because " +
+                           $"{nameof(InputManager)} is not available.", this);
+            return;
+        }
+
+        if (paused)
+        {
+            inputsHints.SetActive(true);
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+            paused = false;
+            inputManager.PopUIMap();
         }
         else
         {
-            pauseMenu.SetActive(false);
-            togglePause();
+            inputsHints.SetActive(false);
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+            paused = true;
+            inputManager.PushUIMap();
+            SelectFirstPauseMenuControl();
         }
     }
 
-    bool togglePause()
+    private void SelectFirstPauseMenuControl()
     {
-        if (Time.timeScale == 0f)
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Cannot select a pause-menu control: " +
+                           $"{nameof(EventSystem)}.current is null.", this);
+            return;
+        }
+
+        Selectable[] controls = pauseMenu.GetComponentsInChildren<Selectable>();
+        foreach (Selectable control in controls)
+        {
+            if (control == null || !control.isActiveAndEnabled || !control.interactable)
+                continue;
+
+            eventSystem.SetSelectedGameObject(control.gameObject);
+            return;
+        }
+
+        Debug.LogWarning($"[{nameof(GameManager)}] Pause menu has no active, interactable " +
+                         $"{nameof(Selectable)} to focus for gamepad navigation.", this);
+    }
+
+    private void OnDestroy()
+    {
+        if (inputManager != null)
+        {
+            inputManager.Overworld.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.Combat.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.Social.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.UI.CancelBack.performed -= OnPauseMenuCancel;
+        }
+
+        if (paused)
         {
             Time.timeScale = 1f;
-            return (false);
+            paused = false;
         }
-        else
-        {
-            Time.timeScale = 0f;
-            return (true);
-        }
-    }
 
-        private void OnDestroy()
-    {
         if (Instance == this)
             Instance = null;
     }

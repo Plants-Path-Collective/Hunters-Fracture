@@ -13,6 +13,7 @@ namespace Core.CombatSystem.Units
         public UNITY_TYPE type;
         public UNIT_TEAM team;
         public Sprite portrait;
+        public Sprite partyPortrait;
         [TextArea(3, 5)]
         public string description;
 
