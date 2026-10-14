@@ -292,7 +292,7 @@ namespace Core.CombatSystem
             AdvanceToNextTurn();
         }
 
-        private void EndCombat(COMBAT_OUTCOME outcome)
+        private void EndCombat(COMBAT_OUTCOME outcome, float closeDelay = 0f)
         {
             IsCombatActive = false;
             finishedOutcome = outcome;
@@ -304,6 +304,19 @@ namespace Core.CombatSystem
                 unit.ExitCombat();
 
             if (autoCloseOnEnd)
+            {
+                if (closeDelay > 0f)
+                    StartCoroutine(CloseCombatAfter(closeDelay));
+                else
+                    CloseCombat();
+            }
+        }
+
+        private IEnumerator CloseCombatAfter(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            if (finishedOutcome != null)
                 CloseCombat();
         }
 
@@ -375,12 +388,13 @@ namespace Core.CombatSystem
             if (!IsCombatActive || unit == null) return;
 
             unit.HP = 0;
+            float deathAnimationDuration = unit.PlayDeathAnimation();
             timeline.Remove(unit);
             statuses.ClearAll(unit);
             OnUnitKilled?.Invoke(unit);
 
             if (TryResolveOutcome(out COMBAT_OUTCOME outcome))
-                EndCombat(outcome);
+                EndCombat(outcome, deathAnimationDuration);
         }
 
         /// <summary>Revives a dead unit with the given HP, reinserting it at the back of the queue.</summary>
@@ -389,6 +403,7 @@ namespace Core.CombatSystem
             if (!IsCombatActive || unit == null || unit.IsAlive) return;
 
             unit.HP = Mathf.Max(1, hp);
+            unit.ResetAnimation();
             timeline.Reinsert(unit);
             OnUnitRevived?.Invoke(unit);
         }
@@ -455,6 +470,8 @@ namespace Core.CombatSystem
 
             if (target.HP <= 0)
                 Kill(target);
+            else
+                target.PlayDamageAnimation();
         }
 
         /// <summary>Fires OnBeforeHeal (mutable), applies context.Amount clamped to MaxHP, fires OnAfterHeal.</summary>

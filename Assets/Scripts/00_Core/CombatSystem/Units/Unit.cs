@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Core.CombatSystem.SkillSystem;
 
@@ -8,9 +9,18 @@ namespace Core.CombatSystem.Units
     [RequireComponent(typeof(UnitInventory), typeof(UnitStatsController), typeof(UnitEffectController))]
     public class Unit : MonoBehaviour
     {
+        private const float damageAnimationDuration = 0.22f;
+        internal const float DeathAnimationDuration = 0.35f;
+
         [SerializeField] private UnitDefinitionSO definition;
         [SerializeField, Tooltip("Resonance charge indicators, ordered from the first charge to the last.")]
         private GameObject[] resonanceChargeIndicators = new GameObject[3];
+
+        private Transform animationTarget;
+        private Vector3 animationTargetBaseScale;
+        private Tween animationTween;
+        private bool deathAnimationPlayed;
+
         public UnitDefinitionSO Definition => definition;
 
         public CombatController Combat { get; private set; }
@@ -185,7 +195,48 @@ namespace Core.CombatSystem.Units
             EffectController = GetComponent<UnitEffectController>();
             StatsController = GetComponent<UnitStatsController>();
 
+            animationTarget = transform.Find("[Visuals]");
+            if (animationTarget == null)
+                animationTarget = transform;
+            animationTargetBaseScale = animationTarget.localScale;
+
             StatsController.OnStatsRecalculated.AddListener(() => OnResourcesChanged?.Invoke(this));
+        }
+
+        internal void PlayDamageAnimation()
+        {
+            if (deathAnimationPlayed || animationTarget == null) return;
+
+            animationTween?.Kill();
+            animationTarget.localScale = animationTargetBaseScale;
+            animationTween = animationTarget
+                .DOPunchScale(animationTargetBaseScale * 0.12f, damageAnimationDuration, 5, 0.65f)
+                .SetEase(Ease.OutQuad)
+                .SetLink(gameObject);
+        }
+
+        internal float PlayDeathAnimation()
+        {
+            if (deathAnimationPlayed) return 0f;
+            deathAnimationPlayed = true;
+
+            animationTween?.Kill();
+            if (animationTarget == null) return 0f;
+
+            animationTarget.localScale = animationTargetBaseScale;
+            animationTween = animationTarget
+                .DOScale(Vector3.zero, DeathAnimationDuration)
+                .SetEase(Ease.InCubic)
+                .SetLink(gameObject);
+            return DeathAnimationDuration;
+        }
+
+        internal void ResetAnimation()
+        {
+            animationTween?.Kill();
+            if (animationTarget != null)
+                animationTarget.localScale = animationTargetBaseScale;
+            deathAnimationPlayed = false;
         }
 
         /// <summary>
