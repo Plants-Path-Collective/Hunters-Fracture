@@ -7,6 +7,54 @@ using Core.CombatSystem.StatusSystem;
 
 namespace Core.CombatSystem.Units
 {
+    public struct UnitStatValues
+    {
+        public float HP;
+        public float SP;
+        public float Speed;
+        public float Strength;
+        public float MagicPower;
+        public float PhysicalDefense;
+        public float MagicalDefense;
+
+        public float Get(STAT_TYPE stat) => stat switch
+        {
+            STAT_TYPE.HP => HP,
+            STAT_TYPE.SP => SP,
+            STAT_TYPE.Speed => Speed,
+            STAT_TYPE.Strength => Strength,
+            STAT_TYPE.MagicPower => MagicPower,
+            STAT_TYPE.PhysicalDefense => PhysicalDefense,
+            STAT_TYPE.MagicalDefense => MagicalDefense,
+            _ => 0f
+        };
+
+        public void Set(STAT_TYPE stat, float value)
+        {
+            switch (stat)
+            {
+                case STAT_TYPE.HP: HP = value; break;
+                case STAT_TYPE.SP: SP = value; break;
+                case STAT_TYPE.Speed: Speed = value; break;
+                case STAT_TYPE.Strength: Strength = value; break;
+                case STAT_TYPE.MagicPower: MagicPower = value; break;
+                case STAT_TYPE.PhysicalDefense: PhysicalDefense = value; break;
+                case STAT_TYPE.MagicalDefense: MagicalDefense = value; break;
+            }
+        }
+
+        public static UnitStatValues From(UnitDefinitionSO definition) => new()
+        {
+            HP = definition.maxHP,
+            SP = definition.maxSP,
+            Speed = definition.speed,
+            Strength = definition.strength,
+            MagicPower = definition.magicPower,
+            PhysicalDefense = definition.physicalDefense,
+            MagicalDefense = definition.magicalDefense
+        };
+    }
+
     /// <summary>
     /// Owns the 7 derived stats of a Unit (MaxHP, MaxSP, Strength, MagicPower, PhysicalDefense,
     /// MagicalDefense, Speed). Base values come from a UnitDefinitionSO via SetBase(); "current"
@@ -52,6 +100,56 @@ namespace Core.CombatSystem.Units
         /// need to refresh after stats change.
         /// </summary>
         public UnityEvent OnStatsRecalculated { get; private set; } = new UnityEvent();
+
+        public static bool TryCalculateItemAdjustedStats(
+            UnitDefinitionSO definition,
+            ItemSnapshot snapshot,
+            ItemCatalog catalog,
+            out UnitStatValues values)
+        {
+            if (definition == null)
+            {
+                Debug.LogError($"[{nameof(UnitStatsController)}] Cannot calculate stats without a unit definition.");
+                values = default;
+                return false;
+            }
+
+            var items = new List<Item>();
+            if (snapshot != null)
+            {
+                bool hasItems = false;
+                foreach (KeyValuePair<int, int> entry in snapshot)
+                    if (entry.Value > 0) { hasItems = true; break; }
+
+                if (hasItems && catalog == null)
+                {
+                    Debug.LogError($"[{nameof(UnitStatsController)}] Cannot calculate item-adjusted stats " +
+                                   "without an ItemCatalog.");
+                    values = default;
+                    return false;
+                }
+
+                if (catalog != null)
+                {
+                    foreach (KeyValuePair<int, int> entry in snapshot)
+                    {
+                        if (entry.Value <= 0) continue;
+
+                        ItemSO itemSO = catalog.GetById(entry.Key);
+                        if (itemSO == null)
+                        {
+                            values = default;
+                            return false;
+                        }
+
+                        items.Add(new Item { itemSO = itemSO, quantity = entry.Value });
+                    }
+                }
+            }
+
+            values = CalculateItemAdjustedStats(UnitStatValues.From(definition), items);
+            return true;
+        }
 
         // Temporary changes owned by active statuses (see StatusBuffTracker). Kept apart from items:
         // they are replaced as a whole every time the tracker changes.
@@ -121,113 +219,67 @@ namespace Core.CombatSystem.Units
         /// base.</param>
         public void RecalculateStats(UnitInventory inventory)
         {
-            ResetToBase();
+            UnitStatValues values = CalculateItemAdjustedStats(
+                new UnitStatValues
+                {
+                    HP = baseMaxHP,
+                    SP = baseMaxSP,
+                    Speed = baseSpeed,
+                    Strength = baseStrength,
+                    MagicPower = baseMagicPower,
+                    PhysicalDefense = basePhysicalDefense,
+                    MagicalDefense = baseMagicalDefense
+                },
+                inventory != null ? inventory.inventory.Values : null);
+
+            currentMaxHP = Mathf.RoundToInt(values.HP);
+            currentMaxSP = Mathf.RoundToInt(values.SP);
+            currentSpeed = values.Speed;
+            currentStrength = values.Strength;
+            currentMagicPower = values.MagicPower;
+            currentPhysicalDefense = values.PhysicalDefense;
+            currentMagicalDefense = values.MagicalDefense;
             UpdateStatsDebugText();
-
-            if (inventory != null && inventory.inventory != null)
-            {
-                foreach (Item item in inventory.inventory.Values)
-                {
-                    if (item == null || item.itemSO == null || item.quantity <= 0 || item.itemSO.effects == null)
-                        continue;
-
-                    foreach (ItemEffectSO effect in item.itemSO.effects)
-                    {
-                        if (effect is not StatModifierEffectSO statModifier)
-                            continue;
-
-                        ApplyModifier(statModifier, item.quantity, item.itemSO.itemName);
-                    }
-                }
-
-                // Second pass: effects that scale with another stat (they read the stats after all flat/percent items).
-                foreach (Item item in inventory.inventory.Values)
-                {
-                    if (item == null || item.itemSO == null || item.quantity <= 0 || item.itemSO.effects == null)
-                        continue;
-
-                    foreach (ItemEffectSO effect in item.itemSO.effects)
-                        if (effect is StatScalingEffectSO scaling)
-                            ApplyScaling(scaling, item.quantity);
-                }
-            }
 
             ApplyTemporaryModifiers();  
             
             OnStatsRecalculated.Invoke();
         }
 
-        private void ApplyModifier(StatModifierEffectSO modifier, int stackCount, string itemName)
+        private static UnitStatValues CalculateItemAdjustedStats(UnitStatValues values, IEnumerable<Item> items)
         {
-            float previousValue = GetCurrentStatValue(modifier.statType);
+            if (items == null) return values;
 
-            switch (modifier.statType)
+            foreach (Item item in items)
             {
-                case STAT_TYPE.HP:
-                    currentMaxHP = Mathf.RoundToInt(modifier.ApplyModifiers(currentMaxHP, stackCount));
-                    break;
-                case STAT_TYPE.SP:
-                    currentMaxSP = Mathf.RoundToInt(modifier.ApplyModifiers(currentMaxSP, stackCount));
-                    break;
-                case STAT_TYPE.Speed:
-                    currentSpeed = modifier.ApplyModifiers(currentSpeed, stackCount);
-                    break;
-                case STAT_TYPE.Strength:
-                    currentStrength = modifier.ApplyModifiers(currentStrength, stackCount);
-                    break;
-                case STAT_TYPE.MagicPower:
-                    currentMagicPower = modifier.ApplyModifiers(currentMagicPower, stackCount);
-                    break;
-                case STAT_TYPE.PhysicalDefense:
-                    currentPhysicalDefense = modifier.ApplyModifiers(currentPhysicalDefense, stackCount);
-                    break;
-                case STAT_TYPE.MagicalDefense:
-                    currentMagicalDefense = modifier.ApplyModifiers(currentMagicalDefense, stackCount);
-                    break;
+                if (item?.itemSO?.effects == null || item.quantity <= 0) continue;
+
+                foreach (ItemEffectSO effect in item.itemSO.effects)
+                    if (effect is StatModifierEffectSO modifier)
+                        ApplyModifier(ref values, modifier, item.quantity);
             }
 
-            float currentValue = GetCurrentStatValue(modifier.statType);
-            float change = currentValue - previousValue;
-            string changeText = change >= 0f ? $"+{change:0.##}" : $"{change:0.##}";
-
-            Debug.Log($"[UnitStatsController] {modifier.statType} current value: {currentValue:0.##}");
-
-            if (modifier.statType == STAT_TYPE.HP && statsDebugText != null)
+            foreach (Item item in items)
             {
-                statsDebugText.text = $"[HP] {currentMaxHP}\n[Item Pick Up] {itemName} {changeText}HP = {currentMaxHP} HP";
+                if (item?.itemSO?.effects == null || item.quantity <= 0) continue;
+
+                foreach (ItemEffectSO effect in item.itemSO.effects)
+                {
+                    if (effect is not StatScalingEffectSO scaling) continue;
+                    float bonus = scaling.Evaluate(values.Get(scaling.sourceStat), item.quantity);
+                    values.Set(scaling.targetStat, values.Get(scaling.targetStat) + bonus);
+                }
             }
+
+            return values;
         }
 
-        private void ApplyScaling(StatScalingEffectSO scaling, int stackCount)
+        private static void ApplyModifier(ref UnitStatValues values, StatModifierEffectSO modifier, int stackCount)
         {
-            float bonus = scaling.Evaluate(GetCurrentStatValue(scaling.sourceStat), stackCount);
-            if (Mathf.Approximately(bonus, 0f)) return;
-
-            switch (scaling.targetStat)
-            {
-                case STAT_TYPE.HP:              currentMaxHP += Mathf.RoundToInt(bonus); break;
-                case STAT_TYPE.SP:              currentMaxSP += Mathf.RoundToInt(bonus); break;
-                case STAT_TYPE.Speed:           currentSpeed += bonus; break;
-                case STAT_TYPE.Strength:        currentStrength += bonus; break;
-                case STAT_TYPE.MagicPower:      currentMagicPower += bonus; break;
-                case STAT_TYPE.PhysicalDefense: currentPhysicalDefense += bonus; break;
-                case STAT_TYPE.MagicalDefense:  currentMagicalDefense += bonus; break;
-            }
-        }
-
-        private float GetCurrentStatValue(STAT_TYPE statType)
-        {
-            return statType switch
-            {
-                STAT_TYPE.HP => currentMaxHP,
-                STAT_TYPE.SP => currentMaxSP,
-                STAT_TYPE.Speed => currentSpeed,
-                STAT_TYPE.Strength => currentStrength,
-                STAT_TYPE.MagicPower => currentMagicPower,
-                STAT_TYPE.PhysicalDefense => currentPhysicalDefense,
-                STAT_TYPE.MagicalDefense => currentMagicalDefense,
-                _ => 0f
-            };
+            float value = modifier.ApplyModifiers(values.Get(modifier.statType), stackCount);
+            if (modifier.statType == STAT_TYPE.HP || modifier.statType == STAT_TYPE.SP)
+                value = Mathf.RoundToInt(value);
+            values.Set(modifier.statType, value);
         }
 
         /// <summary>Replaces this unit's status modifiers and recomputes the stats from scratch.</summary>

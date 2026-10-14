@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject globalVisuals;
     public GameObject inputsHints;
     public GameObject pauseMenu;
+    public GameObject inspectionPanel;
 
     private InputManager inputManager;
 
@@ -52,8 +53,16 @@ public class GameManager : MonoBehaviour
 
     private void OnPauseMenuCancel(InputAction.CallbackContext context)
     {
-        if (paused)
-            TogglePauseMenu();
+        if (!paused)
+            return;
+
+        if (inspectionPanel != null && inspectionPanel.activeInHierarchy)
+        {
+            inspectionPanel.GetComponent<InspectionPanel>().Hide();
+            return;
+        }
+
+        TogglePauseMenu();
     }
 
     public void TogglePauseMenu()

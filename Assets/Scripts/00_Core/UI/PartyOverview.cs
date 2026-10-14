@@ -16,11 +16,16 @@ namespace UI
         [SerializeField] private PlayerEntity playerEntity;
         [SerializeField] private GameObject partySlotPrefab;
         [SerializeField] private Transform partySlotsContainer;
+        [SerializeField] private InspectionPanel inspectionPanel;
 
         private readonly List<PartySlot> partySlots = new();
+        private readonly List<PartySlot> hiddenPartySlots = new();
 
         private void OnEnable()
         {
+            if (inspectionPanel != null)
+                inspectionPanel.Hidden += RestorePartySlots;
+
             if (playerEntity == null)
                 playerEntity = FindFirstObjectByType<PlayerEntity>();
 
@@ -31,6 +36,14 @@ namespace UI
             }
 
             Initialize(playerEntity.Party);
+        }
+
+        private void OnDisable()
+        {
+            if (inspectionPanel != null)
+                inspectionPanel.Hidden -= RestorePartySlots;
+
+            RestorePartySlots();
         }
 
         public void Initialize(AllyParty party)
@@ -74,6 +87,7 @@ namespace UI
                     break;
                 }
 
+                slotComponent.Clicked += ShowInspection;
                 partySlots.Add(slotComponent);
             }
 
@@ -94,6 +108,43 @@ namespace UI
 
                 slot.PopulateSlot(currentParty.Members[i], combatSlot);
             }
+        }
+
+        private void ShowInspection(PartyMemberData member, COMBAT_SLOT slot)
+        {
+            if (inspectionPanel == null)
+            {
+                Debug.LogError($"[{nameof(PartyOverview)}] Inspection panel is not assigned.", this);
+                return;
+            }
+
+            inspectionPanel.Show(member, slot);
+            if (inspectionPanel.isActiveAndEnabled)
+                HideOtherPartySlots(slot);
+        }
+
+        private void HideOtherPartySlots(COMBAT_SLOT selectedCombatSlot)
+        {
+            RestorePartySlots();
+
+            foreach (PartySlot slot in partySlots)
+            {
+                if (slot.combatSlot == selectedCombatSlot || !slot.gameObject.activeSelf) continue;
+
+                hiddenPartySlots.Add(slot);
+                slot.gameObject.SetActive(false);
+            }
+        }
+
+        private void RestorePartySlots()
+        {
+            foreach (PartySlot slot in hiddenPartySlots)
+            {
+                if (slot != null)
+                    slot.gameObject.SetActive(true);
+            }
+
+            hiddenPartySlots.Clear();
         }
     }
 }

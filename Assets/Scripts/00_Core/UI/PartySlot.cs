@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -10,6 +11,8 @@ namespace UI
     public class PartySlot : MonoBehaviour,
         IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
     {
+        public event Action<PartyMemberData, COMBAT_SLOT> Clicked;
+
         [Header("--- Identity ---")]
         public TextMeshProUGUI nameText;
         public Image portraitImage;
@@ -32,10 +35,25 @@ namespace UI
         [Header("--- Feedback ---")]
         public GameObject selectionHighlight;
 
+        private Button button;
+        private PartyMemberData member;
+
         private void Awake()
         {
             if (selectionHighlight != null)
                 selectionHighlight.SetActive(false);
+
+            button = GetComponent<Button>();
+            if (button == null)
+                Debug.LogError($"[{nameof(PartySlot)}] A {nameof(Button)} component is required.", this);
+            else
+                button.onClick.AddListener(HandleClick);
+        }
+
+        private void OnDestroy()
+        {
+            if (button != null)
+                button.onClick.RemoveListener(HandleClick);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -64,6 +82,12 @@ namespace UI
                 selectionHighlight.SetActive(active);
         }
 
+        private void HandleClick()
+        {
+            if (member != null)
+                Clicked?.Invoke(member, combatSlot);
+        }
+
         public void PopulateSlot(PartyMemberData member, COMBAT_SLOT slot)
         {
             if (member == null || member.definition == null)
@@ -72,6 +96,7 @@ namespace UI
                 return;
             }
 
+            this.member = member;
             UnitDefinitionSO definition = member.definition;
             int maxHP = Mathf.Max(0, definition.maxHP);
             int maxSP = Mathf.Max(0, definition.maxSP);
