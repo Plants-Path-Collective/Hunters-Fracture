@@ -27,6 +27,37 @@ MonoBehaviour:
   ultimate: {fileID: 11400000, guid: 46162db43fc0642a99d989975e12a349, type: 2}
   passives:
   - {fileID: 11400000, guid: 466f991fb81b9ec3e920fbcf721dc859, type: 2}
+  basicAttackSfx:
+    Guid:
+      Data1: -514971722
+      Data2: 1241425883
+      Data3: -1305755765
+      Data4: 2034977114
+    Path: event:/SFX/Fasila-Attack
+  skillSfx:
+  - action: {fileID: 11400000, guid: 1382439655e52ddaa80afaa02a349aad, type: 2}
+    sound:
+      Guid:
+        Data1: -1959414324
+        Data2: 1177100906
+        Data3: 1722445740
+        Data4: -203790510
+      Path: "event:/SFX/Fasila-Distorsi\xF3n"
+  - action: {fileID: 11400000, guid: 4f8deb626a6e4b27bb8fdbad0b4f9cf4, type: 2}
+    sound:
+      Guid:
+        Data1: -1765055019
+        Data2: 1187731340
+        Data3: 1951427484
+        Data4: 1856958156
+      Path: event:/SFX/Fasila-Resonancia
+  ultimateSfx:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   unitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
   maxHP: 75
   maxSP: 120

@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 639276293328673180
+  lastModified: 639276762713440206
   FileSizes: []
   Exists: 1
 --- !u!114 &-8941802618867526936
@@ -41,6 +41,33 @@ MonoBehaviour:
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-8839810471492611162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Renjiro-Charca
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Renjiro-Charca
+  Guid:
+    Data1: 1127337537
+    Data2: 1083079630
+    Data3: 1676495785
+    Data4: 1423619499
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -90,6 +117,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-6441226209411605924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: "event:/SFX/Fasila-Distorsi\xF3n"
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: "event:/SFX/Fasila-Distorsi\xF3n"
+  Guid:
+    Data1: -1959414324
+    Data2: 1177100906
+    Data3: 1722445740
+    Data4: -203790510
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-5875376139552422677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Fasila-Attack
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Fasila-Attack
+  Guid:
+    Data1: -514971722
+    Data2: 1241425883
+    Data3: -1305755765
+    Data4: 2034977114
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-5569978866228118096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +204,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 639276293328642252
+  lastModified: 639276669005939850
   FileSizes: []
   Exists: 1
 --- !u!114 &-5105025644429239470
@@ -168,11 +249,38 @@ MonoBehaviour:
   Path: FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639276293328641911
+  lastModified: 639276762712181612
   FileSizes:
   - Name: 
-    Value: 942
+    Value: 1232
   Exists: 1
+--- !u!114 &-1704477909575666934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Renjiro-Attack
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Renjiro-Attack
+  Guid:
+    Data1: 469958270
+    Data2: 1112491460
+    Data3: 1473012356
+    Data4: -1017683836
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,19 +300,56 @@ MonoBehaviour:
   - {fileID: -5300411440853008413}
   EditorEvents:
   - {fileID: -7569483908539296486}
-  - {fileID: 6089700675511002172}
+  - {fileID: -1704477909575666934}
+  - {fileID: -5875376139552422677}
+  - {fileID: -6441226209411605924}
+  - {fileID: 2655684366403798807}
+  - {fileID: -8839810471492611162}
+  - {fileID: 7886887469440400842}
+  - {fileID: 1342270236145225572}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3550121066577965516}
   StringsBanks:
   - {fileID: -2637290366062166047}
   cacheVersion: 132096
-  cacheTime: 639276293328673180
+  cacheTime: 639276762713440206
   SerializableEventsDict:
   - key: event:/Music/Musica_Combate_A
     index: 0
-  - key: event:/SFX/Ambient
+  - key: event:/SFX/Renjiro-Attack
     index: 1
+  - key: event:/SFX/Fasila-Attack
+    index: 2
+  - key: "event:/SFX/Fasila-Distorsi\xF3n"
+    index: 3
+--- !u!114 &1342270236145225572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Renjiro-Envolver
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Renjiro-Envolver
+  Guid:
+    Data1: 1877589655
+    Data2: 1093170688
+    Data3: 1954400905
+    Data4: -22895822
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &2554149162916351256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +370,33 @@ MonoBehaviour:
   - Name: 
     Value: 942
   Exists: 1
+--- !u!114 &2655684366403798807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Fasila-Resonancia
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Fasila-Resonancia
+  Guid:
+    Data1: -1765055019
+    Data2: 1187731340
+    Data3: 1951427484
+    Data4: 1856958156
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &3550121066577965516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +412,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639275991531055818
+  lastModified: 639276762712181612
   FileSizes: []
   Exists: 1
 --- !u!114 &4576014852818147831
@@ -297,7 +469,7 @@ MonoBehaviour:
   lastModified: 639276170485248176
   FileSizes: []
   Exists: 1
---- !u!114 &6089700675511002172
+--- !u!114 &7886887469440400842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -307,14 +479,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Ambient
+  m_Name: event:/SFX/Enemy-Attack
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/Ambient
+  Path: event:/SFX/Enemy-Attack
   Guid:
-    Data1: -1317680740
-    Data2: 1090134539
-    Data3: 692700033
-    Data4: -1334597521
+    Data1: -733954959
+    Data2: 1251271638
+    Data3: 1233006474
+    Data4: 805514974
   Banks:
   - {fileID: -9168890641961931988}
   IsStream: 0

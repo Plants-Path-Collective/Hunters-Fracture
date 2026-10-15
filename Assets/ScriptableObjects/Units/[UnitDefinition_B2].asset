@@ -16,10 +16,29 @@ MonoBehaviour:
   type: 0
   team: 1
   portrait: {fileID: 21300000, guid: c954941584132582c861348d7aae90d6, type: 3}
+  partyPortrait: {fileID: 0}
   description: An angry green ogre that beats his opponents with his mace
+  tag1: 
+  tag2: 
+  tag3: 
   skills: []
   ultimate: {fileID: 0}
   passives: []
+  basicAttackSfx:
+    Guid:
+      Data1: -733954959
+      Data2: 1251271638
+      Data3: 1233006474
+      Data4: 805514974
+    Path: event:/SFX/Enemy-Attack
+  skillSfx: []
+  ultimateSfx:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   unitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
   maxHP: 100
   maxSP: 0
