@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 639276762713440206
+  lastModified: 639276831428263386
   FileSizes: []
   Exists: 1
 --- !u!114 &-8941802618867526936
@@ -249,10 +249,10 @@ MonoBehaviour:
   Path: FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639276762712181612
+  lastModified: 639276831426283623
   FileSizes:
   - Name: 
-    Value: 1232
+    Value: 1302
   Exists: 1
 --- !u!114 &-1704477909575666934
 MonoBehaviour:
@@ -307,13 +307,15 @@ MonoBehaviour:
   - {fileID: -8839810471492611162}
   - {fileID: 7886887469440400842}
   - {fileID: 1342270236145225572}
+  - {fileID: 5013648258491459160}
+  - {fileID: 5171481775777510880}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3550121066577965516}
   StringsBanks:
   - {fileID: -2637290366062166047}
   cacheVersion: 132096
-  cacheTime: 639276762713440206
+  cacheTime: 639276831428263386
   SerializableEventsDict:
   - key: event:/Music/Musica_Combate_A
     index: 0
@@ -323,6 +325,18 @@ MonoBehaviour:
     index: 2
   - key: "event:/SFX/Fasila-Distorsi\xF3n"
     index: 3
+  - key: event:/SFX/Fasila-Resonancia
+    index: 4
+  - key: event:/SFX/Renjiro-Charca
+    index: 5
+  - key: event:/SFX/Enemy-Attack
+    index: 6
+  - key: event:/SFX/Renjiro-Envolver
+    index: 7
+  - key: event:/SFX/Fasila-Ulti
+    index: 8
+  - key: event:/SFX/Renjiro-Ulti
+    index: 9
 --- !u!114 &1342270236145225572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,7 +426,7 @@ MonoBehaviour:
   Path: FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639276762712181612
+  lastModified: 639276831426273583
   FileSizes: []
   Exists: 1
 --- !u!114 &4576014852818147831
@@ -451,6 +465,60 @@ MonoBehaviour:
   lastModified: 639276168216952389
   FileSizes: []
   Exists: 1
+--- !u!114 &5013648258491459160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Fasila-Ulti
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Fasila-Ulti
+  Guid:
+    Data1: 116231475
+    Data2: 1151956499
+    Data3: 1853086376
+    Data4: 697981136
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &5171481775777510880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Renjiro-Ulti
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Renjiro-Ulti
+  Guid:
+    Data1: 316483052
+    Data2: 1292153455
+    Data3: -2031548508
+    Data4: 1831586544
+  Banks:
+  - {fileID: -9168890641961931988}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &5174787751091499418
 MonoBehaviour:
   m_ObjectHideFlags: 0

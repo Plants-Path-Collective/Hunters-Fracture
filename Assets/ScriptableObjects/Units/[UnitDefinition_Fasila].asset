@@ -53,11 +53,11 @@ MonoBehaviour:
       Path: event:/SFX/Fasila-Resonancia
   ultimateSfx:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 116231475
+      Data2: 1151956499
+      Data3: 1853086376
+      Data4: 697981136
+    Path: event:/SFX/Fasila-Ulti
   unitPrefab: {fileID: 3340619970067816380, guid: d0e41c96434c92512ad7f5e1668c938c, type: 3}
   maxHP: 75
   maxSP: 120
