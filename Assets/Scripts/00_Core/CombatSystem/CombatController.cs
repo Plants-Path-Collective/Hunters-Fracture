@@ -6,6 +6,8 @@ using UnityEngine;
 using Core.CombatSystem.Units;
 using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.StatusSystem;
+using FMODUnity;
+using FMOD.Studio;
 
 namespace Core.CombatSystem
 {
@@ -104,6 +106,8 @@ namespace Core.CombatSystem
         [SerializeField, HideInInspector] private List<Transform> alliesAttackPositions;
         [SerializeField, HideInInspector] private List<Transform> enemiesAttackPositions;
 
+        private EventInstance combatMusic;
+
         private void Awake()
         {
             timeline = GetComponent<TimelineController>();
@@ -120,6 +124,8 @@ namespace Core.CombatSystem
             CombatSetUp setUp = CombatSetUp.Consume();
             if (setUp != null)
                 StartFromSetUp(setUp);
+            combatMusic = RuntimeManager.CreateInstance(FMODEvents.instance.CombatMusic);
+            combatMusic.start();
         }
 
         /// <summary>
@@ -221,7 +227,6 @@ namespace Core.CombatSystem
         private void AdvanceToNextTurn()
         {
             CurrentActor = timeline.Pop();
-
             // Defensive: shouldn't happen now that Kill() always removes dead units
             // immediately, but skip over one rather than starting a turn for it if it ever does.
             while (CurrentActor != null && !CurrentActor.IsAlive)
@@ -264,8 +269,7 @@ namespace Core.CombatSystem
         /// </summary>
         public void EndTurn()
         {
-            if (!IsCombatActive || CurrentActor == null) return;
-
+            if (!IsCombatActive || CurrentActor == null) return;     
             Unit finishedActor = CurrentActor;
 
             // End-of-turn status effects (burn, SP regen) and the duration countdown. A burn can kill the
@@ -298,7 +302,7 @@ namespace Core.CombatSystem
             finishedOutcome = outcome;
             timeline.Clear();
             OnCombatEnd?.Invoke(outcome);
-
+            combatMusic.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             // Detach every item effect so nothing stays subscribed to this controller
             foreach (Unit unit in roster)
                 unit.ExitCombat();
@@ -554,5 +558,6 @@ namespace Core.CombatSystem
         public void Swap(Unit a, Unit b) => timeline.Swap(a, b);
         public void InsertAfter(Unit unit, Unit after) => timeline.InsertAfter(unit, after);
         public bool GrantExtraTurn(Unit unit) => timeline.GrantExtraTurn(unit);
+
     }
 }
