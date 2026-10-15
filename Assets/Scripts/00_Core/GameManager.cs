@@ -213,7 +213,8 @@ public class GameManager : MonoBehaviour
 
         if (paused)
         {
-            inputsHints.SetActive(true);
+            if (!isInCombat)
+                inputsHints.SetActive(true);
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             paused = false;

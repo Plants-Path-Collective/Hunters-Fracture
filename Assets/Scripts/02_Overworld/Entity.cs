@@ -5,31 +5,40 @@ namespace Overworld
 {
     /// <summary>
     /// Base class for any combat-capable Overworld entity (Player or Enemy). Owns the
-    /// "pseudo-attack": a placeholder animation followed by a hit check via SphereCast.
+    /// attack animation and trigger-based hit detection.
     /// Subclasses only decide what triggers the attack (input vs AI — Overworld AI isn't
     /// designed yet) and, optionally, what happens once a hit connects.
     /// </summary>
     public abstract class Entity : MonoBehaviour
     {
-        [Header("----- Attack Detection -----")]
-        [Tooltip("Origin of the SphereCast. Defaults to this transform if left empty.")]
-        [SerializeField] protected Transform attackOrigin;
-        [SerializeField] protected float attackRange = 1.5f;
-        [SerializeField] protected float attackRadius = 0.5f;
-        [Tooltip("Optional dedicated unit-sized sphere shown at the end of the attack SphereCast.")]
-        [SerializeField] private GameObject attackRadiusFeedback;
-        [SerializeField] private float attackFeedbackDuration = 0.3f;
+        [Header("----- Attack -----")]
+        [SerializeField] private Transform visualsOrigin;
+        [SerializeField] private Vector3 swingEulerAngles = new(0f, 0f, 90f);
+        [SerializeField] private float attackDuration = 0.45f;
+        [SerializeField] private float attackHitWindow = 0.15f;
 
-        private Tween attackFeedbackTween;
-        protected float AttackDuration => attackFeedbackDuration;
+        private AttackSource attackSource;
+        private Tween attackTween;
+        private Quaternion restRotation;
+        private bool attackSetupValid;
 
         protected virtual void Awake()
         {
-            if (attackRadiusFeedback != null)
+            if (visualsOrigin == null)
             {
-                attackRadiusFeedback.transform.localScale = Vector3.zero;
-                attackRadiusFeedback.SetActive(false);
+                Debug.LogError($"[{nameof(Entity)}] Assign a sword pivot to {nameof(visualsOrigin)} on {name}.", this);
+                return;
             }
+
+            attackSource = visualsOrigin.GetComponentInChildren<AttackSource>(true);
+            if (attackSource == null)
+            {
+                Debug.LogError($"[{nameof(Entity)}] No {nameof(AttackSource)} found under {nameof(visualsOrigin)} on {name}.", this);
+                return;
+            }
+
+            attackSetupValid = attackSource.Initialize(this);
+            restRotation = visualsOrigin.localRotation;
         }
 
         /// <summary>
@@ -45,84 +54,62 @@ namespace Overworld
         /// </summary>
         public virtual void TryAttack()
         {
+            if (!attackSetupValid) return;
             if (isAttacking) return;
 
             isAttacking = true;
             Debug.Log($"[{GetType().Name}] {name} started an attack.");
-            BeginAttackRadiusFeedback();
             PlayAttackPlaceholder();
         }
 
         /// <summary>
-        /// Placeholder attack animation (DOTween for now, one per concrete Entity). Whatever it
-        /// does, it must call <see cref="OnAttackHitFrame"/> at the moment that should count as
-        /// the "impact". Once real animations exist, that call moves to an Animation Event and
-        /// this method's body changes — nothing else in this class needs to.
+        /// Starts the attack swing and opens the trigger hitbox at the impact moment.
         /// </summary>
         protected abstract void PlayAttackPlaceholder();
 
         /// <summary>
-        /// Hit-check entry point. Call this from the placeholder's impact callback now, and from
-        /// an Animation Event once real animations exist. SphereCasts forward from
-        /// <see cref="attackOrigin"/> and resolves the hit via <see cref="OnHitConnected"/> if it
-        /// lands on another Entity.
+        /// Called at the animation's impact moment. Once a real animation is available, call
+        /// this from its Animation Event instead.
         /// </summary>
         protected void OnAttackHitFrame()
         {
-            Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
-            ShowAttackRadiusFeedbackAtImpact(origin);
-
-            Entity target = null;
-            if (Physics.SphereCast(origin, attackRadius, transform.forward, out RaycastHit hit, attackRange))
-            {
-                // GetComponentInParent in case the collider that got hit lives on a child
-                // (e.g. a dedicated hitbox) rather than on the Entity's own root.
-                target = hit.collider.GetComponentInParent<Entity>();
-            }
-
-            RetractAttackRadiusFeedback();
-
-            if (target != null && target != this)
-                OnHitConnected(target);
+            attackSource.BeginAttack();
         }
 
-        private void BeginAttackRadiusFeedback()
+        /// <summary>
+        /// Swings the sword around its assigned pivot and enables its trigger collider at impact.
+        /// </summary>
+        protected void PlayAttackAnimation()
         {
-            if (attackRadiusFeedback == null) return;
+            attackTween?.Kill();
 
-            Transform feedbackTransform = attackRadiusFeedback.transform;
-            attackFeedbackTween?.Kill();
-            Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
-            feedbackTransform.position = origin + transform.forward * attackRange;
-            feedbackTransform.localScale = Vector3.zero;
-            attackRadiusFeedback.SetActive(true);
+            float duration = Mathf.Max(attackDuration, 0.03f);
+            float hitWindow = Mathf.Clamp(attackHitWindow, 0f, duration - 0.02f);
+            float swingDuration = (duration - hitWindow) * 0.5f;
+            float impactTime = swingDuration;
+            Vector3 swingRotation = restRotation.eulerAngles + swingEulerAngles;
 
-            attackFeedbackTween = feedbackTransform
-                .DOScale(Vector3.one * (attackRadius * 2f), attackFeedbackDuration)
-                .SetEase(Ease.OutCubic)
-                .SetLink(attackRadiusFeedback);
+            attackTween = DOTween.Sequence()
+                .Append(visualsOrigin.DOLocalRotate(swingRotation, swingDuration)
+                    .SetEase(Ease.OutCubic))
+                .InsertCallback(impactTime, OnAttackHitFrame)
+                .InsertCallback(impactTime + hitWindow, EndAttackHitWindow)
+                .Append(visualsOrigin.DOLocalRotateQuaternion(restRotation, swingDuration)
+                    .SetEase(Ease.InCubic))
+                .OnComplete(EndAttack)
+                .SetLink(gameObject);
         }
 
-        private void ShowAttackRadiusFeedbackAtImpact(Vector3 origin)
+        private void EndAttackHitWindow()
         {
-            if (attackRadiusFeedback == null) return;
-
-            attackFeedbackTween?.Kill();
-            Transform feedbackTransform = attackRadiusFeedback.transform;
-            feedbackTransform.position = origin + transform.forward * attackRange;
-            feedbackTransform.localScale = Vector3.one * (attackRadius * 2f);
+            attackSource.EndAttack();
         }
 
-        private void RetractAttackRadiusFeedback()
+        internal void RegisterAttackHit(Entity target)
         {
-            if (attackRadiusFeedback == null) return;
+            if (!isAttacking || target == this) return;
 
-            Transform feedbackTransform = attackRadiusFeedback.transform;
-            attackFeedbackTween = feedbackTransform
-                .DOScale(Vector3.zero, 0.15f)
-                .SetEase(Ease.InCubic)
-                .SetLink(attackRadiusFeedback)
-                .OnComplete(() => attackRadiusFeedback.SetActive(false));
+            OnHitConnected(target);
         }
 
         /// <summary>
@@ -140,15 +127,10 @@ namespace Overworld
         /// Clears the attacking lock. Subclasses call this once the placeholder animation (and
         /// its hit check) is fully done.
         /// </summary>
-        protected void EndAttack() => isAttacking = false;
-
-#if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
+        protected void EndAttack()
         {
-            Vector3 origin = attackOrigin != null ? attackOrigin.position : transform.position;
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(origin + transform.forward * attackRange, attackRadius);
+            attackSource?.EndAttack();
+            isAttacking = false;
         }
-#endif
     }
 }

@@ -35,6 +35,8 @@ namespace Core.CombatSystem
         public static void Begin(AllyParty party, EnemyParty enemyParty, UNIT_TEAM advantageTeam,
             GameObject playerObject, GameObject enemyObject)
         {
+            GameManager.Instance.isInCombat = true;
+
             suspendedRoomContents = OverworldRoomRender.ActiveRoomContents.ToList();
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
@@ -67,6 +69,8 @@ namespace Core.CombatSystem
                 HandleDefeat();
                 return;
             }
+
+            GameManager.Instance.isInCombat = false;
 
             foreach (GameObject content in suspendedRoomContents)
                 if (content != null)

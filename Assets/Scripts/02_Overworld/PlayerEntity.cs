@@ -1,5 +1,4 @@
 using Core;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Core.CombatSystem;
@@ -63,14 +62,7 @@ namespace Overworld
         
         protected override void PlayAttackPlaceholder()
         {
-            // Placeholder lunge — swap for a real animation + Animation Event later,
-            // calling OnAttackHitFrame() at the same relative point.
-            transform.DOPunchScale(Vector3.one * 0.2f, AttackDuration, 1, 0.5f)
-                .OnComplete(() =>
-                {
-                    OnAttackHitFrame();
-                    EndAttack();
-                });
+            PlayAttackAnimation();
         }
 
         protected override void OnHitConnected(Entity target)
