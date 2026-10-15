@@ -1,18 +1,25 @@
 using UnityEngine;
 using FMODUnity;
-public class FMODEvents : MonoBehaviour
+
+namespace Core.Audio
 {
-    [field: Header("Music")]
-    [field: SerializeField] public EventReference CombatMusic { get; private set; }
-
-    public static FMODEvents instance { get; private set;  }
-
-    private void Awake()
+    public class FMODEvents : MonoBehaviour
     {
-        if (instance != null) 
+        public static FMODEvents Instance  {get; private set;}
+
+        [field: Header("Music")]
+        [field: SerializeField] public EventReference CombatMusic { get; private set; }
+
+
+        private void Awake()
         {
-            Debug.LogError("Se encontró mas de un FMODEvents en esta escena");
+            if (Instance != null) 
+            {
+                Debug.LogWarning($"[{nameof(FMODEvents)}] Multiple FMODEvents instances detected. Destroying this duplicate.");
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
         }
-        instance = this;
     }
 }

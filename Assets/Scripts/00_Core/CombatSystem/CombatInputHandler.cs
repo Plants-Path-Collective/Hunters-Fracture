@@ -217,7 +217,8 @@ namespace Core.CombatSystem
 
             Unit actor = combat.CurrentActor;
             Lock(); // same reasoning as OnBasicAttack: Defend() ends the turn synchronously
-            combat.Defend(actor);
+            if (combat.Defend(actor))
+                resolver.PlayDefendSfx(actor);
         }
 
         private void OnFlee(InputAction.CallbackContext context)
@@ -226,7 +227,8 @@ namespace Core.CombatSystem
 
             Unit actor = combat.CurrentActor;
             Lock(); // success ends the combat and failure ends the turn, both synchronously
-            combat.Flee(actor);
+            if (combat.Flee(actor))
+                resolver.PlayFleeSfx(actor);
         }
 
         private void OnSkills(InputAction.CallbackContext context)
@@ -383,6 +385,7 @@ namespace Core.CombatSystem
             if (!PartyBackpack.Instance.TryConsume(actor, target, consumable))
                 return false;
 
+            resolver.PlayBackpackSfx(actor);
             backpackOpen = false;
             if (CombatUIManager.Instance != null)
                 CombatUIManager.Instance.CloseBackpackPanel();

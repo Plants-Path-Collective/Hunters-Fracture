@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEngine;
 using Core.CombatSystem.Units;
 using Core.CombatSystem.SkillSystem;
+using Core.Audio;
+using FMODUnity;
+
 namespace Core.CombatSystem
 {
     /// <summary>
@@ -12,16 +15,14 @@ namespace Core.CombatSystem
     /// whatever final amount it's given (see combat.html "Verbos y eventos" / "Resolución de
     /// daño"). One per encounter, sibling to CombatController on the same GameObject.
     /// </summary>
-    /// <remarks>
-    /// Only "Attack" is implemented so far — it's the only one of the five player actions that
-    /// needs real targeting + a formula right now. Defend is simple enough to live directly
-    /// on CombatController (see CombatController.Defend()); Skills and Backpack need
-    /// ActionSO/the backpack system to exist first, so resolving them here would be a hollow
-    /// skeleton.
-    /// </remarks>
     [RequireComponent(typeof(CombatController))]
     public class ActionResolver : MonoBehaviour
     {
+        [Header("Shared Combat SFX")]
+        [SerializeField] private EventReference backpackSfx;
+        [SerializeField] private EventReference defendSfx;
+        [SerializeField] private EventReference fleeSfx;
+
         private CombatController combat;
         private bool IsActorsTurn(Unit actor) =>
             combat.IsCombatActive && actor != null && actor == combat.CurrentActor;
@@ -58,6 +59,7 @@ namespace Core.CombatSystem
             UNITY_TYPE damageType = actor.UnitType;
             int amount = CalculateAttackDamage(actor, target, damageType);
 
+            PlayActionSfx(actor.Definition.basicAttackSfx, actor);
             combat.DealDamage(actor, target, amount, damageType, "attack");
             combat.RestoreSP(actor, actor.Definition.RollSPRegen());
 
@@ -121,6 +123,11 @@ namespace Core.CombatSystem
             combat.NotifyBeforeAction(context);
             if (context.cancelled || !combat.SpendSP(actor, context.spCost)) return false;
 
+            EventReference sound = action == actor.Ultimate
+                ? actor.Definition.ultimateSfx
+                : actor.Definition.GetSkillSfx(action);
+            PlayActionSfx(sound, actor);
+
             foreach (ActionEffectSO effect in action.effects)
                 if (effect != null) effect.Apply(context, combat);
 
@@ -128,6 +135,17 @@ namespace Core.CombatSystem
             combat.EndTurn();
             return true;
         }
+
+        private static void PlayActionSfx(EventReference sound, Unit actor)
+        {
+            if (sound.IsNull || AudioManager.Instance == null) return;
+
+            AudioManager.Instance.PlayOneShot(sound, actor.transform.position);
+        }
+
+        public void PlayBackpackSfx(Unit actor) => PlayActionSfx(backpackSfx, actor);
+        public void PlayDefendSfx(Unit actor) => PlayActionSfx(defendSfx, actor);
+        public void PlayFleeSfx(Unit actor) => PlayActionSfx(fleeSfx, actor);
 
         /// <summary>Whether the picked unit is acceptable for this action. Self, None and All* actions ignore it.</summary>
         public bool IsValidTarget(Unit actor, ActionSO action, Unit target)

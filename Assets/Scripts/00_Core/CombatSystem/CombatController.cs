@@ -8,6 +8,7 @@ using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.StatusSystem;
 using FMODUnity;
 using FMOD.Studio;
+using Core.Audio;
 
 namespace Core.CombatSystem
 {
@@ -124,7 +125,7 @@ namespace Core.CombatSystem
             CombatSetUp setUp = CombatSetUp.Consume();
             if (setUp != null)
                 StartFromSetUp(setUp);
-            combatMusic = RuntimeManager.CreateInstance(FMODEvents.instance.CombatMusic);
+            combatMusic = RuntimeManager.CreateInstance(FMODEvents.Instance.CombatMusic);
             combatMusic.start();
         }
 

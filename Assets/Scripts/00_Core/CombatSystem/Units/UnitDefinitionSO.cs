@@ -2,9 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.ItemSystem;
+using FMODUnity;
 
 namespace Core.CombatSystem.Units
 {
+    [System.Serializable]
+    public class SkillSfx
+    {
+        public ActionSO action;
+        public EventReference sound;
+    }
+
     [CreateAssetMenu(fileName = "NewUnitDefinition", menuName = "Units/Unit Definition")]
     public class UnitDefinitionSO : ScriptableObject
     {
@@ -27,6 +35,12 @@ namespace Core.CombatSystem.Units
         public ActionSO ultimate;
         [Tooltip("Always-on triggered effects of this unit (e.g. Fasila's resonance). Attached like item effects.")]
         public List<TriggeredEffectSO> passives = new();
+
+        [Header("--- Combat SFX ---")]
+        public EventReference basicAttackSfx;
+        [Tooltip("Assign an event for each skill above. The Action reference matches the skill to its sound.")]
+        public List<SkillSfx> skillSfx = new();
+        public EventReference ultimateSfx;
 
         [Header("--- Presentation ---")]
         [Tooltip("Combat prefab: model, animations and the Unit component with its controllers. Instantiated by CombatController.")]
@@ -53,6 +67,17 @@ namespace Core.CombatSystem.Units
         /// Defender share this profile (combat.html).</summary>
         public int RollSPRegen() =>
             Random.Range(Mathf.RoundToInt(SPRegenMin), Mathf.RoundToInt(SPRegenMax) + 1);
+
+        public EventReference GetSkillSfx(ActionSO action)
+        {
+            if (action == null || skillSfx == null) return default;
+
+            foreach (SkillSfx entry in skillSfx)
+                if (entry != null && entry.action == action)
+                    return entry.sound;
+
+            return default;
+        }
 
         private void OnValidate()
         {
