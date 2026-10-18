@@ -1,38 +1,41 @@
 using UnityEngine;
-using CombatSystem.ItemSystem;
-using CombatSystem.Unit;
+using Core.CombatSystem.ItemSystem;
+using Core.CombatSystem.Units;
 
-public class ItemTest : MonoBehaviour
+namespace ExtendedDebug
 {
-    public ItemSO testItem; 
-
-    private void OnTriggerEnter(Collider other)
+    public class ItemTest : MonoBehaviour
     {
-        if (other.CompareTag("Player"))
+        public ItemSO testItem; 
+
+        private void OnTriggerEnter(Collider other)
         {
-
-            Debug.Log($"[ItemTest] Player contact with item: {testItem.itemName} (ID: {testItem.itemID})");
-
-            Unit playerUnit = other.GetComponent<Unit>();
-
-            if (playerUnit == null)
+            if (other.CompareTag("Player"))
             {
-                Debug.LogWarning("[ItemTest] Player does not have a Unit component.");
-                return;
+
+                Debug.Log($"[ItemTest] Player contact with item: {testItem.itemName} (ID: {testItem.itemID})");
+
+                Unit playerUnit = other.GetComponent<Unit>();
+
+                if (playerUnit == null)
+                {
+                    Debug.LogWarning("[ItemTest] Player does not have a Unit component.");
+                    return;
+                }
+
+                UnitInventory playerInventory = playerUnit.Inventory;
+
+                if (playerInventory == null)
+                {
+                    Debug.LogWarning("[ItemTest] Player does not have a UnitInventory component.");
+                    return;
+                }
+
+                playerInventory.AddItem(testItem, 1);
+                
+                Debug.Log($"[ItemTest] Player picked up item: {testItem.itemName} (ID: {testItem.itemID})");
+                Destroy(gameObject);
             }
-
-            UnitInventory playerInventory = playerUnit.inventory;
-
-            if (playerInventory == null)
-            {
-                Debug.LogWarning("[ItemTest] Player does not have a UnitInventory component.");
-                return;
-            }
-
-            playerInventory.AddItem(testItem, 1);
-            
-            Debug.Log($"[ItemTest] Player picked up item: {testItem.itemName} (ID: {testItem.itemID})");
-            Destroy(gameObject);
         }
     }
 }

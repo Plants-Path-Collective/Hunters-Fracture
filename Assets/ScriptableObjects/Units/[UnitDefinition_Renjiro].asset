@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
+  m_Name: '[UnitDefinition_Renjiro]'
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
+  unitName: Renjiro
+  type: 1
+  team: 0
+  portrait: {fileID: 21300000, guid: a030ed2e95fc5b997a3a55e933ac16f4, type: 3}
+  partyPortrait: {fileID: 21300000, guid: dd88caa8fc2712f64ab88f6505e0b526, type: 3}
+  description: 
+  tag1: Envolvente
+  tag2: Control
+  tag3: "Kuroy\u016B"
+  skills:
+  - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+  - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
+  passives: []
+  basicAttackSfx:
+    Guid:
+      Data1: 469958270
+      Data2: 1112491460
+      Data3: 1473012356
+      Data4: -1017683836
+    Path: event:/SFX/Renjiro-Attack
+  skillSfx:
+  - action: {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+    sound:
+      Guid:
+        Data1: 1877589655
+        Data2: 1093170688
+        Data3: 1954400905
+        Data4: -22895822
+      Path: event:/SFX/Renjiro-Envolver
+  - action: {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+    sound:
+      Guid:
+        Data1: 1127337537
+        Data2: 1083079630
+        Data3: 1676495785
+        Data4: 1423619499
+      Path: event:/SFX/Renjiro-Charca
+  ultimateSfx:
+    Guid:
+      Data1: 316483052
+      Data2: 1292153455
+      Data3: -2031548508
+      Data4: 1831586544
+    Path: event:/SFX/Renjiro-Ulti
+  unitPrefab: {fileID: 3340619970067816380, guid: 40c4b232cbfb62687ab51065c9f76091, type: 3}
+  maxHP: 100
+  maxSP: 100
+  speed: 50
+  strength: 10
+  magicPower: 30
+  physicalDefense: 0.15
+  magicalDefense: 0.3
+  SPRegenMin: 5
+  SPRegenMax: 10
+  defendMultiplier: 1.5

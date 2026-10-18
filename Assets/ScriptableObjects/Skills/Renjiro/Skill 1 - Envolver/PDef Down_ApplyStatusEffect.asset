@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5454239ed282dcb0cb27313ce0d98de3, type: 3}
+  m_Name: PDef Down_ApplyStatusEffect
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ApplyStatusEffectSO
+  targetMode: 2
+  side: 1
+  slots: 0
+  status: {fileID: 11400000, guid: d51a1b935c1ac5275af5c668a3e9ebc5, type: 2}
+  magnitude:
+    baseValue: 1.1
+    stat: 4
+    perPoint: 0.01
+  duration: 3

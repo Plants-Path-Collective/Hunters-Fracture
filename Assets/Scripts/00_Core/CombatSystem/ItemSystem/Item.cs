@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     [Tooltip("This class is used only by the inventory (Dictionary) in UnitInventory.cs; it allows the inventory to add the required item type to the `int quantity`")]
     public class Item

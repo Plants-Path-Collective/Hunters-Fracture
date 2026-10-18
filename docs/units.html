@@ -111,11 +111,11 @@
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">Identidad</span>
-<span class="component-desc">Nombre, portrait, descripción y tipo. El <em>tipo</em> distingue arquetipos de personaje y no debe confundirse con <code>UnitTeam</code> — un aliado y un enemigo pueden compartir tipo.</span>
+<span class="component-desc">Nombre, portrait, descripción y tipo (<code>UNITY_TYPE</code>: <code>Physical</code> o <code>Magical</code>). Define qué stat usa el ataque básico de la Unit — <code>Strength</code> si es <code>Physical</code>, <code>MagicPower</code> si es <code>Magical</code> — sin impedir que tenga skills del tipo contrario declaradas en su <code>ActionSO</code>. No debe confundirse con <code>UnitTeam</code> — un aliado y un enemigo pueden compartir tipo.</span>
 </div>
 <div class="component-card">
 <span class="component-name">Base stats</span>
-<span class="component-desc">Los 7 valores base sobre los que se recalcula todo: <code>MaxHP</code>, <code>MaxSP</code>, <code>Attack</code>, <code>MagicPower</code>, <code>PhysicalDefense</code>, <code>MagicalDefense</code>, <code>Speed</code>.</span>
+<span class="component-desc">Los 7 valores base sobre los que se recalcula todo: <code>MaxHP</code>, <code>MaxSP</code>, <code>Strength</code>, <code>MagicPower</code>, <code>PhysicalDefense</code>, <code>MagicalDefense</code>, <code>Speed</code>.</span>
 </div>
 <div class="component-card">
 <span class="component-name">Skills aprendidas</span>
@@ -293,14 +293,6 @@ Enemigo (EnemySlotData):
 </table>
 
 <h2 id="pendientes">Pendientes / abierto</h2>
-<div class="pending-card">
-<span class="pending-tag">Valores</span>
-<p><strong>Los 7 stats base</strong> — la lista actual es <code>MaxHP</code>, <code>MaxSP</code>, <code>Attack</code>, <code>MagicPower</code>, <code>PhysicalDefense</code>, <code>MagicalDefense</code>, <code>Speed</code>. Confirmar si <code>Attack</code> se llama así o <code>Strength</code>, y si <code>Speed</code> cumple alguna función más allá del orden inicial.</p>
-</div>
-<div class="pending-card">
-<span class="pending-tag">Diseño</span>
-<p><strong>Tipo de Unit</strong> — el campo <em>tipo</em> de <code>UnitDefinitionSO</code> todavía no tiene semántica definida. Decidir qué clasifica (arquetipo, facción, raza) y si tiene efecto mecánico o es puramente cosmético.</p>
-</div>
 <div class="pending-card">
 <span class="pending-tag">Implementación</span>
 <p><strong>Clonado de skills aprendidas</strong> — el <code>Unit</code> debe clonar la lista de <code>ActionSO</code> de la definición al inicializarse, para permitir reemplazos temporales por efectos (Brain Control). Confirmar que efectivamente se clona y no se comparte la referencia.</p>

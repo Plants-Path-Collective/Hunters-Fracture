@@ -88,7 +88,7 @@ namespace PlantsPathCo.DialogueSystem.Editor
             serializedObject.Update();
             var manager = (DialogueManager)target;
 
-            DrawHeader();
+            DrawDialogueHeader();
             DrawCreatePanelButton(manager);
 
             if (Application.isPlaying)
@@ -321,7 +321,7 @@ namespace PlantsPathCo.DialogueSystem.Editor
 
         // ---------- Visual Blocks ----------
 
-        private void DrawHeader()
+        private void DrawDialogueHeader()
         {
             EditorGUILayout.Space(2);
             using (new EditorGUILayout.HorizontalScope())

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CombatSystem.ItemSystem
+namespace Core.CombatSystem.ItemSystem
 {
     /// <summary>
     /// Central registry of every ItemSO in the game.

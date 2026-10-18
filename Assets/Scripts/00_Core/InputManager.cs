@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using InputSystem;
 
@@ -8,7 +11,7 @@ namespace Core
     /// Lives on the persistent GameManager GameObject and survives scene loads.
     ///
     /// Usage — subscribe from any system:
-    ///   InputManager.Instance.Exploration.Move.performed += OnMove;
+    ///   InputManager.Instance.Overworld.Move.performed += OnMove;
     ///   InputManager.Instance.Combat.BasicAttack.performed += OnAttack;
     ///
     /// Switch maps:
@@ -19,6 +22,9 @@ namespace Core
         // ── Singleton ─────────────────────────────────────────────────────────
         public static InputManager Instance { get; private set; }
 
+        [Header("── Debug ────────────────")]
+        [SerializeField] private bool logMapChanges = true;
+
         // ── Generated asset ───────────────────────────────────────────────────
         public InputSystem_Actions Actions { get; private set; }
 
@@ -26,12 +32,23 @@ namespace Core
         // UI
         public InputSystem_Actions.UIActions          UI          => Actions.UI;
 
-        // Exploration
+        // Rewards
+        public InputSystem_Actions.RewardsActions     Rewards     => Actions.Rewards;
+
+        // Social
         //   Move            → leftStick / WASD
         //   Interact        → buttonWest (□/X) / E
         //   OpenInventory   → buttonNorth (△/Y) / I
         //   OpenPauseMenu   → touchpad / select / I
-        public InputSystem_Actions.ExplorationActions Exploration => Actions.Exploration;
+        public InputSystem_Actions.SocialActions     Social      => Actions.Social;
+
+        // Overworld
+        //   Move            → leftStick / WASD
+        //   Attack          → buttonSouth / Space / Mouse1
+        //   Interact        → buttonWest (□/X) / E
+        //   OpenInventory   → buttonNorth (△/Y) / Tab
+        //   OpenPauseMenu   → touchpad / select / Escape
+        public InputSystem_Actions.OverworldActions  Overworld   => Actions.Overworld;
 
         // Dialogue
         //   Move                        → leftStick / WASD
@@ -42,11 +59,11 @@ namespace Core
 
         // Combat
         //   TargetSelection  → navigate targets
-        //   MoveinMenu       → navigate action menu
-        //   BasicAttack      → confirm / attack shortcut
-        //   BackfromMenu     → cancel / go back in menu
-        //   OpenSkillsMenu   → open skill selection
-        //   OpenInventory    → open item inventory
+        //   MoveinSkillsBackpack → navigate the skills/backpack lists
+        //   Skills           → toggle skill selection
+        //   ConfirmAction    → use the selected skill
+        //   BasicAttack      → attack
+        //   Backpack         → toggle item inventory
         //   LeftShoulder     → used combined with RightShoulder to charge Ultimate (5s hold)
         //   RightShoulder    → used combined with LeftShoulder to charge Ultimate (5s hold)
         public InputSystem_Actions.CombatActions      Combat      => Actions.Combat;
@@ -57,7 +74,11 @@ namespace Core
         // ── Lifecycle ─────────────────────────────────────────────────────────
         private void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(this); return; }
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -68,17 +89,34 @@ namespace Core
 
         private void OnDestroy()
         {
+            if (Instance == this)
+                Instance = null;
+
             Actions?.Dispose();
+            Actions = null;
+        }
+
+        private void Start()
+        {
+            if (Instance == null)
+                Debug.Log("[InputManager] Instance is null.");
         }
 
         // ── Public API ────────────────────────────────────────────────────────
 
         /// <summary>
         /// Disables every map, then enables only the requested one.
-        /// Safe to call multiple times with the same map.
+        /// Safe to call multiple times with the same map. The caller parameters are filled in by the
+        /// compiler (they only feed the debug log), so existing calls stay unchanged.
         /// </summary>
-        public void ChangeActionMap(INPUTACTION_MAP newMap)
+        public void ChangeActionMap(INPUTACTION_MAP newMap,
+            [CallerMemberName] string caller = "", [CallerFilePath] string callerFile = "")
         {
+            if (logMapChanges)
+                Debug.Log($"[InputManager] ChangeActionMap({newMap}) requested by " +
+                        $"{Path.GetFileNameWithoutExtension(callerFile)}.{caller}() — current: {CurrentMap}" +
+                        (CurrentMap == newMap ? " → IGNORED (already current)" : ""));
+
             if (CurrentMap == newMap) return;
 
             DisableAllMaps();
@@ -88,15 +126,32 @@ namespace Core
             {
                 case INPUTACTION_MAP.Empty:       /* all maps disabled */         break;
                 case INPUTACTION_MAP.UI:          Actions.UI.Enable();            break;
-                case INPUTACTION_MAP.Exploration: Actions.Exploration.Enable();   break;
+                case INPUTACTION_MAP.Rewards:     Actions.Rewards.Enable();       break;
+                case INPUTACTION_MAP.Social:      Actions.Social.Enable();        break;
+                case INPUTACTION_MAP.Overworld:   Actions.Overworld.Enable();     break;
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
                 case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
             }
+
+            if (logMapChanges)
+                Debug.Log($"[InputManager] Map is now {CurrentMap}. Actually enabled: {EnabledMapsSummary()}");
         }
 
+        private string EnabledMapsSummary()
+        {
+            var names = new List<string>();
+            if (Actions.UI.enabled) names.Add("UI");
+            if (Actions.Rewards.enabled) names.Add("Rewards");
+            if (Actions.Social.enabled) names.Add("Social");
+            if (Actions.Overworld.enabled) names.Add("Overworld");
+            if (Actions.Dialogue.enabled) names.Add("Dialogue");
+            if (Actions.Combat.enabled) names.Add("Combat");
+            return names.Count == 0 ? "none" : string.Join(", ", names);
+        }
+        
         /// <summary>
         /// Switches to UI map, remembering the previous map so PopUIMap() can restore it.
-        /// Useful for opening menus during Exploration or Combat.
+        /// Useful for opening menus during Social, Overworld, or Combat.
         /// </summary>
         public void PushUIMap()
         {
@@ -113,12 +168,14 @@ namespace Core
         }
 
         // ── Internals ─────────────────────────────────────────────────────────
-        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Exploration;
+        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Overworld;
 
         private void DisableAllMaps()
         {
             Actions.UI.Disable();
-            Actions.Exploration.Disable();
+            Actions.Rewards.Disable();
+            Actions.Social.Disable();
+            Actions.Overworld.Disable();
             Actions.Dialogue.Disable();
             Actions.Combat.Disable();
         }

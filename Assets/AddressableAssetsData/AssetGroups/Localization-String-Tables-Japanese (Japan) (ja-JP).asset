@@ -27,14 +27,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50185696a15393f298c256987a379bc7
+    m_Address: Dialogues_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9db5a2ec80243b54593c50c73ce7afdb
     m_Address: UI_Menus_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b39d1b29b428f634fb3fcf7a9ef02879
-    m_Address: Dialogue_Test_ja-JP
+  - m_GUID: b49a1db01c9c20850a342bee49e212dc
+    m_Address: UI_Units_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8f84444eb7d5aae5b8d9afb071847df
+    m_Address: UI_Consumables_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP
