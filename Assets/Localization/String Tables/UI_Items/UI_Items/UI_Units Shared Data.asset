@@ -23,6 +23,54 @@ MonoBehaviour:
     m_Key: ui_units_stats
     m_Metadata:
       m_Items: []
+  - m_Id: 6142661366075392
+    m_Key: ui_units_hp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6142932980813824
+    m_Key: ui_units_sp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143012068610048
+    m_Key: ui_units_speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143137285361664
+    m_Key: ui_units_strenght
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143248094679040
+    m_Key: ui_units_mp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143433420001280
+    m_Key: ui_units_pdef
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143592161824768
+    m_Key: ui_units_mdef
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6145271091384320
+    m_Key: ui_units_physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6145365610024960
+    m_Key: ui_units_magical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146834404954112
+    m_Key: ui_units_left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146923009626112
+    m_Key: ui_units_mid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146965334347776
+    m_Key: ui_units_right
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

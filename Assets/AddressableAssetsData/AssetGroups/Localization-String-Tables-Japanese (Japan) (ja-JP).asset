@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e2eb990fabadd666b02c4f8affee5f0
+    m_Address: Units_Renjiro_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 50185696a15393f298c256987a379bc7
     m_Address: Dialogues_ja-JP
     m_ReadOnly: 1
@@ -41,6 +47,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b49a1db01c9c20850a342bee49e212dc
     m_Address: UI_Units_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8ccf696d84423ddabd65f3ea300b28f
+    m_Address: Units_Fasila_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP

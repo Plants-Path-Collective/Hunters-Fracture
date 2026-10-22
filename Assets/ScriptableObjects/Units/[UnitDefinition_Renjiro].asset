@@ -21,6 +21,33 @@ MonoBehaviour:
   tag1: Envolvente
   tag2: Control
   tag3: "Kuroy\u016B"
+  localizedTag1:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 89656610816
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag2:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 155502989312
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag3:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 169394524160
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skills:
   - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
   - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}

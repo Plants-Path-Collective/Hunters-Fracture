@@ -34,6 +34,18 @@ MonoBehaviour:
     m_Localized: Salir
     m_Metadata:
       m_Items: []
+  - m_Id: 34304366994477056
+    m_Localized: Reanudar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34304770335526912
+    m_Localized: "Volver al\nMen\xFA Principal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34305315070758912
+    m_Localized: Equipo
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

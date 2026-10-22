@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Units_Fasila_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: ac2ee972f47925056a992baf4a1678f7, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 209647259648
+    m_Localized: Resonant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 339377082368
+    m_Localized: Disruptive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347061047296
+    m_Localized: Cold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6297054564352
+    m_Localized: Disruption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6208403755008
+    m_Localized: Resonance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6345091928064
+    m_Localized: Chilling Melody
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6278461214720
+    m_Localized: 'Active: Select a Unit; the target is put to sleep for 1 round by
+      that Unit (skipping its next turn).
+
+
+      Passive: Every time Fasila uses
+      a skill, one of her Fragments resonates. If she has 3 resonating Fragments,
+      her next skill doubles its effect (doubles stats, turns, etc.).'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6322916642816
+    m_Localized: 'Reduces the target unit''s MDef by X% for 2 rounds.
+
+
+      X%
+      = 10% (HP / 50)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6371717369856
+    m_Localized: Freezes enemy units in the center and right positions for 2 rounds
+      (skips the unit's next 2 turns).
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

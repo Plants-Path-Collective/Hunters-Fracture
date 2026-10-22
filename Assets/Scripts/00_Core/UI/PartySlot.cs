@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using Core;
 using Core.CombatSystem.Units;
+using UnityEngine.Localization;
 
 namespace UI
 {
@@ -37,6 +38,7 @@ namespace UI
 
         private Button button;
         private PartyMemberData member;
+        private LocalizedString localizedCombatSlot;
 
         private void Awake()
         {
@@ -54,6 +56,18 @@ namespace UI
         {
             if (button != null)
                 button.onClick.RemoveListener(HandleClick);
+        }
+
+        private void OnEnable()
+        {
+            if (localizedCombatSlot != null && combatSlotText != null)
+                localizedCombatSlot.StringChanged += UpdateCombatSlotText;
+        }
+
+        private void OnDisable()
+        {
+            if (localizedCombatSlot != null)
+                localizedCombatSlot.StringChanged -= UpdateCombatSlotText;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -122,8 +136,43 @@ namespace UI
                 SPText.text = $"[{currentSP} / {maxSP}]";
 
             combatSlot = slot;
+            if (localizedCombatSlot != null)
+            {
+                localizedCombatSlot.StringChanged -= UpdateCombatSlotText;
+                localizedCombatSlot = null;
+            }
+
             if (combatSlotText != null)
-                combatSlotText.text = slot.ToString();
+            {
+                string key = GetCombatSlotLocalizationKey(slot);
+                if (key == null)
+                {
+                    combatSlotText.text = slot.ToString();
+                }
+                else
+                {
+                    localizedCombatSlot = new LocalizedString("UI_Units", key);
+                    if (isActiveAndEnabled)
+                        localizedCombatSlot.StringChanged += UpdateCombatSlotText;
+                }
+            }
+        }
+
+        private void UpdateCombatSlotText(string value)
+        {
+            if (combatSlotText != null)
+                combatSlotText.text = value;
+        }
+
+        private static string GetCombatSlotLocalizationKey(COMBAT_SLOT slot)
+        {
+            return slot switch
+            {
+                COMBAT_SLOT.Left => "ui_units_left",
+                COMBAT_SLOT.Mid => "ui_units_mid",
+                COMBAT_SLOT.Right => "ui_units_right",
+                _ => null
+            };
         }
 
         public void SetCombatSlot(COMBAT_SLOT newSlot, out COMBAT_SLOT previousSlot)

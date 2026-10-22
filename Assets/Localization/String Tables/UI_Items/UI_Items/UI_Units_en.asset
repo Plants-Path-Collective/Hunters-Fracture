@@ -26,6 +26,54 @@ MonoBehaviour:
     m_Localized: Stats
     m_Metadata:
       m_Items: []
+  - m_Id: 6142661366075392
+    m_Localized: HP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6142932980813824
+    m_Localized: SP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143012068610048
+    m_Localized: Speed (SPD)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143137285361664
+    m_Localized: Strength (STR)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143248094679040
+    m_Localized: Magic Power (MP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143433420001280
+    m_Localized: Physical Defense PDef
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6143592161824768
+    m_Localized: Magical Defense (MDef)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6145271091384320
+    m_Localized: Physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6145365610024960
+    m_Localized: Magical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146834404954112
+    m_Localized: Left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146923009626112
+    m_Localized: Mid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6146965334347776
+    m_Localized: Right
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

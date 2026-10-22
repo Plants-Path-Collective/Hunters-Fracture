@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Units_Renjiro_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: f1efd7d01c2126b6184eb77b71a9923f, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 169394524160
+    m_Localized: "Kuroy\u016B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 89656610816
+    m_Localized: Surrounding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 155502989312
+    m_Localized: Bending
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2274737999872
+    m_Localized: Surround
+    m_Metadata:
+      m_Items: []
+  - m_Id: 235727441920
+    m_Localized: Black Tide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 215229878272
+    m_Localized: Miasm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2413976309760
+    m_Localized: "Select a unit, then cast the spell and send a stream of Kuroy\u016B
+      toward it. If the unit is an ally, it becomes harder and gains X% PDef for
+      3 turns. If the unit is an enemy, its PDef is reduced by X% and it takes magical
+      damage for 3 rounds.\n\n\n\nX = 0.1 + (1 - (MP / 100))"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2450995236864
+    m_Localized: "Spread a Kuroy\u016B area across the battlefield, affecting the
+      Allied units; the mid unit moves forward 1 turn, while the left and right enemy
+      units each move back 1 turn."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2619652395008
+    m_Localized: "Renjiro transforms the battlefield, enveloping it in his Kuroy\u016B.
+      For 2 rounds, Allied Units regain 15 SP per turn, and their damage increases
+      by 15%."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

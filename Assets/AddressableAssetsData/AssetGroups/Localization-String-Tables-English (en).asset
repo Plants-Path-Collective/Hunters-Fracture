@@ -39,6 +39,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 687081bfefd193fac9d1717310e4d356
+    m_Address: Units_Fasila_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dde62a08c8bafd7a835f68a24c61c6f
     m_Address: UI_Units_en
     m_ReadOnly: 1
@@ -47,6 +53,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aae1428fce5fc271b96092adbc21202c
     m_Address: Demos_Combat1_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4fe78b9517493296a1b2c26f07a6124
+    m_Address: Units_Renjiro_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

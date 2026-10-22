@@ -34,6 +34,20 @@ MonoBehaviour:
     m_Localized: Quit
     m_Metadata:
       m_Items: []
+  - m_Id: 34304366994477056
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34304770335526912
+    m_Localized: 'Go back to
+
+      Main Menu'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34305315070758912
+    m_Localized: Party
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

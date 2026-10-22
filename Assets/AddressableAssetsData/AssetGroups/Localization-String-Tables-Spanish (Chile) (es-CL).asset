@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Localization-String-Tables-Spanish (Chile) (es-CL)
   m_GUID: d54102ff98379a4449f513561a0fee95
   m_SerializeEntries:
+  - m_GUID: 4aca6b76756bc4ab1ae8c8cfbbcd4af2
+    m_Address: Units_Renjiro_es-CL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es-CL
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 51f13419bbc9e43468e451bf019c810f
     m_Address: UI_Combat_es-CL
     m_ReadOnly: 1
@@ -29,6 +35,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 755a2ca92be347449a2cc13388786d54
     m_Address: UI_Menus_es-CL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es-CL
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84e8e2437dbadb51f89d339d0a7f6c8e
+    m_Address: Units_Fasila_es-CL
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-es-CL

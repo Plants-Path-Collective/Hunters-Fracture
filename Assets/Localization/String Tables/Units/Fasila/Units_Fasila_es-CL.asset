@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Units_Fasila_es-CL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: es-CL
+  m_SharedData: {fileID: 11400000, guid: ac2ee972f47925056a992baf4a1678f7, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 209647259648
+    m_Localized: Resonante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 339377082368
+    m_Localized: Disruptiva
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347061047296
+    m_Localized: "Fr\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6208403755008
+    m_Localized: Resonancia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6297054564352
+    m_Localized: "Disrupci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6345091928064
+    m_Localized: "Melod\xEDa Escalofriante"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6278461214720
+    m_Localized: "Activa: Selecciona una Unit, el objetivo queda Dormido por 1 ronda
+      de aquella Unit (Skipea su pr\xF3ximo turno).\n\nPasiva: Cada vez que Fasila
+      utiliza alguna t\xE9cnica, uno de sus Fragmentos resuena, si cuenta con 3 Fragmentos
+      resonantes, la siguiente t\xE9cnica duplica su efecto (dobla stats, turnos,
+      etc.)."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6322916642816
+    m_Localized: 'Reduce la MDef de la Unit targeteada en X%, por 2 rondas.
+
+
+      X%
+      = 10% (HP / 50)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6371717369856
+    m_Localized: "Congela a las Units Enemigas en la posici\xF3n central y derecha,
+      por 2 rondas (Skipea los 2 pr\xF3ximos turnos de la Unit)."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

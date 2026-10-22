@@ -3,6 +3,7 @@ using UnityEngine;
 using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.ItemSystem;
 using FMODUnity;
+using UnityEngine.Localization;
 
 namespace Core.CombatSystem.Units
 {
@@ -27,6 +28,9 @@ namespace Core.CombatSystem.Units
         public string tag1;
         public string tag2;
         public string tag3;
+        public LocalizedString localizedTag1;
+        public LocalizedString localizedTag2;
+        public LocalizedString localizedTag3;
 
         [Header("--- Skills ---")]
         [Tooltip("Skills shown in the Skills menu, in order.")]

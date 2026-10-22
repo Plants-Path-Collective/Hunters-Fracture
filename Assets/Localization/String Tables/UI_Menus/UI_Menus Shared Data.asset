@@ -31,6 +31,18 @@ MonoBehaviour:
     m_Key: ui_menu_quit
     m_Metadata:
       m_Items: []
+  - m_Id: 34304366994477056
+    m_Key: ui_pausemenu_resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34304770335526912
+    m_Key: ui_pausemenu_mainmenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34305315070758912
+    m_Key: ui_pausemenu_party
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

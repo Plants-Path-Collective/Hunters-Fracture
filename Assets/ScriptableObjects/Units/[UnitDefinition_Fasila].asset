@@ -21,6 +21,33 @@ MonoBehaviour:
   tag1: Resonante
   tag2: Disruptiva
   tag3: "Fr\xEDa"
+  localizedTag1:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 209647259648
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag2:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 339377082368
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag3:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 347061047296
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skills:
   - {fileID: 11400000, guid: 4f8deb626a6e4b27bb8fdbad0b4f9cf4, type: 2}
   - {fileID: 11400000, guid: 1382439655e52ddaa80afaa02a349aad, type: 2}
