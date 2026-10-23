@@ -1,3 +1,4 @@
+using System.Collections;
 using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Backpack;
@@ -7,6 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -148,6 +150,46 @@ public class GameManager : MonoBehaviour
     public void OpenOptions()
     {
         SetPauseMenuPanelActive(optionsPanel, nameof(optionsPanel));
+    }
+
+    public void SetLanguageEnglish()
+    {
+        SetLocale(0);
+    }
+
+    public void SetLanguageSpanish()
+    {
+        SetLocale(1);
+    }
+
+    public void SetLanguageJapanese()
+    {
+        SetLocale(2);
+    }
+
+    public void SetLanguageChinese()
+    {
+        SetLocale(3);
+    }
+
+    private void SetLocale(int localeIndex)
+    {
+        StartCoroutine(SetLocaleRoutine(localeIndex));
+    }
+
+    private IEnumerator SetLocaleRoutine(int localeIndex)
+    {
+        yield return LocalizationSettings.InitializationOperation;
+
+        var locales = LocalizationSettings.AvailableLocales.Locales;
+        if (localeIndex < 0 || localeIndex >= locales.Count)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] Locale index {localeIndex} is out of range. " +
+                             $"Available locales: {locales.Count}.", this);
+            yield break;
+        }
+
+        LocalizationSettings.SelectedLocale = locales[localeIndex];
     }
 
     private void SetPauseMenuPanelActive(GameObject panel, string panelName)
