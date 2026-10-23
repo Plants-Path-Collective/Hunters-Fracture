@@ -43,6 +43,34 @@ MonoBehaviour:
     m_Key: ui_pausemenu_party
     m_Metadata:
       m_Items: []
+  - m_Id: 34423791450017792
+    m_Key: ui_pausemenu_minipartylabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34428368287125504
+    m_Key: ui_pausemenu_miniparty_searchalliesbtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34459048832356352
+    m_Key: ui_pausemenu_optionsbtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34439752316047360
+    m_Key: ui_pausemenu_missionsbtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440590224740352
+    m_Key: ui_pausemenu_agenda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440549783261184
+    m_Key: ui_pausemenu_maps
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440976188788736
+    m_Key: ui_pausemenu_wiki
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

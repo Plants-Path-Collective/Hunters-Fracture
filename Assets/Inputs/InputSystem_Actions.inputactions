@@ -663,6 +663,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Beeper",
+                    "type": "Button",
+                    "id": "ffa72933-e17a-445b-b1e5-fadd51c8165e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -841,6 +850,50 @@
                     "action": "Open Pause Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e82189d-bfb3-4120-bb85-20d287357035",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79b7e52a-ea6f-4c34-bcb0-509574c928d1",
+                    "path": "<DualSenseGamepadHID>/touchpadButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21b857ba-1020-4c81-ace1-6fe1b6b0b259",
+                    "path": "<SwitchProControllerHID>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9ec99cf-b2ee-4e9d-a072-c47263187da7",
+                    "path": "<XInputController>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -879,6 +932,15 @@
                     "name": "Open Pause Menu",
                     "type": "Button",
                     "id": "24e2e57d-c0fa-4b12-9111-6b7cd32cd3af",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Beeper",
+                    "type": "Button",
+                    "id": "332dafa1-3176-4a5e-a2cb-aa7aa3874089",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -988,7 +1050,7 @@
                 {
                     "name": "",
                     "id": "ba207281-c453-4f80-ae9f-50358d5dd62e",
-                    "path": "<DualShockGamepad>/touchpadButton",
+                    "path": "<DualShockGamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -999,10 +1061,10 @@
                 {
                     "name": "",
                     "id": "e6bb9841-a041-4914-8b58-0a1f64f93a8c",
-                    "path": "<SwitchProControllerHID>/select",
+                    "path": "<SwitchProControllerHID>/start",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Gamepad;Touch",
                     "action": "Open Pause Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1015,6 +1077,50 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Open Pause Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "251a7c10-4952-4b1c-8512-961dd11d82b3",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "343f83de-e644-4f0c-9fac-31c292a2b0f8",
+                    "path": "<DualSenseGamepadHID>/touchpadButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6415516b-7a2a-4267-8e35-b2321e07fe54",
+                    "path": "<SwitchProControllerHID>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c465544-0d20-452c-a9ce-f05efac8a8e3",
+                    "path": "<XInputController>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Toggle Beeper",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
