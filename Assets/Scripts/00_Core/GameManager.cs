@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject backpackPanel;
     [SerializeField] private GameObject backpackSlotPrefab;
     private int backpackIndex;
+    private Button pauseBackpackButton;
     private bool selectingConsumableTarget;
     private ConsumableSO consumableBeingUsed;
     private PartyOverview partyOverview;
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour
         if (partyOverviewPanel != null) partyOverviewPanel.SetActive(false);
         if (partyBackpackPanel != null) partyBackpackPanel.SetActive(false);
         if (optionsPanel != null) optionsPanel.SetActive(false);
+        FindPauseBackpackButton();
+        UpdatePauseBackpackButton();
 
         // Resolve the sibling singleton after every scene object's Awake has run.
         inputManager = InputManager.Instance;
@@ -141,10 +144,47 @@ public class GameManager : MonoBehaviour
 
     public void OpenPartyBackpack()
     {
+        if (isInCombat)
+            return;
+
         RenderBackpackSlots();
         SetPauseMenuPanelActive(partyBackpackPanel, nameof(partyBackpackPanel));
         if (selectedBackpackSlot != null)
             SelectBackpackSlot(selectedBackpackSlot);
+    }
+
+    public void SetInCombat(bool value)
+    {
+        isInCombat = value;
+        UpdatePauseBackpackButton();
+    }
+
+    private void FindPauseBackpackButton()
+    {
+        if (pauseMenu == null)
+            return;
+
+        foreach (Button button in pauseMenu.GetComponentsInChildren<Button>(true))
+        {
+            for (int i = 0; i < button.onClick.GetPersistentEventCount(); i++)
+            {
+                if (button.onClick.GetPersistentTarget(i) != this ||
+                    button.onClick.GetPersistentMethodName(i) != nameof(OpenPartyBackpack))
+                    continue;
+
+                pauseBackpackButton = button;
+                return;
+            }
+        }
+
+        Debug.LogWarning($"[{nameof(GameManager)}] Could not find the pause-menu button " +
+                         $"wired to {nameof(OpenPartyBackpack)}.", this);
+    }
+
+    private void UpdatePauseBackpackButton()
+    {
+        if (pauseBackpackButton != null)
+            pauseBackpackButton.interactable = !isInCombat;
     }
     public void SelectBackpackSlotIndex(int index)
     {
