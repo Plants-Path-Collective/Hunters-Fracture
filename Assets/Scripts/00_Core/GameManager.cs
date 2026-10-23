@@ -11,6 +11,8 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Overworld;
+using UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,6 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject backpackPanel;
     [SerializeField] private GameObject backpackSlotPrefab;
     private int backpackIndex;
+    private bool selectingConsumableTarget;
+    private ConsumableSO consumableBeingUsed;
+    private PartyOverview partyOverview;
 
     private void Awake()
     {
@@ -93,6 +98,13 @@ public class GameManager : MonoBehaviour
         if (!paused)
             return;
 
+        if (selectingConsumableTarget)
+        {
+            CancelConsumableTargetSelection();
+            OpenPartyBackpack();
+            return;
+        }
+
         if (inspectionPanel != null && inspectionPanel.activeInHierarchy)
         {
             InspectionPanel inspection = inspectionPanel.GetComponent<InspectionPanel>();
@@ -131,6 +143,8 @@ public class GameManager : MonoBehaviour
     {
         RenderBackpackSlots();
         SetPauseMenuPanelActive(partyBackpackPanel, nameof(partyBackpackPanel));
+        if (selectedBackpackSlot != null)
+            SelectBackpackSlot(selectedBackpackSlot);
     }
     public void SelectBackpackSlotIndex(int index)
     {
@@ -255,6 +269,9 @@ public class GameManager : MonoBehaviour
 
         if (paused)
         {
+            if (selectingConsumableTarget)
+                CancelConsumableTargetSelection();
+
             if (!isInCombat)
                 inputsHints.SetActive(true);
             pauseMenu.SetActive(false);
@@ -338,11 +355,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        VerticalLayoutGroup slotsLayout = backpackPanel.GetComponentInChildren<VerticalLayoutGroup>(true);
+        GridLayoutGroup slotsLayout = backpackPanel.GetComponentInChildren<GridLayoutGroup>(true);
         if (slotsLayout == null)
         {
             Debug.LogError($"[{nameof(GameManager)}] Backpack panel has no " +
-                           $"{nameof(VerticalLayoutGroup)} to contain item slots.");
+                           $"{nameof(GridLayoutGroup)} to contain item slots.");
             return;
         }
 
@@ -353,9 +370,17 @@ public class GameManager : MonoBehaviour
         }
 
         Transform slotsContainer = slotsLayout.transform;
+        foreach (BackpackSlotUI slotUI in backpackSlotViews)
+        {
+            if (slotUI != null)
+                slotUI.Selected -= HandleBackpackSlotSelected;
+        }
+
         for (int i = slotsContainer.childCount - 1; i >= 0; i--)
             Destroy(slotsContainer.GetChild(i).gameObject);
         backpackSlotViews.Clear();
+        selectedBackpackSlot = null;
+        backpackIndex = 0;
 
         if (PartyBackpack.Instance == null)
         {
@@ -389,16 +414,18 @@ public class GameManager : MonoBehaviour
             slotUI.quantityText.text = $"x {slot.quantity}";
             slotUI.SetConsumable(slot.consumableSO);
             slotUI.SetSelected(false);
+            slotUI.Selected += HandleBackpackSlotSelected;
 
             Button button = slotObject.GetComponent<Button>();
             if (button != null)
-                button.onClick.AddListener(() => SelectBackpackSlot(slotUI));
+                button.onClick.AddListener(() => HandleBackpackSlotConfirmed(slotUI));
             else
-                slotObject.AddComponent<Button>().onClick.AddListener(() => SelectBackpackSlot(slotUI));
+                slotObject.AddComponent<Button>().onClick.AddListener(() => HandleBackpackSlotConfirmed(slotUI));
 
             backpackSlotViews.Add(slotUI);
         }
 
+        ConfigureBackpackSlotNavigation();
         if (backpackSlotViews.Count > 0)
             SelectBackpackSlot(backpackSlotViews[0]);
     }
@@ -416,14 +443,165 @@ public class GameManager : MonoBehaviour
         if (consumable == null || inputHandler == null) return false;
         return inputHandler.ConsumeSelectedItem(consumable);
     }*/
-    private void SelectBackpackSlot(BackpackSlotUI slotUI)
+    private void HandleBackpackSlotSelected(BackpackSlotUI slotUI)
     {
-        if (selectedBackpackSlot == slotUI) return;
+        int index = backpackSlotViews.IndexOf(slotUI);
+        if (index >= 0)
+            backpackIndex = index;
 
         foreach (BackpackSlotUI other in backpackSlotViews)
-            if (other != null) other.SetSelected(other == slotUI);
+            if (other != null && other != slotUI) other.SetSelected(false);
 
         selectedBackpackSlot = slotUI;
+    }
+
+    private void SelectBackpackSlot(BackpackSlotUI slotUI)
+    {
+        if (slotUI == null) return;
+        HandleBackpackSlotSelected(slotUI);
+
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem != null && slotUI.gameObject.activeInHierarchy &&
+            eventSystem.currentSelectedGameObject != slotUI.gameObject)
+            eventSystem.SetSelectedGameObject(slotUI.gameObject);
+    }
+
+    private void HandleBackpackSlotConfirmed(BackpackSlotUI slotUI)
+    {
+        SelectBackpackSlot(slotUI);
+        BeginConsumableTargetSelection(slotUI.consumable);
+    }
+
+    private void ConfigureBackpackSlotNavigation()
+    {
+        int count = backpackSlotViews.Count;
+        for (int i = 0; i < count; i++)
+        {
+            Button button = backpackSlotViews[i].GetComponent<Button>();
+            if (button == null) continue;
+
+            Navigation navigation = button.navigation;
+            navigation.mode = Navigation.Mode.Explicit;
+            navigation.selectOnUp = backpackSlotViews[(i + count - 1) % count].GetComponent<Button>();
+            navigation.selectOnDown = backpackSlotViews[(i + 1) % count].GetComponent<Button>();
+            button.navigation = navigation;
+        }
+    }
+
+    private void BeginConsumableTargetSelection(ConsumableSO consumable)
+    {
+        if (consumable == null)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] Cannot use a null consumable.", this);
+            return;
+        }
+
+        if (isInCombat)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] Use the combat backpack to consume items during combat.", this);
+            return;
+        }
+
+        if (partyOverviewPanel == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Party overview panel is not assigned.", this);
+            return;
+        }
+
+        partyOverview = partyOverviewPanel.GetComponentInChildren<PartyOverview>(true);
+        if (partyOverview == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Party overview panel has no " +
+                           $"{nameof(PartyOverview)} component.", partyOverviewPanel);
+            return;
+        }
+
+        consumableBeingUsed = consumable;
+        selectingConsumableTarget = true;
+        SetPauseMenuPanelActive(partyOverviewPanel, nameof(partyOverviewPanel));
+        partyOverview.BeginConsumableTargetSelection(UseConsumableOnPartyMember);
+        SelectFirstControl(partyOverviewPanel);
+    }
+
+    private void UseConsumableOnPartyMember(Core.CombatSystem.Units.PartyMemberData member)
+    {
+        if (member?.definition == null || consumableBeingUsed == null)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] Cannot use the selected consumable on an invalid party member.", this);
+            CancelConsumableTargetSelection();
+            OpenPartyBackpack();
+            return;
+        }
+
+        PartyBackpack partyBackpack = PartyBackpack.Instance;
+        if (partyBackpack == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] No {nameof(PartyBackpack)} instance is available.", this);
+            CancelConsumableTargetSelection();
+            OpenPartyBackpack();
+            return;
+        }
+
+        bool itemAvailable = false;
+        foreach (BackpackSlot slot in partyBackpack.backpackSlots)
+        {
+            if (slot.consumableSO != consumableBeingUsed || slot.quantity <= 0)
+                continue;
+
+            itemAvailable = true;
+            break;
+        }
+
+        if (!itemAvailable)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] The selected consumable is no longer available.", this);
+            CancelConsumableTargetSelection();
+            OpenPartyBackpack();
+            return;
+        }
+
+        int maxValue;
+        switch (consumableBeingUsed.statType)
+        {
+            case STAT_TYPE.HP:
+                maxValue = Mathf.Max(0, member.definition.maxHP);
+                member.currentHP = RestoreStat(member.currentHP, maxValue, consumableBeingUsed.restoreAmount);
+                break;
+
+            case STAT_TYPE.SP:
+                maxValue = Mathf.Max(0, member.definition.maxSP);
+                member.currentSP = RestoreStat(member.currentSP, maxValue, consumableBeingUsed.restoreAmount);
+                break;
+
+            default:
+                Debug.LogWarning($"[{nameof(GameManager)}] Consumable '{consumableBeingUsed.name}' " +
+                                 $"targets {consumableBeingUsed.statType}, which cannot be used in the overworld.", this);
+                CancelConsumableTargetSelection();
+                OpenPartyBackpack();
+                return;
+        }
+
+        partyBackpack.RemoveConsumable(consumableBeingUsed, 1);
+        partyOverview.Refresh();
+        CancelConsumableTargetSelection();
+        OpenPartyBackpack();
+    }
+
+    private void CancelConsumableTargetSelection()
+    {
+        if (partyOverview != null)
+            partyOverview.CancelConsumableTargetSelection();
+
+        selectingConsumableTarget = false;
+        consumableBeingUsed = null;
+        partyOverview = null;
+    }
+
+    private static int RestoreStat(int currentValue, int maxValue, int restoreAmount)
+    {
+        int current = currentValue < 0 ? maxValue : Mathf.Clamp(currentValue, 0, maxValue);
+        int amount = Mathf.Min(maxValue - current, Mathf.Max(0, restoreAmount));
+        return current + amount;
     }
 
     private void SelectFirstControl(GameObject selectionRoot)

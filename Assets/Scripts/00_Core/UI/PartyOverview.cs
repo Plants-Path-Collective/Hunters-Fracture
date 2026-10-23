@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
@@ -20,6 +22,7 @@ namespace UI
 
         private readonly List<PartySlot> partySlots = new();
         private readonly List<PartySlot> hiddenPartySlots = new();
+        private Action<PartyMemberData> consumableTargetSelected;
 
         private void OnEnable()
         {
@@ -56,6 +59,21 @@ namespace UI
 
             currentParty = party;
             InitializePartyPanel();
+        }
+
+        public void Refresh()
+        {
+            InitializePartyPanel();
+        }
+
+        public void BeginConsumableTargetSelection(Action<PartyMemberData> onSelected)
+        {
+            consumableTargetSelected = onSelected;
+        }
+
+        public void CancelConsumableTargetSelection()
+        {
+            consumableTargetSelected = null;
         }
 
         private void InitializePartyPanel()
@@ -108,10 +126,20 @@ namespace UI
 
                 slot.PopulateSlot(currentParty.Members[i], combatSlot);
             }
+
+            ConfigurePartySlotNavigation(displayCount);
         }
 
         private void ShowInspection(PartyMemberData member, COMBAT_SLOT slot)
         {
+            if (consumableTargetSelected != null)
+            {
+                Action<PartyMemberData> onSelected = consumableTargetSelected;
+                consumableTargetSelected = null;
+                onSelected.Invoke(member);
+                return;
+            }
+
             if (inspectionPanel == null)
             {
                 Debug.LogError($"[{nameof(PartyOverview)}] Inspection panel is not assigned.", this);
@@ -121,6 +149,31 @@ namespace UI
             inspectionPanel.Show(member, slot);
             if (inspectionPanel.isActiveAndEnabled)
                 HideOtherPartySlots(slot);
+        }
+
+        private void ConfigurePartySlotNavigation(int displayCount)
+        {
+            List<Button> activeButtons = new();
+            for (int i = 0; i < displayCount; i++)
+            {
+                if (!partySlots[i].gameObject.activeSelf)
+                    continue;
+
+                Button button = partySlots[i].GetComponent<Button>();
+                if (button != null)
+                    activeButtons.Add(button);
+            }
+
+            for (int i = 0; i < activeButtons.Count; i++)
+            {
+                Button button = activeButtons[i];
+
+                Navigation navigation = button.navigation;
+                navigation.mode = Navigation.Mode.Explicit;
+                navigation.selectOnLeft = activeButtons[(i + activeButtons.Count - 1) % activeButtons.Count];
+                navigation.selectOnRight = activeButtons[(i + 1) % activeButtons.Count];
+                button.navigation = navigation;
+            }
         }
 
         private void HideOtherPartySlots(COMBAT_SLOT selectedCombatSlot)

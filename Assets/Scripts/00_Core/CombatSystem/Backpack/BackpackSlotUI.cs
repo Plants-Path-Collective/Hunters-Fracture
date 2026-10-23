@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization;
+using UnityEngine.EventSystems;
 
 namespace Core.CombatSystem.Backpack
 {
-    public class BackpackSlotUI : MonoBehaviour
+    public class BackpackSlotUI : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         public Image consumableIcon;
         public TextMeshProUGUI consumableNameText;
@@ -13,9 +15,21 @@ namespace Core.CombatSystem.Backpack
         public TextMeshProUGUI effectText;
         public GameObject selectionHighlight;
         public ConsumableSO consumable { get; private set; }
+        public event Action<BackpackSlotUI> Selected;
 
         private LocalizedString localizedName;
         private LocalizedString localizedEffect;
+
+        public void OnSelect(BaseEventData eventData)
+        {
+            SetSelected(true);
+            Selected?.Invoke(this);
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            SetSelected(false);
+        }
 
         private void OnEnable()
         {
