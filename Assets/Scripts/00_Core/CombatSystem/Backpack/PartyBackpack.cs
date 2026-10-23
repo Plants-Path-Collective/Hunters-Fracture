@@ -31,15 +31,24 @@ namespace Core.CombatSystem.Backpack
 
         public void AddConsumable(ConsumableSO consumable, int quantity = 1)
         {
-            BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
-            if (existingSlot.consumableSO != null)
+            if (consumable == null || quantity <= 0)
             {
-                existingSlot.quantity += quantity;
+                Debug.LogWarning($"[{nameof(PartyBackpack)}] Cannot add a null consumable or non-positive quantity.");
+                return;
             }
-            else
+
+            for (int i = 0; i < backpackSlots.Count; i++)
             {
-                backpackSlots.Add(new BackpackSlot { consumableSO = consumable, quantity = quantity });
+                BackpackSlot slot = backpackSlots[i];
+                if (slot.consumableSO != consumable)
+                    continue;
+
+                slot.quantity += quantity;
+                backpackSlots[i] = slot;
+                return;
             }
+
+            backpackSlots.Add(new BackpackSlot { consumableSO = consumable, quantity = quantity });
         }
 
         public void Clear()
@@ -49,14 +58,24 @@ namespace Core.CombatSystem.Backpack
 
         public void RemoveConsumable(ConsumableSO consumable, int quantity = 1)
         {
-            BackpackSlot existingSlot = backpackSlots.Find(slot => slot.consumableSO == consumable);
-            if (existingSlot.consumableSO != null)
+            if (consumable == null || quantity <= 0)
             {
-                existingSlot.quantity -= quantity;
-                if (existingSlot.quantity <= 0)
-                {
-                    backpackSlots.Remove(existingSlot);
-                }
+                Debug.LogWarning($"[{nameof(PartyBackpack)}] Cannot remove a null consumable or non-positive quantity.");
+                return;
+            }
+
+            for (int i = 0; i < backpackSlots.Count; i++)
+            {
+                BackpackSlot slot = backpackSlots[i];
+                if (slot.consumableSO != consumable)
+                    continue;
+
+                slot.quantity -= quantity;
+                if (slot.quantity <= 0)
+                    backpackSlots.RemoveAt(i);
+                else
+                    backpackSlots[i] = slot;
+                return;
             }
         }
 
