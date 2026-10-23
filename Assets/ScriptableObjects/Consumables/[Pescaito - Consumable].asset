@@ -13,7 +13,25 @@ MonoBehaviour:
   m_Name: '[Pescaito - Consumable]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Backpack.ConsumableSO
   itemName: Pescaito fresco
+  localizedItemName:
+    m_TableReference:
+      m_TableCollectionName: UI_Consumables
+    m_TableEntryReference:
+      m_KeyId: 6189096853786624
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 4eb946077f3c7378e9bea2fb38d7cffd, type: 3}
   effect: +15 SP
+  localizedEffect:
+    m_TableReference:
+      m_TableCollectionName: UI_Consumables
+    m_TableEntryReference:
+      m_KeyId: 6190221304745984
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   statType: 1
   restoreAmount: 15

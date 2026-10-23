@@ -13,7 +13,25 @@ MonoBehaviour:
   m_Name: '[Completo - Consumable]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Backpack.ConsumableSO
   itemName: Completo longo
+  localizedItemName:
+    m_TableReference:
+      m_TableCollectionName: UI_Consumables
+    m_TableEntryReference:
+      m_KeyId: 6188875956572160
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 673708677251705d2966bdd7f5f018a8, type: 3}
   effect: + 15 HP
+  localizedEffect:
+    m_TableReference:
+      m_TableCollectionName: UI_Consumables
+    m_TableEntryReference:
+      m_KeyId: 6190234239979520
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   statType: 0
   restoreAmount: 15

@@ -17,7 +17,23 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: ea6460fe53286597b82b6f84075f75c6, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 6188875956572160
+    m_Localized: Completo Grande
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6189096853786624
+    m_Localized: Pescado Frito
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6190221304745984
+    m_Localized: +15 SP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6190234239979520
+    m_Localized: + 15 HP
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

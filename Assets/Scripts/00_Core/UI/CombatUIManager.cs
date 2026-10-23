@@ -436,9 +436,7 @@ namespace Core.UI
                 }
 
                 slotUI.consumableIcon.sprite = slot.consumableSO.itemIcon;
-                slotUI.consumableNameText.text = slot.consumableSO.itemName;
                 slotUI.quantityText.text = $"x {slot.quantity}";
-                slotUI.effectText.text = slot.consumableSO.effect;
                 slotUI.SetConsumable(slot.consumableSO);
                 slotUI.SetSelected(false);
 

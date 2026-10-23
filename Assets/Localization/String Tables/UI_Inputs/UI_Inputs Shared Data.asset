@@ -31,8 +31,20 @@ MonoBehaviour:
     m_Key: ui_inputs_target
     m_Metadata:
       m_Items: []
+  - m_Id: 6219514466304
+    m_Key: ui_inputs_nav
+    m_Metadata:
+      m_Items: []
   - m_Id: 1699552120832
-    m_Key: New Entry
+    m_Key: ui_inputs_confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7247500627968
+    m_Key: ui_inputs_castultimate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7519417356288
+    m_Key: ui_inputs_inspect
     m_Metadata:
       m_Items: []
   m_Metadata:

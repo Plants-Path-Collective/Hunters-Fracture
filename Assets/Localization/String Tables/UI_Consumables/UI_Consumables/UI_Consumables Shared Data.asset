@@ -14,7 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: UI_Consumables
   m_TableCollectionNameGuidString: ea6460fe53286597b82b6f84075f75c6
-  m_Entries: []
+  m_Entries:
+  - m_Id: 6188875956572160
+    m_Key: ui_consumables_completo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6190234239979520
+    m_Key: ui_consumable_completo_effect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6189096853786624
+    m_Key: ui_consumable_fish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6190221304745984
+    m_Key: ui_consumable_fish_effect
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

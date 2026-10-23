@@ -34,6 +34,26 @@ MonoBehaviour:
     m_Localized: Target
     m_Metadata:
       m_Items: []
+  - m_Id: 1699552120832
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6219514466304
+    m_Localized: Nav
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7247500627968
+    m_Localized: 'Cast
+
+      Ultimate'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7519417356288
+    m_Localized: 'Inspect
+
+      Unit'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

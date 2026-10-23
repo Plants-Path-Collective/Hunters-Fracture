@@ -1,5 +1,6 @@
 using UnityEngine;
 using Core;
+using UnityEngine.Localization;
 
 namespace Core.CombatSystem.Backpack
 {
@@ -7,8 +8,10 @@ namespace Core.CombatSystem.Backpack
     public class ConsumableSO : ScriptableObject
     {
         public string itemName;
+        public LocalizedString localizedItemName;
         public Sprite itemIcon;
         public string effect;
+        public LocalizedString localizedEffect;
         public STAT_TYPE statType;
         public int restoreAmount;
 
