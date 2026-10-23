@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace Core.CombatSystem.SkillSystem
 {
@@ -9,8 +10,10 @@ namespace Core.CombatSystem.SkillSystem
     {
         [Header("--- Identity ---")]
         public string actionName;
+        public LocalizedString localizedActionName;
         public Sprite icon;
         [TextArea(2, 4)] public string description;
+        public LocalizedString localizedDescription;
 
         [Header("--- Rules ---")]
         [Min(0)] public int spCost;

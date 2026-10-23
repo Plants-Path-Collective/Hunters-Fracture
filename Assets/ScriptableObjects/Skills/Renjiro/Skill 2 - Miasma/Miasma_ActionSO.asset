@@ -13,10 +13,28 @@ MonoBehaviour:
   m_Name: Miasma_ActionSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
   actionName: Miasma
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 215229878272
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   description: "Esparce un \xE1rea de Kuroy\u016B por el campo, afectando a las Units,
     del bando Aliado, la Unit de MID adelanta 1 turno, mientras que a las Units LEFT
     y RIGHT del bando Enemigo se atrasan 1 turno c/u."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 2450995236864
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   spCost: 30
   targetType: 0
   effects:

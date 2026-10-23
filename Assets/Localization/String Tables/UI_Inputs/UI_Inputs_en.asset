@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_Inputs_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: cb5717b9fcde47e72b702a2f9de2ebc1, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 44425236480
+    m_Localized: Movement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 149450608640
+    m_Localized: Attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 273224519680
+    m_Localized: Pause Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1619914870784
+    m_Localized: Target
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

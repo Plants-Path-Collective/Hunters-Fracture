@@ -13,12 +13,29 @@ MonoBehaviour:
   m_Name: Disrupcion_ActionSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
   actionName: "Disrupci\xF3n"
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 6297054564352
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   description: 'Reduce la MDef de la Unit targeteada en X%, por 2 rondas.
 
-
     X%
     = 10% (HP / 50)'
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 6322916642816
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   spCost: 20
   targetType: 2
   effects:

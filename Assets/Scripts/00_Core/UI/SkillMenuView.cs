@@ -4,6 +4,7 @@ using UnityEngine;
 using Core.CombatSystem;
 using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.Units;
+using UnityEngine.Localization;
 
 namespace Core.UI
 {
@@ -21,6 +22,7 @@ namespace Core.UI
 
         private readonly List<SkillSlotView> rows = new();
         private IReadOnlyList<ActionSO> skills;
+        private LocalizedString localizedDescription;
 
         private void OnEnable()
         {
@@ -34,6 +36,7 @@ namespace Core.UI
 
         private void OnDisable()
         {
+            UnsubscribeLocalizedDescription();
             if (inputHandler == null) return;
 
             inputHandler.OnSkillsMenuOpened -= Open;
@@ -80,10 +83,46 @@ namespace Core.UI
             for (int i = 0; i < rows.Count; i++)
                 rows[i].SetSelected(i == index);
 
-            if (descriptionLabel != null && skills != null && index < skills.Count)
-                descriptionLabel.text = skills[index].description;
+            SetDescription(index);
         }
 
-        private void Close() => panel.SetActive(false);
+        private void SetDescription(int index)
+        {
+            UnsubscribeLocalizedDescription();
+
+            if (descriptionLabel == null || skills == null || index < 0 || index >= skills.Count)
+                return;
+
+            ActionSO selectedSkill = skills[index];
+            if (selectedSkill.localizedDescription != null)
+            {
+                localizedDescription = selectedSkill.localizedDescription;
+                localizedDescription.StringChanged += UpdateDescription;
+            }
+            else
+            {
+                descriptionLabel.text = selectedSkill.description;
+            }
+        }
+
+        private void UpdateDescription(string value)
+        {
+            if (descriptionLabel != null)
+                descriptionLabel.text = value;
+        }
+
+        private void UnsubscribeLocalizedDescription()
+        {
+            if (localizedDescription != null)
+                localizedDescription.StringChanged -= UpdateDescription;
+
+            localizedDescription = null;
+        }
+
+        private void Close()
+        {
+            UnsubscribeLocalizedDescription();
+            panel.SetActive(false);
+        }
     }
 }

@@ -13,11 +13,29 @@ MonoBehaviour:
   m_Name: Envolver_ActionSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
   actionName: Envolver
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 2274737999872
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   description: "Selecciona una Unit, luego castea y manda una corriente de Kuroy\u016B
     hacia ella. Si es Aliada, se endurece y otorga PDef en X%, por 3 turnos. Mientras
     que si es Enemiga, reduce la Pdef en X% y quema a la unit con da\xF1o Magical
     por 3 rondas.\n\nX = 0.1 + (1- (MP / 100)) "
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:f1efd7d01c2126b6184eb77b71a9923f
+    m_TableEntryReference:
+      m_KeyId: 2413976309760
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   spCost: 20
   targetType: 4
   effects:

@@ -49,6 +49,11 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb5717b9fcde47e72b702a2f9de2ebc1
+    m_Address: Assets/Localization/String Tables/UI_Inputs/UI_Inputs Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea6460fe53286597b82b6f84075f75c6
     m_Address: Assets/Localization/String Tables/UI_Consumables/UI_Consumables/UI_Consumables
       Shared Data.asset

@@ -13,11 +13,29 @@ MonoBehaviour:
   m_Name: Resonancia_ActionSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
   actionName: Resonancia
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 6208403755008
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   icon: {fileID: 0}
   description: "Activa: Selecciona una Unit, el objetivo queda Dormido por 1 ronda
     de aquella Unit (Skipea su pr\xF3ximo turno).\n\nPasiva: Cada vez que Fasila
     utiliza alguna t\xE9cnica, uno de sus Fragmentos resuena, si cuenta con 3 Fragmentos
     resonantes, la siguiente t\xE9cnica duplica su efecto (dobla stats, turnos, etc.)."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
+    m_TableEntryReference:
+      m_KeyId: 6278461214720
+      m_Key:
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   spCost: 25
   targetType: 2
   effects:
