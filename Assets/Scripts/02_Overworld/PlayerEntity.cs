@@ -72,5 +72,10 @@ namespace Overworld
             base.OnHitConnected(target);
             CombatTransition.Begin(party, enemy.EnemyParty, UNIT_TEAM.Ally, gameObject, enemy.gameObject);
         }
+
+        protected override void OnAttackMissed()
+        {
+            GameManager.Instance?.ShowOverworldLogTransient("Missed the attack.");
+        }
     }
 }

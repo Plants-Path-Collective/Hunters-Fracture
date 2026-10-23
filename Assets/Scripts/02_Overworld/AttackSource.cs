@@ -37,10 +37,12 @@ namespace Overworld
             hitbox.enabled = true;
         }
 
-        internal void EndAttack()
+        internal bool EndAttack()
         {
             if (hitbox != null)
                 hitbox.enabled = false;
+
+            return hitRegistered;
         }
 
         private void OnTriggerEnter(Collider other)

@@ -102,7 +102,8 @@ namespace Overworld
 
         private void EndAttackHitWindow()
         {
-            attackSource.EndAttack();
+            if (!attackSource.EndAttack())
+                OnAttackMissed();
         }
 
         internal void RegisterAttackHit(Entity target)
@@ -121,6 +122,10 @@ namespace Overworld
         protected virtual void OnHitConnected(Entity target)
         {
             Debug.Log($"[{GetType().Name}] {name} connected an attack on {target.name}.");
+        }
+
+        protected virtual void OnAttackMissed()
+        {
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 using Overworld;
 using UI;
 
@@ -35,6 +36,15 @@ public class GameManager : MonoBehaviour
     private InputActionReference navigateReference;
     private InputActionReference confirmReference;
     private InputActionReference cancelReference;
+    private readonly Dictionary<TMP_Text, List<TimedLogMessage>> timedLogMessages = new();
+    private int nextLogMessageId;
+    private const float LogMessageDuration = 3f;
+
+    private sealed class TimedLogMessage
+    {
+        public int id;
+        public string message;
+    }
 
     [Header("--- Backpack ---")]
     private readonly List<BackpackSlotUI> backpackSlotViews = new();
@@ -46,6 +56,7 @@ public class GameManager : MonoBehaviour
     private bool selectingConsumableTarget;
     private ConsumableSO consumableBeingUsed;
     private PartyOverview partyOverview;
+    private TMP_Text overworldLogText;
 
     private void Awake()
     {
@@ -151,6 +162,115 @@ public class GameManager : MonoBehaviour
         SetPauseMenuPanelActive(partyBackpackPanel, nameof(partyBackpackPanel));
         if (selectedBackpackSlot != null)
             SelectBackpackSlot(selectedBackpackSlot);
+    }
+
+    public void ShowOverworldLog(string message)
+    {
+        if (isInCombat)
+            return;
+
+        if (overworldLogText == null)
+            overworldLogText = FindLogTextInScene(SceneManager.GetActiveScene());
+
+        if (overworldLogText == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Could not find a TMP text on a GameObject " +
+                           "named '[Log Text]' in the active scene.");
+            return;
+        }
+
+        timedLogMessages.Remove(overworldLogText);
+        overworldLogText.text = message ?? string.Empty;
+    }
+
+    public void ShowOverworldLogTransient(string message)
+    {
+        if (isInCombat)
+            return;
+
+        if (overworldLogText == null)
+            overworldLogText = FindLogTextInScene(SceneManager.GetActiveScene());
+
+        AppendTimedLog(overworldLogText, message, "active scene");
+    }
+
+    public void ShowCombatLog(string message)
+    {
+        Scene combatScene = SceneManager.GetSceneByName("CombatStage");
+        TMP_Text combatLogText = FindLogTextInScene(combatScene);
+        AppendTimedLog(combatLogText, message, "CombatStage scene");
+    }
+
+    public void ClearOverworldLog()
+    {
+        if (overworldLogText != null)
+        {
+            timedLogMessages.Remove(overworldLogText);
+            overworldLogText.text = string.Empty;
+        }
+    }
+
+    private void AppendTimedLog(TMP_Text text, string message, string sceneDescription)
+    {
+        if (text == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Could not find a TMP text on a GameObject " +
+                           $"named '[Log Text]' in the {sceneDescription}.");
+            return;
+        }
+
+        if (!timedLogMessages.TryGetValue(text, out List<TimedLogMessage> messages))
+        {
+            messages = new List<TimedLogMessage>();
+            timedLogMessages.Add(text, messages);
+        }
+
+        TimedLogMessage entry = new()
+        {
+            id = nextLogMessageId++,
+            message = message ?? string.Empty
+        };
+        messages.Add(entry);
+        UpdateTimedLogText(text, messages);
+        StartCoroutine(ExpireLogMessage(text, entry.id));
+    }
+
+    private IEnumerator ExpireLogMessage(TMP_Text text, int messageId)
+    {
+        yield return new WaitForSecondsRealtime(LogMessageDuration);
+
+        if (text == null || !timedLogMessages.TryGetValue(text, out List<TimedLogMessage> messages))
+            yield break;
+
+        messages.RemoveAll(entry => entry.id == messageId);
+        if (messages.Count == 0)
+        {
+            timedLogMessages.Remove(text);
+            text.text = string.Empty;
+            yield break;
+        }
+
+        UpdateTimedLogText(text, messages);
+    }
+
+    private static void UpdateTimedLogText(TMP_Text text, List<TimedLogMessage> messages)
+    {
+        text.text = string.Join("\n", messages.ConvertAll(entry => entry.message));
+    }
+
+    private static TMP_Text FindLogTextInScene(Scene scene)
+    {
+        if (!scene.IsValid() || !scene.isLoaded)
+            return null;
+
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
+                if (text.gameObject.name == "[Log Text]")
+                    return text;
+        }
+
+        return null;
     }
 
     public void SetInCombat(bool value)
@@ -558,6 +678,7 @@ public class GameManager : MonoBehaviour
 
         consumableBeingUsed = consumable;
         selectingConsumableTarget = true;
+        ShowOverworldLog("Select a unit to use this consumable on.");
         SetPauseMenuPanelActive(partyOverviewPanel, nameof(partyOverviewPanel));
         partyOverview.BeginConsumableTargetSelection(UseConsumableOnPartyMember);
         SelectFirstControl(partyOverviewPanel);
@@ -565,6 +686,8 @@ public class GameManager : MonoBehaviour
 
     private void UseConsumableOnPartyMember(Core.CombatSystem.Units.PartyMemberData member)
     {
+        ClearOverworldLog();
+
         if (member?.definition == null || consumableBeingUsed == null)
         {
             Debug.LogWarning($"[{nameof(GameManager)}] Cannot use the selected consumable on an invalid party member.", this);
@@ -629,6 +752,7 @@ public class GameManager : MonoBehaviour
 
     private void CancelConsumableTargetSelection()
     {
+        ClearOverworldLog();
         if (partyOverview != null)
             partyOverview.CancelConsumableTargetSelection();
 

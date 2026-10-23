@@ -7,6 +7,7 @@ using UnityEngine.InputSystem.Interactions;
 using Core.CombatSystem.Units;
 using Core.CombatSystem.SkillSystem;
 using Core.CombatSystem.Backpack;
+using Core.CombatSystem.StatusSystem;
 using Core.UI;
 using InputSystem;
 
@@ -121,6 +122,8 @@ namespace Core.CombatSystem
 
             combat.OnTurnStart += OnTurnStart;
             combat.OnCombatEnd += OnCombatEnd;
+            combat.OnStatusApplied += OnStatusApplied;
+            combat.OnFleeAttempt += OnFleeAttempt;
         }
 
         private void OnDisable()
@@ -129,6 +132,8 @@ namespace Core.CombatSystem
             {
                 combat.OnTurnStart -= OnTurnStart;
                 combat.OnCombatEnd -= OnCombatEnd;
+                combat.OnStatusApplied -= OnStatusApplied;
+                combat.OnFleeAttempt -= OnFleeAttempt;
             }
 
             // InputManager is DontDestroyOnLoad and can be gone first when the app closes.
@@ -165,6 +170,25 @@ namespace Core.CombatSystem
                 OpenTargetSelection(); // target-first: the highlight is up from the start of the turn
             else
                 Lock(); // enemy turn: no player input
+        }
+
+        private void OnStatusApplied(StatusContext context)
+        {
+            if (context?.target == null || context.status == null)
+                return;
+
+            GameManager.Instance?.ShowCombatLog(
+                $"{context.target.Name} is affected by {context.status.statusName}.");
+        }
+
+        private void OnFleeAttempt(FleeContext context)
+        {
+            if (context == null || context.team != UNIT_TEAM.Ally)
+                return;
+
+            GameManager.Instance?.ShowCombatLog(context.success
+                ? "Escaped combat."
+                : "Failed to flee.");
         }
 
         private void OnCombatEnd(COMBAT_OUTCOME outcome)
@@ -327,6 +351,7 @@ namespace Core.CombatSystem
             if (actor.SP < cost)
             {
                 Debug.Log($"[{nameof(CombatInputHandler)}] Not enough SP for {action.actionName} ({actor.SP}/{cost}).");
+                GameManager.Instance?.ShowCombatLog("Not enough SP to use that skill.");
                 return;
             }
 
@@ -334,6 +359,7 @@ namespace Core.CombatSystem
             if (!resolver.IsValidTarget(actor, action, target))
             {
                 OnTargetRejected?.Invoke(target);
+                GameManager.Instance?.ShowCombatLog($"Cannot use {action.actionName} on that target.");
                 return;
             }
 
@@ -341,7 +367,9 @@ namespace Core.CombatSystem
             Lock();
 
             // Could not be used after all: reopen the highlight, keep the turn.
-            if (!resolver.ResolveSkill(actor, action, target))
+            if (resolver.ResolveSkill(actor, action, target))
+                GameManager.Instance?.ShowCombatLog($"{action.actionName} used.");
+            else
                 OpenTargetSelection();
         }
 
@@ -379,12 +407,17 @@ namespace Core.CombatSystem
             if (target == null || target.Team != UNIT_TEAM.Ally)
             {
                 Debug.LogWarning($"[{nameof(CombatInputHandler)}] Cannot consume '{consumable.name}' on a non-ally target.");
+                GameManager.Instance?.ShowCombatLog("Cannot use a consumable on that target.");
                 return false;
             }
 
             if (!PartyBackpack.Instance.TryConsume(actor, target, consumable))
+            {
+                GameManager.Instance?.ShowCombatLog($"Could not use {consumable.itemName}.");
                 return false;
+            }
 
+            GameManager.Instance?.ShowCombatLog($"{target.Name} used {consumable.itemName}.");
             resolver.PlayBackpackSfx(actor);
             backpackOpen = false;
             if (CombatUIManager.Instance != null)
