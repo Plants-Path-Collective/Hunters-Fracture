@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
+  m_Name: '[UnitDefinition_Elowen]'
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
+  unitName: Elowen
+  type: 0
+  team: 0
+  portrait: {fileID: 21300000, guid: e4b81cc1355f0d22097e9700a8e7901d, type: 3}
+  partyPortrait: {fileID: 21300000, guid: 7bc128bf44b5f033ea47649bbb15148b, type: 3}
+  description: 
+  tag1: Manada
+  tag2: Protectora
+  tag3: Licantropia
+  localizedTag1:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 45135261696
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag2:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 128744517632
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag3:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 144729010176
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  skills:
+  - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+  - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
+  passives: []
+  basicAttackSfx:
+    Guid:
+      Data1: 469958270
+      Data2: 1112491460
+      Data3: 1473012356
+      Data4: -1017683836
+    Path: event:/SFX/Renjiro-Attack
+  skillSfx:
+  - action: {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+    sound:
+      Guid:
+        Data1: 1877589655
+        Data2: 1093170688
+        Data3: 1954400905
+        Data4: -22895822
+      Path: event:/SFX/Renjiro-Envolver
+  - action: {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+    sound:
+      Guid:
+        Data1: 1127337537
+        Data2: 1083079630
+        Data3: 1676495785
+        Data4: 1423619499
+      Path: event:/SFX/Renjiro-Charca
+  ultimateSfx:
+    Guid:
+      Data1: 316483052
+      Data2: 1292153455
+      Data3: -2031548508
+      Data4: 1831586544
+    Path: event:/SFX/Renjiro-Ulti
+  unitPrefab: {fileID: 3340619970067816380, guid: b9dc18e8be46a79ab847f77250005f17, type: 3}
+  maxHP: 115
+  maxSP: 150
+  speed: 60
+  strength: 25
+  magicPower: 35
+  physicalDefense: 0.25
+  magicalDefense: 0.45
+  SPRegenMin: 5
+  SPRegenMax: 10
+  defendMultiplier: 1.5
+  references:
+    version: 2
+    RefIds: []

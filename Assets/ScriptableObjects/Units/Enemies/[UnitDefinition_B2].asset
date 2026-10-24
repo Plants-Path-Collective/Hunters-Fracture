@@ -10,17 +10,44 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
-  m_Name: '[UnitDefinition_B1]'
+  m_Name: '[UnitDefinition_B2]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
-  unitName: Ogre1
+  unitName: Ogre2
   type: 0
   team: 1
-  portrait: {fileID: 21300000, guid: c954941584132582c861348d7aae90d6, type: 3}
-  partyPortrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 84f807b67dae971f48db76f1da05423f, type: 3}
+  partyPortrait: {fileID: 21300000, guid: 84f807b67dae971f48db76f1da05423f, type: 3}
   description: An angry green ogre that beats his opponents with his mace
   tag1: 
   tag2: 
   tag3: 
+  localizedTag1:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag2:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  localizedTag3:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skills: []
   ultimate: {fileID: 0}
   passives: []
@@ -42,7 +69,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
   maxHP: 100
   maxSP: 0
-  speed: 45
+  speed: 35
   strength: 15
   magicPower: 0
   physicalDefense: 0.05
@@ -50,3 +77,6 @@ MonoBehaviour:
   SPRegenMin: 5
   SPRegenMax: 10
   defendMultiplier: 1.5
+  references:
+    version: 2
+    RefIds: []

@@ -39,6 +39,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76334bb59857a3c70a619cacf3b35842
+    m_Address: Units_Iter_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 883bd5be52b5a21eaa2aaafc14204466
+    m_Address: Units_Elowen_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9db5a2ec80243b54593c50c73ce7afdb
     m_Address: UI_Menus_ja-JP
     m_ReadOnly: 1
