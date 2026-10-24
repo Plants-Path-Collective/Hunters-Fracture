@@ -36984,12 +36984,17 @@ MonoBehaviour:
   attackHitWindow: 0.15
   party:
     members:
-    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+    - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}
       currentHP: -1
       currentSP: -1
       inventorySnapshot:
         entries: []
-    - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}
+    - definition: {fileID: 11400000, guid: 1af66545aab74bcb8bfa20fe53b9a863, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
+    - definition: {fileID: 11400000, guid: f55b8a5438a6c3e0cb7a033396927db5, type: 2}
       currentHP: -1
       currentSP: -1
       inventorySnapshot:
