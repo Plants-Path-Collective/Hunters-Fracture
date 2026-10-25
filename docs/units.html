@@ -39,7 +39,7 @@
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
 <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html" aria-current="page"><span class="nav-num">04</span>Units</a></li>
+<li><a href="units.html" aria-current="page"><span class="nav-num">04</span>Unidades</a></li>
 <li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
 <li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
 <li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
@@ -64,23 +64,17 @@
 <p class="eyebrow">04 · SISTEMA</p>
 <h1>Units</h1>
 <p class="page-lede">
-      Una Unit es la representación de un combatiente. Existe en dos formas: una persistente que
-      sobrevive a la run (<code>PartyMemberData</code> / <code>EnemySlotData</code>) y una de
-      combate que vive y muere con <code>CombatStage</code> (<code>Unit</code> y sus
-      controladores). Esta página cubre las dos, la plantilla que las origina, y cómo se calculan
-      las stats.
+      Los datos de cada combatiente se separan en una definición ScriptableObject, estado persistente de aliados y una instancia de combate con controladores.
     </p>
 
 <h2 id="dos-formas">Dos formas de una misma Unit</h2>
 <p>
-      El sistema nunca guarda "una Unit" como un objeto único. La identidad y los stats base son
-      inmutables y viven en un asset. El estado mutable (HP, SP, inventario) vive en un lado u
-      otro según el dominio.
+      <code>UnitDefinitionSO</code> define identidad, stats base y habilidades. <code>PartyMemberData</code> conserva HP, SP e inventario del aliado entre encuentros. <code>Unit</code> y sus controladores son instancias temporales de <code>CombatStage</code>.
     </p>
 <div class="spec-grid">
 <div class="spec-card">
 <span class="spec-label">Persistente (Overworld)</span>
-<span class="spec-value"><code>Party</code> + <code>PartyMemberData</code> por aliado · <code>EnemySlotData</code> por enemigo del encuentro</span>
+<span class="spec-value"><code>AllyParty</code> + <code>PartyMemberData</code> por aliado · <code>EnemySlotData</code> por enemigo del encuentro</span>
 </div>
 <div class="spec-card">
 <span class="spec-label">Combate (CombatStage)</span>
@@ -92,8 +86,8 @@
 <tbody>
 <tr><td>Identidad (nombre, portrait, descripción, tipo)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
 <tr><td>Stats base (7)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
-<tr><td>Skills aprendidas</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
-<tr><td><code>currentHP</code> / <code>currentSP</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld</td></tr>
+<tr><td>Skills y ultimate</td><td><code>UnitDefinitionSO</code></td><td>Asset; la lista de skills se copia a la Unit de combate</td></tr>
+<tr><td><code>currentHP</code> / <code>currentSP</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld; -1 indica iniciar a máximo</td></tr>
 <tr><td><code>inventorySnapshot</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld</td></tr>
 <tr><td>Definición + <code>inventorySnapshot</code> opcional (enemigos)</td><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td></tr>
 <tr><td>Stats derivadas</td><td><code>UnitStatsController</code></td><td>CombatStage (se recalculan)</td></tr>
@@ -111,7 +105,7 @@
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">Identidad</span>
-<span class="component-desc">Nombre, portrait, descripción y tipo (<code>UNITY_TYPE</code>: <code>Physical</code> o <code>Magical</code>). Define qué stat usa el ataque básico de la Unit — <code>Strength</code> si es <code>Physical</code>, <code>MagicPower</code> si es <code>Magical</code> — sin impedir que tenga skills del tipo contrario declaradas en su <code>ActionSO</code>. No debe confundirse con <code>UnitTeam</code> — un aliado y un enemigo pueden compartir tipo.</span>
+<span class="component-desc">Nombre, portraits, descripción, tipo (<code>UNITY_TYPE</code>), tags localizables, prefab de combate, habilidades, ultimate, pasivos y parámetros de combate. <code>Unit.InitializeFromParty</code>/<code>InitializeFresh</code> asigna el bando explícitamente; no queda fijado por <code>definition.team</code>.</span>
 </div>
 <div class="component-card">
 <span class="component-name">Base stats</span>
@@ -119,11 +113,11 @@
 </div>
 <div class="component-card">
 <span class="component-name">Skills aprendidas</span>
-<span class="component-desc">Lista de <code>ActionSO</code> que la Unit puede elegir desde el submenú de Habilidad. Se clona al <code>Unit</code> en combate para permitir reemplazos temporales por efectos (por ejemplo, Brain Control).</span>
+<span class="component-desc">Lista de <code>ActionSO</code> y ultimate opcional. La lista se copia al crear la <code>Unit</code> de combate, de modo que cambiarla no modifica el asset compartido.</span>
 </div>
 <div class="component-card">
 <span class="component-name">Parámetros de combate</span>
-<span class="component-desc">Valores que la fórmula de daño y las acciones consultan: <code>SpRegenMin</code> / <code>SpRegenMax</code> (regeneración aleatoria de Atacar y Defender) y <code>DefendingReduction</code> (porcentaje que reduce Defender).</span>
+<span class="component-desc"><code>SPRegenMin</code>/<code>SPRegenMax</code> definen la recuperación aleatoria de SP al atacar o defender; <code>defendMultiplier</code> multiplica ambas defensas mientras dura la guardia.</span>
 </div>
 </div>
 
@@ -140,11 +134,7 @@
 <span>Stats finales</span>
 </div>
 <p>
-      El recálculo aplica cada <code>StatModifierEffectSO</code> activo, en dos pasadas: primero
-      los porcentuales, después los planos. Cada stack del objeto se aplica por separado. Los
-      modificadores en sí viven en <a href="items.html#statmodifiereffectso">Objetos</a>; acá
-      interesa que <strong>el recálculo siempre parte de la base</strong> y nunca acumula deltas
-      sobre un resultado anterior — eso es lo que evita el drift.
+      El recálculo parte siempre de stats base, aplica modificadores de objeto y escalados, y luego los modificadores temporales de estados. No acumula deltas sobre el resultado anterior. Cada <code>StatModifierEffectSO</code> aplica primero sus contribuciones porcentuales y luego las planas; <code>StatScalingEffectSO</code> se calcula en una pasada posterior. Ver <a href="items.html#statmodifiereffectso">Objetos</a>.
     </p>
 <div class="note-box">
 <span class="note-tag">Clamp de entrada</span>
@@ -156,9 +146,9 @@
       </p>
 </div>
 
-<h2 id="party-y-partymemberdata">Party y PartyMemberData</h2>
+<h2 id="party-y-partymemberdata">AllyParty y PartyMemberData</h2>
 <p>
-<code>Party</code> es la lista de hasta 3 <code>PartyMemberData</code> del jugador, uno por
+<code>AllyParty</code> es la lista de hasta 3 <code>PartyMemberData</code> del jugador, uno por
       slot (izquierda, centro, derecha). La porta <code>PlayerEntity</code> en el Overworld y es lo
       primero que se lee al entrar a combate y lo primero que se escribe al salir.
     </p>
@@ -177,15 +167,14 @@
 </div>
 </div>
 <p class="flow-note">
-      Que la <code>Party</code> viva en el Overworld y no en <code>CombatStage</code> es lo que
+      Que <code>AllyParty</code> viva en el Overworld y no en <code>CombatStage</code> es lo que
       permite volver al Overworld con los HP actualizados sin que <code>CombatController</code>
       sepa qué es un "menú principal" o un "save file".
     </p>
 
 <h2 id="enemyslotdata">EnemySlotData</h2>
 <p>
-      Análogo a <code>PartyMemberData</code> pero sin estado arrastrado: los enemigos siempre
-      entran a combate con HP y SP completos. Es un objeto por encuentro — se construye al armar
+      Análogo a <code>PartyMemberData</code> pero sin HP/SP persistentes: los enemigos entran con HP y SP completos. Es un objeto por encuentro; se construye al armar
       el <code>CombatSetUp</code> y se descarta al terminar.
     </p>
 <div class="component-grid">
@@ -223,11 +212,7 @@
 
 <h3 id="team">Team</h3>
 <p>
-      Cada <code>Unit</code> declara un bando mediante <code>enum UnitTeam { Ally, Enemy }</code>.
-      Dos valores y nada más: el sistema nunca maneja un tercer bando. La UI, el targeting y la
-      fórmula de huida usan este enum directamente en vez de un <code>int</code>, lo que permite
-      que el compilador marque cualquier <code>switch</code> incompleto si en el futuro se agrega
-      un valor.
+      Cada <code>Unit</code> declara un bando con el enum <code>UNIT_TEAM</code>: <code>Ally</code> o <code>Enemy</code>. La inicialización asigna el bando del contexto; el campo <code>team</code> de la definición no lo fuerza.
     </p>
 
 <h2 id="inicializacion">Inicialización</h2>
@@ -237,16 +222,14 @@
     </p>
 <pre class="ascii-flow">Aliado (PartyMemberData):
   Instantiate(unitPrefab)
-  Unit.InitializeFromParty(partyMemberData, itemCatalog)
-  UnitInventory.Populate(inventorySnapshot, itemCatalog)
-  UnitStatsController.SetBase(definition)
-  UnitStatsController.RecalculateStats(inventory)
+  Unit.InitializeFromParty(partyMemberData)
+  Carga inventorySnapshot y recalcula stats
   HP = Min(currentHP, MaxHP) · SP = Min(currentSP, MaxSP)
   Team = Ally
 
 Enemigo (EnemySlotData):
   Instantiate(unitPrefab)
-  Unit.InitializeFresh(definition, itemCatalog)
+  Unit.InitializeFresh(definition, inventorySnapshot)
   HP = MaxHP · SP = MaxSP
   Team = Enemy</pre>
 <p class="flow-note">
@@ -256,17 +239,9 @@ Enemigo (EnemySlotData):
     </p>
 
 <h2 id="destruccion">Destrucción</h2>
+<p>En <code>Victory</code> y <code>Fled</code>, <code>CombatController.CloseCombat()</code> copia HP, SP e inventario de cada aliado a su <code>PartyMemberData</code>. En <code>Defeat</code>, no hay write-back porque la run termina. Al cerrar se destruyen las instancias de <code>Unit</code>.</p>
 <p>
-      Al cerrar el combate, <code>CombatController</code> lee HP, SP e inventario de cada
-      <code>Unit</code> aliada y los escribe en el <code>PartyMemberData</code> correspondiente.
-      Recién después se destruyen todos los GameObjects de combate: las <code>Unit</code>, sus
-      tres controladores, y el resto de los controladores de la escena.
-    </p>
-<p>
-      En victoria, los ítems asignados en <code>RewardsScreen</code> se agregan al
-      <code>UnitInventory</code> de la Unit que los recibe y se llama
-      <code>RecalculateStats()</code> solo para esa Unit — el resto no cambia si no recibió ítems.
-      El inventario resultante queda cacheado como el nuevo <code>inventorySnapshot</code>.
+      Si el flujo de recompensas está habilitado, los objetos asignados se agregan antes de cerrar el combate; el siguiente write-back guarda el inventario resultante.
     </p>
 <div class="note-box">
 <span class="note-tag">Estados no persisten</span>
@@ -282,7 +257,7 @@ Enemigo (EnemySlotData):
 <thead><tr><th>Componente</th><th>Dominio</th><th>Responsabilidad</th></tr></thead>
 <tbody>
 <tr><td><code>UnitDefinitionSO</code></td><td>Asset</td><td>Identidad, stats base, skills aprendidas, parámetros de combate</td></tr>
-<tr><td><code>Party</code></td><td>Overworld</td><td>Hasta 3 <code>PartyMemberData</code> del jugador</td></tr>
+<tr><td><code>AllyParty</code></td><td>Overworld</td><td>Hasta 3 <code>PartyMemberData</code> del jugador</td></tr>
 <tr><td><code>PartyMemberData</code></td><td>Overworld</td><td>Definición + <code>currentHP</code>/<code>currentSP</code> + <code>inventorySnapshot</code> de un aliado</td></tr>
 <tr><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td><td>Definición + inventario opcional de un enemigo; sin HP/SP arrastrado</td></tr>
 <tr><td><code>Unit</code></td><td>CombatStage</td><td>MonoBehaviour de combate; compone los tres controladores</td></tr>
@@ -292,15 +267,8 @@ Enemigo (EnemySlotData):
 </tbody>
 </table>
 
-<h2 id="pendientes">Pendientes / abierto</h2>
-<div class="pending-card">
-<span class="pending-tag">Implementación</span>
-<p><strong>Clonado de skills aprendidas</strong> — el <code>Unit</code> debe clonar la lista de <code>ActionSO</code> de la definición al inicializarse, para permitir reemplazos temporales por efectos (Brain Control). Confirmar que efectivamente se clona y no se comparte la referencia.</p>
-</div>
-<div class="pending-card">
-<span class="pending-tag">Nomenclatura</span>
-<p><strong><code>UnitTeam</code> vs <code>Team</code></strong> — usar <code>UnitTeam</code> para el enum y dejar <code>Team</code> libre si en el futuro aparece un "equipo" con otra semántica. Decisión de nombre, no de diseño.</p>
-</div>
+<h2 id="nombres-de-dominio">Nombres de dominio</h2>
+<p>El enum de equipo se llama <code>UNIT_TEAM</code> (valores <code>Ally</code> y <code>Enemy</code>). El contenedor de la party se llama <code>AllyParty</code>; <code>Party</code> es el nombre de una propiedad de <code>CombatSetUp</code>, no una clase independiente.</p>
 
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="combat.html">
@@ -319,13 +287,13 @@ Enemigo (EnemySlotData):
 <a href="#dos-formas">Dos formas de una misma Unit</a>
 <a href="#unitdefinitionso">UnitDefinitionSO</a>
 <a href="#stats">Stats base y derivadas</a>
-<a href="#party-y-partymemberdata">Party y PartyMemberData</a>
+<a href="#party-y-partymemberdata">AllyParty y PartyMemberData</a>
 <a href="#enemyslotdata">EnemySlotData</a>
 <a href="#unit">Unit (lado combate)</a>
 <a href="#inicializacion">Inicialización</a>
 <a href="#destruccion">Destrucción</a>
 <a href="#resumen">Resumen de componentes</a>
-<a href="#pendientes">Pendientes</a>
+<a href="#nombres-de-dominio">Nombres de dominio</a>
 </section>
 
 </div>

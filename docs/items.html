@@ -39,7 +39,7 @@
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
 <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html"><span class="nav-num">04</span>Units</a></li>
+<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
 <li><a href="items.html" aria-current="page"><span class="nav-num">05</span>Objetos</a></li>
 <li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
 <li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
@@ -64,38 +64,29 @@
 <p class="eyebrow">05 · SISTEMA</p>
 <h1>Sistema de Objetos</h1>
 <p class="page-lede">
-      La progresión del roguelite: cómo se definen los objetos, cómo modifican stats, y cómo
-      reaccionan a los eventos de combate sin que <code>CombatController</code> sepa que existen.
+      Las unidades llevan objetos de progresión que modifican sus stats o reaccionan a eventos de combate. Los consumibles del party son un sistema separado.
     </p>
 
 <div class="note-box">
 <span class="note-tag">Alcance</span>
 <p>
-        Esta página cubre el <strong>inventario de progresión</strong> del roguelite: los ítems que
-        una Unit porta, que persisten entre combates, y que alimentan el recálculo de stats. La
-        <strong>Mochila</strong> (consumibles de combate, globales para el party) es un sistema
-        distinto, descrito en <a href="combat.html#mochila">Combate</a>. Los dos no comparten
-        jerarquía de datos.
+        <code>ItemSO</code> y <code>UnitInventory</code> representan objetos asignados a unidades y guardados en el snapshot de la party. <code>ConsumableSO</code> y <code>PartyBackpack</code> representan consumibles compartidos por el party. Son tipos y flujos distintos.
       </p>
 </div>
 
 <h2 id="jerarquia-de-datos">Jerarquía de datos</h2>
 <div class="tree-box">
 <div class="tree-row"><span><code>ItemCatalog</code></span><span>Un único asset. Lookup pasivo por <code>itemID</code>.</span></div>
-<div class="tree-row"><span><code>ItemSO</code></span><span>Un asset por objeto. ID, nombre, ícono, lista de <code>ItemEffectSO</code>.</span></div>
+<div class="tree-row"><span><code>ItemSO</code></span><span>Asset por objeto: ID, nombre, icono, descripción y lista de <code>ItemEffectSO</code>.</span></div>
 <div class="tree-row"><span><code>ItemEffectSO</code></span><span>Base abstracta, sin miembros propios. Nunca se instancia directamente.</span></div>
-<div class="tree-row"><span>↳ <code>StatModifierEffectSO</code></span><span>Modificador estático o por fórmula sobre una stat.</span></div>
+<div class="tree-row"><span>↳ <code>StatModifierEffectSO</code></span><span>Bonus porcentual y/o plano para una stat, según cantidad de stacks.</span></div>
+<div class="tree-row"><span>↳ <code>StatScalingEffectSO</code></span><span>Bonus de una stat calculado a partir del valor final de otra.</span></div>
 <div class="tree-row"><span>↳ <code>TriggeredEffectSO</code></span><span>Reacciona a eventos de <code>CombatController</code> mediante <code>Attach()</code>/<code>Detach()</code>.</span></div>
 </div>
 
 <h2 id="itemcatalog">ItemCatalog</h2>
 <p>
-      Registro central de todo <code>ItemSO</code> del juego. Existe un único asset en el proyecto,
-      referenciado directamente donde se necesita — sin <code>static Instance</code> ni singleton —
-      siguiendo el mismo principio de evitar estado global del resto del sistema de combate. Se
-      consulta para poblar drop tables, UI, guardado/carga, y para inicializar el inventario de una
-      Unit con todos los objetos válidos en cantidad 0. <strong>Nunca</strong> se consulta durante
-      la resolución de una acción de combate.
+      Registro serializado de <code>ItemSO</code> por <code>itemID</code>, con lookup cacheado. El asset vive en <code>Assets/ScriptableObjects/ItemCatalog.asset</code> y se asigna por referencia; no es un Singleton. <code>UnitInventory</code> lo usa para inicializar cantidades y para resolver snapshots.
     </p>
 
 <h2 id="itemso">ItemSO</h2>
@@ -105,8 +96,8 @@
 <span class="component-desc">Identificador único, usado como clave en <code>ItemCatalog</code> y en el diccionario de <code>UnitInventory</code>.</span>
 </div>
 <div class="component-card">
-<span class="component-name">itemName</span>
-<span class="component-desc">Nombre mostrado en UI.</span>
+<span class="component-name">itemName / itemDescription</span>
+<span class="component-desc">Nombre y texto descriptivo del objeto.</span>
 </div>
 <div class="component-card">
 <span class="component-name">itemIcon</span>
@@ -120,9 +111,7 @@
 
 <h2 id="statmodifiereffectso">StatModifierEffectSO</h2>
 <p>
-      Contribuye un modificador estático o por fórmula a una única stat (<code>statType</code>), sin
-      suscribirse jamás a <code>CombatController</code>. Cada stack del objeto se aplica por
-      separado, en dos pasadas: primero los modificadores porcentuales, luego los planos.
+      Aporta modificadores a una stat sin suscribirse a eventos. Para cada efecto, se aplican primero las contribuciones porcentuales de todos los stacks y luego las planas; el primer stack usa <code>percentBonus</code>/<code>flatBonus</code> y los adicionales usan los campos <code>perStack</code>.
     </p>
 <table class="dep-table">
 <thead><tr><th>Campo</th><th>Aplica a</th></tr></thead>
@@ -134,26 +123,18 @@
 </tbody>
 </table>
 <p class="flow-note">
-<code>UnitStatsController.RecalculateStats()</code> invoca <code>ApplyModifiers()</code> una vez
-      por cada objeto con quantity mayor a 0 que la Unit sostiene, como parte de un recálculo completo
-      desde cero — nunca aplica deltas incrementales. El detalle del recálculo vive en
+<code>UnitStatsController.RecalculateStats()</code> parte de stats base y recalcula desde cero. Tras aplicar <code>StatModifierEffectSO</code>, procesa <code>StatScalingEffectSO</code> en una segunda pasada; luego aplica los modificadores temporales de estados. El recálculo nunca acumula deltas sobre el resultado previo. El detalle vive en
       <a href="units.html#stats">Units</a>.
     </p>
 
 <h2 id="triggeredeffectso">TriggeredEffectSO</h2>
 <p>
-      Efecto abstracto que reacciona a eventos de combate en lugar de aportar un número fijo:
-      quemadura, dormir, probabilidades on-hit, robo de stats. Cada objeto concreto implementa
-      <code>Attach(Unit unit)</code> y <code>Detach(Unit unit)</code> con su propia lógica de
-      suscripción a <code>CombatController</code>.
+      Efecto abstracto que se conecta a eventos de combate. Las subclases actuales incluyen efectos posteriores al daño, reducción de coste de SP y peso de aggro. <code>UnitEffectController</code> también conecta los pasivos de <code>UnitDefinitionSO</code>; ordena por <code>Priority</code> descendente y los desconecta al salir de combate.
     </p>
 <div class="note-box">
 <span class="note-tag">Prioridad</span>
 <p>
-        Cada <code>TriggeredEffectSO</code> declara un campo <code>Priority</code>.
-        <code>UnitEffectController</code> ordena los efectos de una Unit por ese campo antes de
-        suscribirlos. Sin esto, el orden de ejecución depende del orden de suscripción y no es
-        determinístico. Ver <a href="combat.html#verbos-y-eventos">Verbos y eventos</a>.
+        Cada efecto declara <code>Priority</code>; el valor más alto se conecta primero. En cambios de inventario, el controlador desconecta y vuelve a conectar el conjunto completo para mantener un orden determinista. Ver <a href="combat.html#verbos-y-eventos">Verbos y eventos</a>.
       </p>
 </div>
 <div class="note-box">
@@ -171,15 +152,11 @@
 <div class="flow-chain">
 <span>UnitInventory</span><span class="flow-arrow">→</span>
 <span>OnStackChanged</span><span class="flow-arrow">→</span>
-<span>UnitEffectController</span><span class="flow-arrow">→</span>
-<span>UnitStatsController</span>
+<span>Reconcile de efectos</span><span class="flow-arrow">+</span>
+<span>Recalcular stats</span>
 </div>
 <p class="flow-note">
-<code>UnitInventory.AddItem()</code>/<code>RemoveItem()</code> disparan
-      <code>OnStackChanged</code>. <code>UnitEffectController</code> escucha ese evento: engancha o
-      desengancha cada <code>TriggeredEffectSO</code> del objeto que cambió de cantidad, y pide un
-      recálculo completo a <code>UnitStatsController</code>, que resetea a base y vuelve a aplicar
-      cada <code>StatModifierEffectSO</code> activo. Los componentes de la Unit viven en
+<code>UnitInventory.AddItem()</code>, <code>RemoveItem()</code> y <code>Populate()</code> notifican cambios. <code>UnitEffectController</code> reconcilia efectos reactivos y <code>UnitStatsController</code> escucha el mismo evento para recalcular stats de forma independiente. Ambos viven en
       <a href="units.html#unit">Units</a>.
     </p>
 
@@ -187,26 +164,18 @@
 <table class="dep-table">
 <thead><tr><th>Objeto</th><th>Categoría</th><th>Implementación</th></tr></thead>
 <tbody>
-<tr><td>HP Booster based on Strength</td><td>Modificador estático dependiente de otro stat</td><td><code>StatModifierEffectSO</code>, resuelto en <code>UnitStatsController</code></td></tr>
-<tr><td>Glasscanon</td><td>Modificador estático puro</td><td><code>StatModifierEffectSO</code>, resuelto en <code>UnitStatsController</code></td></tr>
-<tr><td>SP Reduction</td><td>Modificador estático sobre un valor de la capa de combate</td><td><code>StatModifierEffectSO</code>, resuelto enteramente en el proyecto — <code>SP</code> es un valor propio del sistema, no proviene de ningún asset externo</td></tr>
-<tr><td>Magil Defense Gambling</td><td>Trigger reactivo → buff permanente</td><td><code>TriggeredEffectSO</code> en <code>OnBeforeDamage</code> (como Target); llama <code>ApplyBuff</code>, trackeado por <code>StatusBuffTracker</code></td></tr>
-<tr><td>Steal Magic Power</td><td>Trigger reactivo → buff/debuff temporal</td><td><code>TriggeredEffectSO</code> en <code>OnAfterDamage</code> (como Source); <code>ApplyBuff</code> en ambos lados</td></tr>
-<tr><td>On-Hit Speed Reduction</td><td>Trigger reactivo → debuff temporal</td><td><code>TriggeredEffectSO</code> en <code>OnAfterDamage</code> (como Source); <code>ApplyBuff</code> de Speed</td></tr>
-<tr><td>Darius Passive</td><td>Trigger reactivo → status acumulable</td><td><code>TriggeredEffectSO</code> en <code>OnAfterDamage</code>; <code>ApplyStatus</code> con stacks gestionados por <code>StatusBuffTracker</code></td></tr>
-<tr><td>Emergency SP Shield</td><td>Trigger condicional → acción directa</td><td><code>TriggeredEffectSO</code> en <code>OnAfterDamage</code> (como Target); chequea HP%, llama <code>CombatController.Heal()</code></td></tr>
-<tr><td>Heavy Stunt Armor</td><td>Estático + trigger reactivo</td><td><code>ItemSO</code> con dos efectos: <code>StatModifierEffectSO</code> (Defensa física) y <code>TriggeredEffectSO</code> en <code>OnBeforeDamage</code> que aplica <code>ApplyStatus("aturdido")</code></td></tr>
-<tr><td>Split Shot</td><td>Override de targeting/daño de una acción</td><td>Resuelto en <code>ActionResolver</code>, antes de invocar <code>CombatController.DealDamage()</code></td></tr>
-<tr><td>Missfire</td><td>Override de targeting de una skill</td><td>Resuelto en <code>ActionResolver</code>, antes de invocar el verbo de <code>CombatController</code></td></tr>
-<tr><td>Turn Repeater</td><td>Interviene la timeline</td><td><code>TriggeredEffectSO</code> que llama <code>CombatController.GrantExtraTurn()</code> sobre el portador al cierre de su turno, antes de que el <code>TimelineController</code> lo reinserte al final</td></tr>
-<tr><td>Brain Control (Único)</td><td>Estructural: reemplazo de skill</td><td>Código a medida, sin pasar por el sistema genérico de efectos</td></tr>
-<tr><td>Turn Chainer (Único)</td><td>Estructural: reglas a nivel de encuentro</td><td>Código a medida sobre <code>CombatController</code> / <code>TimelineController</code>, no sobre una Unit puntual</td></tr>
+<tr><td>Magical Defense Gambling</td><td>Efecto reactivo tras daño</td><td><code>MagicalDefenseGamblingEffectSO</code></td></tr>
+<tr><td>HP Booster based on STR</td><td>Escalado de HP según Strength</td><td><code>StatScalingEffectSO</code></td></tr>
+<tr><td>Steal Magic Power</td><td>Efecto reactivo tras daño</td><td><code>StealMagicPowerEffectSO</code></td></tr>
+<tr><td>Glasscanon</td><td>Modificadores de stats</td><td><code>StatModifierEffectSO</code></td></tr>
+<tr><td>Emergency SP Shield</td><td>Curación condicional al recibir daño, con coste de SP</td><td><code>EmergencySpShieldEffectSO</code></td></tr>
+<tr><td>Heavy Stun Armor</td><td>Modificador y efecto reactivo</td><td><code>StatModifierEffectSO</code> + efecto de estado tras daño</td></tr>
+<tr><td>Speed Down on Hit</td><td>Reduce Speed tras daño directo</td><td><code>SpeedDownOnHitEffectSO</code></td></tr>
+<tr><td>SP Cost Reduction</td><td>Reduce coste de SP y aumenta el peso de aggro del portador</td><td><code>SpCostReductionEffectSO</code> + <code>AggroWeightEffectSO</code></td></tr>
 </tbody>
 </table>
-<p class="flow-note">
-      Los últimos dos no son <code>ItemEffectSO</code>: son excepciones estructurales que operan
-      fuera del sistema genérico y se documentan acá solo para tenerlos localizados.
-    </p>
+<h2 id="consumibles">Consumibles de la mochila</h2>
+<p><code>ConsumableSO</code> contiene un tipo de recuperación (<code>HP</code> o <code>SP</code>) y una cantidad; <code>PartyBackpack</code> mantiene cantidades globales del party como Singleton persistente. En combate solo se puede usar un consumible sobre un aliado; el objeto se descuenta y el turno termina al completarse el uso. No utiliza <code>ItemCatalog</code> ni los efectos genéricos de <code>ItemSO</code>.</p>
 
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="units.html">
@@ -229,6 +198,7 @@
 <a href="#triggeredeffectso">TriggeredEffectSO</a>
 <a href="#integracion-con-unit">Integración con Unit</a>
 <a href="#objetos-de-la-demo">Objetos de la demo</a>
+<a href="#consumibles">Consumibles de la mochila</a>
 </section>
 
 </div>

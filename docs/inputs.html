@@ -65,18 +65,35 @@
 <h1>Sistema de Inputs</h1>
 <p class="page-lede">El proyecto utiliza el nuevo Unity Input System (<code>com.unity.inputsystem</code>).</p>
 <ul>
-<li><strong>Configuración:</strong> los mapas de acción se definen en <code>Assets/Inputs/InputSystem_Actions.inputactions</code>.</li>
-<li><strong>Estructura:</strong> la gestión de entradas está centralizada en <code>Core.InputManager</code>, un Singleton persistente responsable de instanciar el asset <code>InputSystem_Actions</code>, habilitar o deshabilitar los distintos mapas de acciones (<em>Exploration, Combat, Dialogue, UI, Minigame</em>) y proporcionar un punto único de acceso al sistema de inputs.</li>
+<li><strong>Configuración:</strong> los mapas y bindings se definen en <code>Assets/Inputs/InputSystem_Actions.inputactions</code>; Unity genera el wrapper <code>InputSystem_Actions.cs</code> en el mismo directorio.</li>
+<li><strong>Gestión:</strong> <code>Core.InputManager</code> instancia el wrapper y expone los mapas. Al cambiar de mapa, deshabilita todos y habilita solo el solicitado.</li>
+<li><strong>Persistencia:</strong> <code>InputManager</code> es un Singleton en el GameObject persistente y conserva su instancia entre cargas de escena.</li>
 </ul>
+<h2 id="mapas-de-accion">Mapas de acción</h2>
+<table class="dep-table">
+<thead><tr><th>Mapa</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>UI</code></td><td>Navegación, confirmación y volver en interfaces.</td></tr>
+<tr><td><code>Rewards</code></td><td>Acciones de la pantalla de recompensas.</td></tr>
+<tr><td><code>Social</code></td><td>Movimiento e interacción en zonas sociales.</td></tr>
+<tr><td><code>Overworld</code></td><td>Movimiento, ataque e interacción durante la exploración.</td></tr>
+<tr><td><code>Dialogue</code></td><td>Avanzar el diálogo, confirmar elecciones, saltar o abandonar una conversación.</td></tr>
+<tr><td><code>Combat</code></td><td>Selección de objetivos y acciones de combate.</td></tr>
+<tr><td><code>Empty</code></td><td>Estado sin mapas habilitados; no recibe entrada de gameplay.</td></tr>
+</tbody>
+</table>
+<p><code>Empty</code> es un estado de control, no un contexto de juego. No existe un mapa <code>Minigame</code> en el asset actual.</p>
+<h2 id="ciclo-de-vida">Ciclo de vida</h2>
+<p>En <code>Awake()</code>, <code>InputManager</code> crea <code>InputSystem_Actions</code> y deshabilita todos los mapas. Si la escena incluye una subclase de <code>SceneSetter</code>, esta selecciona el mapa inicial en <code>Start()</code>. Los sistemas que necesitan entradas se suscriben a las acciones expuestas por el mapa activo. <code>PushUIMap()</code> y <code>PopUIMap()</code> permiten guardar y restaurar el mapa previo al abrir una interfaz.</p>
 <h2 id="flujo-de-datos">Flujo de datos</h2>
 <div class="flow-chain">
-<span>Periférico</span><span class="flow-arrow">→</span>
-<span>Unity Input System</span><span class="flow-arrow">→</span>
-<span>InputManager</span><span class="flow-arrow">→</span>
-<span>Action Map activo</span><span class="flow-arrow">→</span>
-<span>Sistema consumidor</span>
+<span>Dispositivo</span><span class="flow-arrow">→</span>
+<span>Input System</span><span class="flow-arrow">→</span>
+<span>Mapa habilitado</span><span class="flow-arrow">→</span>
+<span>Acción</span><span class="flow-arrow">→</span>
+<span>Sistema suscrito</span>
 </div>
-<p class="flow-note">PlayerController, CombatManager, DialogueManager, etc.</p>
+<p class="flow-note">Por ejemplo: <code>PlayerController</code> consume acciones de <code>Overworld</code>; los consumidores se suscriben a callbacks de Input Actions.</p>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="specs.html">
 <span class="page-nav-dir">Anterior</span>
@@ -93,7 +110,7 @@
 
 </main>
 
-<section class="toc"><strong>En esta página</strong><a href="#flujo-de-datos">Flujo de datos</a></section>
+<section class="toc"><strong>En esta página</strong><a href="#mapas-de-accion">Mapas de acción</a><a href="#ciclo-de-vida">Ciclo de vida</a><a href="#flujo-de-datos">Flujo de datos</a></section>
 
 </div>
 
