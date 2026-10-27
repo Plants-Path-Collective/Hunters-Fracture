@@ -119,8 +119,12 @@ namespace Core
     public enum ENEMY_STATE
     {
         Patrol,
-        Chase // not implemented yet — reserved for when perception exists
+        Detecting,
+        Chase,
+        Recover,
+        CombatStarting
     }
+
     #endregion
 
     #region SOCIAL
