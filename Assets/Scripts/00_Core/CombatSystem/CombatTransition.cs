@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Core;
 using Core.CombatSystem.Units;
-using Core.Render;
+using Overworld;
 
 namespace Core.CombatSystem
 {
@@ -37,7 +37,7 @@ namespace Core.CombatSystem
         {
             GameManager.Instance.SetInCombat(true);
 
-            suspendedRoomContents = OverworldRoomRender.ActiveRoomContents.ToList();
+            suspendedRoomContents = DungeonRoom.ActiveRoomContents.ToList();
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
 

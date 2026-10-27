@@ -7,8 +7,9 @@ using Core.CombatSystem.Units;
 namespace Overworld
 {
     /// <summary>
-    /// Overworld-only component. Patrols by walking to random points within a radius of its
-    /// spawn position. "Seeing" the Player is a stub for now — Overworld enemy perception isn't
+    /// Overworld-only component. Patrols within its room's collider bounds when assigned by a
+    /// room, or within a radius of its spawn position as a fallback. "Seeing" the Player is a
+    /// stub for now — Overworld enemy perception isn't
     /// designed yet, so patrol runs unconditionally until that's built.
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
@@ -26,6 +27,7 @@ namespace Overworld
 
         private NavMeshAgent agent;
         private Vector3 patrolOrigin;
+        private Bounds? patrolBounds;
         private ENEMY_STATE state = ENEMY_STATE.Patrol;
 
         protected override void Awake()
@@ -36,9 +38,16 @@ namespace Overworld
 
         private void Start()
         {
-            // Center of the patrol area — wherever this enemy was placed in the scene.
+            // Center of the patrol area — wherever this enemy was placed in the scene unless
+            // a room assigned a room-bound area through ConfigurePatrolArea().
             patrolOrigin = transform.position;
             PickNewPatrolPoint();
+        }
+
+        /// <summary>Restricts patrol points to the bounds of the room that owns this enemy.</summary>
+        public void ConfigurePatrolArea(Bounds bounds)
+        {
+            patrolBounds = bounds;
         }
 
         private void Update()
@@ -69,13 +78,35 @@ namespace Overworld
 
         private void PickNewPatrolPoint()
         {
-            Vector2 randomCircle = Random.insideUnitCircle * patrolRadius;
-            Vector3 candidate = patrolOrigin + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            Vector3 candidate;
+            if (patrolBounds.HasValue)
+            {
+                Bounds bounds = patrolBounds.Value;
+                candidate = new Vector3(
+                    Random.Range(bounds.min.x, bounds.max.x),
+                    patrolOrigin.y,
+                    Random.Range(bounds.min.z, bounds.max.z));
+            }
+            else
+            {
+                Vector2 randomCircle = Random.insideUnitCircle * patrolRadius;
+                candidate = patrolOrigin + new Vector3(randomCircle.x, 0f, randomCircle.y);
+            }
 
-            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, navMeshSampleMaxDistance, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, navMeshSampleMaxDistance, NavMesh.AllAreas)
+                && (!patrolBounds.HasValue || IsInsidePatrolBounds(hit.position)))
+            {
                 agent.SetDestination(hit.position);
+            }
             // If sampling misses (e.g. candidate landed off any NavMesh island), just keep
             // whatever destination is already set — TickPatrol() retries next time it's reached.
+        }
+
+        private bool IsInsidePatrolBounds(Vector3 position)
+        {
+            Bounds bounds = patrolBounds.Value;
+            return position.x >= bounds.min.x && position.x <= bounds.max.x
+                && position.z >= bounds.min.z && position.z <= bounds.max.z;
         }
 
         /// <summary>

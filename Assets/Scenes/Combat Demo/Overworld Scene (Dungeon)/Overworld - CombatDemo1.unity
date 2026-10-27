@@ -597,7 +597,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: b2775bd2b14124ffea58d1348cbcd76a, type: 2}
     - target: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.21
+      value: 5.8152
       objectReference: {fileID: 0}
     - target: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -605,7 +605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.3940308
+      value: 0.7144904
       objectReference: {fileID: 0}
     - target: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -645,6 +645,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
   m_PrefabInstance: {fileID: 22394246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &22394248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+  m_PrefabInstance: {fileID: 22394246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4a2d66c0a04270494927300addec6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
 --- !u!208 &22812704
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -4504,7 +4515,7 @@ Transform:
   m_GameObject: {fileID: 360825726}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 2.1152112, y: 0, z: 8.114489}
+  m_LocalPosition: {x: 2.1152112, y: 0, z: 11.1144905}
   m_LocalScale: {x: 1, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8011,7 +8022,7 @@ Transform:
   m_GameObject: {fileID: 573555048}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.21629487, z: -0, w: 0.97632813}
-  m_LocalPosition: {x: 26.2, y: 0, z: -0.011110306}
+  m_LocalPosition: {x: 25.6, y: 0, z: -0.011110306}
   m_LocalScale: {x: 1, y: 1, z: 22.0098}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20748,7 +20759,7 @@ GameObject:
   - component: {fileID: 914891701}
   - component: {fileID: 914891700}
   m_Layer: 0
-  m_Name: AreaCameraZone
+  m_Name: '[RoomController]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20808,6 +20819,9 @@ MonoBehaviour:
   playerTag: Player
   roomContent: {fileID: 532461565}
   neighbors: []
+  enemyEntities:
+  - {fileID: 2021478246}
+  - {fileID: 1424334163}
   isStartingRoom: 0
 --- !u!208 &915656735
 NavMeshObstacle:
@@ -27328,7 +27342,7 @@ GameObject:
   - component: {fileID: 1406817655}
   - component: {fileID: 1406817654}
   m_Layer: 0
-  m_Name: AreaCameraZone
+  m_Name: '[RoomController]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27388,6 +27402,9 @@ MonoBehaviour:
   playerTag: Player
   roomContent: {fileID: 701449491}
   neighbors: []
+  enemyEntities:
+  - {fileID: 1438179981}
+  - {fileID: 22394248}
   isStartingRoom: 1
 --- !u!208 &1410169563
 NavMeshObstacle:
@@ -27680,6 +27697,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
   m_PrefabInstance: {fileID: 1424334161}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1424334163 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+  m_PrefabInstance: {fileID: 1424334161}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4a2d66c0a04270494927300addec6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
 --- !u!208 &1429981672
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -27865,6 +27893,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
   m_PrefabInstance: {fileID: 1438179979}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1438179981 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+  m_PrefabInstance: {fileID: 1438179979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4a2d66c0a04270494927300addec6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
 --- !u!208 &1438354912
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -32780,7 +32819,7 @@ Transform:
   m_GameObject: {fileID: 1848253711}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 17.1152, y: 0, z: 8.11449}
+  m_LocalPosition: {x: 17.1152, y: 0, z: 11.114491}
   m_LocalScale: {x: 1, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35054,6 +35093,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5585673692178280518, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
   m_PrefabInstance: {fileID: 2021478244}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2021478246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3661958383387684963, guid: 92001e574a1eceff7b882d7a274434b6, type: 3}
+  m_PrefabInstance: {fileID: 2021478244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4a2d66c0a04270494927300addec6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
 --- !u!1 &2026185087
 GameObject:
   m_ObjectHideFlags: 0
