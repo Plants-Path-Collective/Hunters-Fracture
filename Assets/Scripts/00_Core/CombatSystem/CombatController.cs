@@ -79,11 +79,6 @@ namespace Core.CombatSystem
         /// reference to it directly.</summary>
         public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
 
-        [Header("──────────── Exit ────────────")]
-        [Tooltip("Temporary: closes the combat (write-back, destroy Units, notify) right after it ends. " +
-                "Turn it off once the summary/rewards screens exist and have them call CloseCombat().")]
-        [SerializeField] private bool autoCloseOnEnd = true;
-
         // ── Internal State ──────────────────────────────────────────────────
 
         // Filled by StartFromSetUp. The CombatSetUp itself is not kept.
@@ -307,22 +302,6 @@ namespace Core.CombatSystem
             // Detach every item effect so nothing stays subscribed to this controller
             foreach (Unit unit in roster)
                 unit.ExitCombat();
-
-            if (autoCloseOnEnd)
-            {
-                if (closeDelay > 0f)
-                    StartCoroutine(CloseCombatAfter(closeDelay));
-                else
-                    CloseCombat();
-            }
-        }
-
-        private IEnumerator CloseCombatAfter(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            if (finishedOutcome != null)
-                CloseCombat();
         }
 
         /// <summary>
