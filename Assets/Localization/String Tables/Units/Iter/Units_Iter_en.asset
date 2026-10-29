@@ -30,6 +30,30 @@ MonoBehaviour:
     m_Localized: Accurate
     m_Metadata:
       m_Items: []
+  - m_Id: 1823667444207616
+    m_Localized: Movilize and Engage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1823816228753408
+    m_Localized: Select an enemy Unit and swap its position with Iter's.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1828938044362752
+    m_Localized: 01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829005245501440
+    m_Localized: 'Iter strikes an enemy, dealing X Physical damage, and then strikes
+      another enemy to its right, dealing X Magical damage
+
+
+      (Strikes the same
+      target if no other targets are available)
+
+
+      X = 10 + (STR + (MP/50))'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

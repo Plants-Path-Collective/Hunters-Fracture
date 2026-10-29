@@ -30,6 +30,25 @@ MonoBehaviour:
     m_Localized: Preciso
     m_Metadata:
       m_Items: []
+  - m_Id: 1823667444207616
+    m_Localized: Moviliza y Engancha
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1823816228753408
+    m_Localized: "Selecciona una Unit Enemiga, intercambia la posici\xF3n con la
+      de Iter."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1828938044362752
+    m_Localized: 01
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829005245501440
+    m_Localized: "Iter golpea a un enemigo, haciendole X da\xF1o Physical y luego
+      golpea a otro enemigo a su derecha da\xF1andolo por X da\xF1o Magical\n\n(Golpea
+      el mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + (STR + (MP/50))"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

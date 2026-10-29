@@ -84,13 +84,7 @@ namespace Core.CombatSystem
         private int CalculateAttackDamage(Unit actor, Unit target, UNITY_TYPE damageType)
         {
             float baseDamage = damageType == UNITY_TYPE.Magical ? actor.MagicPower : actor.Strength;
-            float defense = damageType == UNITY_TYPE.Magical
-                ? target.EffectiveMagicalDefense
-                : target.EffectivePhysicalDefense;
-
-            float received = baseDamage / (1f + Mathf.Max(0f, defense));
-
-            return Mathf.Max(1, Mathf.RoundToInt(received));
+            return DamageFormula.Reduce(baseDamage, target, damageType);
         }
 
         /// <summary>

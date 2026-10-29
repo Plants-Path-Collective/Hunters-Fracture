@@ -107,6 +107,15 @@ namespace Core
         AllAllies
     }
 
+    public enum EFFECT_TARGET_MODE
+    {
+        ActionTargets,            // every unit the action resolved to
+        ActionTargetsAlliesOnly,  // ...only those on the actor's side
+        ActionTargetsEnemiesOnly, // ...only those on the other side
+        SlotsOfSide,              // units picked by side and slot, ignoring the player's target
+        RightNeighborOfActionTargets
+    }
+
     /// <summary>Side of an effect's targets, relative to the actor.</summary>
     public enum RELATIVE_SIDE { Allies, Enemies }
 

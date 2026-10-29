@@ -27,6 +27,22 @@ MonoBehaviour:
     m_Key: units_iter_tag3
     m_Metadata:
       m_Items: []
+  - m_Id: 1823667444207616
+    m_Key: units_iter_skill1_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1823816228753408
+    m_Key: units_iter_skill1_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1828938044362752
+    m_Key: units_iter_skill2_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1829005245501440
+    m_Key: units_iter_skill2_desc
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

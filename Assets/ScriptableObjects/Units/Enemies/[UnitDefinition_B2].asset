@@ -69,7 +69,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 1679178503703021930, guid: ee9984f85e3a0db4e88d4dd9876c95b6, type: 3}
   maxHP: 100
   maxSP: 0
-  speed: 35
+  speed: 5
   strength: 15
   magicPower: 0
   physicalDefense: 0.05

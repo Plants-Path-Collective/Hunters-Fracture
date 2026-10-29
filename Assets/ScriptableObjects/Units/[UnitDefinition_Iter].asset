@@ -49,8 +49,8 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   skills:
-  - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
-  - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  - {fileID: 11400000, guid: 3bb8de341d678286ebfc41253d8f742d, type: 2}
+  - {fileID: 11400000, guid: 2a6836bcde625c4a29170e4135b903ce, type: 2}
   ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
   passives: []
   basicAttackSfx:
@@ -61,7 +61,7 @@ MonoBehaviour:
       Data4: -1017683836
     Path: event:/SFX/Renjiro-Attack
   skillSfx:
-  - action: {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+  - action: {fileID: 11400000, guid: 3bb8de341d678286ebfc41253d8f742d, type: 2}
     sound:
       Guid:
         Data1: 1877589655
@@ -69,7 +69,7 @@ MonoBehaviour:
         Data3: 1954400905
         Data4: -22895822
       Path: event:/SFX/Renjiro-Envolver
-  - action: {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  - action: {fileID: 11400000, guid: 2a6836bcde625c4a29170e4135b903ce, type: 2}
     sound:
       Guid:
         Data1: 1127337537

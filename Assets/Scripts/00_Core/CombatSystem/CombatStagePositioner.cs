@@ -34,6 +34,12 @@ namespace Core.CombatSystem
         [Tooltip("Seconds to hold at the attack position before moving back.")]
         [SerializeField] private float pauseAtAttackPosition = 0.1f;
 
+        [Tooltip("Seconds a unit takes to walk to its new defense position after a slot change.")]
+        [SerializeField, Min(0f)] private float slotMoveDuration = 0.35f;
+
+        /// <summary>Slot-change move currently playing per Unit.</summary>
+        private readonly Dictionary<Unit, Sequence> activeSlotMoves = new();
+
         private CombatController combat;
 
         /// <summary>Hop currently playing per Unit. Prevents overlapping tweens when one action
@@ -45,6 +51,7 @@ namespace Core.CombatSystem
             combat = GetComponent<CombatController>();
             combat.OnCombatStart += OnCombatStart;
             combat.OnBeforeDamage += OnBeforeDamage;
+            combat.OnSlotChanged += OnSlotChanged;
         }
 
         private void OnDestroy()
@@ -53,13 +60,16 @@ namespace Core.CombatSystem
             {
                 combat.OnCombatStart -= OnCombatStart;
                 combat.OnBeforeDamage -= OnBeforeDamage;
+                combat.OnSlotChanged -= OnSlotChanged;
             }
 
-            // Kill() fires each sequence's OnKill, which removes it from activeHops while we iterate:
-            // walk a copy instead.
             foreach (Sequence hop in new List<Sequence>(activeHops.Values))
                 hop.Kill();
             activeHops.Clear();
+
+            foreach (Sequence move in new List<Sequence>(activeSlotMoves.Values))
+                move.Kill();
+            activeSlotMoves.Clear();
         }
 
         private void OnCombatStart(IReadOnlyList<Unit> roster)
@@ -85,6 +95,31 @@ namespace Core.CombatSystem
             bool isRanged = context.damageType == UNITY_TYPE.Magical;
             bool isPhysical = context.damageType == UNITY_TYPE.Physical;
             PlayAttackHop(attacker, defense, attack, matchRotation: isRanged, spinAtAttackSite: isPhysical);
+        }
+
+        private void OnSlotChanged(Unit unit, COMBAT_SLOT from, COMBAT_SLOT to)
+        {           
+            // The unit's Slot is already the new one, so this returns the new defense anchor.
+            Transform defense = GetDefensePosition(unit);
+            if (defense == null) return;
+
+            // An attack hop in progress would send the unit back to its old position: cancel it.
+            if (activeHops.TryGetValue(unit, out Sequence hop)) hop.Kill();
+            if (activeSlotMoves.TryGetValue(unit, out Sequence previous)) previous.Kill();
+
+            if (slotMoveDuration <= 0f)
+            {
+                SnapTo(unit, defense);
+                return;
+            }
+
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(unit.transform.DOMove(defense.position, slotMoveDuration).SetEase(Ease.InOutSine));
+            sequence.Join(unit.transform.DORotateQuaternion(defense.rotation, slotMoveDuration).SetEase(Ease.InOutSine));
+            sequence.SetLink(unit.gameObject);
+            sequence.OnKill(() => activeSlotMoves.Remove(unit));
+
+            activeSlotMoves[unit] = sequence;
         }
 
         // ── Lookup ────────────────────────────────────────────────────────────

@@ -46,6 +46,9 @@ namespace Core.CombatSystem
         // ── Unit state events ────────────────────────────────────────────────
         public event Action<Unit> OnUnitKilled;
         public event Action<Unit> OnUnitRevived;
+                /// <summary>A unit changed slot within its own team. Args: unit, previous slot, new slot.
+        /// Hook for the stage positioner and the UI.</summary>
+        public event Action<Unit, COMBAT_SLOT, COMBAT_SLOT> OnSlotChanged;
 
         // ── Action outcome events ────────────────────────────────────────────
         public event Action<DamageContext> OnBeforeDamage;
@@ -539,5 +542,30 @@ namespace Core.CombatSystem
         public void InsertAfter(Unit unit, Unit after) => timeline.InsertAfter(unit, after);
         public bool GrantExtraTurn(Unit unit) => timeline.GrantExtraTurn(unit);
 
+        // ── Slot verbs ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Moves a unit to a slot of its own team. Whoever holds that slot (dead or alive) takes the
+        /// slot the unit leaves, so slots stay unique per team. Never changes a unit's team.
+        /// </summary>
+        public void MoveToSlot(Unit unit, COMBAT_SLOT slot)
+        {
+            if (!IsCombatActive || unit == null || !unit.IsAlive || !unit.Slot.HasValue) return;
+
+            COMBAT_SLOT from = unit.Slot.Value;
+            if (from == slot) return;
+
+            // Dead units don't hold a slot: only a living unit can be displaced.
+            Unit occupant = roster.FirstOrDefault(u =>
+                u != unit && u.IsAlive && u.Team == unit.Team && u.Slot == slot);
+
+            unit.Slot = slot;
+            OnSlotChanged?.Invoke(unit, from, slot);
+
+            if (occupant == null) return;
+
+            occupant.Slot = from;
+            OnSlotChanged?.Invoke(occupant, slot, from);
+        }
     }
 }
