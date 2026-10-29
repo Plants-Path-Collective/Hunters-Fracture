@@ -46,7 +46,8 @@ MonoBehaviour:
   - m_Id: 1829005245501440
     m_Localized: "Iter golpea a un enemigo, haciendole X da\xF1o Physical y luego
       golpea a otro enemigo a su derecha da\xF1andolo por X da\xF1o Magical\n\n(Golpea
-      el mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + (STR + (MP/50))"
+      el mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + ((STR/2) 
+      + (MP/50))"
     m_Metadata:
       m_Items: []
   - m_Id: 1834540871143424
@@ -56,7 +57,7 @@ MonoBehaviour:
   - m_Id: 1834508986044416
     m_Localized: "Iter lanza a un enemigo al aire y luego le da una patada haciendo
       X da\xF1o Physical y cambiando a ese enemigo a una posici\xF3n aleatoria.\n\nX
-      = STR * 3"
+      = STR * 2"
     m_Metadata:
       m_Items: []
   references:

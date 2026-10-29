@@ -51,7 +51,7 @@ MonoBehaviour:
       target if no other targets are available)
 
 
-      X = 10 + (STR + (MP/50))'
+      X = 10 + ((STR/2) + (MP/50))'
     m_Metadata:
       m_Items: []
   - m_Id: 1834540871143424
@@ -64,7 +64,7 @@ MonoBehaviour:
 
 
       X = STR
-      * 3'
+      * 2'
     m_Metadata:
       m_Items: []
   references:

@@ -88,8 +88,8 @@ MonoBehaviour:
   maxHP: 115
   maxSP: 150
   speed: 60
-  strength: 25
-  magicPower: 35
+  strength: 35
+  magicPower: 25
   physicalDefense: 0.25
   magicalDefense: 0.45
   SPRegenMin: 5
