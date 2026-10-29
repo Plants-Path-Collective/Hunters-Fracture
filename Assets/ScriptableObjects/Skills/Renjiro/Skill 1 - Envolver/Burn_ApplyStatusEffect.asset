@@ -15,7 +15,7 @@ MonoBehaviour:
   targetMode: 2
   side: 1
   slots: 0
-  status: {fileID: 0}
+  status: {fileID: 11400000, guid: 9facfacfc8679ecf5a2508d0966bf6b8, type: 2}
   magnitude:
     baseValue: 0.5
     stat: 4
