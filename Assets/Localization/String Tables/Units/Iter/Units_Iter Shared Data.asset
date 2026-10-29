@@ -43,6 +43,14 @@ MonoBehaviour:
     m_Key: units_iter_skill2_desc
     m_Metadata:
       m_Items: []
+  - m_Id: 1834540871143424
+    m_Key: units_iter_ultimate_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1834508986044416
+    m_Key: units_iter_ultimate_desc
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

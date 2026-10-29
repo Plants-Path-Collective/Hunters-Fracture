@@ -49,6 +49,16 @@ MonoBehaviour:
       el mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + (STR + (MP/50))"
     m_Metadata:
       m_Items: []
+  - m_Id: 1834540871143424
+    m_Localized: Subir y Descargar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1834508986044416
+    m_Localized: "Iter lanza a un enemigo al aire y luego le da una patada haciendo
+      X da\xF1o Physical y cambiando a ese enemigo a una posici\xF3n aleatoria.\n\nX
+      = STR * 3"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

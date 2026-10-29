@@ -54,6 +54,19 @@ MonoBehaviour:
       X = 10 + (STR + (MP/50))'
     m_Metadata:
       m_Items: []
+  - m_Id: 1834540871143424
+    m_Localized: Upload and Download
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1834508986044416
+    m_Localized: 'Iter launches an enemy into the air and then kicks them, dealing
+      X Physical damage and moving that enemy to a random position.
+
+
+      X = STR
+      * 3'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

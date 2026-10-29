@@ -37032,6 +37032,7 @@ MonoBehaviour:
   swingEulerAngles: {x: 0, y: 179, z: 0}
   attackDuration: 0.45
   attackHitWindow: 0.15
+  sweepFraction: 1
   party:
     members:
     - definition: {fileID: 11400000, guid: ab499c9d0fd509e2187cbf1e8540346e, type: 2}

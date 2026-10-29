@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: SubirYDescargar_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Subir y Descargar
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:b467f9785440b6693a341528500e6d5e
+    m_TableEntryReference:
+      m_KeyId: 1834540871143424
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  icon: {fileID: 0}
+  description: "Iter lanza a un enemigo al aire y luego le da una patada haciendo
+    X da\xF1o Physical y cambiando a ese enemigo a una posici\xF3n aleatoria.\n\nX
+    = STR * 3"
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:b467f9785440b6693a341528500e6d5e
+    m_TableEntryReference:
+      m_KeyId: 1834508986044416
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  spCost: 40
+  targetType: 2
+  effects:
+  - {fileID: 11400000, guid: 9bb47ebc1d1e7c22ab48e7d1d0523879, type: 2}
+  - {fileID: 11400000, guid: 6a84cbf3f43d27d21b1e483afbd31893, type: 2}
+  references:
+    version: 2
+    RefIds: []

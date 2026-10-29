@@ -19,8 +19,8 @@ MonoBehaviour:
   terms:
   - baseValue: 10
     stat: 3
-    perPoint: 1
+    perPoint: 0.5
   - baseValue: 0
     stat: 4
-    perPoint: 0.02
+    perPoint: 0.2
   applyDefense: 1

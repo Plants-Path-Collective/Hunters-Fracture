@@ -51,7 +51,7 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: 3bb8de341d678286ebfc41253d8f742d, type: 2}
   - {fileID: 11400000, guid: 2a6836bcde625c4a29170e4135b903ce, type: 2}
-  ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
+  ultimate: {fileID: 11400000, guid: 7cc7ff8befecdca9d8cf87a3f7cd8eb4, type: 2}
   passives: []
   basicAttackSfx:
     Guid:
