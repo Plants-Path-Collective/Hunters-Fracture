@@ -25,7 +25,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   description: "Iter golpea a un enemigo, haciendole X da\xF1o Physical y luego golpea
     a otro enemigo a su derecha da\xF1andolo por X da\xF1o Magical\n\n(Golpea el
-    mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + (STR + (MP/50))"
+    mismo objetivo si no hay mas objetivos disponibles)\n\nX = 10 + ((STR/2) + (MP/5))"
   localizedDescription:
     m_TableReference:
       m_TableCollectionName: GUID:b467f9785440b6693a341528500e6d5e
