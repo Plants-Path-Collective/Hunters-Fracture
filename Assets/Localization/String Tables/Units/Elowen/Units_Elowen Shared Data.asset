@@ -27,6 +27,46 @@ MonoBehaviour:
     m_Key: units_elowen_tag3
     m_Metadata:
       m_Items: []
+  - m_Id: 2955666481434624
+    m_Key: units_elowen_skill1A_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956632983293952
+    m_Key: units_elowen_skill1A_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955831032369152
+    m_Key: units_elowen_skill1B_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956790169030656
+    m_Key: units_elowen_skill1B_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955888326561792
+    m_Key: units_elowen_skill2A_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956907152363520
+    m_Key: units_elowen_skill2A_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955970945961984
+    m_Key: units_elowen_skill2B_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957089264848896
+    m_Key: units_elowen_skill2B_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956062478258176
+    m_Key: units_elowen_skill3_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957221792272384
+    m_Key: units_elowen_skill3_desc
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -438,9 +438,9 @@ namespace Core.CombatSystem
         /// Fires OnBeforeDamage (mutable), applies context.Amount, fires OnAfterDamage. Calls
         /// Kill internally if HP drops to 0 — callers never have to remember to check death.
         /// </summary>
-        public void DealDamage(Unit source, Unit target, int amount, UNITY_TYPE damageType, string via)
+        public int DealDamage(Unit source, Unit target, int amount, UNITY_TYPE damageType, string via)
         {
-            if (!IsCombatActive || target == null || !target.IsAlive) return;
+            if (!IsCombatActive || target == null || !target.IsAlive) return 0;
 
             var context = new DamageContext
             {
@@ -452,6 +452,9 @@ namespace Core.CombatSystem
             };
 
             OnBeforeDamage?.Invoke(context);
+
+            // Damage actually removed from the target (what lifesteal and similar effects care about).
+            int dealt = Mathf.Min(target.HP, Mathf.Max(0, context.amount));
             target.HP = Mathf.Max(0, target.HP - context.amount);
             OnAfterDamage?.Invoke(context);
 
@@ -459,6 +462,8 @@ namespace Core.CombatSystem
                 Kill(target);
             else
                 target.PlayDamageAnimation();
+
+            return dealt;
         }
 
         /// <summary>Fires OnBeforeHeal (mutable), applies context.Amount clamped to MaxHP, fires OnAfterHeal.</summary>

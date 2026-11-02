@@ -17,6 +17,9 @@ namespace Core.CombatSystem.SkillSystem
         [Tooltip("Reduce the damage with the target's defense of this type (same formula as the basic attack).")]
         [SerializeField] private bool applyDefense = true;
 
+        [Tooltip("Fraction of the damage actually dealt that the attacker recovers as HP (0.5 = half). 0 disables it.")]
+        [SerializeField, Range(0f, 1f)] private float lifeStealFraction;
+
         public override void Apply(ActionContext context, CombatController combat)
         {
             float baseDamage = 0f;
@@ -31,6 +34,14 @@ namespace Core.CombatSystem.SkillSystem
                     : Mathf.Max(1, Mathf.RoundToInt(baseDamage));
 
                 combat.DealDamage(context.actor, target, amount, damageType, "skill");
+
+                int dealt = combat.DealDamage(context.actor, target, amount, damageType, "skill");
+
+                if (lifeStealFraction > 0f && dealt > 0 && context.actor.IsAlive)
+                {
+                    int healed = Mathf.Max(1, Mathf.RoundToInt(dealt * lifeStealFraction));
+                    combat.Heal(context.actor, context.actor, healed, "lifesteal");
+                }
             }
         }
     }
