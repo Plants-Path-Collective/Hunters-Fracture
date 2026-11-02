@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: '[UnitDefinition_Elowen]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
   unitName: Elowen
-  type: 0
+  type: 1
   team: 0
   portrait: {fileID: 21300000, guid: e4b81cc1355f0d22097e9700a8e7901d, type: 3}
   partyPortrait: {fileID: 21300000, guid: 7bc128bf44b5f033ea47649bbb15148b, type: 3}
@@ -49,10 +49,11 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   skills:
-  - {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
-  - {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
-  ultimate: {fileID: 11400000, guid: 732daeab0bf2a7991b736e520fd2e0c1, type: 2}
-  passives: []
+  - {fileID: 11400000, guid: 62b73dc57247bd449bc1309132beb076, type: 2}
+  - {fileID: 11400000, guid: 5801291dbb53d02bd9feb052d20244ae, type: 2}
+  ultimate: {fileID: 0}
+  passives:
+  - {fileID: 11400000, guid: 763264520eae434778b1034c2e22ac7f, type: 2}
   basicAttackSfx:
     Guid:
       Data1: 469958270
@@ -61,7 +62,7 @@ MonoBehaviour:
       Data4: -1017683836
     Path: event:/SFX/Renjiro-Attack
   skillSfx:
-  - action: {fileID: 11400000, guid: ae66570dc9e4b66a284ffdde16424e24, type: 2}
+  - action: {fileID: 11400000, guid: 62b73dc57247bd449bc1309132beb076, type: 2}
     sound:
       Guid:
         Data1: 1877589655
@@ -69,7 +70,7 @@ MonoBehaviour:
         Data3: 1954400905
         Data4: -22895822
       Path: event:/SFX/Renjiro-Envolver
-  - action: {fileID: 11400000, guid: 29bd6149d16058fa1b4b33da13f99404, type: 2}
+  - action: {fileID: 11400000, guid: 5801291dbb53d02bd9feb052d20244ae, type: 2}
     sound:
       Guid:
         Data1: 1127337537

@@ -35,10 +35,11 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   spCost: 25
+  furyCost: 0
   targetType: 2
   effects:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 64032f0a36667955799396c260c191b5, type: 2}
+  - {fileID: 11400000, guid: ce76dddc133f2dd19961b7fb98d4ac5c, type: 2}
   references:
     version: 2
     RefIds: []

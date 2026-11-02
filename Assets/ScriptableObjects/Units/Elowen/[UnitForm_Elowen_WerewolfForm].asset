@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8fa0354a27a6de9f9d26c56209e4e88, type: 3}
+  m_Name: '[UnitForm_Elowen_WerewolfForm]'
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitFormSO
+  unitType: 0
+  maxHpFromMaxSp: 1
+  flatBonuses:
+  - stat: 5
+    value: 0.3
+  skills:
+  - {fileID: 11400000, guid: 984fe84db4b5f57bebd6c569c0336ce8, type: 2}
+  - {fileID: 11400000, guid: a9dfeec046be3ff249deb1bb6f0e60e0, type: 2}
+  ultimate: {fileID: 11400000, guid: 0c2286cf2d23e204ea2b8cac72cceb03, type: 2}
+  downedHpPenalty: 0.15

@@ -50,8 +50,12 @@ namespace Core.CombatSystem
         {
             combat = GetComponent<CombatController>();
             combat.OnCombatStart += OnCombatStart;
-            combat.OnBeforeDamage += OnBeforeDamage;
             combat.OnSlotChanged += OnSlotChanged;
+        }
+
+        private void Start()
+        {
+            combat.OnBeforeDamage += OnBeforeDamage;
         }
 
         private void OnDestroy()

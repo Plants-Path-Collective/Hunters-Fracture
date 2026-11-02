@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0baf4bf373685399db6ef1cc857f5926, type: 3}
   m_Name: Bite_EffectSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.DealDamageEffectSO
-  targetMode: 0
+  targetMode: 2
   side: 1
   slots: 0
-  damageType: 0
-  terms: []
+  damageType: 1
+  terms:
+  - baseValue: 10
+    stat: 4
+    perPoint: 0.02
   applyDefense: 1
-  lifeStealFraction: 0
+  lifeStealFraction: 0.5

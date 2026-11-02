@@ -70,7 +70,12 @@ namespace Core.UI
                 if (used)
                 {
                     int cost = actor.GetEffectiveSpCost(list[i]);
-                    rows[i].Bind(list[i], cost, affordable: actor.SP >= cost);
+                    int furyCost = list[i].furyCost;
+                    rows[i].Bind(
+                        list[i],
+                        cost,
+                        furyCost,
+                        affordable: actor.SP >= cost && actor.Fury >= furyCost);
                 }
             }
 

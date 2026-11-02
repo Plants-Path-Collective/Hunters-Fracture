@@ -17,6 +17,7 @@ namespace Core.CombatSystem.SkillSystem
 
         [Header("--- Rules ---")]
         [Min(0)] public int spCost;
+        [Min(0)] public int furyCost;
         public TARGET_TYPE targetType = TARGET_TYPE.SingleEnemy;
 
         [Header("--- Effects (run in order) ---")]

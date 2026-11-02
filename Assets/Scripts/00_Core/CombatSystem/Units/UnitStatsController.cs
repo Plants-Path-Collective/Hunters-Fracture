@@ -2,58 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using Core;
 using Core.CombatSystem.ItemSystem;
 using Core.CombatSystem.StatusSystem;
 
 namespace Core.CombatSystem.Units
 {
-    public struct UnitStatValues
-    {
-        public float HP;
-        public float SP;
-        public float Speed;
-        public float Strength;
-        public float MagicPower;
-        public float PhysicalDefense;
-        public float MagicalDefense;
-
-        public float Get(STAT_TYPE stat) => stat switch
-        {
-            STAT_TYPE.HP => HP,
-            STAT_TYPE.SP => SP,
-            STAT_TYPE.Speed => Speed,
-            STAT_TYPE.Strength => Strength,
-            STAT_TYPE.MagicPower => MagicPower,
-            STAT_TYPE.PhysicalDefense => PhysicalDefense,
-            STAT_TYPE.MagicalDefense => MagicalDefense,
-            _ => 0f
-        };
-
-        public void Set(STAT_TYPE stat, float value)
-        {
-            switch (stat)
-            {
-                case STAT_TYPE.HP: HP = value; break;
-                case STAT_TYPE.SP: SP = value; break;
-                case STAT_TYPE.Speed: Speed = value; break;
-                case STAT_TYPE.Strength: Strength = value; break;
-                case STAT_TYPE.MagicPower: MagicPower = value; break;
-                case STAT_TYPE.PhysicalDefense: PhysicalDefense = value; break;
-                case STAT_TYPE.MagicalDefense: MagicalDefense = value; break;
-            }
-        }
-
-        public static UnitStatValues From(UnitDefinitionSO definition) => new()
-        {
-            HP = definition.maxHP,
-            SP = definition.maxSP,
-            Speed = definition.speed,
-            Strength = definition.strength,
-            MagicPower = definition.magicPower,
-            PhysicalDefense = definition.physicalDefense,
-            MagicalDefense = definition.magicalDefense
-        };
-    }
 
     /// <summary>
     /// Owns the 7 derived stats of a Unit (MaxHP, MaxSP, Strength, MagicPower, PhysicalDefense,
@@ -155,6 +109,9 @@ namespace Core.CombatSystem.Units
         // they are replaced as a whole every time the tracker changes.
         private readonly List<TemporaryStatModifier> temporaryModifiers = new();
 
+        private readonly List<FlatStatBonus> formBonuses = new();
+        private bool formMaxHpFromMaxSp;
+
         private UnitInventory inventory;
 
         private void Awake()
@@ -239,10 +196,11 @@ namespace Core.CombatSystem.Units
             currentMagicPower = values.MagicPower;
             currentPhysicalDefense = values.PhysicalDefense;
             currentMagicalDefense = values.MagicalDefense;
+
+            ApplyFormModifiers();
+            ApplyTemporaryModifiers();
             UpdateStatsDebugText();
 
-            ApplyTemporaryModifiers();  
-            
             OnStatsRecalculated.Invoke();
         }
 
@@ -317,6 +275,41 @@ namespace Core.CombatSystem.Units
                     case STAT_TYPE.MagicPower:      currentMagicPower *= factor; break;
                     case STAT_TYPE.PhysicalDefense: currentPhysicalDefense *= factor; break;
                     case STAT_TYPE.MagicalDefense:  currentMagicalDefense *= factor; break;
+                }
+            }
+        }
+
+        /// <summary>Applies an alternate form's stat changes and recomputes the stats from scratch.</summary>
+        public void SetForm(IReadOnlyList<FlatStatBonus> bonuses, bool maxHpFromMaxSp)
+        {
+            formBonuses.Clear();
+            if (bonuses != null)
+                for (int i = 0; i < bonuses.Count; i++)
+                    formBonuses.Add(bonuses[i]);
+
+            formMaxHpFromMaxSp = maxHpFromMaxSp;
+            RecalculateStats(inventory);
+        }
+
+        public void ClearForm() => SetForm(null, false);
+
+        /// <summary>Runs after items and before statuses, so status multipliers also scale the form's bonuses.</summary>
+        private void ApplyFormModifiers()
+        {
+            if (formMaxHpFromMaxSp)
+                currentMaxHP = currentMaxSP;
+
+            foreach (FlatStatBonus bonus in formBonuses)
+            {
+                switch (bonus.stat)
+                {
+                    case STAT_TYPE.HP:              currentMaxHP += Mathf.RoundToInt(bonus.value); break;
+                    case STAT_TYPE.SP:              currentMaxSP += Mathf.RoundToInt(bonus.value); break;
+                    case STAT_TYPE.Speed:           currentSpeed += bonus.value; break;
+                    case STAT_TYPE.Strength:        currentStrength += bonus.value; break;
+                    case STAT_TYPE.MagicPower:      currentMagicPower += bonus.value; break;
+                    case STAT_TYPE.PhysicalDefense: currentPhysicalDefense += bonus.value; break;
+                    case STAT_TYPE.MagicalDefense:  currentMagicalDefense += bonus.value; break;
                 }
             }
         }

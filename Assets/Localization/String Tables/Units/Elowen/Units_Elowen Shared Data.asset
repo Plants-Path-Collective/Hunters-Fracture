@@ -60,11 +60,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2956062478258176
-    m_Key: units_elowen_skill3_name
+    m_Key: units_elowen_ultimate_name
     m_Metadata:
       m_Items: []
   - m_Id: 2957221792272384
-    m_Key: units_elowen_skill3_desc
+    m_Key: units_elowen_ultimate_desc
     m_Metadata:
       m_Items: []
   m_Metadata:

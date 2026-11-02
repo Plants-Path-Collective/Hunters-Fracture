@@ -31,7 +31,7 @@ namespace Core.UI
                 localizedActionName.StringChanged -= UpdateName;
         }
 
-        public void Bind(ActionSO action, int cost, bool affordable)
+        public void Bind(ActionSO action, int spCost, int furyCost, bool affordable)
         {
             if (localizedActionName != null)
                 localizedActionName.StringChanged -= UpdateName;
@@ -47,7 +47,7 @@ namespace Core.UI
                 nameLabel.text = action.actionName;
             }
 
-            costLabel.text = $"{cost} SP";
+            costLabel.text = furyCost > 0 ? $"{spCost} SP / {furyCost} Fury" : $"{spCost} SP";
 
             if (icon != null)
             {
