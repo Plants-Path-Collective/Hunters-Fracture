@@ -46,6 +46,15 @@ namespace Core.CombatSystem
         // ── Unit state events ────────────────────────────────────────────────
         public event Action<Unit> OnUnitKilled;
         public event Action<Unit> OnUnitRevived;
+        /// <summary>A unit changed slot within its own team. Args: unit, previous slot, new slot.
+        /// Hook for the stage positioner and the UI.</summary>
+        public event Action<Unit, COMBAT_SLOT, COMBAT_SLOT> OnSlotChanged;
+
+        /// <summary>Allows a handler to prevent damage-caused death by restoring the unit above 0 HP.</summary>
+        public event Action<DeathContext> OnBeforeDeath;
+
+        /// <summary>A unit entered (true) or left (false) its alternate form.</summary>
+        public event Action<Unit, bool> OnFormChanged;
 
         // ── Action outcome events ────────────────────────────────────────────
         public event Action<DamageContext> OnBeforeDamage;
@@ -78,11 +87,6 @@ namespace Core.CombatSystem
         /// <summary>Relayed straight from TimelineController — nothing outside needs a
         /// reference to it directly.</summary>
         public event Action<Unit, TIMELINE_OPERATION, int> OnTimelineChanged;
-
-        [Header("──────────── Exit ────────────")]
-        [Tooltip("Temporary: closes the combat (write-back, destroy Units, notify) right after it ends. " +
-                "Turn it off once the summary/rewards screens exist and have them call CloseCombat().")]
-        [SerializeField] private bool autoCloseOnEnd = true;
 
         // ── Internal State ──────────────────────────────────────────────────
 
@@ -307,22 +311,6 @@ namespace Core.CombatSystem
             // Detach every item effect so nothing stays subscribed to this controller
             foreach (Unit unit in roster)
                 unit.ExitCombat();
-
-            if (autoCloseOnEnd)
-            {
-                if (closeDelay > 0f)
-                    StartCoroutine(CloseCombatAfter(closeDelay));
-                else
-                    CloseCombat();
-            }
-        }
-
-        private IEnumerator CloseCombatAfter(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            if (finishedOutcome != null)
-                CloseCombat();
         }
 
         /// <summary>
@@ -402,6 +390,82 @@ namespace Core.CombatSystem
                 EndCombat(outcome, deathAnimationDuration);
         }
 
+        private bool TryPreventDeath(Unit unit)
+        {
+            var context = new DeathContext { unit = unit };
+            OnBeforeDeath?.Invoke(context);
+            return context.prevented && unit.HP > 0;
+        }
+
+        /// <summary>Gives a unit an empty Fury meter of the given capacity.</summary>
+        public void ConfigureFury(Unit unit, int maxFury)
+        {
+            if (unit == null || maxFury <= 0) return;
+            unit.MaxFury = maxFury;
+            unit.Fury = 0;
+        }
+
+        /// <summary>Adds Fury (negative removes it), clamped to 0..MaxFury.</summary>
+        public void AddFury(Unit unit, int amount)
+        {
+            if (!IsCombatActive || unit == null || !unit.IsAlive || unit.MaxFury <= 0) return;
+            unit.Fury += amount;
+        }
+
+        /// <summary>Returns false and spends nothing if Fury is insufficient.</summary>
+        public bool SpendFury(Unit unit, int amount)
+        {
+            if (!IsCombatActive || unit == null) return false;
+            if (amount <= 0) return true;
+            if (unit.Fury < amount) return false;
+
+            unit.Fury -= amount;
+            return true;
+        }
+
+        /// <summary>Switches a unit into an alternate form: type, stats, kit and HP.</summary>
+        public void EnterForm(Unit unit, UnitFormSO form)
+        {
+            if (!IsCombatActive || unit == null || !unit.IsAlive || form == null || unit.ActiveForm != null) return;
+
+            unit.PreFormHP = unit.HP;
+            unit.ActiveForm = form;
+            unit.SetUnitType(form.unitType);
+            unit.SetKit(form.skills, form.ultimate);
+            unit.StatsController.SetForm(form.flatBonuses, form.maxHpFromMaxSp);
+
+            if (form.maxHpFromMaxSp)
+                unit.HP = unit.MaxHP;
+
+            unit.NotifyFormChanged();
+            OnFormChanged?.Invoke(unit, true);
+        }
+
+        /// <summary>
+        /// Leaves the unit's alternate form. Voluntary and FuryDepleted keep the HP percentage;
+        /// Downed restores the HP the unit had before the form, reduced by the form's penalty.
+        /// </summary>
+        public void ExitForm(Unit unit, FORM_EXIT_REASON reason)
+        {
+            if (!IsCombatActive || unit == null || unit.ActiveForm == null) return;
+
+            UnitFormSO form = unit.ActiveForm;
+            float hpFraction = unit.MaxHP > 0 ? (float)unit.HP / unit.MaxHP : 0f;
+
+            unit.ActiveForm = null;
+            unit.RestoreBaseKit();
+            unit.StatsController.ClearForm();
+            unit.Fury = 0;
+
+            int restored = reason == FORM_EXIT_REASON.Downed
+                ? Mathf.RoundToInt(unit.PreFormHP * (1f - form.downedHpPenalty))
+                : Mathf.RoundToInt(hpFraction * unit.MaxHP);
+
+            unit.HP = Mathf.Clamp(restored, 1, unit.MaxHP);
+            unit.NotifyFormChanged();
+            OnFormChanged?.Invoke(unit, false);
+        }
+
         /// <summary>Revives a dead unit with the given HP, reinserting it at the back of the queue.</summary>
         public void Revive(Unit unit, int hp)
         {
@@ -456,9 +520,9 @@ namespace Core.CombatSystem
         /// Fires OnBeforeDamage (mutable), applies context.Amount, fires OnAfterDamage. Calls
         /// Kill internally if HP drops to 0 — callers never have to remember to check death.
         /// </summary>
-        public void DealDamage(Unit source, Unit target, int amount, UNITY_TYPE damageType, string via)
+        public int DealDamage(Unit source, Unit target, int amount, UNITY_TYPE damageType, string via)
         {
-            if (!IsCombatActive || target == null || !target.IsAlive) return;
+            if (!IsCombatActive || target == null || !target.IsAlive) return 0;
 
             var context = new DamageContext
             {
@@ -470,13 +534,21 @@ namespace Core.CombatSystem
             };
 
             OnBeforeDamage?.Invoke(context);
-            target.HP = Mathf.Max(0, target.HP - context.amount);
+
+            // A status such as Bodyshield may have redirected the hit: from here on use the context's target.
+            Unit victim = context.target;
+            if (victim == null || !victim.IsAlive) return 0;
+
+            int dealt = Mathf.Min(victim.HP, Mathf.Max(0, context.amount));
+            victim.HP = Mathf.Max(0, victim.HP - context.amount);
             OnAfterDamage?.Invoke(context);
 
-            if (target.HP <= 0)
-                Kill(target);
+            if (victim.HP <= 0 && !TryPreventDeath(victim))
+                Kill(victim);
             else
-                target.PlayDamageAnimation();
+                victim.PlayDamageAnimation();
+
+            return dealt;
         }
 
         /// <summary>Fires OnBeforeHeal (mutable), applies context.Amount clamped to MaxHP, fires OnAfterHeal.</summary>
@@ -524,6 +596,17 @@ namespace Core.CombatSystem
             return true;
         }
 
+        /// <summary>
+        /// Raises a unit's guard for a number of turn advances without ending its turn or restoring SP
+        /// (Defend() does both). For skills that "act as Defend".
+        /// </summary>
+        public void RaiseGuard(Unit unit, int advances)
+        {
+            if (!IsCombatActive || unit == null || !unit.IsAlive) return;
+
+            unit.SetDefending(Mathf.Max(1, advances));
+        }
+
         // ── Status verbs ──────────────────────────────────────────────────────
 
         /// <summary>
@@ -560,5 +643,30 @@ namespace Core.CombatSystem
         public void InsertAfter(Unit unit, Unit after) => timeline.InsertAfter(unit, after);
         public bool GrantExtraTurn(Unit unit) => timeline.GrantExtraTurn(unit);
 
+        // ── Slot verbs ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Moves a unit to a slot of its own team. Whoever holds that slot (dead or alive) takes the
+        /// slot the unit leaves, so slots stay unique per team. Never changes a unit's team.
+        /// </summary>
+        public void MoveToSlot(Unit unit, COMBAT_SLOT slot)
+        {
+            if (!IsCombatActive || unit == null || !unit.IsAlive || !unit.Slot.HasValue) return;
+
+            COMBAT_SLOT from = unit.Slot.Value;
+            if (from == slot) return;
+
+            // Dead units don't hold a slot: only a living unit can be displaced.
+            Unit occupant = roster.FirstOrDefault(u =>
+                u != unit && u.IsAlive && u.Team == unit.Team && u.Slot == slot);
+
+            unit.Slot = slot;
+            OnSlotChanged?.Invoke(unit, from, slot);
+
+            if (occupant == null) return;
+
+            occupant.Slot = from;
+            OnSlotChanged?.Invoke(occupant, slot, from);
+        }
     }
 }

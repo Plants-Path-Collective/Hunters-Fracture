@@ -61,19 +61,23 @@
 <main class="content" id="top">
 <div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Directorios</div>
 
-<p class="eyebrow">08 · REFERENCIA</p>
+<p class="eyebrow">09 · REFERENCIA</p>
 <h1>Estructura de Directorios Clave</h1>
-<p class="page-lede">Ubicación de los sistemas y datos principales dentro de <code>Assets/</code>.</p>
+<p class="page-lede">Rutas verificadas de scripts, escenas, acciones y datos del proyecto.</p>
 <div class="tree-box">
-<div class="tree-row"><code>Assets/Scripts/00_Core/</code><span>Sistemas globales y gestores principales.</span></div>
-<div class="tree-row"><code>Assets/Scripts/00_Core/CombatSystem/</code><span>Sistema de combate principal.</span></div>
-<div class="tree-row"><code>Assets/Scripts/00_Core/DialogueSystem/</code><span>Sistema de diálogo.</span></div>
-<div class="tree-row"><code>Assets/Scripts/01_Player/</code><span>Scripts asociados al jugador.</span></div>
-<div class="tree-row"><code>Assets/Scripts/02_World/</code><span>Scripts de zonas sociales.</span></div>
-<div class="tree-row"><code>Assets/Scripts/98_Debug/</code><span>Scripts para testear nuevas funciones y sistemas.</span></div>
-<div class="tree-row"><code>Assets/Scripts/99_Misc/</code><span>Scripts asociados a diversas funcionalidades complementarias o no relacionadas directamente con el gameplay.</span></div>
-<div class="tree-row"><code>Assets/Inputs/</code><span>Inputs del juego.</span></div>
-<div class="tree-row"><code>Assets/ScriptableObjects/</code><span>SO con data de units, items, etc.</span></div>
+<div class="tree-row"><code>Assets/Inputs/</code><span><code>InputSystem_Actions.inputactions</code> y su wrapper C# generado.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/</code><span>GameManager, InputManager, SceneSetter y servicios base.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/CombatSystem/</code><span>Combate, transiciones, unidades, acciones e inventario.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/DialogueSystem/</code><span>Sistema y componentes de diálogo.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/Render/</code><span>Cámaras y activación de salas/zonas.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/UI/</code><span>Managers y componentes de interfaz.</span></div>
+<div class="tree-row"><code>Assets/Scripts/01_Player/</code><span>Control del jugador.</span></div>
+<div class="tree-row"><code>Assets/Scripts/02_Overworld/</code><span>Entidades y componentes del mundo explorable.</span></div>
+<div class="tree-row"><code>Assets/Scripts/98_Debug/</code><span>Harnesses y utilidades de depuración.</span></div>
+<div class="tree-row"><code>Assets/Scripts/99_Misc/</code><span>Atributos y utilidades compartidas.</span></div>
+<div class="tree-row"><code>Assets/ScriptableObjects/</code><span>Datos de Units, Skills, Items, Consumables, Effects, Statuses y Dialogue; incluye <code>ItemCatalog.asset</code>.</span></div>
+<div class="tree-row"><code>Assets/Scenes/</code><span>Escenas agrupadas en <code>Combat Demo/</code>, <code>Debug Scenes/</code> y <code>Prototype Scenes/</code>.</span></div>
+<div class="tree-row"><code>Assets/Plugins/Demigiant/DOTween/</code><span>Plugin DOTween incluido localmente.</span></div>
 </div>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="architecture.html">

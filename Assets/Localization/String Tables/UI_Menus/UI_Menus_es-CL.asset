@@ -46,6 +46,34 @@ MonoBehaviour:
     m_Localized: Equipo
     m_Metadata:
       m_Items: []
+  - m_Id: 34423791450017792
+    m_Localized: Hunters Cercanos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34428368287125504
+    m_Localized: Buscar Hunters
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34439752316047360
+    m_Localized: Misiones
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440549783261184
+    m_Localized: Mapas
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440590224740352
+    m_Localized: Agenda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34440976188788736
+    m_Localized: Wiki
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34459048832356352
+    m_Localized: "Configuraci\xF3n del\nSistema"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

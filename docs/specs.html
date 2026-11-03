@@ -63,7 +63,7 @@
 
 <p class="eyebrow">01 · SISTEMA</p>
 <h1>Especificaciones Técnicas</h1>
-<p class="page-lede">Resumen del motor, pipeline de renderizado, arquitectura general y dependencias del proyecto.</p>
+<p class="page-lede">Versiones y dependencias verificadas en la configuración actual del proyecto Unity.</p>
 <div class="spec-grid">
 <div class="spec-card">
 <span class="spec-label">Versión de Unity</span>
@@ -75,7 +75,7 @@
 </div>
 <div class="spec-card spec-card--wide">
 <span class="spec-label">Arquitectura</span>
-<span class="spec-value">Event-Driven Architecture, ScriptableObjects (Data-Driven) y patrón Singleton para sistemas globales.</span>
+<span class="spec-value">ScriptableObjects para datos y definiciones; GameManager e InputManager como Singletons persistentes; callbacks y eventos entre sistemas.</span>
 </div>
 </div>
 <h2 id="dependencias-principales">Dependencias principales</h2>
@@ -83,10 +83,14 @@
 <thead><tr><th>Paquete</th><th>ID</th><th>Versión</th></tr></thead>
 <tbody>
 <tr><td>Unity Input System</td><td><code>com.unity.inputsystem</code></td><td>1.19.0</td></tr>
-<tr><td>DOTween</td><td><code>—</code></td><td>1.2.825</td></tr>
 <tr><td>Unity Localization</td><td><code>com.unity.localization</code></td><td>1.5.13</td></tr>
+<tr><td>Universal Render Pipeline</td><td><code>com.unity.render-pipelines.universal</code></td><td>17.3.0</td></tr>
+<tr><td>Cinemachine</td><td><code>com.unity.cinemachine</code></td><td>3.1.7</td></tr>
+<tr><td>FMOD for Unity</td><td><code>com.fmod.fmod-for-unity.v204</code></td><td>2.4.0</td></tr>
+<tr><td>DOTween</td><td><code>Assets/Plugins/Demigiant/DOTween/</code></td><td>Plugin incluido en el proyecto</td></tr>
 </tbody>
 </table>
+<p>Las versiones de Unity y de los paquetes de Unity se leen de <code>ProjectSettings/ProjectVersion.txt</code> y <code>Packages/manifest.json</code>. DOTween está incluido como plugin local, no como dependencia del manifest.</p>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <span></span>
 <a class="page-nav-next" href="inputs.html">

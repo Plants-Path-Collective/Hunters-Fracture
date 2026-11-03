@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using InputSystem;
 
 namespace Core
@@ -85,15 +86,29 @@ namespace Core
 
             Actions = new InputSystem_Actions();
             Actions.Disable();
+            Actions.Overworld.ToggleBeeper.performed += OnToggleBeeper;
+            Actions.Social.ToggleBeeper.performed += OnToggleBeeper;
         }
 
         private void OnDestroy()
         {
+            if (Actions != null)
+            {
+                Actions.Overworld.ToggleBeeper.performed -= OnToggleBeeper;
+                Actions.Social.ToggleBeeper.performed -= OnToggleBeeper;
+            }
+
             if (Instance == this)
                 Instance = null;
 
             Actions?.Dispose();
             Actions = null;
+        }
+
+        private static void OnToggleBeeper(InputAction.CallbackContext context)
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.ToggleBeeper();
         }
 
         private void Start()

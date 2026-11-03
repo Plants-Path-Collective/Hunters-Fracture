@@ -51,6 +51,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 771ce6e0fe210e14f809e4331be39030
+    m_Address: Units_Elowen_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7dde62a08c8bafd7a835f68a24c61c6f
     m_Address: UI_Units_en
     m_ReadOnly: 1
@@ -65,6 +71,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4fe78b9517493296a1b2c26f07a6124
     m_Address: Units_Renjiro_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d14e0afc7251ca720876189705173bb1
+    m_Address: Units_Iter_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

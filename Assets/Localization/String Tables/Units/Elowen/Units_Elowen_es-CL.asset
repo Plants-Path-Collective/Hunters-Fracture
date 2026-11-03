@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Units_Elowen_es-CL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: es-CL
+  m_SharedData: {fileID: 11400000, guid: 7a562a38b16be9c7dbdd39c8094d5871, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 45135261696
+    m_Localized: Manada
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128744517632
+    m_Localized: Protectora
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144729010176
+    m_Localized: Licantropia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955666481434624
+    m_Localized: Proviciones de Emergencia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955831032369152
+    m_Localized: Proteger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955888326561792
+    m_Localized: Derribar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955970945961984
+    m_Localized: Mordisco
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956062478258176
+    m_Localized: Licantropia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956632983293952
+    m_Localized: "Targetea una Unit Aliada, Elowen saca un alimento de su morral
+      y se lo lanza, recuperandole X/2 cantidad de HP y le aplica Regeneraci\xF3n,
+      recuperando X cantidad de HP por 2 turnos.\n\nX = 10 + (MP/10)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956790169030656
+    m_Localized: "Selecciona a una Unit Aliada, cualquier da\xF1o que fuese a ser
+      causado a esa Unit, Elowen lo recibe en su lugar, est\xE1 T\xE9cnica actua
+      como si elowen usase la acci\xF3n de Defensa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956907152363520
+    m_Localized: "Selecciona una Unit, Elowen le golpea con su arma, Derribandole
+      (Skipea su pr\xF3ximo turno) y causandole X de da\xF1o Physical.\n\nX = 10
+      + (STR / 50)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957089264848896
+    m_Localized: "Selecciona a una Unit, Elowen lo muerde provocandole X da\xF1o
+      Magical, luego Elowen recupera HP igual a la mitad del da\xF1o inflingido.\n\nX
+      = 10 + (MP / 50)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957221792272384
+    m_Localized: "Activa: Elowen regresa a su forma humana.\n\nPasiva: Elowen tiene
+      un medidor de Furia (100 tope), el cual se llena a medida que ella o sus aliado
+      reciban da\xF1o. \n\nUna vez se llena al completo, se transforma en su versi\xF3n
+      licantropa, cambiando su kit de T\xE9cnicas. \n\nEn forma licantropa las skills
+      no utilizan SP, en su lugar ocupan Furia. Tambien, Elowen cambia de tipo Magical
+      a tipo Physical, luego regresa a la normalidad. \n\nSu HP aumenta hasta el
+      m\xE1x de su SP, si su HP llega a 0, en lugar de morir, vuelve a su forma humana
+      y disminuye su HP actual en un 15%. Adem\xE1s, su PDef aumenta en un 30% (0.3)
+      en su forma licantropa.\n\nAl finalizar un turno, con licantropia activa, consume
+      20 de Furia."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: 1B_Proteger_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Proteger
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2955831032369152
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  icon: {fileID: 0}
+  description: "Selecciona a una Unit Aliada, cualquier da\xF1o que fuese a ser causado
+    a esa Unit, Elowen lo recibe en su lugar, est\xE1 T\xE9cnica actua como si elowen
+    usase la acci\xF3n de Defensa."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2956790169030656
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  spCost: 0
+  furyCost: 20
+  targetType: 3
+  effects:
+  - {fileID: 11400000, guid: b8731e399b55574c6ae3c486362ad70a, type: 2}
+  references:
+    version: 2
+    RefIds: []

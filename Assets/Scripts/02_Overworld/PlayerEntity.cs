@@ -33,7 +33,13 @@ namespace Overworld
 
         private void OnEnable() => SubscribeAttack();
 
-        private void OnDisable() => UnsubscribeAttack();
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            UnsubscribeAttack();
+        }
+
+        protected override bool CanHit(Entity target) => target is EnemyEntity;
 
         private void SubscribeAttack()
         {

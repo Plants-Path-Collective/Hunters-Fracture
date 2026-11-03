@@ -1,4 +1,6 @@
-﻿using Core.CombatSystem.Backpack;
+﻿using UnityEngine;
+using Core.CombatSystem.Backpack;
+using Core.CombatSystem.Units;
 
 namespace Core
 {
@@ -107,11 +109,56 @@ namespace Core
         AllAllies
     }
 
+    public enum EFFECT_TARGET_MODE
+    {
+        ActionTargets,            // every unit the action resolved to
+        ActionTargetsAlliesOnly,  // ...only those on the actor's side
+        ActionTargetsEnemiesOnly, // ...only those on the other side
+        SlotsOfSide,              // units picked by side and slot, ignoring the player's target
+        RightNeighborOfActionTargets
+    }
+
     /// <summary>Side of an effect's targets, relative to the actor.</summary>
     public enum RELATIVE_SIDE { Allies, Enemies }
 
     [System.Flags]
     public enum SLOT_MASK { None = 0, Left = 1, Mid = 2, Right = 4 }
+
+    /// <summary>Why a unit left its alternate form.</summary>
+    public enum FORM_EXIT_REASON
+    {
+        Voluntary,      // the unit chose to revert (its ultimate)
+        FuryDepleted,   // the Fury meter reached 0
+        Downed          // HP reached 0 while in the form
+    }
+
+    /// <summary>Flat amount added to a derived stat while a form is active.</summary>
+    [System.Serializable]
+    public struct FlatStatBonus
+    {
+        public STAT_TYPE stat;
+        public float value;
+    }
+
+    /// <summary>Model shown while a unit is in a given alternate form.</summary>
+    [System.Serializable]
+    public struct FormModel
+    {
+        public UnitFormSO form;
+        public GameObject model;
+    }
+
+    /// <summary>value = baseValue + perPoint × the caster's stat. perPoint 0 makes it a constant.</summary>
+    [System.Serializable]
+    public struct ScaledValue
+    {
+        public float baseValue;
+        public STAT_TYPE stat;
+        [Tooltip("Added per point of the caster's stat (negative allowed). HP means max HP.")]
+        public float perPoint;
+
+        public float Evaluate(Unit caster) => baseValue + perPoint * caster.GetStat(stat);
+    }
 
     #endregion
 
@@ -119,8 +166,12 @@ namespace Core
     public enum ENEMY_STATE
     {
         Patrol,
-        Chase // not implemented yet — reserved for when perception exists
+        Detecting,
+        Chase,
+        Recover,
+        CombatStarting
     }
+
     #endregion
 
     #region SOCIAL
@@ -130,6 +181,58 @@ namespace Core
     {
         public ConsumableSO consumableSO;
         public int quantity;
+    }
+
+    #endregion
+
+    #region UNITS
+
+    public struct UnitStatValues
+    {
+        public float HP;
+        public float SP;
+        public float Speed;
+        public float Strength;
+        public float MagicPower;
+        public float PhysicalDefense;
+        public float MagicalDefense;
+
+        public float Get(STAT_TYPE stat) => stat switch
+        {
+            STAT_TYPE.HP => HP,
+            STAT_TYPE.SP => SP,
+            STAT_TYPE.Speed => Speed,
+            STAT_TYPE.Strength => Strength,
+            STAT_TYPE.MagicPower => MagicPower,
+            STAT_TYPE.PhysicalDefense => PhysicalDefense,
+            STAT_TYPE.MagicalDefense => MagicalDefense,
+            _ => 0f
+        };
+
+        public void Set(STAT_TYPE stat, float value)
+        {
+            switch (stat)
+            {
+                case STAT_TYPE.HP: HP = value; break;
+                case STAT_TYPE.SP: SP = value; break;
+                case STAT_TYPE.Speed: Speed = value; break;
+                case STAT_TYPE.Strength: Strength = value; break;
+                case STAT_TYPE.MagicPower: MagicPower = value; break;
+                case STAT_TYPE.PhysicalDefense: PhysicalDefense = value; break;
+                case STAT_TYPE.MagicalDefense: MagicalDefense = value; break;
+            }
+        }
+
+        public static UnitStatValues From(UnitDefinitionSO definition) => new()
+        {
+            HP = definition.maxHP,
+            SP = definition.maxSP,
+            Speed = definition.speed,
+            Strength = definition.strength,
+            MagicPower = definition.magicPower,
+            PhysicalDefense = definition.physicalDefense,
+            MagicalDefense = definition.magicalDefense
+        };
     }
 
     #endregion

@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Units_Elowen_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 7a562a38b16be9c7dbdd39c8094d5871, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 45135261696
+    m_Localized: Pack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128744517632
+    m_Localized: Protectress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 144729010176
+    m_Localized: Lycanthropy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956790169030656
+    m_Localized: "Select an Allied Unit; any damage that would have been dealt to
+      that Unit is instead dealt to Elowen. This ability functions as if Elowen were
+      using the \u201CDefense\u201D action."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955831032369152
+    m_Localized: Protect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956632983293952
+    m_Localized: 'Target an Allied Unit. Elowen takes some food out of her backpack
+      and throws it to the unit, restoring X/2 HP and granting it Regeneration, which
+      restores X HP over 2 turns.
+
+
+      X = 10 + (MP/10)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955666481434624
+    m_Localized: Emergency Supplies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956062478258176
+    m_Localized: Lycanthropy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955970945961984
+    m_Localized: Bite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957089264848896
+    m_Localized: 'Select a Unit. Elowen bites it, dealing X magical damage, then
+      Elowen regains HP equal to half the damage dealt.
+
+
+      X = 10 + (MP / 50)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2956907152363520
+    m_Localized: 'Select a Unit. Elowen strikes it with his weapon, knocking it down
+      (skipping its next turn) and dealing X points of Physical damage.
+
+
+      X
+      = 10 + (STR / 50)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2955888326561792
+    m_Localized: Knock Down
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957221792272384
+    m_Localized: "Active: Elowen returns to her human form.\n\nPassive: Elowen has
+      a Fury meter (max 100), which fills as she or her allies take damage.\n\nOnce
+      it is fully charged, she transforms into her werewolf form, changing her skill
+      set.\n\nIn werewolf form, skills do not use SP; instead, they consume Fury.
+      Additionally, Elowen\u2019s damage type changes from Magical to Physical, then
+      returns to normal.\n\nHer HP increases to her maximum SP; if her HP reaches
+      0, instead of dying, she returns to her human form and her current HP is reduced
+      by 15%. Furthermore, her PDef increases by 30% (0.3) in her werewolf form.\n\nAt
+      the end of a turn, while werewolf form is active, she consumes 20 Rage."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

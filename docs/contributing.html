@@ -39,10 +39,11 @@
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
 <li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="items.html"><span class="nav-num">04</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">05</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">06</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">07</span>Arquitectura</a></li>
+<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
+<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section current"><div class="section-title">Referencia</div>
@@ -60,7 +61,7 @@
 <main class="content" id="top">
 <div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Contribución</div>
 
-<p class="eyebrow">09 · REFERENCIA</p>
+<p class="eyebrow">10 · REFERENCIA</p>
 <h1>Guía de Contribución y Buenas Prácticas</h1>
 <div class="rule-grid">
 <div class="rule-card" style="grid-column: 1 / -1;">
@@ -106,12 +107,12 @@
 <pre class="ascii-flow">feat(dialogue): add timeout fallback for unanswered prompts
 
 Files changed:
-- Assets/Scripts/02_Dialogue/DialogueManager.cs
-- Assets/00_Dialogue/NPC_Flora_Ch2.asset</pre>
+- Assets/Scripts/00_Core/DialogueSystem/DialogueManager.cs
+- Assets/ScriptableObjects/Dialogue/Conversations/Test0_Conversation.asset</pre>
 <pre class="ascii-flow">fix(combat): prevent negative HP from status ticks
 
 Files changed:
-- Assets/Scripts/01_Combat/StatusBuffTracker.cs</pre>
+- Assets/Scripts/00_Core/CombatSystem/StatusSystem/StatusBuffTracker.cs</pre>
 <pre class="ascii-flow">chore(inputs): bump Input System package to 1.19.0
 
 Files changed:

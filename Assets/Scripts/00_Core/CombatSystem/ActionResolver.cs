@@ -84,13 +84,7 @@ namespace Core.CombatSystem
         private int CalculateAttackDamage(Unit actor, Unit target, UNITY_TYPE damageType)
         {
             float baseDamage = damageType == UNITY_TYPE.Magical ? actor.MagicPower : actor.Strength;
-            float defense = damageType == UNITY_TYPE.Magical
-                ? target.EffectiveMagicalDefense
-                : target.EffectivePhysicalDefense;
-
-            float received = baseDamage / (1f + Mathf.Max(0f, defense));
-
-            return Mathf.Max(1, Mathf.RoundToInt(received));
+            return DamageFormula.Reduce(baseDamage, target, damageType);
         }
 
         /// <summary>
@@ -108,7 +102,7 @@ namespace Core.CombatSystem
 
             if (action == null) return false;
             int spCost = actor.GetEffectiveSpCost(action);
-            if (actor.SP < spCost) return false;
+            if (actor.SP < spCost || actor.Fury < action.furyCost) return false;
 
             if (!IsValidTarget(actor, action, pickedTarget))
             {
@@ -121,7 +115,9 @@ namespace Core.CombatSystem
             context.targets.AddRange(ResolveTargets(actor, action, pickedTarget));
 
             combat.NotifyBeforeAction(context);
-            if (context.cancelled || !combat.SpendSP(actor, context.spCost)) return false;
+            if (context.cancelled
+                || !combat.SpendSP(actor, context.spCost)
+                || !combat.SpendFury(actor, action.furyCost)) return false;
 
             EventReference sound = action == actor.Ultimate
                 ? actor.Definition.ultimateSfx

@@ -751,6 +751,15 @@ namespace InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Beeper"",
+                    ""type"": ""Button"",
+                    ""id"": ""ffa72933-e17a-445b-b1e5-fadd51c8165e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -929,6 +938,50 @@ namespace InputSystem
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e82189d-bfb3-4120-bb85-20d287357035"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79b7e52a-ea6f-4c34-bcb0-509574c928d1"",
+                    ""path"": ""<DualSenseGamepadHID>/touchpadButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21b857ba-1020-4c81-ace1-6fe1b6b0b259"",
+                    ""path"": ""<SwitchProControllerHID>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9ec99cf-b2ee-4e9d-a072-c47263187da7"",
+                    ""path"": ""<XInputController>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -967,6 +1020,15 @@ namespace InputSystem
                     ""name"": ""Open Pause Menu"",
                     ""type"": ""Button"",
                     ""id"": ""24e2e57d-c0fa-4b12-9111-6b7cd32cd3af"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Beeper"",
+                    ""type"": ""Button"",
+                    ""id"": ""332dafa1-3176-4a5e-a2cb-aa7aa3874089"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1076,7 +1138,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""ba207281-c453-4f80-ae9f-50358d5dd62e"",
-                    ""path"": ""<DualShockGamepad>/touchpadButton"",
+                    ""path"": ""<DualShockGamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
@@ -1087,10 +1149,10 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""e6bb9841-a041-4914-8b58-0a1f64f93a8c"",
-                    ""path"": ""<SwitchProControllerHID>/select"",
+                    ""path"": ""<SwitchProControllerHID>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
+                    ""groups"": "";Gamepad;Touch"",
                     ""action"": ""Open Pause Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1103,6 +1165,50 @@ namespace InputSystem
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Open Pause Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""251a7c10-4952-4b1c-8512-961dd11d82b3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""343f83de-e644-4f0c-9fac-31c292a2b0f8"",
+                    ""path"": ""<DualSenseGamepadHID>/touchpadButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6415516b-7a2a-4267-8e35-b2321e07fe54"",
+                    ""path"": ""<SwitchProControllerHID>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c465544-0d20-452c-a9ce-f05efac8a8e3"",
+                    ""path"": ""<XInputController>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Toggle Beeper"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2127,12 +2233,14 @@ namespace InputSystem
             m_Social_Move = m_Social.FindAction("Move", throwIfNotFound: true);
             m_Social_Interact = m_Social.FindAction("Interact", throwIfNotFound: true);
             m_Social_OpenPauseMenu = m_Social.FindAction("Open Pause Menu", throwIfNotFound: true);
+            m_Social_ToggleBeeper = m_Social.FindAction("Toggle Beeper", throwIfNotFound: true);
             // Overworld
             m_Overworld = asset.FindActionMap("Overworld", throwIfNotFound: true);
             m_Overworld_Move = m_Overworld.FindAction("Move", throwIfNotFound: true);
             m_Overworld_Attack = m_Overworld.FindAction("Attack", throwIfNotFound: true);
             m_Overworld_Interact = m_Overworld.FindAction("Interact", throwIfNotFound: true);
             m_Overworld_OpenPauseMenu = m_Overworld.FindAction("Open Pause Menu", throwIfNotFound: true);
+            m_Overworld_ToggleBeeper = m_Overworld.FindAction("Toggle Beeper", throwIfNotFound: true);
             // Dialogue
             m_Dialogue = asset.FindActionMap("Dialogue", throwIfNotFound: true);
             m_Dialogue_Move = m_Dialogue.FindAction("Move", throwIfNotFound: true);
@@ -2599,6 +2707,7 @@ namespace InputSystem
         private readonly InputAction m_Social_Move;
         private readonly InputAction m_Social_Interact;
         private readonly InputAction m_Social_OpenPauseMenu;
+        private readonly InputAction m_Social_ToggleBeeper;
         /// <summary>
         /// Provides access to input actions defined in input action map "Social".
         /// </summary>
@@ -2622,6 +2731,10 @@ namespace InputSystem
             /// Provides access to the underlying input action "Social/OpenPauseMenu".
             /// </summary>
             public InputAction @OpenPauseMenu => m_Wrapper.m_Social_OpenPauseMenu;
+            /// <summary>
+            /// Provides access to the underlying input action "Social/ToggleBeeper".
+            /// </summary>
+            public InputAction @ToggleBeeper => m_Wrapper.m_Social_ToggleBeeper;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2657,6 +2770,9 @@ namespace InputSystem
                 @OpenPauseMenu.started += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
+                @ToggleBeeper.started += instance.OnToggleBeeper;
+                @ToggleBeeper.performed += instance.OnToggleBeeper;
+                @ToggleBeeper.canceled += instance.OnToggleBeeper;
             }
 
             /// <summary>
@@ -2677,6 +2793,9 @@ namespace InputSystem
                 @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
+                @ToggleBeeper.started -= instance.OnToggleBeeper;
+                @ToggleBeeper.performed -= instance.OnToggleBeeper;
+                @ToggleBeeper.canceled -= instance.OnToggleBeeper;
             }
 
             /// <summary>
@@ -2718,6 +2837,7 @@ namespace InputSystem
         private readonly InputAction m_Overworld_Attack;
         private readonly InputAction m_Overworld_Interact;
         private readonly InputAction m_Overworld_OpenPauseMenu;
+        private readonly InputAction m_Overworld_ToggleBeeper;
         /// <summary>
         /// Provides access to input actions defined in input action map "Overworld".
         /// </summary>
@@ -2745,6 +2865,10 @@ namespace InputSystem
             /// Provides access to the underlying input action "Overworld/OpenPauseMenu".
             /// </summary>
             public InputAction @OpenPauseMenu => m_Wrapper.m_Overworld_OpenPauseMenu;
+            /// <summary>
+            /// Provides access to the underlying input action "Overworld/ToggleBeeper".
+            /// </summary>
+            public InputAction @ToggleBeeper => m_Wrapper.m_Overworld_ToggleBeeper;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2783,6 +2907,9 @@ namespace InputSystem
                 @OpenPauseMenu.started += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed += instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled += instance.OnOpenPauseMenu;
+                @ToggleBeeper.started += instance.OnToggleBeeper;
+                @ToggleBeeper.performed += instance.OnToggleBeeper;
+                @ToggleBeeper.canceled += instance.OnToggleBeeper;
             }
 
             /// <summary>
@@ -2806,6 +2933,9 @@ namespace InputSystem
                 @OpenPauseMenu.started -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.performed -= instance.OnOpenPauseMenu;
                 @OpenPauseMenu.canceled -= instance.OnOpenPauseMenu;
+                @ToggleBeeper.started -= instance.OnToggleBeeper;
+                @ToggleBeeper.performed -= instance.OnToggleBeeper;
+                @ToggleBeeper.canceled -= instance.OnToggleBeeper;
             }
 
             /// <summary>
@@ -3398,6 +3528,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenPauseMenu(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Toggle Beeper" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToggleBeeper(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Overworld" which allows adding and removing callbacks.
@@ -3434,6 +3571,13 @@ namespace InputSystem
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnOpenPauseMenu(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Toggle Beeper" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToggleBeeper(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dialogue" which allows adding and removing callbacks.

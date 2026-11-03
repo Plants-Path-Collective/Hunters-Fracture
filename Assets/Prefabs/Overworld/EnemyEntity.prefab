@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Overworld.EnemyEntity
   visualsOrigin: {fileID: 2470602154619374676}
-  swingEulerAngles: {x: 0, y: 0, z: 90}
+  swingEulerAngles: {x: 0, y: 179, z: 0}
   attackDuration: 0.45
   attackHitWindow: 0.15
   enemyParty:
@@ -80,6 +80,17 @@ MonoBehaviour:
     - definition: {fileID: 11400000, guid: cc67159d1f26fb3048d642494ff4013a, type: 2}
       inventorySnapshot:
         entries: []
+  detectionDelay: 1
+  attackRange: 2
+  postMissStandTime: 2
+  postCombatGraceTime: 2
+  turnSpeed: 540
+  visionOrigin: {fileID: 2470602154619374676}
+  visionRange: 12
+  visionAngle: 80
+  visionObstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   patrolRadius: 8
   patrolPointReachedThreshold: 0.3
   navMeshSampleMaxDistance: 2
@@ -287,7 +298,7 @@ Transform:
   m_GameObject: {fileID: 7950262001807695459}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0.5}
+  m_LocalPosition: {x: -0.00000020861626, y: 1, z: 0.7000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

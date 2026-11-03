@@ -32,5 +32,12 @@ namespace Core.CombatSystem.StatusSystem
 
         /// <summary>Multiplier applied to the damage the bearer deals.</summary>
         public virtual float OutgoingDamageMultiplier(StatusInstance instance) => 1f;
+
+        /// <summary>
+        /// Incoming damage hook, run before the damage is applied to the bearer. A status that takes the hit
+        /// for someone else changes context.target (and context.amount if the new target mitigates
+        /// differently). Returns true if it redirected the damage.
+        /// </summary>
+        public virtual bool TryRedirectIncomingDamage(StatusInstance instance, DamageContext context, CombatController combat) => false;
     }
 }

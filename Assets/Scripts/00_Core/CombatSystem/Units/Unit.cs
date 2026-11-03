@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using Core.CombatSystem.SkillSystem;
 
+
 namespace Core.CombatSystem.Units
 {
     [RequireComponent(typeof(UnitInventory), typeof(UnitStatsController), typeof(UnitEffectController))]
@@ -173,6 +174,53 @@ namespace Core.CombatSystem.Units
         /// <summary>Magical defense including the Defending multiplier.</summary>
         public float EffectiveMagicalDefense =>
             isDefending ? MagicalDefense * Definition.defendMultiplier : MagicalDefense;
+
+        // ----- Fury (secondary resource) -----
+        private int fury;
+
+        /// <summary>Capacity of the Fury meter. 0 means this unit has none.</summary>
+        public int MaxFury { get; internal set; }
+
+        /// <summary>Current Fury. Only CombatController should write it (AddFury / SpendFury).</summary>
+        public int Fury
+        {
+            get => fury;
+            internal set
+            {
+                value = Mathf.Clamp(value, 0, MaxFury);
+                if (fury == value) return;
+                fury = value;
+                OnResourcesChanged?.Invoke(this);
+            }
+        }
+
+        /// <summary>Alternate form the unit is currently in, or null.</summary>
+        public UnitFormSO ActiveForm { get; internal set; }
+
+        /// <summary>HP the unit had when it entered its form.</summary>
+        internal int PreFormHP { get; set; }
+
+        /// <summary>Fired when the unit enters or leaves an alternate form.</summary>
+        public event Action<Unit> OnFormChanged;
+
+        internal void NotifyFormChanged() => OnFormChanged?.Invoke(this);
+
+        internal void SetUnitType(UNITY_TYPE type) => UnitType = type;
+
+        /// <summary>Replaces skills and ultimate (entering a form).</summary>
+        internal void SetKit(IReadOnlyList<ActionSO> skills, ActionSO ultimate)
+        {
+            Skills = skills != null ? new List<ActionSO>(skills) : new List<ActionSO>();
+            Ultimate = ultimate;
+        }
+
+        /// <summary>Back to the definition's type, skills and ultimate (leaving a form).</summary>
+        internal void RestoreBaseKit()
+        {
+            UnitType = definition.type;
+            Skills = definition.skills != null ? new List<ActionSO>(definition.skills) : new List<ActionSO>();
+            Ultimate = definition.ultimate;
+        }
 
         // ----- References -----
         public UnitInventory Inventory { get; private set; }

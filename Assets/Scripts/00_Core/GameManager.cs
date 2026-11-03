@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using TMPro;
 using Overworld;
 using UI;
+using Core.UI.Beeper;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,9 +24,14 @@ public class GameManager : MonoBehaviour
     public GameObject cmCameraActive;
     public GameObject globalVisuals;
     public GameObject inputsHints;
-    public GameObject pauseMenu;
 
-    [Header("Pause Menu Panels")]
+    [Header("Beeper")]
+    public GameObject beeper;
+    [Space(10)]
+
+    [Header("Pause Menu")]
+    public GameObject pauseMenu;
+    [Space(10)]
     public GameObject mainPanel;
     public GameObject partyOverviewPanel;
     public GameObject inspectionPanel;
@@ -33,6 +39,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionsPanel;
 
     private InputManager inputManager;
+    private Beeper beeperController;
     private InputActionReference navigateReference;
     private InputActionReference confirmReference;
     private InputActionReference cancelReference;
@@ -71,6 +78,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (beeper != null)
+        {
+            beeperController = beeper.GetComponent<Beeper>();
+            if (beeperController == null)
+                Debug.LogError($"[{nameof(GameManager)}] The assigned Beeper object is missing its " +
+                               $"{nameof(Beeper)} component.", beeper);
+            else
+                beeperController.Hide();
+        }
+
         if (mainPanel != null) mainPanel.SetActive(false);
         if (partyOverviewPanel != null) partyOverviewPanel.SetActive(false);
         if (partyBackpackPanel != null) partyBackpackPanel.SetActive(false);
@@ -277,6 +294,23 @@ public class GameManager : MonoBehaviour
     {
         isInCombat = value;
         UpdatePauseBackpackButton();
+    }
+
+    public void ToggleBeeper()
+    {
+        if (isInCombat || paused || inputManager == null ||
+            (inputManager.CurrentMap != INPUTACTION_MAP.Overworld &&
+             inputManager.CurrentMap != INPUTACTION_MAP.Social))
+            return;
+
+        if (beeperController == null)
+        {
+            Debug.LogError($"[{nameof(GameManager)}] Beeper is not assigned or does not have a " +
+                           $"{nameof(Beeper)} component.", this);
+            return;
+        }
+
+        beeperController.Toggle();
     }
 
     private void FindPauseBackpackButton()

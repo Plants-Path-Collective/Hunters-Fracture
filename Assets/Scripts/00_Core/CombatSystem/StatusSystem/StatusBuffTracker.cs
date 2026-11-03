@@ -25,6 +25,7 @@ namespace Core.CombatSystem.StatusSystem
 
             // Subscribed before any item effect (they attach on EnterCombat), so it runs first.
             combat.OnBeforeDamage += ApplyOutgoingDamageModifiers;
+            combat.OnBeforeDamage += ApplyIncomingRedirects;
         }
 
         public IReadOnlyList<StatusInstance> GetStatuses(Unit unit) =>
@@ -166,6 +167,17 @@ namespace Core.CombatSystem.StatusSystem
 
             if (!Mathf.Approximately(multiplier, 1f))
                 context.amount = Mathf.Max(1, Mathf.RoundToInt(context.amount * multiplier));
+        }
+
+        /// <summary>Lets the target's statuses redirect the hit. One redirect per hit, never chained.</summary>
+        private void ApplyIncomingRedirects(DamageContext context)
+        {
+            if (context.target == null || !active.TryGetValue(context.target, out List<StatusInstance> list))
+                return;
+
+            foreach (StatusInstance instance in list.ToArray())
+                if (instance.definition.TryRedirectIncomingDamage(instance, context, combat))
+                    return;
         }
 
         private static StatusContext ToContext(StatusInstance instance, bool refreshed) => new()

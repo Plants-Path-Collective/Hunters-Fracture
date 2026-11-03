@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: Licantropia_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Licantropia
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2956062478258176
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  icon: {fileID: 0}
+  description: "Activa: Elowen regresa a su forma humana.\n\nPasiva: Elowen tiene
+    un medidor de Furia (100 tope), el cual se llena a medida que ella o sus aliado
+    reciban da\xF1o. \n\nUna vez se llena al completo, se transforma en su versi\xF3n
+    licantropa, cambiando su kit de T\xE9cnicas. \n\nEn forma licantropa las skills
+    no utilizan SP, en su lugar ocupan Furia. Tambien, Elowen cambia de tipo Magical
+    a tipo Physical, luego regresa a la normalidad. \n\nSu HP aumenta hasta el m\xE1x
+    de su SP, si su HP llega a 0, en lugar de morir, vuelve a su forma humana y disminuye
+    su HP actual en un 15%. Adem\xE1s, su PDef aumenta en un 30% (0.3) en su forma
+    licantropa.\n\nAl finalizar un turno, con licantropia activa, consume 20 de Furia."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2957221792272384
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  spCost: 0
+  furyCost: 0
+  targetType: 1
+  effects:
+  - {fileID: 11400000, guid: 9b2ce6a6df5356443a88fbfda935a9e1, type: 2}
+  references:
+    version: 2
+    RefIds: []

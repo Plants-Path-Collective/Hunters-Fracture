@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fe1e376c99d27a4997daef82033b88, type: 3}
+  m_Name: 2B_Mordisco_ActionSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.SkillSystem.ActionSO
+  actionName: Mordisco
+  localizedActionName:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2955970945961984
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  icon: {fileID: 0}
+  description: "Selecciona a una Unit, Elowen lo muerde provocandole X da\xF1o Magical,
+    luego Elowen recupera HP igual a la mitad del da\xF1o inflingido.\n\nX = 10 +
+    (MP / 50)"
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:7a562a38b16be9c7dbdd39c8094d5871
+    m_TableEntryReference:
+      m_KeyId: 2957089264848896
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  spCost: 0
+  furyCost: 15
+  targetType: 2
+  effects:
+  - {fileID: 11400000, guid: 8a3b5400f4618a37eb5392a6690f0027, type: 2}
+  references:
+    version: 2
+    RefIds: []

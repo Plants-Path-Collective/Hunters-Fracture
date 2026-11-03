@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Core;
 using Core.CombatSystem.Units;
-using Core.Render;
+using Overworld;
 
 namespace Core.CombatSystem
 {
@@ -31,13 +31,24 @@ namespace Core.CombatSystem
         private static GameObject suspendedCamera;
         private static GameObject suspendedPlayer;
         private static GameObject suspendedEnemy;
+        private static bool transitionInProgress;
+
+        public static bool IsTransitionInProgress => transitionInProgress;
 
         public static void Begin(AllyParty party, EnemyParty enemyParty, UNIT_TEAM advantageTeam,
             GameObject playerObject, GameObject enemyObject)
         {
+            // The scene check also covers CombatStage still being unloaded or kept for the game-over UI.
+            if (transitionInProgress || SceneManager.GetSceneByName(CombatStageScene).isLoaded)
+            {
+                Debug.Log("[CombatTransition] A combat transition is already in progress; ignored duplicate request.");
+                return;
+            }
+
+            transitionInProgress = true;
             GameManager.Instance.SetInCombat(true);
 
-            suspendedRoomContents = OverworldRoomRender.ActiveRoomContents.ToList();
+            suspendedRoomContents = DungeonRoom.ActiveRoomContents.ToList();
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
 
@@ -64,6 +75,8 @@ namespace Core.CombatSystem
 
         private static void OnCombatFinished(COMBAT_OUTCOME outcome)
         {
+            // transitionInProgress stays true until CombatStage is fully unloaded (see the end of
+            // this method); Defeat releases it in ClearDefeatState().
             if (outcome == COMBAT_OUTCOME.Defeat)
             {
                 HandleDefeat();
@@ -95,7 +108,12 @@ namespace Core.CombatSystem
             suspendedEnemy = null;
 
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Overworld);
-            SceneManager.UnloadSceneAsync(CombatStageScene);
+
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(CombatStageScene);
+            if (unload == null)
+                transitionInProgress = false;
+            else
+                unload.completed += _ => transitionInProgress = false;
         }
 
         /// <summary>Leaves CombatStage loaded so its game-over UI can offer a fresh run or main menu.</summary>
@@ -112,6 +130,7 @@ namespace Core.CombatSystem
             suspendedCamera = null;
             suspendedPlayer = null;
             suspendedEnemy = null;
+            transitionInProgress = false;
         }
     }
 }
