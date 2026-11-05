@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
   m_Name: 06_Heavy Stun Armor_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  lockedByDefault: 1
   itemID: 6
   itemName: Olla de Hierro
   itemIcon: {fileID: 21300000, guid: b55c9eaa221251ea28f43f86e067d349, type: 3}

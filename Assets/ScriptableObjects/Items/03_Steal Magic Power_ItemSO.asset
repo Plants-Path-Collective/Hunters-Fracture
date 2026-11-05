@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
   m_Name: 03_Steal Magic Power_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  lockedByDefault: 1
   itemID: 3
   itemName: "Gorro de Cumplea\xF1ero"
   itemIcon: {fileID: 21300000, guid: 77395c7b0f9cbc7c69c8bb940bac92d8, type: 3}

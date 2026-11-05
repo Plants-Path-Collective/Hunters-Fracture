@@ -17,6 +17,9 @@ namespace Core.CombatSystem.Units
     [CreateAssetMenu(fileName = "NewUnitDefinition", menuName = "Units/Unit Definition")]
     public class UnitDefinitionSO : ScriptableObject
     {
+        [Tooltip("Stable unique key used by unlocks and saves. Auto-filled from the asset name; never change it after release.")]
+        public string unitID;
+
         [Header("--- Identity ---")]
         public string unitName;
         public UNITY_TYPE type;
@@ -87,6 +90,14 @@ namespace Core.CombatSystem.Units
         {
             if (unitPrefab != null && unitPrefab.GetComponent<Unit>() == null)
                 Debug.LogWarning($"[UnitDefinitionSO] '{name}': unitPrefab has no Unit component.", this);
+        
+            #if UNITY_EDITOR
+            if (string.IsNullOrEmpty(unitID))
+            {
+                unitID = name;
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+            #endif
         }
     }
 }

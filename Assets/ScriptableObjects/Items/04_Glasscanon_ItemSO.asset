@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
   m_Name: 04_Glasscanon_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  lockedByDefault: 1
   itemID: 4
   itemName: "Mu\xF1eca de Porcelana"
   itemIcon: {fileID: 21300000, guid: 94eace61d2161ff89b39bba14d6a409d, type: 3}

@@ -25508,7 +25508,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1282671985
 Transform:
   m_ObjectHideFlags: 0
@@ -35832,6 +35832,52 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &2073163893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2073163895}
+  - component: {fileID: 2073163894}
+  m_Layer: 0
+  m_Name: '[ChallengeDebugHarness]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2073163894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073163893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6964b931f718d7b3dbd932cdb6fe2dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExtendedDebug.ChallengeDebugHarness
+  milestoneID: game_completed
+  killAmount: 5
+--- !u!4 &2073163895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073163893}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &2074678275
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -36767,10 +36813,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 605386163924564926, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
-      propertyPath: displayMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 605386163924564926, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: dialoguePanel.panelRoot
       value: 
       objectReference: {fileID: 1847001963}
@@ -36882,10 +36924,6 @@ PrefabInstance:
       propertyPath: inspectionPanel
       value: 
       objectReference: {fileID: 1990507838}
-    - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
-      propertyPath: backpackSlotPrefab
-      value: 
-      objectReference: {fileID: 7129604670340397062, guid: ca6d05be68d9e92e080622c39cec57ef, type: 3}
     - target: {fileID: 5365583281729322293, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: partyBackpackPanel
       value: 
@@ -37005,6 +37043,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5313629951579403049, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7343133755916109647}
+    - targetCorrespondingSourceObject: {fileID: 5313629951579403049, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7343133755916109649}
+    - targetCorrespondingSourceObject: {fileID: 5313629951579403049, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7343133755916109648}
   m_SourcePrefab: {fileID: 100100000, guid: 598095c7719d9c4409696b5f50a4d0b4, type: 3}
 --- !u!4 &7343133755916109639 stripped
 Transform:
@@ -37072,6 +37116,37 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &7343133755916109648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343133755916109640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40fffe3d6ce40f0e798d112eed5fae7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExtendedDebug.RosterDebugHarness
+  player: {fileID: 7343133755916109641}
+  indexA: 0
+  indexB: 1
+  unitToAdd: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+--- !u!114 &7343133755916109649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343133755916109640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b661e0d928eb15bb8b8a45b16796ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Overworld.PartyRecruiter
+  player: {fileID: 7343133755916109641}
+  recruitableUnits:
+  - {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -37088,3 +37163,4 @@ SceneRoots:
   - {fileID: 134136825}
   - {fileID: 7343133755916109638}
   - {fileID: 80039916}
+  - {fileID: 2073163895}

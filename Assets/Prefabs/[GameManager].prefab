@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 605386163924564926}
   - component: {fileID: 7611040669741959228}
   - component: {fileID: 5365583281729322293}
+  - component: {fileID: 3979040332087808063}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -117,4 +118,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820202f0aba526f69b7c896643850140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  isInCombat: 0
+  paused: 0
   cmCameraActive: {fileID: 0}
+  globalVisuals: {fileID: 0}
+  inputsHints: {fileID: 0}
+  beeper: {fileID: 0}
+  pauseMenu: {fileID: 0}
+  mainPanel: {fileID: 0}
+  partyOverviewPanel: {fileID: 0}
+  inspectionPanel: {fileID: 0}
+  partyBackpackPanel: {fileID: 0}
+  optionsPanel: {fileID: 0}
+  backpackPanel: {fileID: 0}
+  backpackSlotPrefab: {fileID: 7129604670340397062, guid: ca6d05be68d9e92e080622c39cec57ef, type: 3}
+--- !u!114 &3979040332087808063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6587788151947633200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d8aa12a71bc2a6e8e07e2f9c0d153d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeManager
+  catalog: {fileID: 11400000, guid: 5f69b1758c8df7c9c94312378b018e18, type: 2}

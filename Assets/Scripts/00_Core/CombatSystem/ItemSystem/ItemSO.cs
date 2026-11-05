@@ -6,6 +6,11 @@ namespace Core.CombatSystem.ItemSystem
     [CreateAssetMenu(fileName = "NewItem", menuName = "Item System/Item")]
     public class ItemSO : ScriptableObject
     {
+        [Tooltip("If true, this item only appears in the reward pool after a challenge unlocks it.")]
+        public bool lockedByDefault;
+        [Space(10)]
+
+        [Tooltip("Unique identifier for this item.")]
         public int itemID; // Unique identifier
         public string itemName;
         public Sprite itemIcon;

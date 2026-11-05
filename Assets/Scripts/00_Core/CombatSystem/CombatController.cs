@@ -144,7 +144,8 @@ namespace Core.CombatSystem
             onFinished = setUp.OnFinished;
 
             IReadOnlyList<PartyMemberData> members = setUp.Party.Members;
-            for (int i = 0; i < members.Count; i++)
+            int activeCount = Mathf.Min(members.Count, CombatSlots.MaxPerTeam);
+            for (int i = 0; i < activeCount; i++)
             {
                 PartyMemberData member = members[i];
                 if (member == null) continue;
@@ -187,7 +188,7 @@ namespace Core.CombatSystem
             }
 
             Debug.Log($"[{nameof(CombatController)}] Starting with {units.Count} unit(s) " +
-                $"({members.Count} party slot(s), {enemies.Count} enemy slot(s)).");
+                $"({activeCount} active of {members.Count} party member(s), {enemies.Count} enemy slot(s)).");
 
             StartCombat(units, setUp.AdvantageTeam);
         }

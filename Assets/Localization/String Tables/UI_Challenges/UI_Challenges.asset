@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: UI_Challenges
+  m_EditorClassIdentifier: Unity.Localization.Editor::UnityEditor.Localization.StringTableCollection
+  m_SharedTableData: {fileID: 11400000, guid: 0e7222c7c86d563a88a3148403e962cd, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: 1552d1f2c4b0c4a1990ddd1a5af8fd96, type: 2}
+  - {fileID: 11400000, guid: e3fcf357adbbe50fb9c5765ca13367b2, type: 2}
+  - {fileID: 11400000, guid: e957f9e0492ced4c59bdd84fee0156ad, type: 2}
+  - {fileID: 11400000, guid: 3ec3cf768faf6e9ed9329dc903e215bc, type: 2}
+  m_Extensions: []
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds: []

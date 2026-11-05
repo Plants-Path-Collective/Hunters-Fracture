@@ -234,17 +234,25 @@ namespace Core.UI
                 return result;
             }
 
-            // Distinct random items.
-            var pool = new List<ItemSO>();
+            // Items that can currently be offered (locked ones are filtered out).
+            var available = new List<ItemSO>();
             foreach (ItemSO item in itemCatalog.AllItems)
-                if (item != null) pool.Add(item);
+                if (item != null && itemCatalog.IsAvailable(item)) available.Add(item);
 
+            if (available.Count == 0) return result;
+
+            // Distinct random items first.
+            var pool = new List<ItemSO>(available);
             for (int i = 0; i < rewardCount && pool.Count > 0; i++)
             {
                 int index = Random.Range(0, pool.Count);
                 result.Add(pool[index]);
                 pool.RemoveAt(index);
             }
+
+            // Not enough distinct items: fill the remaining rewards with copies of available ones.
+            while (result.Count < rewardCount)
+                result.Add(available[Random.Range(0, available.Count)]);
 
             return result;
         }

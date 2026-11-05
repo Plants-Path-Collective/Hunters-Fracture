@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Core.ChallengesSystem;
 
 namespace Core.CombatSystem.ItemSystem
 {
@@ -44,6 +45,19 @@ namespace Core.CombatSystem.ItemSystem
 
             Debug.LogWarning($"[ItemCatalog] No item found with ID {itemID}.");
             return null;
+        }
+
+        /// <summary>
+        /// Whether the item can currently appear in the reward pool.
+        /// Items flagged lockedByDefault need a challenge to unlock them first.
+        /// </summary>
+        public bool IsAvailable(ItemSO item)
+        {
+            if (item == null) return false;
+            if (!item.lockedByDefault) return true;
+
+            return ChallengeManager.Instance != null &&
+                ChallengeManager.Instance.IsUnlocked(UnlockKeys.Item(item.itemID));
         }
 
         private void EnsureLookupBuilt()

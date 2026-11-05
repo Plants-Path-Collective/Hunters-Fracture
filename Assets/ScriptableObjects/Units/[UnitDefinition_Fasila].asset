@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a738fec9070e64bbabe2943f312824a1, type: 3}
   m_Name: '[UnitDefinition_Fasila]'
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.Units.UnitDefinitionSO
+  unitID: '[UnitDefinition_Fasila]'
   unitName: Fasila
   type: 1
   team: 0
@@ -26,7 +27,7 @@ MonoBehaviour:
       m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
     m_TableEntryReference:
       m_KeyId: 209647259648
-      m_Key:
+      m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
@@ -35,7 +36,7 @@ MonoBehaviour:
       m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
     m_TableEntryReference:
       m_KeyId: 339377082368
-      m_Key:
+      m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
@@ -44,7 +45,7 @@ MonoBehaviour:
       m_TableCollectionName: GUID:ac2ee972f47925056a992baf4a1678f7
     m_TableEntryReference:
       m_KeyId: 347061047296
-      m_Key:
+      m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
@@ -96,3 +97,6 @@ MonoBehaviour:
   SPRegenMin: 5
   SPRegenMax: 10
   defendMultiplier: 1.5
+  references:
+    version: 2
+    RefIds: []
