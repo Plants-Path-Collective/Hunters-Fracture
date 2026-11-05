@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Objetos — Hunters: Fracture of Time</title>
+<title>Sistema de Ítems — Hunters: Fracture of Time</title>
 <meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,18 +38,19 @@
 <ul class="nav-list">
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
-<li><a href="items.html" aria-current="page"><span class="nav-num">05</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html" aria-current="page"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section"><div class="section-title">Referencia</div>
 <ul class="nav-list">
-<li><a href="structure.html"><span class="nav-num">09</span>Directorios</a></li>
-<li><a href="contributing.html"><span class="nav-num">10</span>Contribución</a></li>
+<li><a href="structure.html"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
 </ul>
 </div>
 </nav>
@@ -59,25 +60,25 @@
 </div></div></aside>
 
 <main class="content" id="top">
-<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Objetos</div>
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Ítems</div>
 
-<p class="eyebrow">05 · SISTEMA</p>
-<h1>Sistema de Objetos</h1>
+<p class="eyebrow">06 · SISTEMA</p>
+<h1>Sistema de Ítems</h1>
 <p class="page-lede">
-      Las unidades llevan objetos de progresión que modifican sus stats o reaccionan a eventos de combate. Los consumibles del party son un sistema separado.
+      Las unidades llevan ítems de progresión que modifican sus stats o reaccionan a eventos de combate. Los consumibles del party son un sistema separado.
     </p>
 
 <div class="note-box">
 <span class="note-tag">Alcance</span>
 <p>
-        <code>ItemSO</code> y <code>UnitInventory</code> representan objetos asignados a unidades y guardados en el snapshot de la party. <code>ConsumableSO</code> y <code>PartyBackpack</code> representan consumibles compartidos por el party. Son tipos y flujos distintos.
+        <code>ItemSO</code> y <code>UnitInventory</code> representan ítems asignados a unidades y guardados en el snapshot de la party. <code>ConsumableSO</code> y <code>PartyBackpack</code> representan consumibles compartidos por el party. Son tipos y flujos distintos.
       </p>
 </div>
 
 <h2 id="jerarquia-de-datos">Jerarquía de datos</h2>
 <div class="tree-box">
 <div class="tree-row"><span><code>ItemCatalog</code></span><span>Un único asset. Lookup pasivo por <code>itemID</code>.</span></div>
-<div class="tree-row"><span><code>ItemSO</code></span><span>Asset por objeto: ID, nombre, icono, descripción y lista de <code>ItemEffectSO</code>.</span></div>
+<div class="tree-row"><span><code>ItemSO</code></span><span>Asset por ítem: ID, nombre, icono, descripción y lista de <code>ItemEffectSO</code>.</span></div>
 <div class="tree-row"><span><code>ItemEffectSO</code></span><span>Base abstracta, sin miembros propios. Nunca se instancia directamente.</span></div>
 <div class="tree-row"><span>↳ <code>StatModifierEffectSO</code></span><span>Bonus porcentual y/o plano para una stat, según cantidad de stacks.</span></div>
 <div class="tree-row"><span>↳ <code>StatScalingEffectSO</code></span><span>Bonus de una stat calculado a partir del valor final de otra.</span></div>
@@ -160,7 +161,7 @@
       <a href="units.html#unit">Units</a>.
     </p>
 
-<h2 id="objetos-de-la-demo">Objetos de la demo</h2>
+<h2 id="items-de-la-demo">Ítems de la demo</h2>
 <table class="dep-table">
 <thead><tr><th>Objeto</th><th>Categoría</th><th>Implementación</th></tr></thead>
 <tbody>
@@ -197,7 +198,7 @@
 <a href="#statmodifiereffectso">StatModifierEffectSO</a>
 <a href="#triggeredeffectso">TriggeredEffectSO</a>
 <a href="#integracion-con-unit">Integración con Unit</a>
-<a href="#objetos-de-la-demo">Objetos de la demo</a>
+<a href="#items-de-la-demo">Ítems de la demo</a>
 <a href="#consumibles">Consumibles de la mochila</a>
 </section>
 

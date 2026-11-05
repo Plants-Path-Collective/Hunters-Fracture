@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Units — Hunters: Fracture of Time</title>
+<title>Sistema de Unidades — Hunters: Fracture of Time</title>
 <meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,18 +38,19 @@
 <ul class="nav-list">
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html" aria-current="page"><span class="nav-num">04</span>Unidades</a></li>
-<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html" aria-current="page"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section"><div class="section-title">Referencia</div>
 <ul class="nav-list">
-<li><a href="structure.html"><span class="nav-num">09</span>Directorios</a></li>
-<li><a href="contributing.html"><span class="nav-num">10</span>Contribución</a></li>
+<li><a href="structure.html"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
 </ul>
 </div>
 </nav>
@@ -59,15 +60,15 @@
 </div></div></aside>
 
 <main class="content" id="top">
-<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Units</div>
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Unidades</div>
 
-<p class="eyebrow">04 · SISTEMA</p>
-<h1>Units</h1>
+<p class="eyebrow">05 · SISTEMA</p>
+<h1>Sistema de Unidades</h1>
 <p class="page-lede">
       Los datos de cada combatiente se separan en una definición ScriptableObject, estado persistente de aliados y una instancia de combate con controladores.
     </p>
 
-<h2 id="dos-formas">Dos formas de una misma Unit</h2>
+<h2 id="persistencia-y-combate">Datos persistentes e instancia de combate</h2>
 <p>
       <code>UnitDefinitionSO</code> define identidad, stats base y habilidades. <code>PartyMemberData</code> conserva HP, SP e inventario del aliado entre encuentros. <code>Unit</code> y sus controladores son instancias temporales de <code>CombatStage</code>.
     </p>
@@ -121,6 +122,49 @@
 </div>
 </div>
 
+<h2 id="formas-alternas">Formas alternas durante el combate</h2>
+<p>Una <em>forma</em> es un estado temporal que una <code>Unit</code> puede adoptar durante un encuentro. No es otra definición de personaje ni reemplaza el asset base: <code>UnitFormSO</code> contiene los cambios de forma, y el sistema de combate los aplica a la instancia activa.</p>
+<div class="form-compare">
+<article class="form-state">
+<span class="form-state-label">Estado base</span>
+<h3>UnitDefinitionSO</h3>
+<p>Define el tipo, las stats base, las habilidades y el ultimate originales. Se conserva como referencia y se restaura al salir de la forma.</p>
+</article>
+<div class="form-transition" aria-hidden="true">⇄</div>
+<article class="form-state form-state--alternate">
+<span class="form-state-label">Mientras la forma está activa</span>
+<h3>UnitFormSO</h3>
+<p>Puede cambiar el tipo de ataque, añadir bonuses planos, cambiar el máximo de HP y sustituir las habilidades y el ultimate.</p>
+</article>
+</div>
+<div class="form-details">
+<div class="form-detail">
+<span class="form-detail-num">01</span>
+<div><strong>Entrada</strong><p>Un passive u otra lógica de combate llama a <code>EnterForm</code>. Solo una unidad viva, todavía en su forma base, puede entrar.</p></div>
+</div>
+<div class="form-detail">
+<span class="form-detail-num">02</span>
+<div><strong>Aplicación</strong><p>Se guardan los HP previos, se reemplaza el kit, y se recalculan las stats. La opción <code>maxHpFromMaxSp</code> establece el máximo de HP igual al máximo de SP y llena HP hasta ese nuevo máximo.</p></div>
+</div>
+<div class="form-detail">
+<span class="form-detail-num">03</span>
+<div><strong>Salida</strong><p><code>ExitForm</code> restaura tipo, habilidades, ultimate y stats base. Al salir voluntariamente o al agotarse Fury, conserva la proporción de HP actual; si la unidad queda downed en forma, evita la muerte y recupera los HP previos menos la penalización <code>downedHpPenalty</code>.</p></div>
+</div>
+</div>
+<p>Las formas son datos de combate, no progreso persistente: al cerrar el encuentro se destruye la instancia <code>Unit</code>, mientras el write-back de la party conserva HP, SP e inventario, no una forma activa.</p>
+
+<h3 id="furia-y-forma">Ejemplo: Fury Form de Elowen</h3>
+<p><code>FuryFormPassiveSO</code> configura un medidor de Fury para la unidad que porta el passive. Recibe Fury cuando esa unidad o un aliado recibe daño; al llenarse el medidor entra en la <code>UnitFormSO</code> asignada. En el asset actual de Elowen, el medidor llega hasta 100, gana 0.5 Fury por cada 1% de daño relativo al HP máximo del objetivo y drena 20 Fury al final de cada turno transformado. Al llegar a cero, vuelve a su forma base. La forma también puede terminar voluntariamente mediante un efecto de acción como <code>RevertFormEffectSO</code>.</p>
+<div class="form-example">
+<div class="form-example-heading"><span>FLUJO DE ELOWEN</span><code>FuryFormPassiveSO</code></div>
+<div class="form-example-flow">
+<span>Daño a la party</span><b>→</b><span>Sube Fury</span><b>→</b><span>Fury al máximo</span><b>→</b><span>Werewolf form</span>
+</div>
+</div>
+
+<h3 id="representacion-visual">Representación visual</h3>
+<p><code>UnitFormVisuals</code> escucha los cambios de forma y activa el modelo asociado a la forma actual, o el modelo base al volver. El cambio también invoca el UnityEvent <code>onModelSwapped</code> para conectar feedback, como partículas o sonido. Si una forma no tiene un modelo asignado, se mantiene visible el modelo base. En el prefab, conviene mantener todos los modelos bajo el mismo objeto <code>Visuals</code> para que las animaciones de daño y muerte afecten al modelo que esté visible.</p>
+
 <h2 id="stats">Stats base y derivadas</h2>
 <p>
       El juego nunca escribe stats "finales" en el asset. <code>UnitStatsController</code> las
@@ -134,7 +178,7 @@
 <span>Stats finales</span>
 </div>
 <p>
-      El recálculo parte siempre de stats base, aplica modificadores de objeto y escalados, y luego los modificadores temporales de estados. No acumula deltas sobre el resultado anterior. Cada <code>StatModifierEffectSO</code> aplica primero sus contribuciones porcentuales y luego las planas; <code>StatScalingEffectSO</code> se calcula en una pasada posterior. Ver <a href="items.html#statmodifiereffectso">Objetos</a>.
+      El recálculo parte siempre de stats base, aplica modificadores de ítems y escalados, y luego los modificadores temporales de estados. No acumula deltas sobre el resultado anterior. Cada <code>StatModifierEffectSO</code> aplica primero sus contribuciones porcentuales y luego las planas; <code>StatScalingEffectSO</code> se calcula en una pasada posterior. Ver <a href="items.html#statmodifiereffectso">Ítems</a>.
     </p>
 <div class="note-box">
 <span class="note-tag">Clamp de entrada</span>
@@ -198,7 +242,7 @@
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">UnitInventory</span>
-<span class="component-desc">Cantidades por ítem. Se puebla desde el <code>inventorySnapshot</code> al iniciar y dispara <code>OnStackChanged</code> en cada cambio. Qué es un ítem se define en <a href="items.html">Objetos</a>; acá solo importa que la Unit lo <em>sostiene</em>.</span>
+<span class="component-desc">Cantidades por ítem. Se puebla desde el <code>inventorySnapshot</code> al iniciar y dispara <code>OnStackChanged</code> en cada cambio. Qué es un ítem se define en <a href="items.html">Ítems</a>; acá solo importa que la Unit lo <em>sostiene</em>.</span>
 </div>
 <div class="component-card">
 <span class="component-name">UnitStatsController</span>
@@ -206,7 +250,7 @@
 </div>
 <div class="component-card">
 <span class="component-name">UnitEffectController</span>
-<span class="component-desc">Suscribe y desuscribe los <code>TriggeredEffectSO</code> que la Unit porta a los eventos de <code>CombatController</code>, ordenados por <code>Priority</code>. Los efectos en sí viven en <a href="items.html#triggeredeffectso">Objetos</a>; los eventos, en <a href="combat.html#verbos-y-eventos">Combate</a>.</span>
+<span class="component-desc">Suscribe y desuscribe los <code>TriggeredEffectSO</code> que la Unit porta a los eventos de <code>CombatController</code>, ordenados por <code>Priority</code>. Los efectos en sí viven en <a href="items.html#triggeredeffectso">Ítems</a>; los eventos, en <a href="combat.html#verbos-y-eventos">Combate</a>.</span>
 </div>
 </div>
 
@@ -241,7 +285,7 @@ Enemigo (EnemySlotData):
 <h2 id="destruccion">Destrucción</h2>
 <p>En <code>Victory</code> y <code>Fled</code>, <code>CombatController.CloseCombat()</code> copia HP, SP e inventario de cada aliado a su <code>PartyMemberData</code>. En <code>Defeat</code>, no hay write-back porque la run termina. Al cerrar se destruyen las instancias de <code>Unit</code>.</p>
 <p>
-      Si el flujo de recompensas está habilitado, los objetos asignados se agregan antes de cerrar el combate; el siguiente write-back guarda el inventario resultante.
+      Si el flujo de recompensas está habilitado, los ítems asignados se agregan antes de cerrar el combate; el siguiente write-back guarda el inventario resultante.
     </p>
 <div class="note-box">
 <span class="note-tag">Estados no persisten</span>
@@ -261,6 +305,8 @@ Enemigo (EnemySlotData):
 <tr><td><code>PartyMemberData</code></td><td>Overworld</td><td>Definición + <code>currentHP</code>/<code>currentSP</code> + <code>inventorySnapshot</code> de un aliado</td></tr>
 <tr><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td><td>Definición + inventario opcional de un enemigo; sin HP/SP arrastrado</td></tr>
 <tr><td><code>Unit</code></td><td>CombatStage</td><td>MonoBehaviour de combate; compone los tres controladores</td></tr>
+<tr><td><code>UnitFormSO</code></td><td>Asset / CombatStage</td><td>Configura los cambios temporales de tipo, stats, habilidades y ultimate de una forma</td></tr>
+<tr><td><code>UnitFormVisuals</code></td><td>CombatStage</td><td>Alterna entre el modelo base y el modelo de la forma activa</td></tr>
 <tr><td><code>UnitInventory</code></td><td>CombatStage</td><td>Cantidades por ítem; dispara <code>OnStackChanged</code></td></tr>
 <tr><td><code>UnitStatsController</code></td><td>CombatStage</td><td>Recalcula stats finales desde base + modificadores activos</td></tr>
 <tr><td><code>UnitEffectController</code></td><td>CombatStage</td><td>Attach/Detach de <code>TriggeredEffectSO</code> a eventos de <code>CombatController</code></td></tr>
@@ -277,15 +323,18 @@ Enemigo (EnemySlotData):
 </a>
 <a class="page-nav-next" href="items.html">
 <span class="page-nav-dir">Siguiente</span>
-<span class="page-nav-title">Objetos</span>
+<span class="page-nav-title">Ítems</span>
 </a>
 </nav>
 
 </main>
 
 <section class="toc"><strong>En esta página</strong>
-<a href="#dos-formas">Dos formas de una misma Unit</a>
+<a href="#persistencia-y-combate">Datos persistentes e instancia de combate</a>
 <a href="#unitdefinitionso">UnitDefinitionSO</a>
+<a href="#formas-alternas">Formas alternas durante el combate</a>
+<a href="#furia-y-forma">Fury Form de Elowen</a>
+<a href="#representacion-visual">Representación visual</a>
 <a href="#stats">Stats base y derivadas</a>
 <a href="#party-y-partymemberdata">AllyParty y PartyMemberData</a>
 <a href="#enemyslotdata">EnemySlotData</a>

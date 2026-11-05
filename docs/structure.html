@@ -38,18 +38,19 @@
 <ul class="nav-list">
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-<li><a href="combat.html"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
-<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section current"><div class="section-title">Referencia</div>
 <ul class="nav-list">
-<li><a href="structure.html" aria-current="page"><span class="nav-num">09</span>Directorios</a></li>
-<li><a href="contributing.html"><span class="nav-num">10</span>Contribución</a></li>
+<li><a href="structure.html" aria-current="page"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
 </ul>
 </div>
 </nav>
@@ -61,13 +62,14 @@
 <main class="content" id="top">
 <div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Directorios</div>
 
-<p class="eyebrow">09 · REFERENCIA</p>
+<p class="eyebrow">10 · REFERENCIA</p>
 <h1>Estructura de Directorios Clave</h1>
 <p class="page-lede">Rutas verificadas de scripts, escenas, acciones y datos del proyecto.</p>
 <div class="tree-box">
 <div class="tree-row"><code>Assets/Inputs/</code><span><code>InputSystem_Actions.inputactions</code> y su wrapper C# generado.</span></div>
 <div class="tree-row"><code>Assets/Scripts/00_Core/</code><span>GameManager, InputManager, SceneSetter y servicios base.</span></div>
 <div class="tree-row"><code>Assets/Scripts/00_Core/CombatSystem/</code><span>Combate, transiciones, unidades, acciones e inventario.</span></div>
+<div class="tree-row"><code>Assets/Scripts/00_Core/ChallengesSystem/</code><span>Definiciones, condiciones, progreso, recompensas y guardado de desafíos.</span></div>
 <div class="tree-row"><code>Assets/Scripts/00_Core/DialogueSystem/</code><span>Sistema y componentes de diálogo.</span></div>
 <div class="tree-row"><code>Assets/Scripts/00_Core/Render/</code><span>Cámaras y activación de salas/zonas.</span></div>
 <div class="tree-row"><code>Assets/Scripts/00_Core/UI/</code><span>Managers y componentes de interfaz.</span></div>
@@ -75,14 +77,14 @@
 <div class="tree-row"><code>Assets/Scripts/02_Overworld/</code><span>Entidades y componentes del mundo explorable.</span></div>
 <div class="tree-row"><code>Assets/Scripts/98_Debug/</code><span>Harnesses y utilidades de depuración.</span></div>
 <div class="tree-row"><code>Assets/Scripts/99_Misc/</code><span>Atributos y utilidades compartidas.</span></div>
-<div class="tree-row"><code>Assets/ScriptableObjects/</code><span>Datos de Units, Skills, Items, Consumables, Effects, Statuses y Dialogue; incluye <code>ItemCatalog.asset</code>.</span></div>
+<div class="tree-row"><code>Assets/ScriptableObjects/</code><span>Datos de Units, Skills, Items, Consumables, Effects, Statuses, Dialogue y Challenges; incluye <code>ItemCatalog.asset</code> y <code>ChallengeCatalog.asset</code>.</span></div>
 <div class="tree-row"><code>Assets/Scenes/</code><span>Escenas agrupadas en <code>Combat Demo/</code>, <code>Debug Scenes/</code> y <code>Prototype Scenes/</code>.</span></div>
 <div class="tree-row"><code>Assets/Plugins/Demigiant/DOTween/</code><span>Plugin DOTween incluido localmente.</span></div>
 </div>
 <nav aria-label="Navegación entre páginas" class="page-nav">
-<a class="page-nav-prev" href="architecture.html">
+<a class="page-nav-prev" href="challenges.html">
 <span class="page-nav-dir">Anterior</span>
-<span class="page-nav-title">Arquitectura</span>
+<span class="page-nav-title">Desafíos</span>
 </a>
 <a class="page-nav-next" href="contributing.html">
 <span class="page-nav-dir">Siguiente</span>

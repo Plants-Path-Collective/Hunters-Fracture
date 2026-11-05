@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Desafíos — Hunters: Fracture of Time</title>
+<meta name="description" content="Documentación técnica del sistema de desafíos, progreso, recompensas y desbloqueos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section current"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="challenges.html" aria-current="page"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
+</ul>
+</div>
+<div class="nav-section"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
+
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Desafíos</div>
+
+<p class="eyebrow">03 · SISTEMA</p>
+<h1>Sistema de Desafíos</h1>
+<p class="page-lede">Desafíos definidos con ScriptableObjects: escuchan eventos de progreso, entregan recompensas al completarse y guardan el progreso y los desbloqueos entre sesiones.</p>
+
+<h2 id="arquitectura">Arquitectura</h2>
+<p><code>ChallengeManager</code> es un Singleton persistente que recibe un <code>ChallengeCatalog</code>, carga el archivo de guardado y conecta las condiciones de cada desafío que aún no está completado. Las condiciones escuchan el hub estático <code>ChallengeEvents</code>; los sistemas de gameplay informan estadísticas o hitos sin depender directamente del manager.</p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">ChallengeCatalog</span>
+<span class="component-desc">Asset que enumera las definiciones disponibles y permite buscarlas por <code>challengeID</code>. Se asigna al manager; no es un Singleton.</span>
+</div>
+<div class="component-card">
+<span class="component-name">ChallengeSO</span>
+<span class="component-desc">Definición de un desafío: ID estable, nombre y descripción localizados, icono, visibilidad, condición, alcance y recompensas. El progreso no se guarda en este asset.</span>
+</div>
+<div class="component-card">
+<span class="component-name">ChallengeConditionSO</span>
+<span class="component-desc">Condición reutilizable que se suscribe a eventos y entrega al manager un callback para sumar progreso. Cada condición devuelve una acción de limpieza para desuscribirse al completar.</span>
+</div>
+<div class="component-card">
+<span class="component-name">ChallengeManager</span>
+<span class="component-desc">Mantiene progreso y desbloqueos en memoria, anuncia cambios, concede recompensas y coordina la persistencia.</span>
+</div>
+</div>
+
+<h2 id="condiciones-y-alcance">Condiciones y alcance</h2>
+<p>Hay dos tipos de condición implementados:</p>
+<ul>
+<li><code>StatThresholdConditionSO</code> suma una cantidad de una estadística hasta alcanzar un objetivo. El enum contempla estadísticas como enemigos derrotados, combates ganados, daño infligido e ítems recogidos; no todas tienen un emisor conectado actualmente.</li>
+<li><code>MilestoneConditionSO</code> suma una unidad cuando se informa un ID de hito concreto. Puede requerir más de una notificación del mismo hito.</li>
+</ul>
+<p>El alcance <code>Lifetime</code> conserva el progreso entre runs. <code>PerRun</code> reinicia el progreso incompleto cuando otro sistema llama a <code>ChallengeManager.BeginRun()</code>; los desafíos ya completados siguen completados. El sistema no inicia una run automáticamente.</p>
+<div class="note-box">
+<span class="note-tag">Progreso que se reporta actualmente</span>
+<p><code>CombatChallengeReporter</code> informa enemigos derrotados (una vez por unidad), daño aliado solicitado —incluye overkill—, combates ganados y huidas. Aunque <code>CHALLENGE_STAT</code> también declara <code>ItemsCollected</code>, <code>RunsStarted</code> y <code>RunsCompleted</code>, no encontré emisores de gameplay para esos valores. Tampoco encontré llamadas de gameplay a <code>ReportMilestone</code>; el harness de depuración sí permite probar estadísticas e hitos manualmente.</p>
+</div>
+
+<h2 id="completar-y-recompensas">Completar y conceder recompensas</h2>
+<p>Al alcanzar el objetivo, el manager marca el desafío completado, se desuscribe de su condición, concede las recompensas configuradas, emite <code>OnChallengeCompleted</code> y guarda. Las recompensas actuales permiten añadir una clave de desbloqueo genérica, desbloquear un ítem o desbloquear una unidad.</p>
+<ul>
+<li><strong>Ítems:</strong> las claves usan <code>item:{itemID}</code>. <code>ItemCatalog.IsAvailable</code> permite los ítems normales y filtra del pool los marcados <code>lockedByDefault</code> hasta que se desbloquean.</li>
+<li><strong>Unidades:</strong> las claves usan <code>unit:{unitID}</code>. <code>PartyRecruiter</code> sincroniza las unidades desbloqueadas al iniciar y después de completar un desafío; añade al grupo las que estén en su lista de reclutables y aún no estén presentes.</li>
+</ul>
+<p>El campo <code>hidden</code> indica que una interfaz debe ocultar el nombre y la descripción hasta completar el desafío. El manager expone catálogo, progreso y eventos para una UI, pero no encontré un componente de pantalla de desafíos entre los scripts actuales.</p>
+
+<h2 id="persistencia">Persistencia</h2>
+<p><code>JsonChallengeSaveBackend</code> guarda <code>challenges.json</code> en <code>Application.persistentDataPath</code>. El JSON contiene la versión del formato, el progreso por ID (valor y estado completado) y las claves de desbloqueo. Para escribir, usa un archivo temporal y después lo reemplaza o mueve al destino. Si no puede leer un archivo existente, registra el error e intenta conservar una copia con extensión <code>.corrupt</code>.</p>
+<p>Se guarda al completar un desafío, al terminar un combate cuando hay cambios, cuando <code>BeginRun()</code> reinicia progreso y al salir de la aplicación si quedan cambios pendientes. El progreso también puede consultarse con <code>GetProgress</code> e <code>IsCompleted</code>; los desbloqueos, con <code>IsUnlocked</code>.</p>
+
+<h2 id="eventos-y-api">Eventos y API</h2>
+<table class="dep-table">
+<thead><tr><th>Elemento</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>ChallengeEvents.ReportStat(stat, amount)</code></td><td>Reporta un incremento positivo de una estadística.</td></tr>
+<tr><td><code>ChallengeEvents.ReportMilestone(id)</code></td><td>Reporta un hito identificado por una cadena no vacía.</td></tr>
+<tr><td><code>OnProgressChanged</code></td><td>Evento del manager con desafío, progreso actual y objetivo.</td></tr>
+<tr><td><code>OnChallengeCompleted</code></td><td>Evento del manager al completar un desafío; lo usa <code>PartyRecruiter</code>.</td></tr>
+</tbody>
+</table>
+<p class="flow-note">Los reportes no hacen nada si no hay suscriptores. Para validar el sistema en Play Mode, <code>ChallengeDebugHarness</code> permite reportar estadísticas e hitos desde el menú de contexto del componente.</p>
+
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="inputs.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Inputs</span>
+</a>
+<a class="page-nav-next" href="combat.html">
+<span class="page-nav-dir">Siguiente</span>
+<span class="page-nav-title">Combate</span>
+</a>
+</nav>
+
+</main>
+
+<section class="toc"><strong>En esta página</strong>
+<a href="#arquitectura">Arquitectura</a>
+<a href="#condiciones-y-alcance">Condiciones y alcance</a>
+<a href="#completar-y-recompensas">Completar y recompensas</a>
+<a href="#persistencia">Persistencia</a>
+<a href="#eventos-y-api">Eventos y API</a>
+</section>
+
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

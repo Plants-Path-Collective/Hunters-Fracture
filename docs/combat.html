@@ -38,18 +38,19 @@
 <ul class="nav-list">
 <li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
 <li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
-<li><a href="combat.html" aria-current="page"><span class="nav-num">03</span>Combate</a></li>
-<li><a href="units.html"><span class="nav-num">04</span>Unidades</a></li>
-<li><a href="items.html"><span class="nav-num">05</span>Objetos</a></li>
-<li><a href="dialogue.html"><span class="nav-num">06</span>Diálogo</a></li>
-<li><a href="localization.html"><span class="nav-num">07</span>Localización</a></li>
-<li><a href="architecture.html"><span class="nav-num">08</span>Arquitectura</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html" aria-current="page"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
 </ul>
 </div>
 <div class="nav-section"><div class="section-title">Referencia</div>
 <ul class="nav-list">
-<li><a href="structure.html"><span class="nav-num">09</span>Directorios</a></li>
-<li><a href="contributing.html"><span class="nav-num">10</span>Contribución</a></li>
+<li><a href="structure.html"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
 </ul>
 </div>
 </nav>
@@ -61,7 +62,7 @@
 <main class="content" id="top">
 <div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Combate</div>
 
-<p class="eyebrow">03 · SISTEMA</p>
+<p class="eyebrow">04 · SISTEMA</p>
 <h1>Combate</h1>
 <p class="page-lede">
       Sistema de combate por turnos con timeline posicional. El combate no depende de ningún
@@ -201,7 +202,7 @@
 <p><code>CombatController</code> determina el resultado al quedarse un bando sin unidades vivas y dispara <code>OnCombatEnd</code>. <code>CloseCombat()</code> escribe HP, SP e inventario de los aliados en <code>PartyMemberData</code> para <code>Victory</code> y <code>Fled</code>; en <code>Defeat</code> no hay write-back. Después destruye las Units y llama al callback de <code>CombatSetUp</code>.</p>
 <ul>
 <li><strong>Defeat:</strong> <code>CombatUIManager</code> muestra la pantalla de game over y permite volver al Overworld o al Main Menu.</li>
-<li><strong>Rewards:</strong> <code>CombatStage</code> tiene <code>autoCloseOnEnd</code> desactivado y <code>RewardsScreen</code> asignado. Al ganar, ofrece dos objetos distintos elegidos al azar del <code>ItemCatalog</code>, que se asignan a unidades aliadas.</li>
+<li><strong>Rewards:</strong> <code>CombatStage</code> tiene <code>autoCloseOnEnd</code> desactivado y <code>RewardsScreen</code> asignado. Al ganar, ofrece dos ítems distintos elegidos al azar del <code>ItemCatalog</code>, que se asignan a unidades aliadas.</li>
 <li><strong>Configuración:</strong> <code>autoCloseOnEnd</code> vale <code>true</code> por defecto en el script; la escena <code>CombatStage</code> lo sobrescribe a <code>false</code> para permitir el flujo de recompensas.</li>
 </ul>
 
@@ -362,7 +363,7 @@
 <h3 id="mochila">Mochila</h3>
 <div class="note-box">
 <span class="note-tag">Sistema separado</span>
-<p>La mochila usa <code>ConsumableSO</code> y <code>PartyBackpack</code>, no <code>UnitInventory</code>. El inventario de progresión se describe en <a href="items.html">Objetos</a>.</p>
+<p>La mochila usa <code>ConsumableSO</code> y <code>PartyBackpack</code>, no <code>UnitInventory</code>. El inventario de progresión se describe en <a href="items.html">Ítems</a>.</p>
 </div>
 <p>Comportamiento implementado:</p>
 <ul>
@@ -540,9 +541,9 @@ final      = Max(1, RoundToInt(received))</pre>
 </div>
 
 <nav aria-label="Navegación entre páginas" class="page-nav">
-<a class="page-nav-prev" href="inputs.html">
+<a class="page-nav-prev" href="challenges.html">
 <span class="page-nav-dir">Anterior</span>
-<span class="page-nav-title">Inputs</span>
+<span class="page-nav-title">Desafíos</span>
 </a>
 <a class="page-nav-next" href="units.html">
 <span class="page-nav-dir">Siguiente</span>
