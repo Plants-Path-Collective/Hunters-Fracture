@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Misiones — Hunters: Fracture of Time</title>
+<meta name="description" content="Diseño del sistema de misiones: datos, estados, ventanas horarias, integración con diálogo, UI y puente con desafíos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section current"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
+<li><a href="clock.html"><span class="nav-num">10</span>Reloj y horarios</a></li>
+<li><a href="quests.html" aria-current="page"><span class="nav-num">11</span>Misiones</a></li>
+</ul>
+</div>
+<div class="nav-section"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">12</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">13</span>Contribución</a></li>
+<li><a href="console.html"><span class="nav-num">14</span>Consola de desarrollo</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
+
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Misiones</div>
+
+<p class="eyebrow">13 · SISTEMA</p>
+<h1>Sistema de Misiones</h1>
+<p class="page-lede">Misiones que el jugador acepta o rechaza mediante diálogo, sigue con objetivos visibles en la interfaz y entrega al volver con un NPC. Dependen del <a href="clock.html">reloj</a> para sus ventanas horarias y completarlas puede cumplir un <a href="challenges.html">desafío</a>.</p>
+
+<div class="note-box">
+<span class="note-tag">Estado</span>
+<p>Diseño acordado, <strong>aún sin implementar</strong>. Se apoya en sistemas existentes (<code>ChallengeEvents</code>, <code>ConversationSO</code>, <code>ConversationTrigger</code>, localización). Los nombres de miembros de esos sistemas deben verificarse contra el código al implementar.</p>
+</div>
+
+<h2 id="arquitectura">Arquitectura</h2>
+<p><strong>Quest</strong> y <strong>Challenge</strong> son capas distintas. Una misión tiene estado por run, objetivos visibles y NPC de oferta y entrega. Un desafío es un logro persistente. El único acoplamiento es un hito: al completar una misión, el manager reporta <code>quest_completed:{questID}</code> y un desafío con <code>MilestoneConditionSO</code> lo escucha, sin tocar <code>ChallengeManager</code>.</p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">QuestSO</span>
+<span class="component-desc">Definición de una misión. Es un asset inmutable: el progreso no se guarda aquí.</span>
+</div>
+<div class="component-card">
+<span class="component-name">QuestObjectiveSO</span>
+<span class="component-desc">Base abstracta de un objetivo. Se suscribe a eventos y entrega una acción de limpieza, igual que <code>ChallengeConditionSO</code>.</span>
+</div>
+<div class="component-card">
+<span class="component-name">QuestCatalog</span>
+<span class="component-desc">Asset que enumera las misiones y permite buscarlas por <code>questID</code>. Se asigna por referencia; no es un Singleton.</span>
+</div>
+<div class="component-card">
+<span class="component-name">QuestManager</span>
+<span class="component-desc">Singleton persistente. Mantiene estados y progreso, conecta objetivos, entrega recompensas, emite eventos para la UI y coordina el guardado.</span>
+</div>
+<div class="component-card">
+<span class="component-name">NpcQuestGiver</span>
+<span class="component-desc">Componente del NPC que elige la conversación según el estado de sus misiones y la fase del día.</span>
+</div>
+<div class="component-card">
+<span class="component-name">DialogueActionSO</span>
+<span class="component-desc">Acción que una respuesta del diálogo ejecuta al elegirse (aceptar, entregar).</span>
+</div>
+</div>
+
+<h2 id="questso">QuestSO</h2>
+<table class="dep-table">
+<thead><tr><th>Campo</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>questID</code></td><td>Identificador estable; clave del catálogo, del guardado y del hito <code>quest_completed:{questID}</code>.</td></tr>
+<tr><td>Título y descripción</td><td><code>LocalizedString</code>.</td></tr>
+<tr><td><code>giverNpcID</code> / <code>turnInNpcID</code></td><td>NPC que ofrece y NPC que recibe la entrega; pueden ser distintos.</td></tr>
+<tr><td>Prerrequisitos</td><td>Otras misiones completadas o claves de desbloqueo.</td></tr>
+<tr><td><code>objectives</code></td><td>Lista de <code>QuestObjectiveSO</code>; todos deben cumplirse.</td></tr>
+<tr><td><code>offerPhases</code></td><td>Máscara de <code>DAY_PHASE</code> en la que se puede aceptar.</td></tr>
+<tr><td><code>completePhases</code></td><td>Máscara en la que se puede entregar. Fuera de ella, una misión aceptada expira.</td></tr>
+<tr><td>Recompensas</td><td>Mismo tipo de recompensa que usa <code>ChallengeSO</code>, para no duplicar la lógica de ítems y unidades.</td></tr>
+<tr><td><code>autoComplete</code></td><td>Si es verdadero, se completa al cumplir los objetivos sin necesidad de entregar.</td></tr>
+<tr><td>Conversaciones</td><td>Referencias a <code>ConversationSO</code> para cada situación (ver <a href="#dialogo">Integración con diálogo</a>).</td></tr>
+<tr><td>Consecuencias de expiración</td><td>Lista opcional; ver <a href="#expiracion">Ventanas horarias y expiración</a>.</td></tr>
+</tbody>
+</table>
+<p>Todas las misiones son <code>PerRun</code>: al iniciar una run, el progreso se borra y pueden completarse de nuevo.</p>
+
+<h2 id="objetivos">Objetivos</h2>
+<p>Cada objetivo expone un texto localizado con progreso, por ejemplo <em>"Derrota {current}/{target} lobos"</em> mediante Smart Strings de Unity Localization, y un método para suscribirse a su fuente de progreso. Implementaciones iniciales:</p>
+<ul>
+<li><code>MilestoneObjectiveSO</code>: suma progreso al informarse un ID de hito (<code>ChallengeEvents.ReportMilestone</code>).</li>
+<li><code>StatObjectiveSO</code>: cuenta una estadística <strong>desde que se aceptó</strong> la misión. Es importante porque <code>StatThresholdConditionSO</code> suma progreso global y no sirve como base.</li>
+</ul>
+<p>Los objetivos que dependen de la dungeon solo avanzan mientras el jugador esté dentro, es decir, durante la tarde.</p>
+
+<h2 id="estados">Estados</h2>
+<div class="flow-chain">
+<span>Unavailable</span><span class="flow-arrow">→</span>
+<span>Available</span><span class="flow-arrow">→</span>
+<span>Active</span><span class="flow-arrow">→</span>
+<span>ReadyToTurnIn</span><span class="flow-arrow">→</span>
+<span>Completed</span>
+</div>
+<table class="dep-table">
+<thead><tr><th>Estado</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td><code>Unavailable</code></td><td>No se cumplen los prerrequisitos.</td></tr>
+<tr><td><code>Available</code></td><td>Se puede ofrecer. Si el jugador la rechaza o la fase de oferta pasa, sigue <code>Available</code>; el NPC decide qué conversación usar.</td></tr>
+<tr><td><code>Active</code></td><td>Aceptada, con objetivos suscritos.</td></tr>
+<tr><td><code>ReadyToTurnIn</code></td><td>Objetivos cumplidos; falta hablar con el NPC de entrega.</td></tr>
+<tr><td><code>Completed</code></td><td>Entregada y recompensada.</td></tr>
+<tr><td><code>Expired</code></td><td>Aceptada pero no entregada dentro de <code>completePhases</code>.</td></tr>
+</tbody>
+</table>
+<p>API prevista de <code>QuestManager</code>: <code>GetState</code>, <code>Accept</code>, <code>TryTurnIn</code>, <code>GetObjectives</code>, <code>BeginRun</code>. Eventos para la interfaz: <code>OnQuestStateChanged</code> y <code>OnObjectiveProgress</code>. Al aceptar se suscriben los objetivos; al cargar un guardado se vuelven a suscribir los de las misiones activas.</p>
+
+<h2 id="expiracion">Ventanas horarias y expiración</h2>
+<p>Las misiones no tienen lógica de tiempo propia: consultan al <code>GameClock</code>.</p>
+<ul>
+<li><strong>Oferta:</strong> si la fase actual no está en <code>offerPhases</code>, el NPC no entrega la misión y usa su conversación de "cerrada".</li>
+<li><strong>Entrega:</strong> si una misión <code>Active</code> o <code>ReadyToTurnIn</code> sale de <code>completePhases</code>, pasa a <code>Expired</code>.</li>
+<li><strong>Evaluación:</strong> perezosa, al consultar el estado, al recibir <code>OnPhaseChanged</code> y al cargar, para cubrir saltos de tiempo.</li>
+<li><strong>Consecuencias:</strong> una lista de acciones de datos que se ejecutan al expirar, como cambiar el <code>NpcScheduleSO</code> de un NPC por uno "ausente" (el NPC desaparece, como en <em>Majora's Mask</em>). Mantenerlas como datos evita código especial por misión.</li>
+</ul>
+<div class="note-box">
+<span class="note-tag">Diseño</span>
+<p>Una misión aceptada en la mañana y completada en la dungeon durante la tarde se entrega normalmente en la noche. Si <code>completePhases</code> no incluye la noche, una misión terminada dentro de la dungeon expira antes de poder entregarse. Decide esto por misión.</p>
+</div>
+
+<h2 id="dialogo">Integración con diálogo</h2>
+<p>Hoy el diálogo solo reproduce líneas y <code>ConversationTrigger</code> elige la conversación por <code>conversationIndex</code>. Se añaden tres piezas.</p>
+<h3>Acciones en las respuestas</h3>
+<p><code>AnswerOption</code> gana una lista de <code>DialogueActionSO</code>, ejecutadas al elegir la respuesta: <code>AcceptQuestAction</code> (<code>QuestManager.Accept</code>) y <code>TurnInQuestAction</code> (<code>QuestManager.TryTurnIn</code>). <strong>Rechazar</strong> es una respuesta sin acción que cierra la conversación; la misión sigue <code>Available</code> y el NPC puede volver a ofrecerla. El fallback por timeout de <code>DialogueLine</code> equivale a rechazar.</p>
+<h3>Selección de conversación</h3>
+<p><code>NpcQuestGiver</code> consulta a <code>QuestManager</code> las misiones de su <code>NPC_ID</code> antes de iniciar. Cada <code>QuestSO</code> referencia sus conversaciones y el orden de prioridad es:</p>
+<table class="dep-table">
+<thead><tr><th>Prioridad</th><th>Situación</th><th>Conversación</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>ReadyToTurnIn</code> dentro de <code>completePhases</code></td><td>Entrega, con <code>TurnInQuestAction</code></td></tr>
+<tr><td>2</td><td><code>Expired</code></td><td>Misión expirada</td></tr>
+<tr><td>3</td><td><code>Available</code> dentro de <code>offerPhases</code> y prerrequisitos cumplidos</td><td>Oferta, con <code>AcceptQuestAction</code></td></tr>
+<tr><td>4</td><td><code>Active</code></td><td>Recordatorio</td></tr>
+<tr><td>5</td><td><code>Available</code> fuera de <code>offerPhases</code></td><td>"Ya no la entrego"</td></tr>
+<tr><td>6</td><td><code>Completed</code></td><td>Post-misión</td></tr>
+<tr><td>7</td><td>Sin misiones</td><td>El <code>conversationIndex</code> habitual</td></tr>
+</tbody>
+</table>
+<h3>Bandera request</h3>
+<p>La bandera <code>request</code> de <code>ConversationTrigger</code>, que hoy bloquea el avance del índice, puede derivarse del estado: verdadera mientras el NPC tenga una misión <code>Active</code> o <code>ReadyToTurnIn</code>. Deja de ser un flag manual.</p>
+
+<h2 id="challenges">Puente con desafíos</h2>
+<div class="flow-chain">
+<span>Misión completada</span><span class="flow-arrow">→</span>
+<span>ReportMilestone("quest_completed:{id}")</span><span class="flow-arrow">→</span>
+<span>MilestoneConditionSO</span><span class="flow-arrow">→</span>
+<span>ChallengeManager</span>
+</div>
+<p class="flow-note">Así se pueden crear desafíos como "completa la misión X" o, con otra condición, "completa 3 misiones", sin cambiar el sistema de desafíos. Las recompensas de la misión y las del desafío son independientes. Ver <a href="challenges.html#condiciones-y-alcance">Desafíos</a>.</p>
+
+<h2 id="reinicio">Reinicio de run</h2>
+<p><code>QuestManager.BeginRun()</code> borra el estado y el progreso de todas las misiones. Lo invoca <code>RunManager.ResetRun()</code> junto con <code>ChallengeManager.BeginRun()</code> (ver <a href="clock.html#fin-de-dia">Fin de día y reinicio de run</a>). Los desafíos completados y sus desbloqueos se conservan.</p>
+
+<h2 id="interfaz">Interfaz</h2>
+<ul>
+<li><strong>Tracker en HUD:</strong> título y objetivos de la misión activa, como texto localizado. Se actualiza con <code>OnObjectiveProgress</code> y con <code>StringChanged</code> al cambiar de idioma. Si está lista para entregar, indica a quién volver.</li>
+<li><strong>Avisos:</strong> mensajes breves al aceptar, avanzar un objetivo, completar y expirar.</li>
+<li><strong>Visibilidad:</strong> el tracker se oculta durante <code>CombatStage</code>, enganchado al mismo ciclo que <code>CombatTransition</code>.</li>
+<li><strong>Registro de misiones (opcional):</strong> pantalla aparte que usaría el mapa <code>UI</code> con <code>PushUIMap()</code>/<code>PopUIMap()</code>.</li>
+<li><strong>Localización:</strong> colecciones nuevas para títulos, descripciones y objetivos (<code>Quests</code>) y para textos de interfaz (<code>UI_Quests</code>); las líneas de diálogo van en <code>Dialogues</code>.</li>
+</ul>
+
+<h2 id="persistencia">Persistencia</h2>
+<p>El estado se guarda en <code>quests.json</code> con el mismo patrón que <code>JsonChallengeSaveBackend</code>: archivo temporal que reemplaza al destino y copia <code>.corrupt</code> si no se puede leer. Contiene versión del formato, estado y progreso de cada objetivo por <code>questID</code>. Se guarda al cambiar el estado de una misión y al salir de la aplicación si hay cambios pendientes. Como las misiones se reinician con cada run, <code>BeginRun()</code> también limpia el archivo.</p>
+
+<h2 id="emisores">Emisores de hitos</h2>
+<p>Según <a href="challenges.html#condiciones-y-alcance">Desafíos</a>, hoy solo <code>CombatChallengeReporter</code> reporta progreso real y <code>ReportMilestone</code> no se llama desde gameplay. Para que los objetivos tengan algo que escuchar harán falta:</p>
+<table class="dep-table">
+<thead><tr><th>Hito</th><th>Quién lo emite</th><th>Objetivo típico</th></tr></thead>
+<tbody>
+<tr><td><code>enemy_defeated:{unitID}</code></td><td>Combate, al derrotar una unidad enemiga</td><td>Derrotar un tipo de enemigo</td></tr>
+<tr><td><code>talk:{NPC_ID}</code></td><td><code>DialogueManager</code>, al terminar una conversación</td><td>Hablar con un NPC</td></tr>
+<tr><td><code>item_collected:{itemID}</code></td><td>Recogida de ítems del Overworld</td><td>Conseguir un ítem concreto</td></tr>
+<tr><td><code>quest_completed:{questID}</code></td><td><code>QuestManager</code></td><td>Puente con desafíos</td></tr>
+</tbody>
+</table>
+
+<h2 id="consola">Comandos de consola</h2>
+<table class="dep-table">
+<thead><tr><th>Comando</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td><code>quest.list</code></td><td>Lista las misiones y su estado.</td></tr>
+<tr><td><code>quest.state &lt;id&gt;</code></td><td>Muestra el estado y el progreso de una misión.</td></tr>
+<tr><td><code>quest.accept &lt;id&gt;</code></td><td>Acepta una misión sin pasar por el diálogo.</td></tr>
+<tr><td><code>quest.progress &lt;hito&gt;</code></td><td>Reporta un hito manualmente.</td></tr>
+<tr><td><code>quest.reset</code></td><td>Equivale a <code>BeginRun()</code> para misiones.</td></tr>
+</tbody>
+</table>
+
+<h2 id="orden">Orden de implementación</h2>
+<ol>
+<li>Reloj y fases (<a href="clock.html">Reloj y horarios</a>), con comandos de consola.</li>
+<li>Núcleo sin interfaz: <code>QuestSO</code>, objetivos, catálogo, <code>QuestManager</code> y persistencia, probado con comandos.</li>
+<li>Un desafío de prueba que se complete con <code>quest_completed:test</code>.</li>
+<li>Diálogo: <code>DialogueActionSO</code>, cambio en <code>AnswerOption</code> y <code>NpcQuestGiver</code>.</li>
+<li>Emisores de hitos necesarios para la primera misión real.</li>
+<li>Interfaz: tracker y avisos primero, registro de misiones después.</li>
+</ol>
+
+<h2 id="pendientes">Pendientes / abierto</h2>
+<div class="pending-card">
+<span class="pending-tag">Diseño</span>
+<p><strong>Varias misiones por NPC</strong> — la tabla de prioridad resuelve el orden, pero falta decidir cuántas misiones activas simultáneas se permiten y cuál muestra el tracker.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Diseño</span>
+<p><strong>Fallo por otras causas</strong> — por ahora una misión solo expira por tiempo; no falla por muerte de un NPC o por abandonar.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Verificar</span>
+<p><strong>Nombres del código existente</strong> — <code>AnswerOption</code>, <code>ConversationTrigger</code>, <code>ChallengeEvents</code> y el tipo de recompensa de <code>ChallengeSO</code> deben comprobarse contra los scripts antes de extenderlos.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">UI</span>
+<p><strong>Registro de misiones</strong> — pantalla opcional; requiere definir su input y su flujo con el mapa <code>UI</code>.</p>
+</div>
+
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="clock.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Reloj y horarios</span>
+</a>
+<a class="page-nav-next" href="structure.html">
+<span class="page-nav-dir">Siguiente</span>
+<span class="page-nav-title">Directorios</span>
+</a>
+</nav>
+
+</main>
+
+<section class="toc"><strong>En esta página</strong>
+<a href="#arquitectura">Arquitectura</a>
+<a href="#questso">QuestSO</a>
+<a href="#objetivos">Objetivos</a>
+<a href="#estados">Estados</a>
+<a href="#expiracion">Ventanas y expiración</a>
+<a href="#dialogo">Integración con diálogo</a>
+<a href="#challenges">Puente con desafíos</a>
+<a href="#reinicio">Reinicio de run</a>
+<a href="#interfaz">Interfaz</a>
+<a href="#persistencia">Persistencia</a>
+<a href="#emisores">Emisores de hitos</a>
+<a href="#consola">Comandos de consola</a>
+<a href="#orden">Orden de implementación</a>
+<a href="#pendientes">Pendientes</a>
+</section>
+
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

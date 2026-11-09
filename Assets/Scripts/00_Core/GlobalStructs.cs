@@ -236,4 +236,26 @@ namespace Core
     }
 
     #endregion
+
+    #region SCHEDULE
+    /// <summary>Phases of the in-game day. Flags so windows and access rules can be masks.</summary>
+    [System.Flags]
+    public enum DAY_PHASE
+    {
+        None      = 0,
+        Morning   = 1,
+        Afternoon = 2,
+        Night     = 4
+    }
+
+    /// <summary>Reasons that can pause the game clock.</summary>
+    public enum CLOCK_PAUSE_REASON
+    {
+        Combat,
+        Dialogue,
+        Transition,
+        Menu,
+        Debug
+    }
+    #endregion
 }

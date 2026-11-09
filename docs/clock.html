@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloj y Horarios — Hunters: Fracture of Time</title>
+<meta name="description" content="Diseño del reloj ficticio, las fases del día, el acceso a la dungeon, los horarios de NPC y el reinicio de run.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section current"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
+<li><a href="clock.html" aria-current="page"><span class="nav-num">10</span>Reloj y horarios</a></li>
+<li><a href="quests.html"><span class="nav-num">11</span>Misiones</a></li>
+</ul>
+</div>
+<div class="nav-section"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">12</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">13</span>Contribución</a></li>
+<li><a href="console.html"><span class="nav-num">14</span>Consola de desarrollo</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
+
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Reloj y horarios</div>
+
+<p class="eyebrow">14 · SISTEMA</p>
+<h1>Reloj y Horarios</h1>
+<p class="page-lede">Reloj ficticio que divide el día en tres fases. Regula el acceso a la dungeon, la fuerza de los enemigos, las rutinas de los NPC y las ventanas de las misiones, y reinicia la run cuando el día termina.</p>
+
+<div class="note-box">
+<span class="note-tag">Estado</span>
+<p>Diseño acordado, <strong>aún sin implementar</strong>. Los nombres de tipos, las duraciones y los comandos son la propuesta de partida; ajústalos al escribir el código y actualiza esta página con los valores finales.</p>
+</div>
+
+<h2 id="concepto">Concepto</h2>
+<p>El día no se mide en horas exactas sino en <strong>tres fases</strong>, más fáciles de leer para el jugador. Cada fase tiene un rol fijo: las áreas sociales viven en la mañana y la noche, y la dungeon solo abre en la tarde.</p>
+<table class="dep-table">
+<thead><tr><th>Fase</th><th>Duración propuesta</th><th>Rol</th><th>Dungeon</th></tr></thead>
+<tbody>
+<tr><td>Mañana</td><td>8 min</td><td>Áreas sociales: ofertas de misiones, NPC en su rutina</td><td>No se puede entrar</td></tr>
+<tr><td>Tarde</td><td>11 min</td><td>Exploración de la dungeon y combate</td><td>Abierta</td></tr>
+<tr><td>Noche</td><td>6 min</td><td>Áreas sociales: entregas, descanso. Enemigos más fuertes</td><td>Entrada cerrada</td></tr>
+</tbody>
+</table>
+<p>El día completo dura unos 25 minutos de reloj. Las duraciones viven en un asset, no en código, para poder balancearlas. Como el reloj se congela en combate y diálogo (ver <a href="#pausas">Pausas</a>), el tiempo real que pasa el jugador en la dungeon es mayor que los 11 minutos de la tarde.</p>
+
+<h2 id="gameclock">GameClock</h2>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">DAY_PHASE</span>
+<span class="component-desc">Enum <code>[Flags]</code> con <code>Morning</code>, <code>Afternoon</code> y <code>Night</code>. Al ser máscara, una ventana de misión o un permiso de acceso es simplemente una combinación de fases.</span>
+</div>
+<div class="component-card">
+<span class="component-name">GameClockSettingsSO</span>
+<span class="component-desc">Asset con la duración de cada fase. Se asigna por referencia al <code>GameClock</code>; no es un Singleton.</span>
+</div>
+<div class="component-card">
+<span class="component-name">GameClock</span>
+<span class="component-desc">Singleton persistente. Avanza con tiempo escalado, mantiene el día y la fase actual, y emite los eventos del ciclo. Solo corre si no hay ninguna pausa activa.</span>
+</div>
+</div>
+<pre class="ascii-flow">[Flags]
+public enum DAY_PHASE
+{
+    Morning   = 1,
+    Afternoon = 2,
+    Night     = 4
+}
+
+// Access and quest windows are just masks:
+// allowedPhases = DAY_PHASE.Morning | DAY_PHASE.Afternoon</pre>
+
+<h3>API prevista</h3>
+<table class="dep-table">
+<thead><tr><th>Miembro</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>CurrentPhase</code></td><td>Fase actual. Es lo que consultan quests, NPC, puertas y enemigos.</td></tr>
+<tr><td><code>PhaseProgress</code></td><td>Avance 0–1 <strong>dentro</strong> de la fase actual. Alimenta el HUD y la iluminación; al ser fases desiguales, un valor global se vería irregular.</td></tr>
+<tr><td><code>Day</code></td><td>Contador de días de la run.</td></tr>
+<tr><td><code>IsIn(mask)</code></td><td>Indica si la fase actual pertenece a una máscara.</td></tr>
+<tr><td><code>JumpTo(phase)</code></td><td>Salta a una fase. Base para dormir o avanzar el tiempo en el futuro.</td></tr>
+<tr><td><code>Pause(reason)</code> / <code>Resume(reason)</code></td><td>Pausa por razón. Ver <a href="#pausas">Pausas</a>.</td></tr>
+<tr><td><code>OnPhaseChanged(old, new)</code></td><td>Cambio de fase, incluidos los saltos.</td></tr>
+<tr><td><code>OnDayEnded</code></td><td>Se terminó la noche. <code>RunManager</code> lo escucha.</td></tr>
+</tbody>
+</table>
+<div class="note-box">
+<span class="note-tag">Principio</span>
+<p>Los consumidores <strong>derivan su estado de <code>CurrentPhase</code></strong> en lugar de acumularlo escuchando cada tick. Así los saltos de tiempo, la carga de partida y las pruebas con consola funcionan sin casos especiales: al cargar o saltar, cada sistema simplemente vuelve a evaluar "¿qué me corresponde en esta fase?".</p>
+</div>
+
+<h2 id="pausas">Pausas</h2>
+<p>El reloj usa un <strong>contador de pausas por razón</strong>, no un booleano. Corre solo cuando no hay ninguna razón activa; así un sistema no puede reanudar el tiempo mientras otro sigue pausado.</p>
+<table class="dep-table">
+<thead><tr><th>Razón</th><th>Quién la activa</th></tr></thead>
+<tbody>
+<tr><td><code>Combat</code></td><td><code>CombatTransition</code>, al cargar y al descargar <code>CombatStage</code>.</td></tr>
+<tr><td><code>Dialogue</code></td><td><code>DialogueManager</code>, al iniciar y terminar una conversación.</td></tr>
+<tr><td><code>Transition</code></td><td><code>RunManager</code>, durante el fade de fin de día.</td></tr>
+<tr><td><code>Menu</code></td><td>Menú de pausa y otras interfaces que detengan el juego.</td></tr>
+</tbody>
+</table>
+<p class="flow-note">La fase con la que se entra a un combate es la que cuenta: al estar el reloj congelado, no puede cambiar a mitad de pelea.</p>
+
+<h2 id="acceso-dungeon">Acceso a la dungeon</h2>
+<p><code>PhaseGate</code> es un componente en el trigger de entrada a la dungeon, con una máscara <code>allowedPhases</code> (por defecto, <code>Afternoon</code>). Al interactuar, si la fase actual está permitida carga la dungeon; si no, muestra un mensaje localizado ("aún no abre" en la mañana, "cerrada" en la noche).</p>
+<ul>
+<li>El gate bloquea la <strong>entrada</strong>, no la salida. Un jugador que sigue dentro cuando empieza la noche puede escapar hacia las áreas sociales.</li>
+<li>Se engancha en el punto donde hoy se cambia de zona; no requiere tocar <code>DungeonSceneSetter</code> ni <code>CombatTransition</code>.</li>
+<li>Los textos van en una colección de localización (por ejemplo, <code>UI_Common</code>).</li>
+</ul>
+
+<h2 id="noche-y-enemigos">Noche y enemigos</h2>
+<p>Durante la noche los enemigos son más fuertes. Como las <code>Unit</code> enemigas se crean al entrar a combate y el reloj está congelado dentro de él, basta con aplicar el bonus <strong>al construirlas</strong>.</p>
+<ul>
+<li><code>PhaseModifierSO</code> define multiplicadores por fase (HP, Strength, MagicPower, defensas). Es un asset editable para balancear.</li>
+<li>Se aplica como un paso adicional del recálculo de stats de las unidades del bando enemigo; sigue el mismo principio de <a href="units.html#stats">Stats base y derivadas</a>: nunca se persiste ni se escribe en <code>UnitDefinitionSO</code>.</li>
+<li>El HUD avisa cuando la tarde está por terminar (por ejemplo, <code>PhaseProgress</code> alto) para que el jugador sepa que debe salir.</li>
+</ul>
+
+<h2 id="fin-de-dia">Fin de día y reinicio de run</h2>
+<p>Para la demo, un día es una run. Cuando termina la noche, o cuando el jugador duerme en una cama, la run se reinicia. <code>RunManager</code> es el <strong>único punto</strong> que ejecuta ese reinicio.</p>
+<pre class="ascii-flow">RunManager.EndDay(reason)      // reason: TimeOut, Slept
+  → pause clock (Transition)
+  → switch input map to Empty
+  → fade to black + "day advances" animation
+  → ResetRun()
+  → load starting scene in Morning
+  → fade in, resume clock</pre>
+<table class="dep-table">
+<thead><tr><th>Se reinicia</th><th>Se conserva</th></tr></thead>
+<tbody>
+<tr><td>HP, SP e inventario de la party</td><td>Desafíos <code>Lifetime</code> completados y sus desbloqueos</td></tr>
+<tr><td>Misiones (progreso, estados)</td><td>Ítems y unidades desbloqueados por desafíos</td></tr>
+<tr><td>Desafíos <code>PerRun</code> incompletos (<code>ChallengeManager.BeginRun()</code>)</td><td>Configuración del jugador</td></tr>
+<tr><td>El reloj (día y fase)</td><td></td></tr>
+</tbody>
+</table>
+<p>Si el jugador está en la dungeon cuando termina la noche, el flujo es el mismo. Tener <code>reason</code> y un único método permite, más adelante, separar "día" de "run" (varios días por run, guardado real) cambiando solo lo que hace <code>EndDay</code> según el caso. Una cama es un interactuable que llama a <code>EndDay(Slept)</code>; si luego dormir solo debe avanzar el tiempo, ya existe <code>JumpTo(phase)</code>.</p>
+
+<h2 id="horarios-npc">Horarios de NPC</h2>
+<p>Inspirado en <em>Majora's Mask</em>: cada NPC sigue una rutina por fase hasta que el jugador interactúa con él. <code>NpcScheduleSO</code> tiene como máximo una entrada por fase:</p>
+<div class="component-grid">
+<div class="component-card">
+<span class="component-name">Ubicación</span>
+<span class="component-desc">Waypoint o punto de la sala donde está el NPC durante esa fase.</span>
+</div>
+<div class="component-card">
+<span class="component-name">Actividad</span>
+<span class="component-desc">Animación o estado visual (trabajando, durmiendo, paseando).</span>
+</div>
+<div class="component-card">
+<span class="component-name">Interactuable</span>
+<span class="component-desc">Si el jugador puede iniciar una conversación en ese momento.</span>
+</div>
+<div class="component-card">
+<span class="component-name">Presente</span>
+<span class="component-desc">Permite una entrada "ausente", usada por las consecuencias de misiones expiradas (el NPC desaparece).</span>
+</div>
+</div>
+<p>El NPC reevalúa su entrada con <code>OnPhaseChanged</code> y al activarse su sala. Si el jugador está en otra sala puede colocarse directamente en su punto; si está presente, camina con <code>NavMeshAgent</code>, igual que la patrulla de <code>EnemyEntity</code>. Las misiones pueden cambiar el horario de un NPC al expirar; ver <a href="quests.html#expiracion">Misiones</a>.</p>
+
+<h2 id="persistencia">Persistencia</h2>
+<p>El reloj vive en el dominio persistente y debe guardarse cuando exista el sistema de guardado (día, fase y progreso dentro de la fase). Al cargar, los sistemas dependientes vuelven a derivar su estado de la fase restaurada.</p>
+
+<h2 id="consola">Comandos de consola</h2>
+<p>Necesarios para probar quests y accesos sin esperar. Se registran con <code>[ConsoleCommand]</code>, dentro de <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code> y con <code>[Preserve]</code>, como indica <a href="console.html#anadir-comandos">la guía de la consola</a>.</p>
+<table class="dep-table">
+<thead><tr><th>Comando</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td><code>clock.phase [fase]</code></td><td>Muestra o salta a una fase.</td></tr>
+<tr><td><code>clock.pause</code> / <code>clock.resume</code></td><td>Pausa o reanuda con una razón de depuración.</td></tr>
+<tr><td><code>clock.speed [factor]</code></td><td>Escala la velocidad del reloj.</td></tr>
+<tr><td><code>day.end</code></td><td>Ejecuta <code>RunManager.EndDay</code>.</td></tr>
+</tbody>
+</table>
+
+<h2 id="pendientes">Pendientes / abierto</h2>
+<div class="pending-card">
+<span class="pending-tag">Valores</span>
+<p><strong>Duración de las fases</strong> — 8 / 11 / 6 minutos son una propuesta; balancear con pruebas reales y considerar el tiempo congelado en combate.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Diseño</span>
+<p><strong>Entrada de la noche</strong> — decidir si el aumento de fuerza es un salto inmediato o gradual, y qué feedback tiene el jugador (iluminación, aviso en HUD).</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">Futuro</span>
+<p><strong>Varios días por run</strong> — hoy un día es una run. Si se separan, <code>EndDay</code> deberá distinguir entre avanzar de día y terminar la run.</p>
+</div>
+<div class="pending-card">
+<span class="pending-tag">UI</span>
+<p><strong>HUD del reloj</strong> — representación de la fase y su progreso, y la animación de fin de día.</p>
+</div>
+
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="architecture.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Arquitectura</span>
+</a>
+<a class="page-nav-next" href="quests.html">
+<span class="page-nav-dir">Siguiente</span>
+<span class="page-nav-title">Misiones</span>
+</a>
+</nav>
+
+</main>
+
+<section class="toc"><strong>En esta página</strong>
+<a href="#concepto">Concepto</a>
+<a href="#gameclock">GameClock</a>
+<a href="#pausas">Pausas</a>
+<a href="#acceso-dungeon">Acceso a la dungeon</a>
+<a href="#noche-y-enemigos">Noche y enemigos</a>
+<a href="#fin-de-dia">Fin de día y reinicio</a>
+<a href="#horarios-npc">Horarios de NPC</a>
+<a href="#persistencia">Persistencia</a>
+<a href="#consola">Comandos de consola</a>
+<a href="#pendientes">Pendientes</a>
+</section>
+
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

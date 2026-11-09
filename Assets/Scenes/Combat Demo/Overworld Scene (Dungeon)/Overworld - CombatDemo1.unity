@@ -21669,6 +21669,51 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.079, y: -0.27800003, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &797842886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 797842887}
+  - component: {fileID: 797842888}
+  m_Layer: 0
+  m_Name: '[GameClock]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &797842887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797842886}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1482486006}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &797842888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797842886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 292a449c29915a3b39c12e16c36056d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Clock.GameClock
+  settings: {fileID: 11400000, guid: dee6c1f085b3f5b319bd9ed70d54132f, type: 2}
 --- !u!1 &799291948
 GameObject:
   m_ObjectHideFlags: 0
@@ -32689,6 +32734,11 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!4 &1482486006 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2730033684326986306, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+  m_PrefabInstance: {fileID: 6074159178634438000}
+  m_PrefabAsset: {fileID: 0}
 --- !u!208 &1483481745
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -42826,7 +42876,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2892240965244473777, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2730033684326986306, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 797842887}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
 --- !u!1001 &7343133755916109638
