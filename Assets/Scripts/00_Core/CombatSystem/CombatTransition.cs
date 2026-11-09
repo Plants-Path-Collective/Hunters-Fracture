@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Core;
 using Core.CombatSystem.Units;
+using Core.Clock;
 using Overworld;
 
 namespace Core.CombatSystem
@@ -48,6 +48,12 @@ namespace Core.CombatSystem
             transitionInProgress = true;
             GameManager.Instance.SetInCombat(true);
 
+            // Pause the GameClock so it doesn't advance while the player is in combat
+            // The clock will be resumed when the combat ends
+            transitionInProgress = true;
+            GameManager.Instance.SetInCombat(true);
+            GameClock.RequestPause(CLOCK_PAUSE_REASON.Combat);
+
             suspendedRoomContents = DungeonRoom.ActiveRoomContents.ToList();
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
@@ -84,6 +90,10 @@ namespace Core.CombatSystem
             }
 
             GameManager.Instance.SetInCombat(false);
+
+            // Resume the GameClock now that combat is over. The clock was paused when combat started
+            GameManager.Instance.SetInCombat(false);
+            GameClock.ReleasePause(CLOCK_PAUSE_REASON.Combat);
 
             foreach (GameObject content in suspendedRoomContents)
                 if (content != null)

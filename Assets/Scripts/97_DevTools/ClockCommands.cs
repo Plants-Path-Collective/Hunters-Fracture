@@ -66,6 +66,16 @@ namespace Core
                 : "Clock resumed.";
         }
 
+        [ConsoleCommand("clock.clearpauses", "Clears every active pause reason (debug).")]
+        private static string ClearPauses()
+        {
+            GameClock clock = GameClock.Instance;
+            if (clock == null) return NoClock;
+
+            clock.ClearAllPauses();
+            return "All clock pauses cleared.";
+        }
+
         [ConsoleCommand("clock.speed", "Shows or sets the clock speed multiplier (1 = normal).")]
         private static string Speed(float factor = -1f)
         {

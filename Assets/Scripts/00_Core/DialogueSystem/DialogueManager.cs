@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
+using Core.Clock;
 
 namespace PlantsPathCo.DialogueSystem
 {
@@ -67,6 +68,7 @@ namespace PlantsPathCo.DialogueSystem
         public UnityEvent<AnswerOption, int> onChoiceSelected;
 
         private Coroutine runningCoroutine;
+        private bool clockPausedByDialogue;
 
         // Cache of currently active answer LocalizedStrings, in the same order as line.answers,
         // so we can map an input index back to the correct AnswerOption/nextConversation.
@@ -92,6 +94,12 @@ namespace PlantsPathCo.DialogueSystem
         {
             foreach (var input in choiceInputs)
                 if (input != null) input.action.Disable();
+
+            if (clockPausedByDialogue)
+            {
+                GameClock.ReleasePause(CLOCK_PAUSE_REASON.Dialogue);
+                clockPausedByDialogue = false;
+            }
         }
 
         /// <summary>Función para empezar una conversación, requiere de un ConversationSO.</summary>
@@ -111,6 +119,13 @@ namespace PlantsPathCo.DialogueSystem
 
             if (dialoguePanel.panelRoot != null)
                 dialoguePanel.panelRoot.SetActive(true);
+
+
+            if (!clockPausedByDialogue)
+            {
+                GameClock.RequestPause(CLOCK_PAUSE_REASON.Dialogue);
+                clockPausedByDialogue = true;
+            }
 
             onConversationStart?.Invoke(conversation);
             runningCoroutine = StartCoroutine(PlayConversation());
@@ -325,6 +340,12 @@ namespace PlantsPathCo.DialogueSystem
 
             currentConversation = null;
             runningCoroutine = null;
+
+            if (clockPausedByDialogue)
+            {
+                GameClock.ReleasePause(CLOCK_PAUSE_REASON.Dialogue);
+                clockPausedByDialogue = false;
+            }
 
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Overworld);
         }
