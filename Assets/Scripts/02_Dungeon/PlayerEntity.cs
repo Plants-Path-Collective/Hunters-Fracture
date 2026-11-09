@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Overworld-only component. Lives alongside PlayerController on the Player GameObject,

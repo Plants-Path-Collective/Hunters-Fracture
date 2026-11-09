@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Core.CombatSystem.Units;
 using Core.Clock;
-using Overworld;
+using Dungeon;
 
 namespace Core.CombatSystem
 {
@@ -117,7 +117,7 @@ namespace Core.CombatSystem
             suspendedEnemy?.SetActive(true);
             suspendedEnemy = null;
 
-            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Overworld);
+            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Dungeon);
 
             AsyncOperation unload = SceneManager.UnloadSceneAsync(CombatStageScene);
             if (unload == null)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
-using Overworld;
+using Dungeon;
 
 namespace UI
 {

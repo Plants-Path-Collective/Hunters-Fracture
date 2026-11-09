@@ -77,7 +77,7 @@
     </p>
 <div class="spec-grid">
 <div class="spec-card">
-<span class="spec-label">Persistente (Overworld)</span>
+<span class="spec-label">Persistente (Dungeon)</span>
 <span class="spec-value"><code>AllyParty</code> + <code>PartyMemberData</code> por aliado · <code>EnemySlotData</code> por enemigo del encuentro</span>
 </div>
 <div class="spec-card">
@@ -91,9 +91,9 @@
 <tr><td>Identidad (nombre, portrait, descripción, tipo)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
 <tr><td>Stats base (7)</td><td><code>UnitDefinitionSO</code></td><td>Asset inmutable</td></tr>
 <tr><td>Skills y ultimate</td><td><code>UnitDefinitionSO</code></td><td>Asset; la lista de skills se copia a la Unit de combate</td></tr>
-<tr><td><code>currentHP</code> / <code>currentSP</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld; -1 indica iniciar a máximo</td></tr>
-<tr><td><code>inventorySnapshot</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Overworld</td></tr>
-<tr><td>Definición + <code>inventorySnapshot</code> opcional (enemigos)</td><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td></tr>
+<tr><td><code>currentHP</code> / <code>currentSP</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Dungeon; -1 indica iniciar a máximo</td></tr>
+<tr><td><code>inventorySnapshot</code> (aliados)</td><td><code>PartyMemberData</code></td><td>Dungeon</td></tr>
+<tr><td>Definición + <code>inventorySnapshot</code> opcional (enemigos)</td><td><code>EnemySlotData</code></td><td>Dungeon (por encuentro)</td></tr>
 <tr><td>Stats derivadas</td><td><code>UnitStatsController</code></td><td>CombatStage (se recalculan)</td></tr>
 <tr><td>Cantidades por ítem en combate</td><td><code>UnitInventory</code></td><td>CombatStage</td></tr>
 <tr><td>Estados y buffs activos</td><td><code>StatusBuffTracker</code></td><td>CombatStage</td></tr>
@@ -196,7 +196,7 @@
 <h2 id="party-y-partymemberdata">AllyParty y PartyMemberData</h2>
 <p>
 <code>AllyParty</code> es la lista de hasta 3 <code>PartyMemberData</code> del jugador, uno por
-      slot (izquierda, centro, derecha). La porta <code>PlayerEntity</code> en el Overworld y es lo
+      slot (izquierda, centro, derecha). La porta <code>PlayerEntity</code> en Dungeon y es lo
       primero que se lee al entrar a combate y lo primero que se escribe al salir.
     </p>
 <div class="component-grid">
@@ -214,8 +214,8 @@
 </div>
 </div>
 <p class="flow-note">
-      Que <code>AllyParty</code> viva en el Overworld y no en <code>CombatStage</code> es lo que
-      permite volver al Overworld con los HP actualizados sin que <code>CombatController</code>
+      Que <code>AllyParty</code> viva en Dungeon y no en <code>CombatStage</code> es lo que
+      permite volver a Dungeon con los HP actualizados sin que <code>CombatController</code>
       sepa qué es un "menú principal" o un "save file".
     </p>
 
@@ -304,9 +304,9 @@ Enemigo (EnemySlotData):
 <thead><tr><th>Componente</th><th>Dominio</th><th>Responsabilidad</th></tr></thead>
 <tbody>
 <tr><td><code>UnitDefinitionSO</code></td><td>Asset</td><td>Identidad, stats base, skills aprendidas, parámetros de combate</td></tr>
-<tr><td><code>AllyParty</code></td><td>Overworld</td><td>Hasta 3 <code>PartyMemberData</code> del jugador</td></tr>
-<tr><td><code>PartyMemberData</code></td><td>Overworld</td><td>Definición + <code>currentHP</code>/<code>currentSP</code> + <code>inventorySnapshot</code> de un aliado</td></tr>
-<tr><td><code>EnemySlotData</code></td><td>Overworld (por encuentro)</td><td>Definición + inventario opcional de un enemigo; sin HP/SP arrastrado</td></tr>
+<tr><td><code>AllyParty</code></td><td>Dungeon</td><td>Hasta 3 <code>PartyMemberData</code> del jugador</td></tr>
+<tr><td><code>PartyMemberData</code></td><td>Dungeon</td><td>Definición + <code>currentHP</code>/<code>currentSP</code> + <code>inventorySnapshot</code> de un aliado</td></tr>
+<tr><td><code>EnemySlotData</code></td><td>Dungeon (por encuentro)</td><td>Definición + inventario opcional de un enemigo; sin HP/SP arrastrado</td></tr>
 <tr><td><code>Unit</code></td><td>CombatStage</td><td>MonoBehaviour de combate; compone los tres controladores</td></tr>
 <tr><td><code>UnitFormSO</code></td><td>Asset / CombatStage</td><td>Configura los cambios temporales de tipo, stats, habilidades y ultimate de una forma</td></tr>
 <tr><td><code>UnitFormVisuals</code></td><td>CombatStage</td><td>Alterna entre el modelo base y el modelo de la forma activa</td></tr>

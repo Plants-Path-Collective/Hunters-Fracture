@@ -6,7 +6,7 @@ namespace Core
 
     public class DungeonSceneSetter : SceneSetter
     {
-        protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Overworld;
+        protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Dungeon;
 
         protected override void OnSceneReady()
         {

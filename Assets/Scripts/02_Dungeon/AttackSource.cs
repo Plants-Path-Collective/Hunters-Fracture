@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Hitbox of an Entity's weapon. While open it is tested every frame against the colliders it

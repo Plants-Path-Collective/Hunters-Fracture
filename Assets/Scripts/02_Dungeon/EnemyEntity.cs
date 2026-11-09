@@ -4,7 +4,7 @@ using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Overworld-only enemy behaviour. Patrols within a room or around its spawn, detects the

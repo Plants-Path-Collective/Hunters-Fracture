@@ -3,7 +3,7 @@ using UnityEngine;
 using Core.ChallengesSystem;
 using Core.CombatSystem.Units;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Adds characters unlocked through challenges to the player's party.

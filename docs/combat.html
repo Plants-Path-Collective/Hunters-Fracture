@@ -82,7 +82,7 @@
 <div class="spec-grid">
 <div class="spec-card">
 <span class="spec-label">Dominio persistente</span>
-<span class="spec-value">Overworld · <code>AllyParty</code>, <code>PartyMemberData</code>, <code>UnitDefinitionSO</code></span>
+<span class="spec-value">Dungeon · <code>AllyParty</code>, <code>PartyMemberData</code>, <code>UnitDefinitionSO</code></span>
 </div>
 <div class="spec-card">
 <span class="spec-label">Dominio de combate</span>
@@ -98,7 +98,7 @@
 <tr><td>Stats base</td><td>Sí, como plantilla</td><td><code>UnitDefinitionSO</code> es un asset independiente de cualquier instancia de combate</td></tr>
 <tr><td>HP actual</td><td>Sí</td><td>Representa el daño acumulado durante la run; no es derivable de nada más</td></tr>
 <tr><td>SP actual</td><td>Sí</td><td>Igual que HP</td></tr>
-<tr><td>Inventario (cantidades por ítem)</td><td>Sí</td><td>Es la progresión del roguelite; alimenta la UI del Overworld y el recálculo de stats</td></tr>
+<tr><td>Inventario (cantidades por ítem)</td><td>Sí</td><td>Es la progresión del roguelite; alimenta la UI de Dungeon y el recálculo de stats</td></tr>
 <tr><td>Stats derivadas (MaxHP, MaxSP, Strength, MagicPower, Defensas)</td><td>No</td><td>Se recalculan siempre desde stats base + inventario en cada combate</td></tr>
 <tr><td>Estados, buffs y debuffs</td><td>No</td><td><code>StatusBuffTracker</code> vive y muere con <code>CombatStage</code>; un veneno no sobrevive al combate</td></tr>
 <tr><td>GameObjects de combate y sus controladores</td><td>No</td><td>Se crean y destruyen por encuentro</td></tr>
@@ -109,7 +109,7 @@
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">AllyParty</span>
-<span class="component-desc">Hasta 3 <code>PartyMemberData</code> del jugador, uno por slot. La porta <code>PlayerEntity</code> en el Overworld.</span>
+<span class="component-desc">Hasta 3 <code>PartyMemberData</code> del jugador, uno por slot. La porta <code>PlayerEntity</code> en Dungeon.</span>
 </div>
 <div class="component-card">
 <span class="component-name">PartyMemberData</span>
@@ -170,13 +170,13 @@
 </div>
 
 <h2 id="entrada-a-combate">Entrada a combate</h2>
-<pre class="ascii-flow">1. PlayerEntity o EnemyEntity detecta la colisión de Attack en el Overworld.
+<pre class="ascii-flow">1. PlayerEntity o EnemyEntity detecta la colisión de Attack en Dungeon.
   → El iniciador determina qué bando recibe la ventaja inicial.
 
 2. CombatSetUp reúne: AllyParty (aliados), los EnemySlotData del encuentro,
    y qué bando tiene la ventaja. Se lo entrega a CombatController y se destruye.
 
-3. CombatStage se carga aditivamente. El Overworld sigue cargado; sus objetos de sala, cámara,
+3. CombatStage se carga aditivamente. Dungeon sigue cargada; sus objetos de sala, cámara,
    jugador y enemigo se suspenden durante el combate.
 
 4. Por cada PartyMemberData:
@@ -204,7 +204,7 @@
 <h2 id="salida-de-combate">Salida de combate</h2>
 <p><code>CombatController</code> determina el resultado al quedarse un bando sin unidades vivas y dispara <code>OnCombatEnd</code>. <code>CloseCombat()</code> escribe HP, SP e inventario de los aliados en <code>PartyMemberData</code> para <code>Victory</code> y <code>Fled</code>; en <code>Defeat</code> no hay write-back. Después destruye las Units y llama al callback de <code>CombatSetUp</code>.</p>
 <ul>
-<li><strong>Defeat:</strong> <code>CombatUIManager</code> muestra la pantalla de game over y permite volver al Overworld o al Main Menu.</li>
+<li><strong>Defeat:</strong> <code>CombatUIManager</code> muestra la pantalla de game over y permite volver a Dungeon o al Main Menu.</li>
 <li><strong>Rewards:</strong> <code>CombatStage</code> tiene <code>autoCloseOnEnd</code> desactivado y <code>RewardsScreen</code> asignado. Al ganar, ofrece dos ítems distintos elegidos al azar del <code>ItemCatalog</code>, que se asignan a unidades aliadas.</li>
 <li><strong>Configuración:</strong> <code>autoCloseOnEnd</code> vale <code>true</code> por defecto en el script; la escena <code>CombatStage</code> lo sobrescribe a <code>false</code> para permitir el flujo de recompensas.</li>
 </ul>
@@ -380,7 +380,7 @@
 <li>Disponible para <code>UNIT_TEAM.Ally</code> en el menú del jugador.</li>
 <li>Una tirada por turno, por la unidad que elige Escapar.</li>
 <li>Fórmula: <code>chance = clamp(0.5 + (avgAllySpeed − avgEnemySpeed) * 0.02, 0.1, 0.9)</code>.</li>
-<li>Éxito → <code>COMBAT_OUTCOME.Fled</code>, fin del combate sin recompensas; HP/SP e inventario aliado se escriben como en victoria. La transición restaura el enemigo del Overworld.</li>
+<li>Éxito → <code>COMBAT_OUTCOME.Fled</code>, fin del combate sin recompensas; HP/SP e inventario aliado se escriben como en victoria. La transición restaura el enemigo de Dungeon.</li>
 <li>Fracaso → la unidad va al final de la cola (pierde el turno, como cualquier otra acción).</li>
 <li>La IA enemiga actual no intenta huir; realiza un ataque básico en su turno.</li>
 </ul>

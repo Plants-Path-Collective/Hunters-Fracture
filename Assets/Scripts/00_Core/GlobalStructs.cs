@@ -17,7 +17,7 @@ namespace Core
         UI,
         Rewards,
         Social,
-        Overworld,
+        Dungeon,
         Dialogue,
         Combat
     }

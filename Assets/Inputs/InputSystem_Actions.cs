@@ -986,7 +986,7 @@ namespace InputSystem
             ]
         },
         {
-            ""name"": ""Overworld"",
+            ""name"": ""Dungeon"",
             ""id"": ""15920111-9e90-4f3c-bbbe-dbbe720c81a3"",
             ""actions"": [
                 {
@@ -2234,13 +2234,13 @@ namespace InputSystem
             m_Social_Interact = m_Social.FindAction("Interact", throwIfNotFound: true);
             m_Social_OpenPauseMenu = m_Social.FindAction("Open Pause Menu", throwIfNotFound: true);
             m_Social_ToggleBeeper = m_Social.FindAction("Toggle Beeper", throwIfNotFound: true);
-            // Overworld
-            m_Overworld = asset.FindActionMap("Overworld", throwIfNotFound: true);
-            m_Overworld_Move = m_Overworld.FindAction("Move", throwIfNotFound: true);
-            m_Overworld_Attack = m_Overworld.FindAction("Attack", throwIfNotFound: true);
-            m_Overworld_Interact = m_Overworld.FindAction("Interact", throwIfNotFound: true);
-            m_Overworld_OpenPauseMenu = m_Overworld.FindAction("Open Pause Menu", throwIfNotFound: true);
-            m_Overworld_ToggleBeeper = m_Overworld.FindAction("Toggle Beeper", throwIfNotFound: true);
+            // Dungeon
+            m_Dungeon = asset.FindActionMap("Dungeon", throwIfNotFound: true);
+            m_Dungeon_Move = m_Dungeon.FindAction("Move", throwIfNotFound: true);
+            m_Dungeon_Attack = m_Dungeon.FindAction("Attack", throwIfNotFound: true);
+            m_Dungeon_Interact = m_Dungeon.FindAction("Interact", throwIfNotFound: true);
+            m_Dungeon_OpenPauseMenu = m_Dungeon.FindAction("Open Pause Menu", throwIfNotFound: true);
+            m_Dungeon_ToggleBeeper = m_Dungeon.FindAction("Toggle Beeper", throwIfNotFound: true);
             // Dialogue
             m_Dialogue = asset.FindActionMap("Dialogue", throwIfNotFound: true);
             m_Dialogue_Move = m_Dialogue.FindAction("Move", throwIfNotFound: true);
@@ -2272,7 +2272,7 @@ namespace InputSystem
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Rewards.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Rewards.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Social.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Social.Disable() has not been called.");
-            UnityEngine.Debug.Assert(!m_Overworld.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Overworld.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Dungeon.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Dungeon.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Dialogue.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Dialogue.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_Combat.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Combat.Disable() has not been called.");
         }
@@ -2830,49 +2830,49 @@ namespace InputSystem
         /// </summary>
         public SocialActions @Social => new SocialActions(this);
 
-        // Overworld
-        private readonly InputActionMap m_Overworld;
-        private List<IOverworldActions> m_OverworldActionsCallbackInterfaces = new List<IOverworldActions>();
-        private readonly InputAction m_Overworld_Move;
-        private readonly InputAction m_Overworld_Attack;
-        private readonly InputAction m_Overworld_Interact;
-        private readonly InputAction m_Overworld_OpenPauseMenu;
-        private readonly InputAction m_Overworld_ToggleBeeper;
+        // Dungeon
+        private readonly InputActionMap m_Dungeon;
+        private List<IDungeonActions> m_DungeonActionsCallbackInterfaces = new List<IDungeonActions>();
+        private readonly InputAction m_Dungeon_Move;
+        private readonly InputAction m_Dungeon_Attack;
+        private readonly InputAction m_Dungeon_Interact;
+        private readonly InputAction m_Dungeon_OpenPauseMenu;
+        private readonly InputAction m_Dungeon_ToggleBeeper;
         /// <summary>
-        /// Provides access to input actions defined in input action map "Overworld".
+        /// Provides access to input actions defined in input action map "Dungeon".
         /// </summary>
-        public struct OverworldActions
+        public struct DungeonActions
         {
             private @InputSystem_Actions m_Wrapper;
 
             /// <summary>
             /// Construct a new instance of the input action map wrapper class.
             /// </summary>
-            public OverworldActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+            public DungeonActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
             /// <summary>
-            /// Provides access to the underlying input action "Overworld/Move".
+            /// Provides access to the underlying input action "Dungeon/Move".
             /// </summary>
-            public InputAction @Move => m_Wrapper.m_Overworld_Move;
+            public InputAction @Move => m_Wrapper.m_Dungeon_Move;
             /// <summary>
-            /// Provides access to the underlying input action "Overworld/Attack".
+            /// Provides access to the underlying input action "Dungeon/Attack".
             /// </summary>
-            public InputAction @Attack => m_Wrapper.m_Overworld_Attack;
+            public InputAction @Attack => m_Wrapper.m_Dungeon_Attack;
             /// <summary>
-            /// Provides access to the underlying input action "Overworld/Interact".
+            /// Provides access to the underlying input action "Dungeon/Interact".
             /// </summary>
-            public InputAction @Interact => m_Wrapper.m_Overworld_Interact;
+            public InputAction @Interact => m_Wrapper.m_Dungeon_Interact;
             /// <summary>
-            /// Provides access to the underlying input action "Overworld/OpenPauseMenu".
+            /// Provides access to the underlying input action "Dungeon/OpenPauseMenu".
             /// </summary>
-            public InputAction @OpenPauseMenu => m_Wrapper.m_Overworld_OpenPauseMenu;
+            public InputAction @OpenPauseMenu => m_Wrapper.m_Dungeon_OpenPauseMenu;
             /// <summary>
-            /// Provides access to the underlying input action "Overworld/ToggleBeeper".
+            /// Provides access to the underlying input action "Dungeon/ToggleBeeper".
             /// </summary>
-            public InputAction @ToggleBeeper => m_Wrapper.m_Overworld_ToggleBeeper;
+            public InputAction @ToggleBeeper => m_Wrapper.m_Dungeon_ToggleBeeper;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
-            public InputActionMap Get() { return m_Wrapper.m_Overworld; }
+            public InputActionMap Get() { return m_Wrapper.m_Dungeon; }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -2880,9 +2880,9 @@ namespace InputSystem
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
-            /// Implicitly converts an <see ref="OverworldActions" /> to an <see ref="InputActionMap" /> instance.
+            /// Implicitly converts an <see ref="DungeonActions" /> to an <see ref="InputActionMap" /> instance.
             /// </summary>
-            public static implicit operator InputActionMap(OverworldActions set) { return set.Get(); }
+            public static implicit operator InputActionMap(DungeonActions set) { return set.Get(); }
             /// <summary>
             /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
             /// </summary>
@@ -2890,11 +2890,11 @@ namespace InputSystem
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
             /// </remarks>
-            /// <seealso cref="OverworldActions" />
-            public void AddCallbacks(IOverworldActions instance)
+            /// <seealso cref="DungeonActions" />
+            public void AddCallbacks(IDungeonActions instance)
             {
-                if (instance == null || m_Wrapper.m_OverworldActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_OverworldActionsCallbackInterfaces.Add(instance);
+                if (instance == null || m_Wrapper.m_DungeonActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_DungeonActionsCallbackInterfaces.Add(instance);
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
@@ -2918,8 +2918,8 @@ namespace InputSystem
             /// <remarks>
             /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
             /// </remarks>
-            /// <seealso cref="OverworldActions" />
-            private void UnregisterCallbacks(IOverworldActions instance)
+            /// <seealso cref="DungeonActions" />
+            private void UnregisterCallbacks(IDungeonActions instance)
             {
                 @Move.started -= instance.OnMove;
                 @Move.performed -= instance.OnMove;
@@ -2939,12 +2939,12 @@ namespace InputSystem
             }
 
             /// <summary>
-            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="OverworldActions.UnregisterCallbacks(IOverworldActions)" />.
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DungeonActions.UnregisterCallbacks(IDungeonActions)" />.
             /// </summary>
-            /// <seealso cref="OverworldActions.UnregisterCallbacks(IOverworldActions)" />
-            public void RemoveCallbacks(IOverworldActions instance)
+            /// <seealso cref="DungeonActions.UnregisterCallbacks(IDungeonActions)" />
+            public void RemoveCallbacks(IDungeonActions instance)
             {
-                if (m_Wrapper.m_OverworldActionsCallbackInterfaces.Remove(instance))
+                if (m_Wrapper.m_DungeonActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
@@ -2954,21 +2954,21 @@ namespace InputSystem
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
             /// </remarks>
-            /// <seealso cref="OverworldActions.AddCallbacks(IOverworldActions)" />
-            /// <seealso cref="OverworldActions.RemoveCallbacks(IOverworldActions)" />
-            /// <seealso cref="OverworldActions.UnregisterCallbacks(IOverworldActions)" />
-            public void SetCallbacks(IOverworldActions instance)
+            /// <seealso cref="DungeonActions.AddCallbacks(IDungeonActions)" />
+            /// <seealso cref="DungeonActions.RemoveCallbacks(IDungeonActions)" />
+            /// <seealso cref="DungeonActions.UnregisterCallbacks(IDungeonActions)" />
+            public void SetCallbacks(IDungeonActions instance)
             {
-                foreach (var item in m_Wrapper.m_OverworldActionsCallbackInterfaces)
+                foreach (var item in m_Wrapper.m_DungeonActionsCallbackInterfaces)
                     UnregisterCallbacks(item);
-                m_Wrapper.m_OverworldActionsCallbackInterfaces.Clear();
+                m_Wrapper.m_DungeonActionsCallbackInterfaces.Clear();
                 AddCallbacks(instance);
             }
         }
         /// <summary>
-        /// Provides a new <see cref="OverworldActions" /> instance referencing this action map.
+        /// Provides a new <see cref="DungeonActions" /> instance referencing this action map.
         /// </summary>
-        public OverworldActions @Overworld => new OverworldActions(this);
+        public DungeonActions @Dungeon => new DungeonActions(this);
 
         // Dialogue
         private readonly InputActionMap m_Dialogue;
@@ -3537,11 +3537,11 @@ namespace InputSystem
             void OnToggleBeeper(InputAction.CallbackContext context);
         }
         /// <summary>
-        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Overworld" which allows adding and removing callbacks.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dungeon" which allows adding and removing callbacks.
         /// </summary>
-        /// <seealso cref="OverworldActions.AddCallbacks(IOverworldActions)" />
-        /// <seealso cref="OverworldActions.RemoveCallbacks(IOverworldActions)" />
-        public interface IOverworldActions
+        /// <seealso cref="DungeonActions.AddCallbacks(IDungeonActions)" />
+        /// <seealso cref="DungeonActions.RemoveCallbacks(IDungeonActions)" />
+        public interface IDungeonActions
         {
             /// <summary>
             /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.

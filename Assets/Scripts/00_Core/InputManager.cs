@@ -49,7 +49,7 @@ namespace Core
         //   Interact        → buttonWest (□/X) / E
         //   OpenInventory   → buttonNorth (△/Y) / Tab
         //   OpenPauseMenu   → touchpad / select / Escape
-        public InputSystem_Actions.OverworldActions  Overworld   => Actions.Overworld;
+        public InputSystem_Actions.DungeonActions  Overworld   => Actions.Dungeon;
 
         // Dialogue
         //   Move                        → leftStick / WASD
@@ -86,7 +86,7 @@ namespace Core
 
             Actions = new InputSystem_Actions();
             Actions.Disable();
-            Actions.Overworld.ToggleBeeper.performed += OnToggleBeeper;
+            Actions.Dungeon.ToggleBeeper.performed += OnToggleBeeper;
             Actions.Social.ToggleBeeper.performed += OnToggleBeeper;
         }
 
@@ -94,7 +94,7 @@ namespace Core
         {
             if (Actions != null)
             {
-                Actions.Overworld.ToggleBeeper.performed -= OnToggleBeeper;
+                Actions.Dungeon.ToggleBeeper.performed -= OnToggleBeeper;
                 Actions.Social.ToggleBeeper.performed -= OnToggleBeeper;
             }
 
@@ -143,7 +143,7 @@ namespace Core
                 case INPUTACTION_MAP.UI:          Actions.UI.Enable();            break;
                 case INPUTACTION_MAP.Rewards:     Actions.Rewards.Enable();       break;
                 case INPUTACTION_MAP.Social:      Actions.Social.Enable();        break;
-                case INPUTACTION_MAP.Overworld:   Actions.Overworld.Enable();     break;
+                case INPUTACTION_MAP.Dungeon:   Actions.Dungeon.Enable();     break;
                 case INPUTACTION_MAP.Dialogue:    Actions.Dialogue.Enable();      break;
                 case INPUTACTION_MAP.Combat:      Actions.Combat.Enable();        break;
             }
@@ -158,7 +158,7 @@ namespace Core
             if (Actions.UI.enabled) names.Add("UI");
             if (Actions.Rewards.enabled) names.Add("Rewards");
             if (Actions.Social.enabled) names.Add("Social");
-            if (Actions.Overworld.enabled) names.Add("Overworld");
+            if (Actions.Dungeon.enabled) names.Add("Overworld");
             if (Actions.Dialogue.enabled) names.Add("Dialogue");
             if (Actions.Combat.enabled) names.Add("Combat");
             return names.Count == 0 ? "none" : string.Join(", ", names);
@@ -183,14 +183,14 @@ namespace Core
         }
 
         // ── Internals ─────────────────────────────────────────────────────────
-        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Overworld;
+        private INPUTACTION_MAP _previousMap = INPUTACTION_MAP.Dungeon;
 
         private void DisableAllMaps()
         {
             Actions.UI.Disable();
             Actions.Rewards.Disable();
             Actions.Social.Disable();
-            Actions.Overworld.Disable();
+            Actions.Dungeon.Disable();
             Actions.Dialogue.Disable();
             Actions.Combat.Disable();
         }

@@ -1,6 +1,6 @@
 using Core.CombatSystem.Units;
 using DG.Tweening;
-using Overworld;
+using Dungeon;
 using UnityEngine;
 
 namespace ExtendedDebug

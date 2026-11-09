@@ -131,7 +131,7 @@ namespace PlantsPathCo.DialogueSystem
             if (InputManager.Instance != null)
             {
                 // Fallback keeps the player controllable if the previous map was never captured.
-                InputManager.Instance.ChangeActionMap(mapBeforeDialogue ?? INPUTACTION_MAP.Overworld);
+                InputManager.Instance.ChangeActionMap(mapBeforeDialogue ?? INPUTACTION_MAP.Dungeon);
             }
             mapBeforeDialogue = null;
 

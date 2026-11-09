@@ -2,7 +2,7 @@ using Core.CombatSystem;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Base class for any combat-capable Overworld entity (Player or Enemy). Owns the

@@ -119,7 +119,7 @@ namespace Core.UI
         public void NewGame()
         {
             // SceneManager.LoadScene("Social");
-            SceneManager.LoadScene("Overworld - CombatDemo1");
+            SceneManager.LoadScene("Social");
         }
 
         /// <summary>

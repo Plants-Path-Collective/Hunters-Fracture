@@ -12,7 +12,7 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using Overworld;
+using Dungeon;
 using UI;
 using Core.UI.Beeper;
 
@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
     public void ToggleBeeper()
     {
         if (isInCombat || paused || inputManager == null ||
-            (inputManager.CurrentMap != INPUTACTION_MAP.Overworld &&
+            (inputManager.CurrentMap != INPUTACTION_MAP.Dungeon &&
              inputManager.CurrentMap != INPUTACTION_MAP.Social))
             return;
 

@@ -73,15 +73,16 @@
 <h2 id="inicializacion-de-escena">Inicialización de escena</h2>
 <p><code>Core.SceneSetter</code> es una clase base abstracta. Las subclases implementan <code>InitialActionMap</code> y pueden sobrescribir <code>OnSceneReady()</code>. En <code>Start()</code>, la clase base cambia el mapa del <code>InputManager</code> y luego ejecuta la inicialización específica. Entre las subclases existentes están <code>DungeonSceneSetter</code>, <code>SocialSceneSetter</code> y <code>AssetZooSceneSetter</code>.</p>
 <h2 id="transicion-de-combate">Transición de combate</h2>
-<p><code>Core.CombatSystem.CombatTransition</code> carga <code>CombatStage</code> en modo aditivo. Antes de cargarla, suspende los contenidos de la sala activa, cámara, jugador y enemigo, y activa el mapa <code>Combat</code>. En los resultados <code>Victory</code> y <code>Fled</code>, restaura los objetos suspendidos, cambia al mapa <code>Overworld</code> y descarga <code>CombatStage</code>. En <code>Defeat</code>, conserva la escena de combate para que la interfaz de fin de partida pueda ofrecer las siguientes opciones.</p>
+<p><code>Core.CombatSystem.CombatTransition</code> carga <code>CombatStage</code> en modo aditivo. Antes de cargarla, suspende los contenidos de la sala activa, cámara, jugador y enemigo, y activa el mapa <code>Combat</code>. En los resultados <code>Victory</code> y <code>Fled</code>, restaura los objetos suspendidos, cambia al mapa <code>Dungeon</code> y descarga <code>CombatStage</code>. En <code>Defeat</code>, conserva la escena de combate para que la interfaz de fin de partida pueda ofrecer las siguientes opciones.</p>
 <h2 id="escenas-en-build-settings">Escenas en Build Settings</h2>
 <p>Las escenas habilitadas actualmente en <code>ProjectSettings/EditorBuildSettings.asset</code> son:</p>
 <ul>
-<li><code>Assets/Scenes/Combat Demo/Main Menu - CombatDemo.unity</code></li>
-<li><code>Assets/Scenes/Combat Demo/Overworld Scene (Dungeon)/Overworld - CombatDemo1.unity</code></li>
-<li><code>Assets/Scenes/Prototype Scenes/CombatStage.unity</code></li>
+<li><code>Assets/Scenes/Prototype Scenes/MainMenu.unity</code></li>
+<li><code>Assets/Scenes/Prototype Scenes/Social Scene/Social.unity</code></li>
+<li><code>Assets/Scenes/Prototype Scenes/Dungeon Scene/Dungeon.unity</code></li>
+<li><code>Assets/Scenes/Prototype Scenes/CombatStage/CombatStage.unity</code></li>
 </ul>
-<p>La transición documentada no descarga el Overworld completo: suspende objetos concretos y añade <code>CombatStage</code>. No se documenta streaming de áreas adyacentes porque no forma parte del flujo implementado por <code>CombatTransition</code>.</p>
+<p>La transición documentada no descarga la escena Dungeon completa: suspende objetos concretos y añade <code>CombatStage</code>. No se documenta streaming de áreas adyacentes porque no forma parte del flujo implementado por <code>CombatTransition</code>.</p>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="localization.html">
 <span class="page-nav-dir">Anterior</span>

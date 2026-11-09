@@ -3,7 +3,7 @@ using System.Linq;
 using Core.Render;
 using UnityEngine;
 
-namespace Overworld
+namespace Dungeon
 {
     /// <summary>
     /// Camera + room-activation zone for Overworld dungeon rooms (rail-mounted, angled-down

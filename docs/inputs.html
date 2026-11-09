@@ -80,7 +80,7 @@
 <tr><td><code>UI</code></td><td>Navegación, confirmación y volver en interfaces.</td></tr>
 <tr><td><code>Rewards</code></td><td>Acciones de la pantalla de recompensas.</td></tr>
 <tr><td><code>Social</code></td><td>Movimiento e interacción en zonas sociales.</td></tr>
-<tr><td><code>Overworld</code></td><td>Movimiento, ataque e interacción durante la exploración.</td></tr>
+<tr><td><code>Dungeon</code></td><td>Movimiento, ataque e interacción durante la exploración de la dungeon.</td></tr>
 <tr><td><code>Dialogue</code></td><td>Avanzar el diálogo, confirmar elecciones, saltar o abandonar una conversación.</td></tr>
 <tr><td><code>Combat</code></td><td>Selección de objetivos y acciones de combate.</td></tr>
 <tr><td><code>Empty</code></td><td>Estado sin mapas habilitados; no recibe entrada de gameplay.</td></tr>
@@ -97,7 +97,7 @@
 <span>Acción</span><span class="flow-arrow">→</span>
 <span>Sistema suscrito</span>
 </div>
-<p class="flow-note">Por ejemplo: <code>PlayerController</code> consume acciones de <code>Overworld</code>; los consumidores se suscriben a callbacks de Input Actions.</p>
+<p class="flow-note">Por ejemplo: <code>PlayerController</code> consume acciones del mapa <code>Dungeon</code> a través de <code>InputManager</code>; los consumidores se suscriben a callbacks de Input Actions.</p>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="specs.html">
 <span class="page-nav-dir">Anterior</span>
