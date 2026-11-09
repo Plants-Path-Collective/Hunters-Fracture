@@ -16,14 +16,21 @@ MonoBehaviour:
   - speaker: {fileID: 11400000, guid: 77a647eda168b8847a77aa433224ba86, type: 2}
     dialogueText:
       m_TableReference:
-        m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+        m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
       m_TableEntryReference:
-        m_KeyId: 3879579373570
+        m_KeyId: 15973786213109760
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    voiceLine: {fileID: 0}
+    voiceLine:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 10

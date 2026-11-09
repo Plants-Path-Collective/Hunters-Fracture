@@ -48,6 +48,12 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89a8c1883a5f28e748dcfbac407e8001
+    m_Address: Assets/Localization/String Tables/SocialArea_Misc/SocialArea_Misc/SocialArea_Misc
+      Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 95b4cff7b78839970ae88c3ff464b6cb
     m_Address: Assets/Localization/String Tables/Dialogues/Dialogues/Dialogues Shared
       Data.asset

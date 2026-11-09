@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1377872336087304090
+--- !u!1 &1482930641522316761
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7771779578962239749}
-  - component: {fileID: 6783559691260328272}
-  - component: {fileID: 1341585531382803057}
-  - component: {fileID: 4028056550419404738}
-  - component: {fileID: 3366040247548614592}
+  - component: {fileID: 8529443450933560582}
+  - component: {fileID: 568225998942926769}
+  - component: {fileID: 1162735602764689321}
+  - component: {fileID: 6375362703776984536}
+  - component: {fileID: 6785894636520942396}
   m_Layer: 0
-  m_Name: Cinemachine Brain - Main Camera
+  m_Name: Cinemachine Brain - Main Camera Social Scenes
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7771779578962239749
+--- !u!4 &8529443450933560582
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377872336087304090}
+  m_GameObject: {fileID: 1482930641522316761}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23911767, y: 0.36964315, z: -0.099045575, w: 0.8923994}
-  m_LocalPosition: {x: -10, y: 10, z: -10}
+  m_LocalRotation: {x: 0.15343878, y: -0.3900179, z: 0.06608741, w: 0.90552473}
+  m_LocalPosition: {x: 17.3, y: 1.7, z: 3.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
---- !u!20 &6783559691260328272
+--- !u!20 &568225998942926769
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377872336087304090}
+  m_GameObject: {fileID: 1482930641522316761}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.033641864, g: 0.12328426, b: 0.26415092, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -68,7 +68,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 25
+  field of view: 65
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -86,21 +86,21 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1341585531382803057
+--- !u!81 &1162735602764689321
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377872336087304090}
+  m_GameObject: {fileID: 1482930641522316761}
   m_Enabled: 1
---- !u!114 &4028056550419404738
+--- !u!114 &6375362703776984536
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377872336087304090}
+  m_GameObject: {fileID: 1482930641522316761}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
@@ -138,13 +138,13 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &3366040247548614592
+--- !u!114 &6785894636520942396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377872336087304090}
+  m_GameObject: {fileID: 1482930641522316761}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}

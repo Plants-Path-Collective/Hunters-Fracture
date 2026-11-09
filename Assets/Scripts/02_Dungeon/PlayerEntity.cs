@@ -45,7 +45,7 @@ namespace Dungeon
         {
             if (subscribed || InputManager.Instance == null) return;
 
-            InputManager.Instance.Overworld.Attack.performed += OnAttackInput;
+            InputManager.Instance.Dungeon.Attack.performed += OnAttackInput;
             subscribed = true;
             Debug.Log($"[{nameof(PlayerEntity)}] Attack subscribed (map: {InputManager.Instance.CurrentMap}).");
         }
@@ -54,7 +54,7 @@ namespace Dungeon
         {
             // InputManager is DontDestroyOnLoad and can be gone first when the app closes.
             if (InputManager.Instance != null)
-                InputManager.Instance.Overworld.Attack.performed -= OnAttackInput;
+                InputManager.Instance.Dungeon.Attack.performed -= OnAttackInput;
 
             subscribed = false;
             Debug.Log($"[{nameof(PlayerEntity)}] Attack unsubscribed.");

@@ -49,7 +49,7 @@ namespace Core
         //   Interact        → buttonWest (□/X) / E
         //   OpenInventory   → buttonNorth (△/Y) / Tab
         //   OpenPauseMenu   → touchpad / select / Escape
-        public InputSystem_Actions.DungeonActions  Overworld   => Actions.Dungeon;
+        public InputSystem_Actions.DungeonActions  Dungeon   => Actions.Dungeon;
 
         // Dialogue
         //   Move                        → leftStick / WASD

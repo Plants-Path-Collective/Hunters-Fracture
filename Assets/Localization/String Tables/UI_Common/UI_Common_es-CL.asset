@@ -22,6 +22,10 @@ MonoBehaviour:
     m_Localized: Regresar
     m_Metadata:
       m_Items: []
+  - m_Id: 40638211259846656
+    m_Localized: Interactuar
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

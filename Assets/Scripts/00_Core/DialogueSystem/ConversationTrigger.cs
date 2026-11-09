@@ -1,8 +1,9 @@
 using UnityEngine;
 using PlantsPathCo.DialogueSystem;
+using Player;
 
 [RequireComponent(typeof(Collider))]
-public class ConversationTrigger : MonoBehaviour
+public class ConversationTrigger : MonoBehaviour, IPlayerInteractable
 {
     [ReadOnly] public bool playing;
     
@@ -19,6 +20,8 @@ public class ConversationTrigger : MonoBehaviour
     [ReadOnly] [SerializeField] private int conversationIndex;
 
     private string SaveKey => $"NPC_{npcID}_Conversation";
+    private bool playerInRange;
+    public Transform InteractionPoint => transform;
 
     private void Awake()
     {
@@ -30,18 +33,38 @@ public class ConversationTrigger : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        StartConversation();
+        playerInRange = true;
     }
 
-    private void StartConversation()
+    private void OnTriggerExit(Collider other)
     {
+        if (other.CompareTag("Player"))
+            playerInRange = false;
+    }
+
+    public void Interact()
+    {
+        if (!playerInRange || playing)
+            return;
+
         if (conversations == null || conversations.Length == 0)
             return;
 
         int index = Mathf.Clamp(conversationIndex, 0, conversations.Length - 1);
+        ConversationSO conversation = conversations[index];
+        if (conversation == null || conversation.lines == null || conversation.lines.Length == 0)
+        {
+            Debug.LogWarning($"[{nameof(ConversationTrigger)}] No valid conversation configured for '{name}'.", this);
+            return;
+        }
 
-        DialogueManager.Instance.StartConversation(conversations[index], this);
+        if (DialogueManager.Instance == null)
+        {
+            Debug.LogError($"[{nameof(ConversationTrigger)}] No DialogueManager found; cannot start conversation.", this);
+            return;
+        }
 
+        DialogueManager.Instance.StartConversation(conversation, this);
         playing = true;
     }
 

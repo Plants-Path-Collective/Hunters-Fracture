@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.SpeakerSO
   speakerName:
     m_TableReference:
-      m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+      m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
     m_TableEntryReference:
-      m_KeyId: 3879583567877
+      m_KeyId: 15973973086130176
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  portrait: {fileID: 21300000, guid: 051385c355037c6479ac47612fa7a82e, type: 3}
+  portrait: {fileID: 21300000, guid: 21b49b8b6656f69458b0a8e0d255e550, type: 3}
   references:
     version: 2
     RefIds: []

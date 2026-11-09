@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -6,6 +7,12 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
+    public interface IPlayerInteractable
+    {
+        Transform InteractionPoint { get; }
+        void Interact();
+    }
+
     [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerController : MonoBehaviour
     {
@@ -30,6 +37,12 @@ namespace Player
         private Vector2 _rawInput;
         private Vector3 _velocity;
         private float   _currentSpeed;
+        private readonly Dictionary<IPlayerInteractable, int> _nearbyInteractables = new();
+        private InputAction _socialMoveAction;
+        private InputAction _dungeonMoveAction;
+        private InputAction _socialInteractAction;
+        private InputAction _dungeonInteractAction;
+        private bool _inputUnavailableWarningLogged;
 
         private static readonly int AnimMoveSpeed = Animator.StringToHash("MoveSpeed");
 
@@ -55,27 +68,169 @@ namespace Player
 
         private void OnEnable()
         {
-            var move = InputManager.Instance.Overworld.Move;
-            move.performed += OnMovePerformed;
-            move.canceled  += OnMoveCanceled;   // Value actions sí disparan canceled
-            move.started   += OnMovePerformed;  // por si performed no llega al primer frame
+            TrySubscribeToInput();
+        }
+
+        private void Start()
+        {
+            TrySubscribeToInput();
         }
 
         private void OnDisable()
         {
-            if (InputManager.Instance == null) return;
+            if (_socialMoveAction != null) UnsubscribeFromMove(_socialMoveAction);
+            if (_dungeonMoveAction != null) UnsubscribeFromMove(_dungeonMoveAction);
+            if (_socialInteractAction != null) UnsubscribeFromInteract(_socialInteractAction);
+            if (_dungeonInteractAction != null) UnsubscribeFromInteract(_dungeonInteractAction);
 
-            var move = InputManager.Instance.Overworld.Move;
-            move.performed -= OnMovePerformed;
-            move.canceled  -= OnMoveCanceled;
-            move.started   -= OnMovePerformed;
+            _socialMoveAction = null;
+            _dungeonMoveAction = null;
+            _socialInteractAction = null;
+            _dungeonInteractAction = null;
 
             // Limpiar input al deshabilitarse para no heredar estado sucio
             _rawInput = Vector2.zero;
+            _nearbyInteractables.Clear();
+        }
+
+        private bool TrySubscribeToInput()
+        {
+            if (_socialMoveAction != null) return true;
+
+            InputManager input = InputManager.Instance;
+            if (input == null || input.Actions == null)
+            {
+                if (!_inputUnavailableWarningLogged)
+                {
+                    Debug.LogWarning($"[{nameof(PlayerController)}] Waiting for InputManager before subscribing to player input.", this);
+                    _inputUnavailableWarningLogged = true;
+                }
+
+                return false;
+            }
+
+            _socialMoveAction = input.Social.Move;
+            _dungeonMoveAction = input.Dungeon.Move;
+            _socialInteractAction = input.Social.Interact;
+            _dungeonInteractAction = input.Dungeon.Interact;
+
+            SubscribeToMove(_socialMoveAction);
+            SubscribeToMove(_dungeonMoveAction);
+            SubscribeToInteract(_socialInteractAction);
+            SubscribeToInteract(_dungeonInteractAction);
+            Debug.Log(
+                $"[{nameof(PlayerController)}] Subscribed to Social and Dungeon Interact. " +
+                $"Current map: {input.CurrentMap}; Social enabled: {_socialInteractAction.enabled}; " +
+                $"Dungeon enabled: {_dungeonInteractAction.enabled}.", this);
+            _inputUnavailableWarningLogged = false;
+            return true;
+        }
+
+        private void SubscribeToMove(InputAction move)
+        {
+            move.performed += OnMovePerformed;
+            move.canceled  += OnMoveCanceled;
+            move.started   += OnMovePerformed;
+        }
+
+        private void UnsubscribeFromMove(InputAction move)
+        {
+            move.performed -= OnMovePerformed;
+            move.canceled  -= OnMoveCanceled;
+            move.started   -= OnMovePerformed;
+        }
+
+        private void SubscribeToInteract(InputAction interact)
+        {
+            interact.started += OnInteractStarted;
+            interact.performed += OnInteractPerformed;
+        }
+
+        private void UnsubscribeFromInteract(InputAction interact)
+        {
+            interact.started -= OnInteractStarted;
+            interact.performed -= OnInteractPerformed;
+        }
+
+        private void OnInteractStarted(InputAction.CallbackContext context)
+        {
+            Debug.Log(
+                $"[{nameof(PlayerController)}] Interact pressed: map={context.action.actionMap.name}, " +
+                $"control={context.control?.path ?? "unknown"}.", this);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Debug.Log($"[{nameof(PlayerController)}] Trigger enter: '{other.name}' (tag: {other.tag}).", this);
+            UpdateNearbyInteractables(other, true);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            Debug.Log($"[{nameof(PlayerController)}] Trigger exit: '{other.name}' (tag: {other.tag}).", this);
+            UpdateNearbyInteractables(other, false);
+        }
+
+        private void UpdateNearbyInteractables(Collider other, bool entering)
+        {
+            foreach (MonoBehaviour component in other.GetComponentsInParent<MonoBehaviour>())
+            {
+                if (component is not IPlayerInteractable interactable) continue;
+
+                if (entering)
+                {
+                    _nearbyInteractables.TryGetValue(interactable, out int count);
+                    _nearbyInteractables[interactable] = count + 1;
+                    Debug.Log($"[{nameof(PlayerController)}] Registered nearby interactable '{component.name}'.", this);
+                }
+                else if (_nearbyInteractables.TryGetValue(interactable, out int count))
+                {
+                    if (count <= 1)
+                        _nearbyInteractables.Remove(interactable);
+                    else
+                        _nearbyInteractables[interactable] = count - 1;
+
+                    Debug.Log($"[{nameof(PlayerController)}] Unregistered nearby interactable '{component.name}'.", this);
+                }
+            }
+        }
+
+        private void OnInteractPerformed(InputAction.CallbackContext context)
+        {
+            Debug.Log(
+                $"[{nameof(PlayerController)}] Interact pressed: map={context.action.actionMap.name}, " +
+                $"control={context.control?.path ?? "unknown"}, " +
+                $"nearby interactables={_nearbyInteractables.Count}.", this);
+
+            if (_nearbyInteractables.Count == 0)
+            {
+                Debug.LogWarning($"[{nameof(PlayerController)}] Interact pressed with no nearby interactables.", this);
+                return;
+            }
+
+            IPlayerInteractable nearest = null;
+            float nearestDistance = float.MaxValue;
+
+            foreach (IPlayerInteractable interactable in _nearbyInteractables.Keys)
+            {
+                Transform point = interactable.InteractionPoint;
+                if (point == null) continue;
+
+                float distance = (point.position - transform.position).sqrMagnitude;
+                if (distance >= nearestDistance) continue;
+
+                nearest = interactable;
+                nearestDistance = distance;
+            }
+
+            nearest?.Interact();
         }
 
         private void Update()
         {
+            if (_socialMoveAction == null)
+                TrySubscribeToInput();
+
             MoveAndRotate(GetCameraRelativeDirection(_rawInput));
             DriveAnimator();
         }

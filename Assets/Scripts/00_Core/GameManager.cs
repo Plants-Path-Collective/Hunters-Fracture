@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
         confirmReference = InputActionReference.Create(inputManager.Actions.UI.Confirm);
         cancelReference = InputActionReference.Create(inputManager.Actions.UI.CancelBack);
 
-        inputManager.Overworld.OpenPauseMenu.performed += OnOpenPauseMenu;
+        inputManager.Dungeon.OpenPauseMenu.performed += OnOpenPauseMenu;
         inputManager.Combat.OpenPauseMenu.performed += OnOpenPauseMenu;
         inputManager.Social.OpenPauseMenu.performed += OnOpenPauseMenu;
         inputManager.UI.CancelBack.performed += OnPauseMenuCancel;
@@ -837,7 +837,7 @@ public class GameManager : MonoBehaviour
 
         if (inputManager != null)
         {
-            inputManager.Overworld.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.Dungeon.OpenPauseMenu.performed -= OnOpenPauseMenu;
             inputManager.Combat.OpenPauseMenu.performed -= OnOpenPauseMenu;
             inputManager.Social.OpenPauseMenu.performed -= OnOpenPauseMenu;
             inputManager.UI.CancelBack.performed -= OnPauseMenuCancel;

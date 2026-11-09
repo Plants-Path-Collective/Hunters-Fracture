@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.SpeakerSO
   speakerName:
     m_TableReference:
-      m_TableCollectionName: GUID:82f34e8ff59b2054f80efdeeccaa00bf
+      m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
     m_TableEntryReference:
-      m_KeyId: 3879583567876
+      m_KeyId: 15972999625920512
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0

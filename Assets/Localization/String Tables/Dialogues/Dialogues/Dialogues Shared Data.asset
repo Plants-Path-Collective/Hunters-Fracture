@@ -14,7 +14,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: Dialogues
   m_TableCollectionNameGuidString: 95b4cff7b78839970ae88c3ff464b6cb
-  m_Entries: []
+  m_Entries:
+  - m_Id: 15972999625920512
+    m_Key: dialogues_testspeaker1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973973086130176
+    m_Key: dialogues_testspeaker2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15972939492184064
+    m_Key: dialogues_testconv1_line1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973389075435520
+    m_Key: dialogues_testconv1_line2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973498756485120
+    m_Key: dialogues_testconv1_answer1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973573926801408
+    m_Key: dialogues_testconv1_answer2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973641979383808
+    m_Key: dialogues_testconv1_answer3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973685948272640
+    m_Key: dialogues_testconv1_answer4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15973786213109760
+    m_Key: dialogues_testconvA_line1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15974389865730048
+    m_Key: dialogues_testconvB_line1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15974428344274944
+    m_Key: dialogues_testconvC_line1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15974450712498176
+    m_Key: dialogues_testconvD_line1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15974475693772800
+    m_Key: dialogues_testconvE_line1
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
