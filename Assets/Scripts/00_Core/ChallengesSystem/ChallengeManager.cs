@@ -94,6 +94,25 @@ Debug.Log($"[Challenges] Ready. {catalog.Challenges.Count} challenge(s). Save fo
         public bool IsCompleted(string challengeID) =>
             progressByID.TryGetValue(challengeID, out ChallengeProgress p) && p.completed;
 
+        /// <summary>Completes a challenge by ID, granting its rewards and saving the result.</summary>
+        public bool ForceComplete(string challengeID)
+        {
+            if (catalog == null || string.IsNullOrEmpty(challengeID) ||
+                !catalog.TryGet(challengeID, out ChallengeSO challenge) ||
+                challenge == null || IsCompleted(challengeID))
+            {
+                return false;
+            }
+
+            ChallengeProgress progress = GetOrCreateProgress(challengeID);
+            int target = challenge.condition != null ? challenge.condition.Target : 0;
+            progress.value = target;
+            isDirty = true;
+            OnProgressChanged?.Invoke(challenge, progress.value, target);
+            Complete(challenge, progress);
+            return true;
+        }
+
         /// <summary>Gets current progress and target of a challenge (for UI).</summary>
         public (int current, int target) GetProgress(ChallengeSO challenge)
         {

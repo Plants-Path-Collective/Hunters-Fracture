@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consola de desarrollo — Hunters: Fracture of Time</title>
+<meta name="description" content="Uso de la consola de desarrollo de Unity y guía para registrar comandos personalizados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('hunters-docs-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir navegación" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<header>
+  <a class="logo" href="index.html">HUNTERS<span>:</span> FRACTURE OF TIME</a>
+  <div class="version">v0.1</div>
+  <a class="header-search" href="index.html">⌕ Buscar en la documentación...</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">☾ Oscuro</button>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-inner">
+<a href="index.html" class="brand"><span class="brand-title">Hunters: Fracture of Time</span></a>
+<p class="brand-sub">Documentación técnica · v0.1</p>
+<nav class="nav" aria-label="Secciones de documentación">
+<ul class="nav-list">
+<li><a href="index.html"><span class="nav-num">·</span>Inicio</a></li>
+</ul>
+<div class="nav-section"><div class="section-title">Sistemas</div>
+<ul class="nav-list">
+<li><a href="specs.html"><span class="nav-num">01</span>Especificaciones</a></li>
+<li><a href="inputs.html"><span class="nav-num">02</span>Inputs</a></li>
+<li><a href="challenges.html"><span class="nav-num">03</span>Desafíos</a></li>
+<li><a href="combat.html"><span class="nav-num">04</span>Combate</a></li>
+<li><a href="units.html"><span class="nav-num">05</span>Unidades</a></li>
+<li><a href="items.html"><span class="nav-num">06</span>Ítems</a></li>
+<li><a href="dialogue.html"><span class="nav-num">07</span>Diálogo</a></li>
+<li><a href="localization.html"><span class="nav-num">08</span>Localización</a></li>
+<li><a href="architecture.html"><span class="nav-num">09</span>Arquitectura</a></li>
+</ul>
+</div>
+<div class="nav-section current"><div class="section-title">Referencia</div>
+<ul class="nav-list">
+<li><a href="structure.html"><span class="nav-num">10</span>Directorios</a></li>
+<li><a href="contributing.html"><span class="nav-num">11</span>Contribución</a></li>
+<li><a href="console.html" aria-current="page"><span class="nav-num">12</span>Consola de desarrollo</a></li>
+</ul>
+</div>
+</nav>
+<div class="sidebar-footer">
+<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<p class="footer-hint">Para el equipo y futuros modders</p>
+</div></div></aside>
+
+<main class="content" id="top">
+<div class="breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:20px"><a href="index.html">Documentación</a><span style="opacity:.5;margin:0 6px">/</span>Consola de desarrollo</div>
+
+<p class="eyebrow">12 · REFERENCIA</p>
+<h1>Consola de desarrollo</h1>
+<p class="page-lede">Consola en pantalla para inspeccionar el juego, ejecutar utilidades y probar sistemas durante el desarrollo.</p>
+
+<h2 id="disponibilidad">Disponibilidad y uso</h2>
+<p><code>DevConsole</code> se crea automáticamente al iniciar el juego en el Editor y en las Development Builds. No requiere añadir un objeto a una escena. La consola no se incluye en builds de producción.</p>
+<ul>
+<li>Pulsa <kbd>F4</kbd> con la vista <strong>Game</strong> enfocada para abrir o cerrar la consola.</li>
+<li>Escribe un comando y pulsa <kbd>Enter</kbd>. Los nombres de comandos no distinguen mayúsculas de minúsculas; se acepta una barra inicial opcional.</li>
+<li>Usa <kbd>Tab</kbd> para autocompletar, <kbd>↑</kbd>/<kbd>↓</kbd> para recorrer el historial y <kbd>Page Up</kbd>/<kbd>Page Down</kbd> para desplazarte por los logs.</li>
+<li>Las comillas dobles agrupan argumentos con espacios, por ejemplo: <code>scene "Overworld Scene"</code>.</li>
+</ul>
+<p>Mientras está abierta, la consola bloquea los mapas de entrada de gameplay y muestra el cursor. Al cerrarla restaura el mapa previo.</p>
+
+<h2 id="comandos-incluidos">Comandos incluidos</h2>
+<p>Escribe <code>help</code> para ver los comandos registrados y <code>help &lt;comando&gt;</code> para consultar la firma y descripción de uno. Algunas utilidades generales:</p>
+<table class="dep-table">
+<thead><tr><th>Comando</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td><code>clear</code></td><td>Limpia las líneas visibles.</td></tr>
+<tr><td><code>echo &lt;texto...&gt;</code></td><td>Imprime texto en la consola.</td></tr>
+<tr><td><code>timescale [scale]</code></td><td>Muestra o cambia <code>Time.timeScale</code>; <code>0</code> pausa el tiempo.</td></tr>
+<tr><td><code>scenes</code></td><td>Lista las escenas de Build Settings y las cargadas actualmente.</td></tr>
+<tr><td><code>scene &lt;nombre|índice&gt; [additive]</code></td><td>Carga una escena; se puede indicar si la carga es aditiva.</td></tr>
+<tr><td><code>console.save</code></td><td>Guarda el historial de logs en <code>Application.persistentDataPath</code>.</td></tr>
+<tr><td><code>quit</code></td><td>Sale del juego o detiene Play Mode en el Editor.</td></tr>
+</tbody>
+</table>
+<p>También hay comandos de prueba agrupados por prefijo, como <code>combat.*</code>, <code>party.*</code>, <code>enemy.*</code> y <code>challenge.*</code>. Consulta <code>help</code> para ver la lista vigente.</p>
+
+<h2 id="anadir-comandos">Añadir comandos</h2>
+<ol>
+<li>Crea o reutiliza una clase estática en el código del sistema correspondiente; por ejemplo, <code>Assets/Scripts/97_DevTools/GameCommands.cs</code>.</li>
+<li>Marca un método estático con <code>[ConsoleCommand("nombre", "Descripción para help")]</code>.</li>
+<li>Usa únicamente los tipos de parámetros admitidos y devuelve <code>string</code> para mostrar un resultado o <code>void</code> si no hace falta imprimirlo.</li>
+</ol>
+<pre class="ascii-flow">using DevTools;
+
+internal static class DebugCommands
+{
+    [ConsoleCommand("dev.greet", "Saluda al nombre indicado.")]
+    private static string Greet(string name = "developer") =&gt;
+        $"Hello, {name}!";
+}</pre>
+<p>La consola descubre por reflexión métodos estáticos públicos o privados marcados con el atributo al arrancar. No es necesario registrarlos manualmente. El nombre es único y no distingue mayúsculas de minúsculas; usa puntos para agrupar comandos relacionados.</p>
+<p>Para un comando de juego real, llama desde el método a la API pública del sistema correspondiente, comprueba que ese sistema esté disponible y devuelve un mensaje claro si no se puede realizar la operación.</p>
+
+<h3>Parámetros admitidos</h3>
+<ul>
+<li><code>string</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>bool</code> y cualquier <code>enum</code>.</li>
+<li>Los parámetros opcionales de C# se muestran entre corchetes en la ayuda y usan su valor predeterminado si se omiten.</li>
+<li><code>params string[]</code> puede usarse como último parámetro para aceptar una cantidad variable de palabras.</li>
+<li>Los argumentos se pasan en orden. Los valores booleanos aceptan <code>true/false</code>, <code>1/0</code>, <code>on/off</code> y <code>yes/no</code>; los números usan punto decimal.</li>
+</ul>
+
+<h3>Compilación y recomendaciones</h3>
+<ul>
+<li>Envuelve las clases de comandos en <code>#if UNITY_EDITOR || DEVELOPMENT_BUILD</code> para excluirlas de builds de producción.</li>
+<li>Los comandos descubiertos solo por reflexión deben marcarse con <code>[Preserve]</code> en su clase para evitar que IL2CPP los elimine en Development Builds.</li>
+<li>Valida los argumentos y el estado del juego antes de modificarlo. Devuelve mensajes claros en caso de no poder ejecutar la operación.</li>
+<li>Prueba el comando con <code>help &lt;comando&gt;</code> y verifica tanto los valores válidos como los inválidos.</li>
+</ul>
+
+<nav aria-label="Navegación entre páginas" class="page-nav">
+<a class="page-nav-prev" href="contributing.html">
+<span class="page-nav-dir">Anterior</span>
+<span class="page-nav-title">Contribución</span>
+</a>
+<span></span>
+</nav>
+<footer class="site-footer">
+<p>Hunters: Fracture of Time — documentación interna, generada a partir del proyecto en Unity.</p>
+</footer>
+</main>
+
+<section class="toc"><strong>En esta página</strong><a href="#disponibilidad">Disponibilidad y uso</a><a href="#comandos-incluidos">Comandos incluidos</a><a href="#anadir-comandos">Añadir comandos</a></section>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

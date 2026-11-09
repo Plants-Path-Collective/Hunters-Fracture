@@ -1,0 +1,4 @@
+#dev-console-input {
+    --unity-cursor-color: rgb(115, 220, 255);
+    --unity-selection-color: rgba(31, 133, 173, 179);
+}
