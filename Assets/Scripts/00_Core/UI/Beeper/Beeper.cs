@@ -59,10 +59,15 @@ namespace Core.UI.Beeper
                         introDuration)
                     .SetEase(Ease.OutCubic)
                     .SetTarget(this)
-                    .SetLink(gameObject);
+                    .SetLink(gameObject)
+                    .OnComplete(() =>
+                    {
+                        Time.timeScale = 0f;
+                    });
                 return;
             }
 
+            Time.timeScale = 1f;
             positionTween = DOTween.To(
                     () => visualsRect.anchoredPosition.y,
                     SetVisualsY,
@@ -72,7 +77,7 @@ namespace Core.UI.Beeper
                 .SetTarget(this)
                 .SetLink(gameObject)
                 .OnComplete(() =>
-                {
+                { 
                     positionTween = null;
                     if (!isVisible)
                         beeperVisuals.SetActive(false);

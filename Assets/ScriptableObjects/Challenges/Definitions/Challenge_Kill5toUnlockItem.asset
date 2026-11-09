@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5db8487065d140caba4e4784f4621cad, type: 3}
-  m_Name: Challenge_Kill3toUnlockRenjiro
+  m_Name: Challenge_Kill5toUnlockItem
   m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeSO
-  challengeID: kill3_unlockrenjiro
+  challengeID: kill5_unlockitem
   challengeName:
     m_TableReference:
       m_TableCollectionName: 
@@ -36,7 +36,7 @@ MonoBehaviour:
   condition: {fileID: 11400000, guid: 43e2da77b2a67a729a42d19177231c3b, type: 2}
   scope: 0
   rewards:
-  - {fileID: 11400000, guid: cce6770c608335b458b48ceed906b5dd, type: 2}
+  - {fileID: 11400000, guid: 5c4a3cacb21b7ad5fb1386957b703436, type: 2}
   references:
     version: 2
     RefIds: []

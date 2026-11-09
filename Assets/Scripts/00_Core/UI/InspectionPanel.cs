@@ -314,4 +314,9 @@ public class InspectionPanel : MonoBehaviour
         string suffix = percentage ? "%" : string.Empty;
         label.text = $"{baseValue:0.##}{suffix} ({bonusText}{suffix})";
     }
+
+    public void Test()
+    {
+        Debug.Log("Button has been pressed");
+    }
 }
