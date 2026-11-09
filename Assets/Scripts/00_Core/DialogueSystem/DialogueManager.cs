@@ -68,7 +68,9 @@ namespace PlantsPathCo.DialogueSystem
         public UnityEvent<AnswerOption, int> onChoiceSelected;
 
         private Coroutine runningCoroutine;
+        private INPUTACTION_MAP? mapBeforeDialogue;
         private bool clockPausedByDialogue;
+        
 
         // Cache of currently active answer LocalizedStrings, in the same order as line.answers,
         // so we can map an input index back to the correct AnswerOption/nextConversation.
@@ -102,6 +104,44 @@ namespace PlantsPathCo.DialogueSystem
             }
         }
 
+        /// <summary>
+        /// Switches to the Dialogue map and pauses the clock. Safe to call while a conversation is already
+        /// running: the map to restore and the pause are captured only once.
+        /// </summary>
+        private void EnterDialogueState()
+        {
+            InputManager input = InputManager.Instance;
+
+            // Capture the map only on the first entry, and never capture Dialogue itself.
+            if (mapBeforeDialogue == null && input.CurrentMap != INPUTACTION_MAP.Dialogue)
+                mapBeforeDialogue = input.CurrentMap;
+
+            input.ChangeActionMap(INPUTACTION_MAP.Dialogue);
+
+            if (!clockPausedByDialogue)
+            {
+                GameClock.RequestPause(CLOCK_PAUSE_REASON.Dialogue);
+                clockPausedByDialogue = true;
+            }
+        }
+
+        /// <summary>Restores the map that was active before the conversation and resumes the clock.</summary>
+        private void ExitDialogueState()
+        {
+            if (InputManager.Instance != null)
+            {
+                // Fallback keeps the player controllable if the previous map was never captured.
+                InputManager.Instance.ChangeActionMap(mapBeforeDialogue ?? INPUTACTION_MAP.Overworld);
+            }
+            mapBeforeDialogue = null;
+
+            if (clockPausedByDialogue)
+            {
+                GameClock.ReleasePause(CLOCK_PAUSE_REASON.Dialogue);
+                clockPausedByDialogue = false;
+            }
+        }
+
         /// <summary>Función para empezar una conversación, requiere de un ConversationSO.</summary>
         public void StartConversation(ConversationSO conversation, ConversationTrigger trigger)
         {
@@ -115,17 +155,12 @@ namespace PlantsPathCo.DialogueSystem
             currentTrigger = trigger;
             lineIndex = 0;
 
-            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Dialogue);
+            EnterDialogueState();
 
             if (dialoguePanel.panelRoot != null)
                 dialoguePanel.panelRoot.SetActive(true);
 
 
-            if (!clockPausedByDialogue)
-            {
-                GameClock.RequestPause(CLOCK_PAUSE_REASON.Dialogue);
-                clockPausedByDialogue = true;
-            }
 
             onConversationStart?.Invoke(conversation);
             runningCoroutine = StartCoroutine(PlayConversation());
@@ -341,13 +376,8 @@ namespace PlantsPathCo.DialogueSystem
             currentConversation = null;
             runningCoroutine = null;
 
-            if (clockPausedByDialogue)
-            {
-                GameClock.ReleasePause(CLOCK_PAUSE_REASON.Dialogue);
-                clockPausedByDialogue = false;
-            }
-
-            InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Overworld);
+            if (mapBeforeDialogue != null || clockPausedByDialogue)
+                ExitDialogueState();
         }
     }
 }
