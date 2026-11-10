@@ -8,9 +8,14 @@ namespace Core
     {
         protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Dungeon;
 
+        public GameObject inputHints;
+        public GameObject logText;
+
         protected override void OnSceneReady()
         {
-            // Example: tell GameManager we entered overworld, start ambient music, etc.
+            GameManager.Instance.inputsHints = inputHints;
+            GameManager.Instance.logText = logText;
+
             Debug.Log($"[DungeonSceneSetter] Scene ready — {InitialActionMap} map active.");
         }
     }

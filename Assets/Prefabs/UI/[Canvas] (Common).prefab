@@ -4243,7 +4243,7 @@ GameObject:
   - component: {fileID: 83693627824917925}
   - component: {fileID: 1151231742470660630}
   m_Layer: 0
-  m_Name: '[Canvas] (Social Variant)'
+  m_Name: '[Canvas] (Common)'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

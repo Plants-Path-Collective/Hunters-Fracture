@@ -37,7 +37,7 @@ namespace Core.Render
             // Start inactive — the first zone of a scene should either have its camera already
             // set to a higher priority in the Inspector, or something external (a SceneSetter)
             // should call Activate() on it once the scene is ready.
-            cinemachineCamera.Priority = inactivePriority;
+            // cinemachineCamera.Priority = inactivePriority;
         }
 
         private void OnTriggerEnter(Collider other)

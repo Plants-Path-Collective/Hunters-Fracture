@@ -12,7 +12,6 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using Dungeon;
 using UI;
 using Core.UI.Beeper;
 
@@ -24,6 +23,7 @@ public class GameManager : MonoBehaviour
     public GameObject cmCameraActive;
     public GameObject globalVisuals;
     public GameObject inputsHints;
+    public GameObject logText;
 
     [Header("Beeper")]
     public GameObject beeper;

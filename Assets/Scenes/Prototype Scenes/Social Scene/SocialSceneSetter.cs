@@ -8,9 +8,12 @@ namespace Core
     {
         protected override INPUTACTION_MAP InitialActionMap => INPUTACTION_MAP.Social;
 
+        public GameObject inputsHints;
+
         protected override void OnSceneReady()
         {
-            // Example: tell GameManager we entered social area, start ambient music, etc.
+            GameManager.Instance.inputsHints = inputsHints;
+            
             Debug.Log($"[SocialSceneSetter] Scene ready — {InitialActionMap} map active.");
         }
     }
