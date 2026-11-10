@@ -1,8 +1,4 @@
 using System.Collections;
-using Core;
-using Core.CombatSystem;
-using Core.CombatSystem.Backpack;
-using Core.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +8,10 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using UI;
+using Core;
+using Core.CombatSystem.Backpack;
+using Core.Clock;
+using Core.UI;
 using Core.UI.Beeper;
 
 public class GameManager : MonoBehaviour
@@ -46,6 +45,7 @@ public class GameManager : MonoBehaviour
     private readonly Dictionary<TMP_Text, List<TimedLogMessage>> timedLogMessages = new();
     private int nextLogMessageId;
     private const float LogMessageDuration = 3f;
+    private readonly ClockPauseHandle clockPause = new(CLOCK_PAUSE_REASON.Menu);
 
     private sealed class TimedLogMessage
     {
@@ -471,6 +471,7 @@ public class GameManager : MonoBehaviour
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             paused = false;
+            clockPause.Set(false);
             inputManager.PopUIMap();
         }
         else
@@ -479,6 +480,7 @@ public class GameManager : MonoBehaviour
             pauseMenu.SetActive(true);
             Time.timeScale = 0f;
             paused = true;
+            clockPause.Set(true);
             inputManager.PushUIMap();
             ClosePauseMenuPanel();
             ConfigurePauseMenuInputModule();

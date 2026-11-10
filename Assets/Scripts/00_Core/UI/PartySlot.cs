@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using Core;
 using Core.CombatSystem.Units;
 using UnityEngine.Localization;
 
-namespace UI
+namespace Core.UI
 {
     public class PartySlot : MonoBehaviour,
         IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler

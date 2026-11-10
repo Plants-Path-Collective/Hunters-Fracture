@@ -255,6 +255,7 @@ namespace Core
         Dialogue,
         Transition,
         Menu,
+        Beeper,
         Debug
     }
     #endregion

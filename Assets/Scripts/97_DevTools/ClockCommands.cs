@@ -1,10 +1,11 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System;
-using DevTools;
+using UnityEngine;
 using UnityEngine.Scripting;
+using Core;
 using Core.Clock;
 
-namespace Core
+namespace DevTools
 {
     /// <summary>
     /// Development console commands to inspect and manipulate the <see cref="GameClock"/>.
@@ -23,7 +24,8 @@ namespace Core
 
             return $"Day {clock.Day} | {clock.CurrentPhase} {clock.PhaseProgress:P0} | " +
                    $"running: {clock.IsRunning} | paused: {clock.IsPaused} | dayOver: {clock.IsDayOver} | " +
-                   $"speed x{clock.SpeedMultiplier:0.##}";
+                   $"speed x{clock.SpeedMultiplier:0.##} | " +
+                   $"| timeScale: {Time.timeScale:0.##}";
         }
 
         [ConsoleCommand("clock.phase", "Shows or jumps to a phase: Morning, Afternoon or Night.")]

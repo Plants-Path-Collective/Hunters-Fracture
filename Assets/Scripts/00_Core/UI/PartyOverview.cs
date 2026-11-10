@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Core;
 using Core.CombatSystem;
 using Core.CombatSystem.Units;
 using Dungeon;
 
-namespace UI
+namespace Core.UI
 {
     /// <summary>
     /// Manages the party overview UI, displaying information about the player's party members.

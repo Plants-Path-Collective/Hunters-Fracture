@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using Core.Clock;
 
 namespace Core.UI.Beeper
 {
@@ -25,6 +26,7 @@ namespace Core.UI.Beeper
         private RectTransform visualsRect;
         private Tween positionTween;
         private bool isVisible;
+        private readonly ClockPauseHandle clockPause = new(CLOCK_PAUSE_REASON.Beeper);
 
         private void Awake()
         {
@@ -46,6 +48,7 @@ namespace Core.UI.Beeper
                 return;
 
             isVisible = !isVisible;
+            clockPause.Set(isVisible);
             positionTween?.Kill();
 
             if (isVisible)
@@ -64,6 +67,7 @@ namespace Core.UI.Beeper
                     {
                         Time.timeScale = 0f;
                     });
+
                 return;
             }
 
@@ -92,6 +96,7 @@ namespace Core.UI.Beeper
             positionTween?.Kill();
             positionTween = null;
             isVisible = false;
+            clockPause.Set(false);
             SetVisualsY(hiddenPositionY);
             beeperVisuals.SetActive(false);
         }
@@ -158,6 +163,11 @@ namespace Core.UI.Beeper
             Vector2 position = visualsRect.anchoredPosition;
             position.y = y;
             visualsRect.anchoredPosition = position;
+        }
+
+        private void OnDisable()
+        {
+            clockPause.Set(false);
         }
     }
 }
