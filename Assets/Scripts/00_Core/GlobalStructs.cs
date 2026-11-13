@@ -237,7 +237,7 @@ namespace Core
 
     #endregion
 
-    #region SCHEDULE
+    #region TIME
     /// <summary>Phases of the in-game day. Flags so windows and access rules can be masks.</summary>
     [System.Flags]
     public enum DAY_PHASE
@@ -257,6 +257,12 @@ namespace Core
         Menu,
         Beeper,
         Debug
+    }  
+
+    public enum END_CYCLE_REASONS
+    {
+        DayEnd,
+        GameOver
     }
     #endregion
 }
