@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema de Diálogo — Hunters: Fracture of Time</title>
-<meta name="description" content="Documentación técnica del proyecto Hunters: Fracture of Time.">
+<meta name="description" content="Referencia del sistema de diálogo: conversaciones localizadas, respuestas, acciones, NPCs y eventos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -58,7 +58,7 @@
 </div>
 </nav>
 <div class="sidebar-footer">
-<a href="https://github.com/" class="footer-link" id="repoLink">Repositorio ↗</a>
+<a href="https://github.com/Plants-Path-Collective/Hunters-Fracture" class="footer-link" id="repoLink">Repositorio ↗</a>
 <p class="footer-hint">Para el equipo y futuros modders</p>
 </div></div></aside>
 
@@ -67,99 +67,84 @@
 
 <p class="eyebrow">07 · SISTEMA</p>
 <h1>Sistema de Diálogo</h1>
-<p class="page-lede">Arquitectura data-driven basada en ScriptableObjects para desacoplar los datos de la lógica de reproducción.</p>
-<p>
-      Cada conversación se representa mediante un <code>ConversationSO</code>, el cual almacena un
-      conjunto ordenado de <code>DialogueLine</code>. Cada línea puede contener un hablante
-      (<code>SpeakerSO</code>), texto localizado, una línea de voz opcional (<code>AudioClip</code>),
-      hasta cuatro respuestas posibles (<code>AnswerOption</code>), un tiempo límite para responder y
-      una conversación alternativa que se ejecuta cuando el jugador no realiza ninguna elección.
-    </p>
-<p>
-      Tanto <code>dialogueText</code> como <code>answerText</code> son de tipo <code>LocalizedString</code>
-      (Unity Localization): no almacenan el texto directamente, sino una referencia a una entrada dentro
-      de una String Table — ver <a href="localization.html">Sistema de Localización</a>.
-    </p>
-<p>
-      La reproducción está centralizada en <code>DialogueManager</code>, un sistema global persistente
-      encargado de iniciar y finalizar diálogos, mostrar la interfaz correspondiente (nombre y retrato
-      del hablante), reproducir líneas de voz, gestionar las respuestas del jugador y controlar la
-      transición entre conversaciones mediante <em>Coroutines</em>. Su funcionamiento es independiente
-      de los NPCs: cualquier sistema puede iniciar una conversación con solo una referencia a un
-      <code>ConversationSO</code>.
-    </p>
-<p>
-      Cada NPC dispone de un componente <code>ConversationTrigger</code>, responsable de detectar la
-      entrada del jugador mediante un Trigger Collider e iniciar la conversación correspondiente.
-      Además posee un identificador único (<code>NPC_ID</code>) y un índice de progreso
-      (<code>conversationIndex</code>) que registra cuántas veces el jugador ha interactuado con él,
-      permitiendo presentar distintas conversaciones conforme avanza la relación entre el jugador y el
-      personaje.
-    </p>
-<p>
-      El <code>ConversationTrigger</code> también incorpora una bandera de estado (<code>request</code>)
-      que bloquea el avance del <code>conversationIndex</code> mientras exista una solicitud o misión
-      pendiente asociada al personaje, manteniendo el mismo diálogo hasta que la condición
-      correspondiente se resuelve.
-    </p>
+<p class="page-lede">Las conversaciones se describen con ScriptableObjects y las reproduce <code>DialogueManager</code>. Los textos y las voces admiten localización; las respuestas pueden continuar el diálogo o ejecutar acciones.</p>
 <h2 id="flujo-del-sistema">Flujo del sistema</h2>
-<pre class="ascii-flow">Jugador entra al Trigger Collider
-            │
-            ▼
-     ConversationTrigger
-            │
-            ▼
-   Obtiene NPC_ID y conversationIndex
-            │
-            ▼
-   Selecciona ConversationSO correspondiente
-            │
-            ▼
-   DialogueManager.StartConversation()
-            │
-            ▼
+<pre class="ascii-flow">El jugador interactúa dentro del trigger
+                │
+                ▼
+       ConversationTrigger
+                │
+                ├── usa IConversationOverride si devuelve una conversación
+                └── si no, usa conversations[conversationIndex]
+                │
+                ▼
+  DialogueManager cambia el mapa de input y pausa el reloj
+                │
+                ▼
        Reproduce DialogueLine
-            │
-            ├── Texto
-            ├── Voz (opcional)
-            └── Respuestas (opcional)
-            │
-            ▼
-   ¿Finalizó la conversación?
-            │
-            ▼
-      ¿request == false?
-            │
-      Sí ───────► conversationIndex++
-      No ───────► Mantiene el mismo índice
-            │
-            ▼
-     Guarda el progreso del NPC</pre>
+                │
+       ┌────────┴─────────┐
+       ▼                  ▼
+ Elige respuesta      Vence el tiempo
+       │                  │
+ Ejecuta actions     Usa noResponseConversation
+       └────────┬─────────┘
+                ▼
+         Fin de la conversación</pre>
 <h2 id="componentes-principales">Componentes principales</h2>
 <div class="component-grid">
 <div class="component-card">
 <span class="component-name">ConversationSO</span>
-<span class="component-desc">Contenedor de datos que representa una conversación completa.</span>
+<span class="component-desc">Asset con un arreglo ordenado de líneas de diálogo.</span>
 </div>
 <div class="component-card">
 <span class="component-name">SpeakerSO</span>
-<span class="component-desc">Contenedor de datos reutilizable para un personaje (nombre localizado y retrato).</span>
+<span class="component-desc">Datos reutilizables del hablante: nombre localizado y retrato.</span>
 </div>
 <div class="component-card">
 <span class="component-name">DialogueManager</span>
-<span class="component-desc">Sistema global encargado de reproducir y controlar el flujo completo de las conversaciones.</span>
+<span class="component-desc">Reproduce líneas, muestra respuestas, ejecuta acciones y controla el estado de diálogo.</span>
 </div>
 <div class="component-card">
 <span class="component-name">ConversationTrigger</span>
-<span class="component-desc">Gestiona el inicio de la conversación y el progreso individual de cada NPC.</span>
+<span class="component-desc">Detecta la interacción del jugador y selecciona una conversación para ese NPC.</span>
 </div>
 </div>
+<h2 id="datos">Datos de conversación</h2>
+<table class="dep-table">
+<thead><tr><th>Tipo</th><th>Campos y comportamiento</th></tr></thead>
+<tbody>
+<tr><td><code>DialogueLine</code></td><td>Hablante opcional, <code>LocalizedString</code>, voz localizada opcional, respuestas, tiempo de respuesta y conversación de fallback.</td></tr>
+<tr><td><code>AnswerOption</code></td><td>Texto localizado, <code>nextConversation</code> y arreglo opcional de <code>DialogueActionSO</code>.</td></tr>
+<tr><td><code>SpeakerSO</code></td><td>Nombre localizado y retrato. Si una línea no define hablante, se mantiene el último mostrado.</td></tr>
+</tbody>
+</table>
+<p>Los textos referencian entradas de Unity Localization; los clips de voz también pueden variar por idioma. Consulta <a href="localization.html">Sistema de Localización</a>.</p>
+
+<h2 id="npc">Interacción y selección del NPC</h2>
+<p><code>ConversationTrigger</code> requiere un Collider, implementa <code>IPlayerInteractable</code> y comienza la conversación cuando el jugador está dentro del trigger. Su <code>npcID</code> identifica al personaje; <code>conversationIndex</code> selecciona una entrada de <code>conversations</code> y se guarda en <code>PlayerPrefs</code> con una clave por NPC.</p>
+<p>Si hay un componente que implemente <code>IConversationOverride</code>, el trigger lo consulta primero. <code>NpcQuestGiver</code> implementa esta interfaz y busca una conversación según el estado de las misiones del NPC. Si no hay una conversación aplicable, se usa el arreglo regular. Un override no avanza el índice regular; este llega hasta el último elemento y no vuelve al inicio.</p>
+<p>Con <code>NpcQuestGiver</code>, <code>request</code> se actualiza según las misiones asociadas al NPC: se activa mientras haya alguna <code>Active</code> o <code>ReadyToTurnIn</code>. Sin ese componente, la bandera sigue siendo manual.</p>
+<p>El orden de selección de diálogos de misión y la resolución de empates se detallan en <a href="quests.html#dialogo">Sistema de Misiones</a>.</p>
+
+<h2 id="reproduccion">Reproducción y respuestas</h2>
+<p><code>DialogueManager</code> admite los modos <code>TextOnly</code>, <code>VoiceOnly</code> y <code>Both</code>. Para iniciar una conversación necesita un asset con al menos una línea. Al comenzar, cambia al mapa de input <code>Dialogue</code> y solicita una pausa del <code>GameClock</code>; al finalizar, restaura el mapa previo y libera la pausa.</p>
+<ul>
+<li>Al seleccionar una respuesta, emite <code>onChoiceSelected</code>, ejecuta sus acciones y luego pasa a <code>nextConversation</code>, si existe.</li>
+<li>Si vence <code>answerTimeout</code>, no se ejecutan acciones y se usa <code>noResponseConversation</code>, si está asignada.</li>
+<li>Al terminar normalmente, limpia la interfaz, libera el trigger y emite <code>onConversationEnd</code>.</li>
+<li><code>StopConversation()</code> interrumpe el diálogo, finaliza el trigger y emite <code>onConversationEnd</code>, pero no reporta el hito de charla. También llama a <code>AdvanceConversation()</code>, por lo que el índice regular puede avanzar si <code>request</code> está desactivado.</li>
+</ul>
+
+<h2 id="acciones">Acciones y misiones</h2>
+<p><code>DialogueActionSO</code> es la clase base para acciones configuradas en una respuesta. El sistema de misiones incluye <code>AcceptQuestActionSO</code> y <code>TurnInQuestActionSO</code>, que llaman a <code>QuestManager.Accept</code> y <code>QuestManager.TryTurnIn</code>. Las acciones se ejecutan solo cuando el jugador selecciona esa respuesta; el timeout no las ejecuta. El selector <code>NpcQuestGiver</code> prioriza el diálogo de misión por encima de las conversaciones regulares. Consulta <a href="quests.html#dialogo">Sistema de Misiones</a>.</p>
+
+<h2 id="eventos">Eventos</h2>
+<p><code>DialogueManager</code> expone eventos Unity para inicio y fin de conversación, línea mostrada y respuesta elegida. Además, al finalizar normalmente una conversación con un trigger, reporta <code>talk:{NPC_ID}</code> mediante <code>ChallengeEvents</code>. Este hito puede avanzar objetivos de misión o condiciones de desafío que escuchen ese ID.</p>
+
 <div class="note-box">
 <span class="note-tag">Nota</span>
-<p>Actualmente el progreso de las conversaciones se almacena con <code>PlayerPrefs</code> por NPC,
-      combinando <code>NPC_ID</code> + <code>conversationIndex</code>. En futuras iteraciones este sistema
-      será integrado con el gestor de guardado y el sistema de misiones, permitiendo persistencia completa
-      entre partidas y gestión centralizada del estado narrativo.</p>
+<p><code>conversationIndex</code> se guarda en <code>PlayerPrefs</code> por NPC. Las conversaciones provistas por un override no modifican ese índice.</p>
 </div>
 <nav aria-label="Navegación entre páginas" class="page-nav">
 <a class="page-nav-prev" href="combat.html">
@@ -174,8 +159,14 @@
 
 </main>
 
-<section class="toc"><strong>En esta página</strong><a href="#flujo-del-sistema">Flujo del sistema</a>
-<a href="#componentes-principales">Componentes principales</a></section>
+<section class="toc"><strong>En esta página</strong>
+<a href="#flujo-del-sistema">Flujo del sistema</a>
+<a href="#componentes-principales">Componentes principales</a>
+<a href="#datos">Datos de conversación</a>
+<a href="#npc">Interacción y selección</a>
+<a href="#reproduccion">Reproducción y respuestas</a>
+<a href="#acciones">Acciones y misiones</a>
+<a href="#eventos">Eventos</a></section>
 
 </div>
 
