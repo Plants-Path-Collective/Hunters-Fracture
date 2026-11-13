@@ -7,8 +7,8 @@ using Core.Clock;
 namespace Core.QuestsSystem
 {
     /// <summary>
-    /// Persistent singleton that owns quest states and step progress.
-    /// Steps listen to ChallengeEvents milestones only while their quest is Active,
+    /// Persistent singleton that owns quest states and objective progress.
+    /// Objectives listen to gameplay events only while their quest is Active,
     /// so progress counts from the moment the quest was accepted.
     /// Time windows are evaluated lazily from GameClock (on query, on phase change and on load).
     /// </summary>
@@ -23,8 +23,8 @@ namespace Core.QuestsSystem
         /// <summary>Raised when a quest changes state (quest, new state).</summary>
         public event Action<QuestSO, QUEST_STATE> OnQuestStateChanged;
 
-        /// <summary>Raised on every step progress change (quest, step index, current, target).</summary>
-        public event Action<QuestSO, int, int, int> OnStepProgress;
+        /// <summary>Raised on every objective progress change (quest, objective index, current, target).</summary>
+        public event Action<QuestSO, int, int, int> OnObjectiveProgress;
 
         /// <summary>The catalog used by this manager (for UI lists and console).</summary>
         public QuestCatalog Catalog => catalog;
@@ -141,20 +141,20 @@ namespace Core.QuestsSystem
                 return false;
             }
 
-            if (!quest.HasValidSteps(out string stepError))
+            if (!quest.HasValidObjectives(out string objectiveError))
             {
-                failReason = $"'{questID}' has invalid steps: {stepError}";
+                failReason = $"'{questID}' has invalid objectives: {objectiveError}";
                 return false;
             }
 
             var progress = new QuestProgress { id = quest.questID };
             progressByID[quest.questID] = progress;
 
-            AttachSteps(quest);
+            AttachObjectives(quest);
             SetState(quest, progress, QUEST_STATE.Active);
 
-            // A quest without steps is already done.
-            CheckStepsMet(quest, progress);
+            // A quest without objectives is already done.
+            CheckObjectivesMet(quest, progress);
 
             failReason = null;
             return true;
@@ -191,14 +191,17 @@ namespace Core.QuestsSystem
             return true;
         }
 
-        /// <summary>Gets current progress and target of a step (for UI).</summary>
-        public (int current, int target) GetStepProgress(QuestSO quest, int stepIndex)
+        /// <summary>Gets current progress and target of an objective (for UI).</summary>
+        public (int current, int target) GetObjectiveProgress(QuestSO quest, int objectiveIndex)
         {
-            if (quest == null || stepIndex < 0 || stepIndex >= quest.steps.Count) return (0, 0);
+            if (quest == null || quest.objectives == null ||
+                objectiveIndex < 0 || objectiveIndex >= quest.objectives.Count)
+                return (0, 0);
 
-            QuestStep step = quest.steps[stepIndex];
-            if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return (0, step.Target);
-            return (progress.GetValue(step.stepID), step.Target);
+            QuestObjectiveSO objective = quest.objectives[objectiveIndex];
+            if (objective == null) return (0, 0);
+            if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return (0, objective.Target);
+            return (progress.GetValue(objective.ObjectiveID), objective.Target);
         }
 
         /// <summary>
@@ -250,7 +253,7 @@ namespace Core.QuestsSystem
                     continue;
                 }
 
-                progress.steps ??= new List<QuestStepProgress>();
+                progress.steps ??= new List<QuestObjectiveProgress>();
                 progressByID[progress.id] = progress;
             }
         }
@@ -269,72 +272,87 @@ namespace Core.QuestsSystem
             foreach (QuestProgress progress in progressByID.Values)
             {
                 if (progress.state != QUEST_STATE.Active) continue;
-                if (catalog.TryGet(progress.id, out QuestSO quest)) AttachSteps(quest);
+                if (catalog.TryGet(progress.id, out QuestSO quest)) AttachObjectives(quest);
             }
         }
 
-        private void AttachSteps(QuestSO quest)
+        private void AttachObjectives(QuestSO quest)
         {
-            DetachSteps(quest.questID);
+            DetachObjectives(quest.questID);
 
             var attached = new List<Action>();
-            for (int i = 0; i < quest.steps.Count; i++)
+            if (quest.objectives == null)
             {
-                string milestone = quest.steps[i].milestoneID;
-                if (string.IsNullOrEmpty(milestone)) continue;
+                Debug.LogError($"[Quests] '{quest.questID}' has a null objectives list.", quest);
+                detachers[quest.questID] = attached;
+                return;
+            }
+
+            for (int i = 0; i < quest.objectives.Count; i++)
+            {
+                QuestObjectiveSO objective = quest.objectives[i];
+                if (objective == null)
+                {
+                    Debug.LogError($"[Quests] '{quest.questID}' has no objective assigned at index {i}.", quest);
+                    continue;
+                }
 
                 int index = i;
-                Action<string> handler = reported =>
+                Action detach = objective.Subscribe(delta => AddObjectiveProgress(quest, index, delta));
+                if (detach == null)
                 {
-                    if (reported == milestone) AddStepProgress(quest, index, 1);
-                };
+                    Debug.LogError($"[Quests] Objective '{objective.ObjectiveID}' returned no unsubscribe action.", objective);
+                    continue;
+                }
 
-                ChallengeEvents.OnMilestoneReported += handler;
-                attached.Add(() => ChallengeEvents.OnMilestoneReported -= handler);
+                attached.Add(detach);
             }
 
             detachers[quest.questID] = attached;
         }
 
-        private void DetachSteps(string questID)
+        private void DetachObjectives(string questID)
         {
             if (!detachers.Remove(questID, out List<Action> attached)) return;
 
             foreach (Action detach in attached) detach?.Invoke();
         }
 
-        private void AddStepProgress(QuestSO quest, int index, int delta)
+        private void AddObjectiveProgress(QuestSO quest, int index, int delta)
         {
-            if (delta <= 0 || index >= quest.steps.Count) return;
+            if (delta <= 0 || index < 0 || index >= quest.objectives.Count) return;
             if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return;
 
             RefreshExpiration(quest);
             if (progress.state != QUEST_STATE.Active) return;
 
-            QuestStep step = quest.steps[index];
-            int previous = progress.GetValue(step.stepID);
-            int current = Mathf.Min(previous + delta, step.Target);
+            QuestObjectiveSO objective = quest.objectives[index];
+            int previous = progress.GetValue(objective.ObjectiveID);
+            int current = Mathf.Min(previous + delta, objective.Target);
             if (current == previous) return;
 
-            progress.SetValue(step.stepID, current);
+            progress.SetValue(objective.ObjectiveID, current);
             isDirty = true;
 
-            Debug.Log($"[Quests] {quest.questID}/{step.stepID}: {current}/{step.Target}");
+            Debug.Log($"[Quests] {quest.questID}/{objective.ObjectiveID}: {current}/{objective.Target}");
 
-            OnStepProgress?.Invoke(quest, index, current, step.Target);
-            CheckStepsMet(quest, progress);
+            OnObjectiveProgress?.Invoke(quest, index, current, objective.Target);
+            CheckObjectivesMet(quest, progress);
         }
 
-        private void CheckStepsMet(QuestSO quest, QuestProgress progress)
+        private void CheckObjectivesMet(QuestSO quest, QuestProgress progress)
         {
             if (progress.state != QUEST_STATE.Active) return;
 
-            foreach (QuestStep step in quest.steps)
+            if (quest.objectives == null) return;
+
+            foreach (QuestObjectiveSO objective in quest.objectives)
             {
-                if (progress.GetValue(step.stepID) < step.Target) return;
+                if (objective == null) return;
+                if (progress.GetValue(objective.ObjectiveID) < objective.Target) return;
             }
 
-            DetachSteps(quest.questID);
+            DetachObjectives(quest.questID);
 
             if (quest.autoComplete) Complete(quest, progress);
             else SetState(quest, progress, QUEST_STATE.ReadyToTurnIn);
@@ -342,7 +360,7 @@ namespace Core.QuestsSystem
 
         private void Complete(QuestSO quest, QuestProgress progress)
         {
-            DetachSteps(quest.questID);
+            DetachObjectives(quest.questID);
             SetState(quest, progress, QUEST_STATE.Completed);
             GrantRewards(quest);
 
@@ -352,7 +370,7 @@ namespace Core.QuestsSystem
 
         private void Expire(QuestSO quest, QuestProgress progress)
         {
-            DetachSteps(quest.questID);
+            DetachObjectives(quest.questID);
             SetState(quest, progress, QUEST_STATE.Expired);
 
             foreach (QuestConsequenceSO consequence in quest.expirationConsequences)

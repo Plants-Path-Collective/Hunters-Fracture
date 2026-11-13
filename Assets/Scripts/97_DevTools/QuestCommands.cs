@@ -32,7 +32,7 @@ namespace DevTools
             return sb.Length > 0 ? sb.ToString() : "The catalog is empty.";
         }
 
-        [ConsoleCommand("quest.state", "Shows the state and step progress of a quest.")]
+        [ConsoleCommand("quest.state", "Shows the state and objective progress of a quest.")]
         private static string State(string questID)
         {
             QuestManager manager = QuestManager.Instance;
@@ -40,10 +40,14 @@ namespace DevTools
             if (!manager.Catalog.TryGet(questID, out QuestSO quest)) return $"Unknown quest '{questID}'.";
 
             var sb = new StringBuilder($"{quest.questID}: {manager.GetState(quest)}");
-            for (int i = 0; i < quest.steps.Count; i++)
+            for (int i = 0; i < quest.objectives.Count; i++)
             {
-                (int current, int target) = manager.GetStepProgress(quest, i);
-                sb.Append($"\n  [{i}] {quest.steps[i].stepID}: {current}/{target} ({quest.steps[i].milestoneID})");
+                QuestObjectiveSO objective = quest.objectives[i];
+                (int current, int target) = manager.GetObjectiveProgress(quest, i);
+                string source = objective is MilestoneObjectiveSO milestone
+                    ? milestone.MilestoneID
+                    : objective.GetType().Name;
+                sb.Append($"\n  [{i}] {objective.ObjectiveID}: {current}/{target} ({source})");
             }
 
             return sb.ToString();

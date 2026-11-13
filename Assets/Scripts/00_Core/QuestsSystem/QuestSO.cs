@@ -39,11 +39,11 @@ namespace Core.QuestsSystem
         [Tooltip("Unlock keys (see UnlockKeys) that must be unlocked by challenges.")]
         public List<string> prerequisiteUnlockKeys = new();
 
-        [Header("Steps")]
-        [Tooltip("Visible steps, in order. All must be completed.")]
-        public List<QuestStep> steps = new();
+        [Header("Objectives")]
+        [Tooltip("Objective assets in display order. All must be completed.")]
+        public List<QuestObjectiveSO> objectives = new();
 
-        [Tooltip("If true, completes as soon as every step is done, without a turn-in.")]
+        [Tooltip("If true, completes as soon as every objective is done, without a turn-in.")]
         public bool autoComplete;
 
         [Header("Time windows")]
@@ -102,29 +102,34 @@ namespace Core.QuestsSystem
             return (int)phase > latest;
         }
 
-        /// <summary>Checks that every step has a unique stepID and a milestone.</summary>
-        public bool HasValidSteps(out string error)
+        /// <summary>Checks that every objective is assigned, valid and uniquely identified in this quest.</summary>
+        public bool HasValidObjectives(out string error)
         {
             var seen = new HashSet<string>();
-            for (int i = 0; i < steps.Count; i++)
+            if (objectives == null)
             {
-                QuestStep step = steps[i];
+                error = "the objectives list is null.";
+                return false;
+            }
 
-                if (string.IsNullOrEmpty(step.stepID))
+            for (int i = 0; i < objectives.Count; i++)
+            {
+                QuestObjectiveSO objective = objectives[i];
+                if (objective == null)
                 {
-                    error = $"step {i} has no stepID.";
+                    error = $"objective {i} is not assigned.";
                     return false;
                 }
 
-                if (!seen.Add(step.stepID))
+                if (!objective.Validate(out string objectiveError))
                 {
-                    error = $"stepID '{step.stepID}' is duplicated.";
+                    error = $"objective {i} {objectiveError}";
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(step.milestoneID))
+                if (!seen.Add(objective.ObjectiveID))
                 {
-                    error = $"step '{step.stepID}' has no milestoneID.";
+                    error = $"objectiveID '{objective.ObjectiveID}' is duplicated.";
                     return false;
                 }
             }
@@ -133,14 +138,16 @@ namespace Core.QuestsSystem
             return true;
         }
 
-        /// <summary>Returns the index of the first step listening for a milestone, or -1 if none does.</summary>
-        public int FindStepIndex(string milestoneID)
+        /// <summary>Returns the index of the first milestone objective with this ID, or -1 if none matches.</summary>
+        public int FindObjectiveIndex(string milestoneID)
         {
-            if (string.IsNullOrEmpty(milestoneID) || steps == null) return -1;
+            if (string.IsNullOrEmpty(milestoneID) || objectives == null) return -1;
 
-            for (int i = 0; i < steps.Count; i++)
+            for (int i = 0; i < objectives.Count; i++)
             {
-                if (steps[i].milestoneID == milestoneID) return i;
+                if (objectives[i] is MilestoneObjectiveSO objective &&
+                    objective.MilestoneID == milestoneID)
+                    return i;
             }
 
             return -1;
@@ -161,41 +168,7 @@ namespace Core.QuestsSystem
                 changed = true;
             }
 
-            if (EnsureUniqueStepIDs()) changed = true;
             if (changed) UnityEditor.EditorUtility.SetDirty(this);
-        }
-
-        /// <summary>
-        /// Rows added with "+" copy the previous one, so duplicated or empty stepIDs get a fresh "step_N".
-        /// </summary>
-        private bool EnsureUniqueStepIDs()
-        {
-            if (steps == null) return false;
-
-            var taken = new HashSet<string>();
-            var needsID = new List<int>();
-            for (int i = 0; i < steps.Count; i++)
-            {
-                string id = steps[i].stepID;
-                if (string.IsNullOrEmpty(id) || !taken.Add(id)) needsID.Add(i);
-            }
-
-            int counter = 1;
-            foreach (int i in needsID)
-            {
-                string candidate;
-                do
-                {
-                    candidate = $"step_{counter++}";
-                } while (taken.Contains(candidate));
-
-                taken.Add(candidate);
-                QuestStep step = steps[i];
-                step.stepID = candidate;
-                steps[i] = step;
-            }
-
-            return needsID.Count > 0;
         }
 #endif
     }

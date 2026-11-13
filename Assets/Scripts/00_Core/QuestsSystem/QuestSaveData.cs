@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace Core.QuestsSystem
 {
     /// <summary>
-    /// Progress of one step, keyed by its stable stepID inside the quest.
+    /// Progress of one objective, keyed by its stable objectiveID inside the quest.
     /// </summary>
     [Serializable]
-    public class QuestStepProgress
+    public class QuestObjectiveProgress
     {
         public string id;
         public int value;
@@ -22,30 +22,31 @@ namespace Core.QuestsSystem
     {
         public string id;
         public QUEST_STATE state;
-        public List<QuestStepProgress> steps = new();
+        // Keep the JSON field name "steps" so existing quest saves retain their shape.
+        public List<QuestObjectiveProgress> steps = new();
 
-        /// <summary>Current value of a step (0 if it has no entry yet).</summary>
-        public int GetValue(string stepID)
+        /// <summary>Current value of an objective (0 if it has no entry yet).</summary>
+        public int GetValue(string objectiveID)
         {
-            foreach (QuestStepProgress step in steps)
+            foreach (QuestObjectiveProgress step in steps)
             {
-                if (step.id == stepID) return step.value;
+                if (step.id == objectiveID) return step.value;
             }
 
             return 0;
         }
 
-        /// <summary>Sets the value of a step, creating its entry if needed.</summary>
-        public void SetValue(string stepID, int value)
+        /// <summary>Sets the value of an objective, creating its entry if needed.</summary>
+        public void SetValue(string objectiveID, int value)
         {
-            foreach (QuestStepProgress step in steps)
+            foreach (QuestObjectiveProgress step in steps)
             {
-                if (step.id != stepID) continue;
+                if (step.id != objectiveID) continue;
                 step.value = value;
                 return;
             }
 
-            steps.Add(new QuestStepProgress { id = stepID, value = value });
+            steps.Add(new QuestObjectiveProgress { id = objectiveID, value = value });
         }
     }
 

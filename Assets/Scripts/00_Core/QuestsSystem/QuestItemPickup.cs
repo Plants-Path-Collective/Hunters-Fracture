@@ -6,15 +6,15 @@ using Core.ChallengesSystem;
 namespace Core.QuestsSystem
 {
     /// <summary>
-    /// Collectible tied to a quest step. The dungeon reloads on every entry, so the pickup only exists
-    /// while its quest is Active and the matching step is not complete, and it re-checks on every
+    /// Collectible tied to a quest objective. The dungeon reloads on every entry, so the pickup only exists
+    /// while its quest is Active and the matching objective is not complete, and it re-checks on every
     /// quest change. Collecting reports the "quest_item:{itemID}" milestone.
     /// </summary>
     [RequireComponent(typeof(Collider))]
     public class QuestItemPickup : MonoBehaviour, IPlayerInteractable
     {
         [Header("Quest")]
-        [Tooltip("Quest that needs this item. One of its steps must use the milestone 'quest_item:{itemID}'.")]
+        [Tooltip("Quest that needs this item. One of its objectives must use the milestone 'quest_item:{itemID}'.")]
         [SerializeField] private QuestSO quest;
 
         [Tooltip("Item identifier used in the milestone ID.")]
@@ -46,8 +46,8 @@ namespace Core.QuestsSystem
                 return;
             }
 
-            if (quest.FindStepIndex(Milestone) < 0)
-                Debug.LogWarning($"[{nameof(QuestItemPickup)}] '{quest.questID}' has no step with milestone '{Milestone}'.", this);
+            if (quest.FindObjectiveIndex(Milestone) < 0)
+                Debug.LogWarning($"[{nameof(QuestItemPickup)}] '{quest.questID}' has no objective with milestone '{Milestone}'.", this);
 
             manager = QuestManager.Instance;
             if (manager == null)
@@ -57,7 +57,7 @@ namespace Core.QuestsSystem
             }
 
             manager.OnQuestStateChanged += HandleQuestStateChanged;
-            manager.OnStepProgress += HandleStepProgress;
+            manager.OnObjectiveProgress += HandleObjectiveProgress;
             Refresh();
         }
 
@@ -66,7 +66,7 @@ namespace Core.QuestsSystem
             if (manager == null) return;
 
             manager.OnQuestStateChanged -= HandleQuestStateChanged;
-            manager.OnStepProgress -= HandleStepProgress;
+            manager.OnObjectiveProgress -= HandleObjectiveProgress;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -94,7 +94,7 @@ namespace Core.QuestsSystem
             if (changed == quest) Refresh();
         }
 
-        private void HandleStepProgress(QuestSO changed, int stepIndex, int current, int target)
+        private void HandleObjectiveProgress(QuestSO changed, int objectiveIndex, int current, int target)
         {
             if (changed == quest) Refresh();
         }
@@ -102,12 +102,21 @@ namespace Core.QuestsSystem
         private void Refresh()
         {
             bool needed = false;
-
-            int index = quest.FindStepIndex(Milestone);
-            if (index >= 0 && manager.GetState(quest) == QUEST_STATE.Active)
+            if (manager.GetState(quest) == QUEST_STATE.Active)
             {
-                (int current, int target) = manager.GetStepProgress(quest, index);
-                needed = current < target;
+                for (int i = 0; i < quest.objectives.Count; i++)
+                {
+                    if (quest.objectives[i] is not MilestoneObjectiveSO objective ||
+                        objective.MilestoneID != Milestone)
+                        continue;
+
+                    (int current, int target) = manager.GetObjectiveProgress(quest, i);
+                    if (current < target)
+                    {
+                        needed = true;
+                        break;
+                    }
+                }
             }
 
             SetAvailable(needed);

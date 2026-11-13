@@ -35,7 +35,7 @@ MonoBehaviour:
   turnInNpcID: 
   prerequisiteQuests: []
   prerequisiteUnlockKeys: []
-  steps: []
+  objectives: []
   autoComplete: 0
   offerPhases: 7
   completePhases: 7
