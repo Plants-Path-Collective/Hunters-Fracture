@@ -7,6 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 using Core.Clock;
+using Core.ChallengesSystem;
+using Core.QuestsSystem;
 
 namespace PlantsPathCo.DialogueSystem
 {
@@ -171,7 +173,7 @@ namespace PlantsPathCo.DialogueSystem
         {
             if (runningCoroutine != null)
                 StopCoroutine(runningCoroutine);
-            EndConversation();
+            EndConversation(false);
         }
 
         private IEnumerator PlayConversation()
@@ -198,7 +200,7 @@ namespace PlantsPathCo.DialogueSystem
                 lineIndex++;
             }
 
-            EndConversation();
+            EndConversation(true);
         }
 
         // Resolves a LocalizedString against the currently selected Locale.
@@ -303,11 +305,23 @@ namespace PlantsPathCo.DialogueSystem
             {
                 AnswerOption chosen = line.answers[chosenIndex];
                 onChoiceSelected?.Invoke(chosen, chosenIndex);
+                RunActions(chosen);
                 callback(chosen.nextConversation);
             }
             else
             {
                 callback(line.noResponseConversation);
+            }
+        }
+
+        // Runs the data-driven actions of the chosen answer, before its next conversation starts.
+        private void RunActions(AnswerOption option)
+        {
+            if (option.actions == null) return;
+
+            foreach (DialogueActionSO action in option.actions)
+            {
+                if (action != null) action.Execute(currentTrigger);
             }
         }
 
@@ -355,7 +369,7 @@ namespace PlantsPathCo.DialogueSystem
                 dialoguePanel.answerPanel.SetActive(false);
         }
 
-        private void EndConversation()
+        private void EndConversation(bool completed)
         {
             HideAnswers();
 
@@ -369,6 +383,9 @@ namespace PlantsPathCo.DialogueSystem
             {
                 currentTrigger.playing = false;
                 currentTrigger.AdvanceConversation();
+
+                if (completed)
+                    ChallengeEvents.ReportMilestone(QuestMilestones.Talk(currentTrigger.NpcID));
             }
 
             onConversationEnd?.Invoke(currentConversation);
