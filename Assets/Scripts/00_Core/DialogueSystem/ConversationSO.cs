@@ -51,5 +51,9 @@ namespace PlantsPathCo.DialogueSystem
     {
         public LocalizedString answerText;
         public ConversationSO nextConversation;
+
+        [Tooltip("Actions executed when the player picks this answer, before the next conversation " +
+                 "(accept or turn in a quest...). Empty is valid; a timeout never runs them.")]
+        public DialogueActionSO[] actions;
     }
 }

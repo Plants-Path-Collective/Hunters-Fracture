@@ -75,6 +75,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3ef335168e10c1cfb2f485622d527a3
+    m_Address: Quests_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aae1428fce5fc271b96092adbc21202c
     m_Address: Demos_Combat1_en
     m_ReadOnly: 1

@@ -1,4 +1,6 @@
 using UnityEngine;
+using Core.ChallengesSystem;
+using Core.QuestsSystem;
 
 namespace Core
 {
@@ -49,6 +51,7 @@ namespace Core
 
             InputManager.Instance.ChangeActionMap(InitialActionMap);
             OnSceneReady();
+            ChallengeEvents.ReportMilestone(QuestMilestones.SceneEntered(gameObject.scene.name));
         }
     }
 }

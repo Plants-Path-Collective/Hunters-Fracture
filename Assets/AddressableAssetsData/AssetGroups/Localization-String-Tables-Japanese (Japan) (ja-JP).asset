@@ -69,6 +69,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3a3cecc6c9d23e338bbad8abb6bebf3
+    m_Address: Quests_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8f84444eb7d5aae5b8d9afb071847df
     m_Address: UI_Consumables_ja-JP
     m_ReadOnly: 1

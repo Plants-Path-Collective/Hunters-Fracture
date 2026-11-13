@@ -1,6 +1,10 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
 --- !u!1 &1172043955939321440
+=======
+--- !u!1 &4402313934654423328
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +12,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 2990821379334469789}
   - component: {fileID: 6494034885023790569}
   m_Layer: 0
   m_Name: '[RunManager]'
+=======
+  - component: {fileID: 4165791961976083975}
+  - component: {fileID: 2223329157805194585}
+  m_Layer: 0
+  m_Name: '[ChallengeManager]'
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!4 &2990821379334469789
+=======
+--- !u!4 &4165791961976083975
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1172043955939321440}
+=======
+  m_GameObject: {fileID: 4402313934654423328}
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -32,12 +51,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2730033684326986306}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &6494034885023790569
+=======
+--- !u!114 &2223329157805194585
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1172043955939321440}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -45,6 +69,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.RunManager
   endReason: 0
+=======
+  m_GameObject: {fileID: 4402313934654423328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d8aa12a71bc2a6e8e07e2f9c0d153d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeManager
+  catalog: {fileID: 11400000, guid: 5f69b1758c8df7c9c94312378b018e18, type: 2}
+--- !u!1 &4491665134012136425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 839479760928948288}
+  - component: {fileID: 6589586791355310419}
+  m_Layer: 0
+  m_Name: '[QuestManager]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &839479760928948288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4491665134012136425}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2730033684326986306}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6589586791355310419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4491665134012136425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6693f7487d847717b9d8ced0774fb184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.QuestManager
+  catalog: {fileID: 11400000, guid: 29a7119bd1d9ead01a6106928e196dde, type: 2}
+>>>>>>> 979caf16c1b10a3fcfa516799a00505287fbd2c6
 --- !u!1 &6587788151947633200
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +136,6 @@ GameObject:
   - component: {fileID: 605386163924564926}
   - component: {fileID: 7611040669741959228}
   - component: {fileID: 5365583281729322293}
-  - component: {fileID: 3979040332087808063}
   m_Layer: 0
   m_Name: '[GameManager]'
   m_TagString: Untagged
@@ -81,6 +158,8 @@ Transform:
   m_Children:
   - {fileID: 2990821379334469789}
   - {fileID: 1639486863978887610}
+  - {fileID: 4165791961976083975}
+  - {fileID: 839479760928948288}
   - {fileID: 6071823514465027727}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -181,19 +260,6 @@ MonoBehaviour:
   optionsPanel: {fileID: 3320381313797551651}
   backpackPanel: {fileID: 8752614040419336276}
   backpackSlotPrefab: {fileID: 7129604670340397062, guid: ca6d05be68d9e92e080622c39cec57ef, type: 3}
---- !u!114 &3979040332087808063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6587788151947633200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06d8aa12a71bc2a6e8e07e2f9c0d153d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeManager
-  catalog: {fileID: 11400000, guid: 5f69b1758c8df7c9c94312378b018e18, type: 2}
 --- !u!1 &7187295865298026063
 GameObject:
   m_ObjectHideFlags: 0

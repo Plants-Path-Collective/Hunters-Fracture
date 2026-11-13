@@ -45,6 +45,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-es-CL
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8198de61dbdc4406493c375772e3ab91
+    m_Address: Quests_es-CL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-es-CL
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84e8e2437dbadb51f89d339d0a7f6c8e
     m_Address: Units_Fasila_es-CL
     m_ReadOnly: 1
