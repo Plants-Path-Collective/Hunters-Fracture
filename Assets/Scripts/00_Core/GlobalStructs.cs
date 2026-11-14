@@ -261,7 +261,8 @@ namespace Core
 
     public enum END_CYCLE_REASONS
     {
-        DayEnd,
+        TimeOut,
+        GoToSleep,
         GameOver
     }
     #endregion
