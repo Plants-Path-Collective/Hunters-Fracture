@@ -36,6 +36,9 @@ namespace Core
         /// <summary>Fired when the new cycle is visible and the clock is running again.</summary>
         public event Action OnCycleStarted;
 
+        // Private variables
+        private bool awaitingConfirm;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -94,6 +97,7 @@ namespace Core
 
             endCycleTransition.FadeToBlack(() =>
             {
+                awaitingConfirm = true;
                 OnEndScreenRequested?.Invoke(reason);
                 if (autoConfirm) ConfirmEndOfDay();
             });
@@ -102,10 +106,10 @@ namespace Core
         /// <summary>Called by the end-of-day UI (button or timer) to continue to the next run.</summary>
         public void ConfirmEndOfDay()
         {
-            if (!IsTransitioning) return;
+            if (!IsTransitioning || !awaitingConfirm) return;
+            awaitingConfirm = false;
             ResetRun();
         }
-
         /// <summary>Starts the very first run (e.g. "New game" in the Main Menu), without an end screen.</summary>
         public void StartRun()
         {

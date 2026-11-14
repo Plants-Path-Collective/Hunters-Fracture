@@ -5,67 +5,97 @@ using UnityEngine;
 namespace Core.UI
 {
     /// <summary>
-    /// Full-screen black overlay driven by a CanvasGroup alpha tween.
+    /// Handles the two layers of the end-of-cycle screen: a black overlay that fades first,
+    /// and the day-change screen that fades in once the black is solid.
     /// </summary>
-    [RequireComponent(typeof(CanvasGroup))]
     public class EndCycleTransition : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField, Tooltip("CanvasGroup of the black overlay. Must NOT be a parent of the end-of-day UI.")]
-        private CanvasGroup canvasGroup;
+        [SerializeField, Tooltip("Solid black overlay. Fades first.")]
+        private CanvasGroup blackout;
+        [SerializeField, Tooltip("Day-change screen (text + Continue button). Fades after the blackout is solid.")]
+        private CanvasGroup dayScreen;
 
-        [Header("Timing")]
-        [SerializeField] private float fadeToBlackDuration = 2f;
-        [SerializeField] private float fadeFromBlackDuration = 1f;
+        [Header("Fade to black")]
+        [SerializeField] private float blackoutFadeInDuration = 2f;
+        [SerializeField, Tooltip("Pause between the black being solid and the day screen starting to appear.")]
+        private float holdBeforeDayScreen = 0.25f;
+        [SerializeField] private float dayScreenFadeInDuration = 0.75f;
+
+        [Header("Fade from black")]
+        [SerializeField] private float dayScreenFadeOutDuration = 0.5f;
+        [SerializeField] private float blackoutFadeOutDuration = 1f;
+
         [SerializeField] private Ease ease = Ease.InOutSine;
 
-        private Tween fadeTween;
+        private Sequence sequence;
 
-        private void Reset() => canvasGroup = GetComponent<CanvasGroup>();
-
-        private void Awake() => SetVisible(0f);
-
-        /// <summary>Raises the alpha to 1 and invokes onComplete once the screen is fully black.</summary>
-        public void FadeToBlack(Action onComplete = null)
+        private void Awake()
         {
-            fadeTween?.Kill();
-            canvasGroup.blocksRaycasts = true;
-
-            fadeTween = canvasGroup.DOFade(1f, fadeToBlackDuration)
-                .SetEase(ease)
-                .SetUpdate(true)               // unscaled time, so timescale 0 can't freeze it
-                .SetLink(gameObject)           // auto-kill if this object is destroyed
-                .OnComplete(() => onComplete?.Invoke());
+            SetGroup(blackout, 0f, false);
+            SetGroup(dayScreen, 0f, false);
         }
 
-        /// <summary>Lowers the alpha to 0 and invokes onComplete when the screen is clear.</summary>
-        public void FadeFromBlack(Action onComplete = null)
+        /// <summary>
+        /// Blackout fades in, then the day screen fades in. onComplete is invoked once
+        /// the day screen is fully visible and interactable.
+        /// </summary>
+        public void FadeToBlack(Action onComplete = null)
         {
-            fadeTween?.Kill();
+            sequence?.Kill();
 
-            if (canvasGroup.alpha <= 0.001f)
-            {
-                SetVisible(0f);
-                onComplete?.Invoke();
-                return;
-            }
+            blackout.blocksRaycasts = true;
+            dayScreen.alpha = 0f;
+            dayScreen.blocksRaycasts = true;
+            dayScreen.interactable = false;
 
-            fadeTween = canvasGroup.DOFade(0f, fadeFromBlackDuration)
-                .SetEase(ease)
-                .SetUpdate(true)
+            sequence = DOTween.Sequence()
+                .Append(blackout.DOFade(1f, blackoutFadeInDuration).SetEase(ease))
+                .AppendInterval(holdBeforeDayScreen)
+                .Append(dayScreen.DOFade(1f, dayScreenFadeInDuration).SetEase(ease))
+                .SetUpdate(true)               // unscaled time; applies to the whole sequence
                 .SetLink(gameObject)
                 .OnComplete(() =>
                 {
-                    canvasGroup.blocksRaycasts = false;
+                    dayScreen.interactable = true;
                     onComplete?.Invoke();
                 });
         }
 
-        private void SetVisible(float alpha)
+        /// <summary>
+        /// Day screen fades out, then the blackout fades out. onComplete is invoked when the screen is clear.
+        /// </summary>
+        public void FadeFromBlack(Action onComplete = null)
         {
-            canvasGroup.alpha = alpha;
-            canvasGroup.blocksRaycasts = alpha > 0f;
-            canvasGroup.interactable = false;
+            sequence?.Kill();
+            dayScreen.interactable = false;
+
+            if (blackout.alpha <= 0.001f && dayScreen.alpha <= 0.001f)
+            {
+                SetGroup(blackout, 0f, false);
+                SetGroup(dayScreen, 0f, false);
+                onComplete?.Invoke();
+                return;
+            }
+
+            sequence = DOTween.Sequence()
+                .Append(dayScreen.DOFade(0f, dayScreenFadeOutDuration).SetEase(ease))
+                .Append(blackout.DOFade(0f, blackoutFadeOutDuration).SetEase(ease))
+                .SetUpdate(true)
+                .SetLink(gameObject)
+                .OnComplete(() =>
+                {
+                    SetGroup(blackout, 0f, false);
+                    SetGroup(dayScreen, 0f, false);
+                    onComplete?.Invoke();
+                });
+        }
+
+        private static void SetGroup(CanvasGroup group, float alpha, bool blocksRaycasts)
+        {
+            group.alpha = alpha;
+            group.blocksRaycasts = blocksRaycasts;
+            group.interactable = false;
         }
     }
 }

@@ -23177,10 +23177,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1032597229683450528, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
-      propertyPath: m_SortingOrder
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 1451206053695061609, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
       propertyPath: m_Name
       value: '[Canvas] (Social)'
