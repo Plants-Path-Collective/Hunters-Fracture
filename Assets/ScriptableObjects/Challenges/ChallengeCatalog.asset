@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: ChallengeCatalog
   m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeCatalog
   challenges:
-  - {fileID: 11400000, guid: 1171e086dac101cb3a9e9f96dd5c94b9, type: 2}
-  - {fileID: 11400000, guid: 437d626d9707a69ff8abbaa426466db4, type: 2}
+  - {fileID: 11400000, guid: 38b05ed889bd9054cacee600196065dc, type: 2}

@@ -20881,6 +20881,7 @@ GameObject:
   - component: {fileID: 1905486616}
   - component: {fileID: 1905486617}
   - component: {fileID: 1905486618}
+  - component: {fileID: 1905486619}
   m_Layer: 0
   m_Name: NPC1
   m_TagString: Untagged
@@ -20965,6 +20966,18 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1905486619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905486614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96d033ae839de48bca0cdff2932f74a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.NpcQuestGiver
 --- !u!208 &1907127913
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -22918,11 +22931,11 @@ PrefabInstance:
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 322.53635
+      value: 322.53632
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.67746
+      value: -24.677399
       objectReference: {fileID: 0}
     - target: {fileID: 1026861588720341945, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_fontAsset
@@ -23094,11 +23107,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320.57004
+      value: 320.57
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29.991913
+      value: -29.991852
       objectReference: {fileID: 0}
     - target: {fileID: 6905977884795800042, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_fontAsset
@@ -23414,9 +23427,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 75364062}
+  - {fileID: 891217340}
   - {fileID: 4035234261556204534}
   - {fileID: 3312020367217798411}
-  - {fileID: 891217340}
   - {fileID: 2855975133751543080}
   - {fileID: 493458463}
   - {fileID: 7343133755916109638}

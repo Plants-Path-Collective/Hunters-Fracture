@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
         overworldLogText.text = message ?? string.Empty;
     }
 
-    public void ShowOverworldLogTransient(string message)
+    public void ShowDungeonLogTransient(string message)
     {
         if (isInCombat)
             return;
@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
         AppendTimedLog(combatLogText, message, "CombatStage scene");
     }
 
-    public void ClearOverworldLog()
+    public void ClearDungeonLog()
     {
         if (overworldLogText != null)
         {
@@ -722,7 +722,7 @@ public class GameManager : MonoBehaviour
 
     private void UseConsumableOnPartyMember(Core.CombatSystem.Units.PartyMemberData member)
     {
-        ClearOverworldLog();
+        ClearDungeonLog();
 
         if (member?.definition == null || consumableBeingUsed == null)
         {
@@ -788,7 +788,7 @@ public class GameManager : MonoBehaviour
 
     private void CancelConsumableTargetSelection()
     {
-        ClearOverworldLog();
+        ClearDungeonLog();
         if (partyOverview != null)
             partyOverview.CancelConsumableTargetSelection();
 

@@ -13487,6 +13487,7 @@ Transform:
   - {fileID: 8043003578075680733}
   - {fileID: 4752037615611994447}
   - {fileID: 6139143937948510592}
+  - {fileID: 2112705423536346048}
   - {fileID: 2852975151399410993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13676,6 +13677,51 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6140783796149216313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2112705423536346048}
+  - component: {fileID: 2846809933403458705}
+  m_Layer: 0
+  m_Name: '[QuestsManager]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2112705423536346048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6140783796149216313}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1058440379899947330}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2846809933403458705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6140783796149216313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6693f7487d847717b9d8ced0774fb184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.QuestManager
+  catalog: {fileID: 11400000, guid: 29a7119bd1d9ead01a6106928e196dde, type: 2}
 --- !u!1 &6264804347972434767
 GameObject:
   m_ObjectHideFlags: 0
@@ -14956,8 +15002,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ddca84ead194242812d20842766b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.UIManager
-  canvasGroup: {fileID: 3695333116067205489}
-  showDuration: 0.75
 --- !u!1 &7193584835053255127
 GameObject:
   m_ObjectHideFlags: 0

@@ -63,6 +63,7 @@ namespace Core.Render
             if (cinemachineCamera == null) return;
             cinemachineCamera.gameObject.SetActive(true);
             cinemachineCamera.Priority = activePriority;
+            GameManager.Instance.cmCameraActive = this.gameObject;
         }
 
         /// <summary>

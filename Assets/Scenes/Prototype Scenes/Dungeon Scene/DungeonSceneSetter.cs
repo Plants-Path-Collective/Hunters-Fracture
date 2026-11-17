@@ -10,11 +10,13 @@ namespace Core
 
         public GameObject inputHints;
         public GameObject logText;
+        public GameObject globalVisuals;
 
         protected override void OnSceneReady()
         {
             GameManager.Instance.inputsHints = inputHints;
             GameManager.Instance.logText = logText;
+            GameManager.Instance.globalVisuals = globalVisuals;
 
             Debug.Log($"[DungeonSceneSetter] Scene ready — {InitialActionMap} map active.");
         }

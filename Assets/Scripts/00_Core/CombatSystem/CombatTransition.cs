@@ -38,6 +38,8 @@ namespace Core.CombatSystem
         public static void Begin(AllyParty party, EnemyParty enemyParty, UNIT_TEAM advantageTeam,
             GameObject playerObject, GameObject enemyObject)
         {
+            Debug.Log("[CombatTransition] Starting transition.");
+
             // The scene check also covers CombatStage still being unloaded or kept for the game-over UI.
             if (transitionInProgress || SceneManager.GetSceneByName(CombatStageScene).isLoaded)
             {
@@ -58,7 +60,10 @@ namespace Core.CombatSystem
             foreach (GameObject content in suspendedRoomContents)
                 content.SetActive(false);
 
-            GameManager.Instance.globalVisuals.SetActive(false);
+            if (GameManager.Instance.globalVisuals != null)
+                GameManager.Instance.globalVisuals.SetActive(false);
+            else
+                Debug.LogWarning("[CombatTransition] GameManager not have globalVisuals assigned.");
 
             // need to adapt it to cinemachinecamera (currently not working as intended)
             suspendedCamera = Camera.main != null ? Camera.main.gameObject : null;
@@ -74,6 +79,8 @@ namespace Core.CombatSystem
             suspendedEnemy?.SetActive(false);
 
             CombatSetUp.Prepare(party, enemyParty, advantageTeam, OnCombatFinished);
+
+            Debug.Log("[CombatTransition] Finishing transition.");
 
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Combat);
             SceneManager.LoadSceneAsync(CombatStageScene, LoadSceneMode.Additive);

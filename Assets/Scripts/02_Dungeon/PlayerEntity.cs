@@ -81,7 +81,7 @@ namespace Dungeon
 
         protected override void OnAttackMissed()
         {
-            GameManager.Instance?.ShowOverworldLogTransient("Missed the attack.");
+            GameManager.Instance?.ShowDungeonLogTransient("Missed the attack.");
         }
     }
 }
