@@ -18787,6 +18787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputEvent
   targetImage: {fileID: 1583852442}
   gamepadSprite: {fileID: 21300000, guid: 7647ed59a7e698054a5b8c461fe925ae, type: 3}
+  nintendoSprite: {fileID: 0}
   xboxGamepadSprite: {fileID: 21300000, guid: 7647ed59a7e698054a5b8c461fe925ae, type: 3}
   playStationGamepadSprite: {fileID: 21300000, guid: 140f0cd362a22d7858038affe4540556, type: 3}
   keyboardMouseSprite: {fileID: 21300000, guid: b13922f1732109c3e860461517f54563, type: 3}
@@ -22931,7 +22932,7 @@ PrefabInstance:
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 322.53632
+      value: 322.53638
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -23101,13 +23102,17 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 5843739928866016278, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 10.355667
+      objectReference: {fileID: 0}
     - target: {fileID: 6089807476958008992, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_Name
       value: '[GameManager]'
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320.57
+      value: 320.57007
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -23274,6 +23279,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4028200700004159690, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 40638211259846656
+      objectReference: {fileID: 0}
+    - target: {fileID: 4028200700004159690, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:f0d6af3bf629de14285f0c5fbbed27b8
+      objectReference: {fileID: 0}
     - target: {fileID: 5492455600181230089, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -23289,6 +23302,10 @@ PrefabInstance:
     - target: {fileID: 5492455600181230089, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202067389023482068, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8357580564560362494, guid: 123e3f8c76a8c69e99f48cac70b67e9b, type: 3}
       propertyPath: m_AnchorMax.y

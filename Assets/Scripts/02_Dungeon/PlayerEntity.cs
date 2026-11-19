@@ -47,7 +47,9 @@ namespace Dungeon
 
             InputManager.Instance.Dungeon.Attack.performed += OnAttackInput;
             subscribed = true;
+            #if  UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log($"[{nameof(PlayerEntity)}] Attack subscribed (map: {InputManager.Instance.CurrentMap}).");
+            #endif
         }
 
         private void UnsubscribeAttack()
@@ -57,7 +59,6 @@ namespace Dungeon
                 InputManager.Instance.Dungeon.Attack.performed -= OnAttackInput;
 
             subscribed = false;
-            Debug.Log($"[{nameof(PlayerEntity)}] Attack unsubscribed.");
         }
 
         private void OnAttackInput(InputAction.CallbackContext ctx)

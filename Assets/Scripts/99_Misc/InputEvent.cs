@@ -11,6 +11,7 @@ public class InputEvent : MonoBehaviour
     {
         KeyboardMouse,
         Gamepad,
+        NintendoGamepad,
         XboxGamepad,
         PlayStationGamepad,
         OtherGamepad
@@ -19,6 +20,7 @@ public class InputEvent : MonoBehaviour
     [Header("Optional Sprite Change")]
     [SerializeField] private Image targetImage;
     [SerializeField] private Sprite gamepadSprite;
+    [SerializeField] private Sprite nintendoSprite;
     [SerializeField] private Sprite xboxGamepadSprite;
     [SerializeField] private Sprite playStationGamepadSprite;
     [SerializeField] private Sprite keyboardMouseSprite;
@@ -79,6 +81,7 @@ public class InputEvent : MonoBehaviour
         Sprite sprite = inputType switch
         {
             InputType.XboxGamepad => xboxGamepadSprite != null ? xboxGamepadSprite : gamepadSprite,
+            InputType.NintendoGamepad => nintendoSprite != null ? nintendoSprite : gamepadSprite,
             InputType.PlayStationGamepad => playStationGamepadSprite != null
                 ? playStationGamepadSprite
                 : gamepadSprite,
@@ -107,6 +110,9 @@ public class InputEvent : MonoBehaviour
             return InputType.PlayStationGamepad;
 
         if (ContainsAny(description, "Xbox", "XInput", "Microsoft"))
+            return InputType.XboxGamepad;
+
+        if (ContainsAny(description, "Nintendo", "switch", "joy-con", "pro controller"))
             return InputType.XboxGamepad;
 
         return InputType.OtherGamepad;

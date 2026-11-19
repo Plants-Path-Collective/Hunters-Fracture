@@ -43,7 +43,7 @@ namespace Core
         //   OpenPauseMenu   → touchpad / select / I
         public InputSystem_Actions.SocialActions     Social      => Actions.Social;
 
-        // Overworld
+        // Dungeon
         //   Move            → leftStick / WASD
         //   Attack          → buttonSouth / Space / Mouse1
         //   Interact        → buttonWest (□/X) / E
