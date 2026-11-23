@@ -105,7 +105,8 @@ MonoBehaviour:
         m_WaitForCompletion: 0
         m_LocalVariables: []
       nextConversation: {fileID: 11400000, guid: b8aa87d235356186f8b4d5f4f35c4a36, type: 2}
-      actions: []
+      actions:
+      - {fileID: 11400000, guid: 63a4a17fe3dbf0f01bbf13a60771339a, type: 2}
     - answerText:
         m_TableReference:
           m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb

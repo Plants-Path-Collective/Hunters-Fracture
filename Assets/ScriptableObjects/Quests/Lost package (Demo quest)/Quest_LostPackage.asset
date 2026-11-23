@@ -35,7 +35,7 @@ MonoBehaviour:
   turnInNpcID: 8
   prerequisiteQuests: []
   offerPhases: 1
-  turnInPhases: 4
+  turnInPhases: 6
   steps:
   - description:
       m_TableReference:

@@ -19078,6 +19078,7 @@ GameObject:
   - component: {fileID: 1609667712}
   - component: {fileID: 1609667715}
   - component: {fileID: 1609667714}
+  - component: {fileID: 1609667716}
   - component: {fileID: 1609667713}
   m_Layer: 0
   m_Name: NPC_DonCucho
@@ -19162,6 +19163,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1609667716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609667711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96d033ae839de48bca0cdff2932f74a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.NpcQuestGiver
 --- !u!208 &1611859537
 NavMeshObstacle:
   m_ObjectHideFlags: 0
