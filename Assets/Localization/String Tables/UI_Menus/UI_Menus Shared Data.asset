@@ -71,6 +71,10 @@ MonoBehaviour:
     m_Key: ui_pausemenu_wiki
     m_Metadata:
       m_Items: []
+  - m_Id: 44895392104665088
+    m_Key: ui_itemassignation_title
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

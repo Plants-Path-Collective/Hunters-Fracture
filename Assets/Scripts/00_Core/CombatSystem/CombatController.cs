@@ -288,7 +288,7 @@ namespace Core.CombatSystem
             // If finishedActor died mid-turn (e.g. reflected damage killed the acting unit),
             // it's already gone from the timeline via Kill()'s Remove call — reinserting it
             // here would put a dead unit back into the queue.
-            if (finishedActor.IsAlive)
+            if (finishedActor.IsAlive && !UpcomingTurns.Contains(finishedActor))
                 timeline.Reinsert(finishedActor);
 
             CurrentActor = null;

@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 4290684787242331994}
   - component: {fileID: 7167451610059546173}
   m_Layer: 5
-  m_Name: '[RewardItemView]'
+  m_Name: '[RewardItemView - Combat Rewards Screen]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

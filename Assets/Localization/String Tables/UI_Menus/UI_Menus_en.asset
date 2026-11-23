@@ -76,6 +76,10 @@ MonoBehaviour:
     m_Localized: System Configuration
     m_Metadata:
       m_Items: []
+  - m_Id: 44895392104665088
+    m_Localized: Assign the items to the Hunters in your Party!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     public GameObject cmCameraActive;
     public GameObject globalVisuals;
     public GameObject inputsHints;
+
+    // Money
+    private float pesos;
+    public float Pesos => pesos;
+
     public GameObject logText;
 
     [Header("Beeper")]

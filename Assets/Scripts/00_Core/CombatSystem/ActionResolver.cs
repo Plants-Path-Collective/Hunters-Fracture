@@ -36,10 +36,9 @@ namespace Core.CombatSystem
         /// Basic attack: Strength vs PhysicalDefense for a Physical attacker, MagicPower vs
         /// MagicalDefense for a Magical one (see units.html "UnitDefinitionSO" — the attacker's
         /// own UnitType decides, regardless of the target's type), reduced by the target's
-        /// DefendingReduction if it's currently Defending. Always 1 enemy target — "Attack"
-        /// specifically can't hit allies (see combat.html "Attack"; skills and items later will
-        /// be able to target allies via their own TargetType). Returns false without doing
-        /// anything if the target isn't valid.
+        /// DefendingReduction if it's currently Defending. Hits 1 enemy target by default; item
+        /// effects may add targets or scale the damage through OnBeforeAction (context.action is
+        /// null for a basic attack). Returns false without doing anything if the target isn't valid.
         /// </summary>
         public bool ResolveAttack(Unit actor, Unit target)
         {
@@ -57,11 +56,32 @@ namespace Core.CombatSystem
             }
 
             UNITY_TYPE damageType = actor.UnitType;
-            int amount = CalculateAttackDamage(actor, target, damageType);
+
+            // The basic attack goes through the same action pipeline as skills. A null action marks it.
+            var context = new ActionContext { actor = actor, action = null, spCost = 0 };
+            context.targets.Add(target);
+
+            combat.NotifyBeforeAction(context);
+            if (context.cancelled) return false;
 
             PlayActionSfx(actor.Definition.basicAttackSfx, actor);
-            combat.DealDamage(actor, target, amount, damageType, "attack");
+
+            // Copy: interceptors may have added targets, and kills mutate the roster while we iterate.
+            foreach (Unit victim in context.targets.ToArray())
+            {
+                if (victim == null || !victim.IsAlive || victim.Team == actor.Team) continue;
+
+                int amount = CalculateAttackDamage(actor, victim, damageType);
+
+                // Only touch the amount when an interceptor changed the scale (keeps the default path identical).
+                if (!Mathf.Approximately(context.effectScale, 1f))
+                    amount = Mathf.Max(1, Mathf.RoundToInt(amount * context.effectScale));
+
+                combat.DealDamage(actor, victim, amount, damageType, "attack");
+            }
+
             combat.RestoreSP(actor, actor.Definition.RollSPRegen());
+            combat.NotifyAfterAction(context);
 
             // Every player action consumes the turn (combat.html "Acciones del jugador": "todas
             // consumen el turno y reinsertan al actor al final de la cola").

@@ -29,5 +29,6 @@ namespace Core.CombatSystem.StatusSystem
     {
         public STAT_TYPE stat;
         public float fraction;
+        public float flat;
     }
 }

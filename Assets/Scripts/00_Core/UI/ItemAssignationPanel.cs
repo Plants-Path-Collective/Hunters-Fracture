@@ -9,7 +9,7 @@ namespace Core.UI
     {
         public static ItemAssignationPanel Instance;
 
-        public List<ItemSO> itemsToAssign;
+        [ReadOnly] public List<ItemSO> itemsToAssign;
         [SerializeField] private RewardItemView itemPrefab;
 
         // ── Internal State ──────────────────────────────────────────────────

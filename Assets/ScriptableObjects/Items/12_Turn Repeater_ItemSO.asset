@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8540830363968245a8cd9ec3d1593fb, type: 3}
+  m_Name: 12_Turn Repeater_ItemSO
+  m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
+  lockedByDefault: 0
+  itemID: 11
+  itemName: Corta Zapallo
+  itemIcon: {fileID: 21300000, guid: 95fc5ef5b1a615426a865735bf8e59fc, type: 3}
+  itemDescription: "Al atacar o usar una t\xE9cnica, 10% (+5% por copia) de probabilidad
+    de repetir el turno, justo despu\xE9s de este."
+  effects:
+  - {fileID: 11400000, guid: 16e4afa1c3784343b848e39fb06894ed, type: 2}

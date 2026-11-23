@@ -250,31 +250,36 @@ namespace Core.CombatSystem.Units
             RecalculateStats(inventory);
         }
 
-        /// <summary>Statuses add up per stat (+0.8 and -0.3 → ×1.5), apply after every item modifier,
-        /// and never take a stat below 0.</summary>
+        /// <summary>Statuses add up per stat: fractions first (+0.8 and -0.3 → ×1.5), then flat amounts
+        /// (in the stat's own units). Both apply after every item modifier, and no stat goes below 0.</summary>
         private void ApplyTemporaryModifiers()
         {
             if (temporaryModifiers.Count == 0) return;
 
             foreach (STAT_TYPE stat in System.Enum.GetValues(typeof(STAT_TYPE)))
             {
-                float sum = 0f;
+                float fractionSum = 0f;
+                float flatSum = 0f;
                 foreach (TemporaryStatModifier modifier in temporaryModifiers)
-                    if (modifier.stat == stat) sum += modifier.fraction;
+                {
+                    if (modifier.stat != stat) continue;
+                    fractionSum += modifier.fraction;
+                    flatSum += modifier.flat;
+                }
 
-                if (Mathf.Approximately(sum, 0f)) continue;
+                if (Mathf.Approximately(fractionSum, 0f) && Mathf.Approximately(flatSum, 0f)) continue;
 
-                float factor = Mathf.Max(0f, 1f + sum);
+                float factor = Mathf.Max(0f, 1f + fractionSum);
 
                 switch (stat)
                 {
-                    case STAT_TYPE.HP:              currentMaxHP = Mathf.RoundToInt(currentMaxHP * factor); break;
-                    case STAT_TYPE.SP:              currentMaxSP = Mathf.RoundToInt(currentMaxSP * factor); break;
-                    case STAT_TYPE.Speed:           currentSpeed *= factor; break;
-                    case STAT_TYPE.Strength:        currentStrength *= factor; break;
-                    case STAT_TYPE.MagicPower:      currentMagicPower *= factor; break;
-                    case STAT_TYPE.PhysicalDefense: currentPhysicalDefense *= factor; break;
-                    case STAT_TYPE.MagicalDefense:  currentMagicalDefense *= factor; break;
+                    case STAT_TYPE.HP:              currentMaxHP = Mathf.Max(0, Mathf.RoundToInt(currentMaxHP * factor + flatSum)); break;
+                    case STAT_TYPE.SP:              currentMaxSP = Mathf.Max(0, Mathf.RoundToInt(currentMaxSP * factor + flatSum)); break;
+                    case STAT_TYPE.Speed:           currentSpeed = Mathf.Max(0f, currentSpeed * factor + flatSum); break;
+                    case STAT_TYPE.Strength:        currentStrength = Mathf.Max(0f, currentStrength * factor + flatSum); break;
+                    case STAT_TYPE.MagicPower:      currentMagicPower = Mathf.Max(0f, currentMagicPower * factor + flatSum); break;
+                    case STAT_TYPE.PhysicalDefense: currentPhysicalDefense = Mathf.Max(0f, currentPhysicalDefense * factor + flatSum); break;
+                    case STAT_TYPE.MagicalDefense:  currentMagicalDefense = Mathf.Max(0f, currentMagicalDefense * factor + flatSum); break;
                 }
             }
         }

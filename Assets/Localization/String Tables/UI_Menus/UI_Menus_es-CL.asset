@@ -74,6 +74,10 @@ MonoBehaviour:
     m_Localized: "Configuraci\xF3n del\nSistema"
     m_Metadata:
       m_Items: []
+  - m_Id: 44895392104665088
+    m_Localized: "\xA1Asigna los objetos a los Hunters de tu party!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

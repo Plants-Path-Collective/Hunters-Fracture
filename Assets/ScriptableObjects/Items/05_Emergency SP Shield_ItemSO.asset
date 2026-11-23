@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   lockedByDefault: 0
   itemID: 5
-  itemName: Silbato Antiguo
+  itemName: Collar de Piedra Luna
   itemIcon: {fileID: 21300000, guid: 95fc5ef5b1a615426a865735bf8e59fc, type: 3}
   itemDescription: Si el HP del portador, disminuye bajo el 30%, se regenera el 20%
     (+10% por copia) de su HP, gastando el 50% (+10% por copia) de su SP actual.
