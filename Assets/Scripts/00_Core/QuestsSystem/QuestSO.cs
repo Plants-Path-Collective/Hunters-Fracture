@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using PlantsPathCo.DialogueSystem;
-using Core;
+using Core.CombatSystem.Backpack;
+using Core.CombatSystem.ItemSystem;
 
 namespace Core.QuestsSystem
 {
@@ -15,6 +16,35 @@ namespace Core.QuestsSystem
 
         [Tooltip("What the player must do to finish this step.")]
         public QuestConditionSO condition;
+    }
+
+    /// <summary>One reward given when a quest is turned in. A quest can have several.</summary>
+    [System.Serializable]
+    public class QuestReward
+    {
+        [Tooltip("Which type of reward this entry gives.")]
+        public QUEST_REWARD type;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.Lore)]
+        [Tooltip("Lore entry unlocked when the quest is turned in.")]
+        public LocalizedString loreReward;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.Pesos)]
+        [Tooltip("Amount of pesos given.")]
+        public float pesosReward;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.Item)]
+        public ItemSO itemReward;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.Consumable)]
+        public ConsumableSO consumableReward;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.Consumable)]
+        [Range(1, 999)] public int consumableQty = 1;
+
+        [ShowIfReward(nameof(type), QUEST_REWARD.KeyItem)]
+        [Tooltip("Key item prefab given to the player.")]
+        public GameObject keyItemReward;
     }
 
     /// <summary>
@@ -45,6 +75,10 @@ namespace Core.QuestsSystem
         [Header("Rules")]
         [Tooltip("Quests that must be Completed (this run) before this one is offered.")]
         public List<QuestSO> prerequisiteQuests = new();
+
+        [Header("Rewards")]
+        [Tooltip("Everything the player receives when the quest is turned in.")]
+        public List<QuestReward> rewards = new();
 
         [Tooltip("Phases in which the quest can be accepted. None = any phase.")]
         public DAY_PHASE offerPhases = AllPhases;

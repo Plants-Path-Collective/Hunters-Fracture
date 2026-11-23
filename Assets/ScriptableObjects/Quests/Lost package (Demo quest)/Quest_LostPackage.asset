@@ -34,6 +34,37 @@ MonoBehaviour:
   giverNpcID: 5
   turnInNpcID: 8
   prerequisiteQuests: []
+  rewards:
+  - type: 1
+    loreReward:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    pesosReward: 2000
+    itemReward: {fileID: 0}
+    consumableReward: {fileID: 0}
+    consumableQty: 0
+    keyItemReward: {fileID: 0}
+  - type: 0
+    loreReward:
+      m_TableReference:
+        m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
+      m_TableEntryReference:
+        m_KeyId: 21038696454377472
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    pesosReward: 2000
+    itemReward: {fileID: 0}
+    consumableReward: {fileID: 0}
+    consumableQty: 0
+    keyItemReward: {fileID: 0}
   offerPhases: 1
   turnInPhases: 6
   steps:

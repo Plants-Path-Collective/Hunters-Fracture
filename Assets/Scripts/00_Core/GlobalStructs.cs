@@ -284,13 +284,22 @@ namespace Core
     /// <summary>
     /// Evaluation order: the first usable conversation wins.
     /// </summary>
-    public enum Slot 
+    public enum SLOT 
     { 
         TurnIn, 
         Expired, 
         Offer, 
         InProgress, 
         Completed 
+    }
+
+    public enum QUEST_REWARD
+    {
+        Lore,
+        Pesos,
+        Item,
+        Consumable,
+        KeyItem
     }
     #endregion
 }

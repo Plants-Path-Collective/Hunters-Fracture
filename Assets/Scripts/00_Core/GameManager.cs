@@ -308,6 +308,7 @@ public class GameManager : MonoBehaviour
     // ── Money ─────────────────────────────────────────────────────────────────
     /// <summary>Amount of currency the player currently holds.</summary>
     public float Pesos => pesos;
+    [ReadOnly] public float currentBalance;
 
     /// <summary>Tries to deduct <paramref name="amount"/> pesos. Returns false if the player cannot afford it.</summary>
     public bool TrySpendPesos(float amount)
@@ -315,6 +316,12 @@ public class GameManager : MonoBehaviour
         if (pesos < amount) return false;
         pesos -= amount;
         return true;
+    }
+
+    public void AddBalance(float amount)
+    {
+        pesos += amount;
+        currentBalance = pesos;
     }
     #endregion
 }

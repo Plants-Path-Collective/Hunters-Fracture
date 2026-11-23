@@ -32,7 +32,7 @@ namespace Core.QuestsSystem
             conversation = null;
             if (!isActiveAndEnabled || !Bind()) return false;
 
-            foreach (Slot slot in System.Enum.GetValues(typeof(Slot)))
+            foreach (SLOT slot in System.Enum.GetValues(typeof(SLOT)))
             {
                 foreach (QuestSO quest in manager.Quests)
                 {
@@ -47,7 +47,7 @@ namespace Core.QuestsSystem
             return false;
         }
 
-        private ConversationSO Pick(QuestSO quest, Slot slot)
+        private ConversationSO Pick(QuestSO quest, SLOT slot)
         {
             if (quest == null) return null;
 
@@ -57,18 +57,18 @@ namespace Core.QuestsSystem
 
             switch (slot)
             {
-                case Slot.TurnIn:
+                case SLOT.TurnIn:
                     return state == QUEST_STATE.ReadyToTurnIn && isTurnIn && QuestManager.InTurnInWindow(quest)
                         ? quest.turnInConversation : null;
-                case Slot.Expired:
+                case SLOT.Expired:
                     return state == QUEST_STATE.Expired && isTurnIn ? quest.expiredConversation : null;
-                case Slot.Offer:
+                case SLOT.Offer:
                     return state == QUEST_STATE.Available && isGiver && QuestManager.InOfferWindow(quest)
                         ? quest.offerConversation : null;
-                case Slot.InProgress:
+                case SLOT.InProgress:
                     return (state == QUEST_STATE.Active || state == QUEST_STATE.ReadyToTurnIn) && isGiver
                         ? quest.inProgressConversation : null;
-                case Slot.Completed:
+                case SLOT.Completed:
                     return state == QUEST_STATE.Completed && isTurnIn ? quest.completedConversation : null;
             }
 

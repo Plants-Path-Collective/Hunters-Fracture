@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Core.Clock;
+using Core.UI;
+using Core.CombatSystem.Backpack;
 
 namespace Core.QuestsSystem
 {
@@ -186,11 +188,41 @@ namespace Core.QuestsSystem
             foreach (QuestStep step in quest.steps) step.condition?.Consume();
 
             progress[quest].state = QUEST_STATE.Completed;
+
+            progress[quest].state = QUEST_STATE.Completed;
+
+            foreach (QuestReward reward in quest.rewards) GrantReward(quest, reward);
+
             Save();
             OnQuestChanged?.Invoke(quest);
 
             failReason = null;
             return true;
+        }
+
+        private void GrantReward(QuestSO quest, QuestReward reward)
+        {
+            switch (reward.type)
+            {
+                case QUEST_REWARD.Lore:
+                    Debug.Log("[Quest Reward]: " + reward.loreReward.GetLocalizedString());
+                break;
+
+                case QUEST_REWARD.Pesos:
+                    GameManager.Instance.AddBalance(reward.pesosReward);
+                break;
+
+                case QUEST_REWARD.Item:
+                    // ItemAssignationPanel.Instance
+                break;
+
+                case QUEST_REWARD.Consumable:
+                    PartyBackpack.Instance.AddConsumable(reward.consumableReward, reward.consumableQty);
+                break;
+
+                case QUEST_REWARD.KeyItem:
+                break;
+            }
         }
 
         /// <summary>Current step data for a UI. False if the quest is not Active.</summary>
@@ -360,7 +392,7 @@ namespace Core.QuestsSystem
                     QuestSO quest = quests.Find(q => q != null && q.questID == p.id);
                     if (quest == null)
                     {
-                        Debug.LogWarning($"[Quests] Saved quest '{p.id}' no longer exists, dropped.");
+                        Debug.LogWarning($"[QuestManager] Saved quest '{p.id}' no longer exists, dropped.");
                         dirty = true;
                         continue;
                     }
@@ -370,7 +402,7 @@ namespace Core.QuestsSystem
             }
             catch (Exception e)
             {
-                Debug.LogError($"[Quests] Could not read {SavePath}: {e.Message}");
+                Debug.LogError($"[QuestManager] Could not read {SavePath}: {e.Message}");
             }
         }
 
@@ -384,12 +416,13 @@ namespace Core.QuestsSystem
                 string temp = SavePath + ".tmp";
                 File.WriteAllText(temp, JsonUtility.ToJson(data, true));
                 File.Copy(temp, SavePath, true);
+                Debug.Log($"[QuestManager] Quest state saved to {SavePath}");
                 File.Delete(temp);
                 dirty = false;
             }
             catch (Exception e)
             {
-                Debug.LogError($"[Quests] Could not write {SavePath}: {e.Message}");
+                Debug.LogError($"[QuestManager] Could not write {SavePath}: {e.Message}");
             }
         }
 
