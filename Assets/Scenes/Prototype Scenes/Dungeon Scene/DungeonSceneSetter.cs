@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace Core
@@ -14,8 +15,8 @@ namespace Core
 
         protected override void OnSceneReady()
         {
-            GameManager.Instance.inputsHints = inputHints;
-            GameManager.Instance.logText = logText;
+            UIManager.Instance.inputsHints = inputHints;
+            UIManager.Instance.dungeonLogText = logText.GetComponent<TextMeshProUGUI>();
             GameManager.Instance.globalVisuals = globalVisuals;
 
             Debug.Log($"[DungeonSceneSetter] Scene ready — {InitialActionMap} map active.");

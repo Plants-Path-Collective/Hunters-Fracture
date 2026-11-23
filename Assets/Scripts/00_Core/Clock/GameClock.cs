@@ -69,7 +69,6 @@ namespace Core.Clock
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             if (settings == null)
             {

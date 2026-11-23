@@ -82,7 +82,7 @@ namespace Dungeon
 
         protected override void OnAttackMissed()
         {
-            GameManager.Instance?.ShowDungeonLogTransient("Missed the attack.");
+            UIManager.Instance?.ShowDungeonLogTransient("Missed the attack.");
         }
     }
 }

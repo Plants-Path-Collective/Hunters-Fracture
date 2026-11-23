@@ -1,74 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using TMPro;
 using Core;
 using Core.CombatSystem.Backpack;
 using Core.Clock;
-using Core.UI;
-using Core.UI.Beeper;
 
+/// <summary>
+/// Persistent owner of global game state: pause, combat flag, money, scene flow and language.
+/// It never touches UI objects directly; <see cref="UIManager"/> reacts to the events below.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    /// <summary>Raised after the pause state changes. The argument is the new paused state.</summary>
+    public event Action<bool> OnPauseChanged;
+
+    /// <summary>Raised after <see cref="SetInCombat"/>. The argument is the new combat state.</summary>
+    public event Action<bool> OnCombatStateChanged;
+
     public bool isInCombat = false;
     public bool paused = false;
-    public static GameManager Instance { get; private set; }
     public GameObject cmCameraActive;
     public GameObject globalVisuals;
-    public GameObject inputsHints;
 
     // Money
     private float pesos;
     public float Pesos => pesos;
 
-    public GameObject logText;
-
-    [Header("Beeper")]
-    public GameObject beeper;
-    [Space(10)]
-
-    [Header("Pause Menu")]
-    public GameObject pauseMenu;
-    [Space(10)]
-    public GameObject mainPanel;
-    public GameObject partyOverviewPanel;
-    public GameObject inspectionPanel;
-    public GameObject partyBackpackPanel;
-    public GameObject optionsPanel;
-
     private InputManager inputManager;
-    private Beeper beeperController;
-    private InputActionReference navigateReference;
-    private InputActionReference confirmReference;
-    private InputActionReference cancelReference;
-    private readonly Dictionary<TMP_Text, List<TimedLogMessage>> timedLogMessages = new();
-    private int nextLogMessageId;
-    private const float LogMessageDuration = 3f;
     private readonly ClockPauseHandle clockPause = new(CLOCK_PAUSE_REASON.Menu);
-
-    private sealed class TimedLogMessage
-    {
-        public int id;
-        public string message;
-    }
-
-    [Header("--- Backpack ---")]
-    private readonly List<BackpackSlotUI> backpackSlotViews = new();
-    private BackpackSlotUI selectedBackpackSlot;
-    [SerializeField] private GameObject backpackPanel;
-    [SerializeField] private GameObject backpackSlotPrefab;
-    private int backpackIndex;
-    private Button pauseBackpackButton;
-    private bool selectingConsumableTarget;
-    private ConsumableSO consumableBeingUsed;
-    private PartyOverview partyOverview;
-    private TMP_Text overworldLogText;
 
     private void Awake()
     {
@@ -83,23 +48,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (beeper != null)
-        {
-            beeperController = beeper.GetComponent<Beeper>();
-            if (beeperController == null)
-                Debug.LogError($"[{nameof(GameManager)}] The assigned Beeper object is missing its " +
-                               $"{nameof(Beeper)} component.", beeper);
-            else
-                beeperController.Hide();
-        }
-
-        if (mainPanel != null) mainPanel.SetActive(false);
-        if (partyOverviewPanel != null) partyOverviewPanel.SetActive(false);
-        if (partyBackpackPanel != null) partyBackpackPanel.SetActive(false);
-        if (optionsPanel != null) optionsPanel.SetActive(false);
-        FindPauseBackpackButton();
-        UpdatePauseBackpackButton();
-
         // Resolve the sibling singleton after every scene object's Awake has run.
         inputManager = InputManager.Instance;
         if (inputManager == null)
@@ -108,282 +56,158 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        navigateReference = InputActionReference.Create(inputManager.Actions.UI.Navigate);
-        confirmReference = InputActionReference.Create(inputManager.Actions.UI.Confirm);
-        cancelReference = InputActionReference.Create(inputManager.Actions.UI.CancelBack);
-
         inputManager.Dungeon.OpenPauseMenu.performed += OnOpenPauseMenu;
         inputManager.Combat.OpenPauseMenu.performed += OnOpenPauseMenu;
         inputManager.Social.OpenPauseMenu.performed += OnOpenPauseMenu;
-        inputManager.UI.CancelBack.performed += OnPauseMenuCancel;
-
-        if (pauseMenu == null)
-            Debug.LogError($"[{nameof(GameManager)}] Pause menu is not assigned. " +
-                           "Assign the scene's Pause Menu object in the Inspector.", this);
     }
+
+    private void OnDestroy()
+    {
+        if (inputManager != null)
+        {
+            inputManager.Dungeon.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.Combat.OpenPauseMenu.performed -= OnOpenPauseMenu;
+            inputManager.Social.OpenPauseMenu.performed -= OnOpenPauseMenu;
+        }
+
+        if (paused)
+        {
+            Time.timeScale = 1f;
+            paused = false;
+        }
+
+        if (Instance == this)
+            Instance = null;
+    }
+
+    #region Pause
 
     private void OnOpenPauseMenu(InputAction.CallbackContext context) => TogglePauseMenu();
 
-    private void OnPauseMenuCancel(InputAction.CallbackContext context)
-    {
-        HandlePauseMenuCancel();
-    }
+    public void TogglePauseMenu() => SetPaused(!paused);
 
-    private void HandlePauseMenuCancel()
+    private void SetPaused(bool value)
     {
-        if (!paused)
+        if (paused == value)
             return;
 
-        if (selectingConsumableTarget)
+        if (inputManager == null)
         {
-            CancelConsumableTargetSelection();
-            OpenPartyBackpack();
+            Debug.LogError($"[{nameof(GameManager)}] Cannot toggle pause because " +
+                           $"{nameof(InputManager)} is not available.", this);
             return;
         }
 
-        if (inspectionPanel != null && inspectionPanel.activeInHierarchy)
+        // Pausing without a menu to resume from would soft-lock the game.
+        if (value && (UIManager.Instance == null || !UIManager.Instance.CanShowPauseMenu))
         {
-            InspectionPanel inspection = inspectionPanel.GetComponent<InspectionPanel>();
-            if (inspection == null)
-            {
-                Debug.LogError($"[{nameof(GameManager)}] Inspection panel is missing its " +
-                               $"{nameof(InspectionPanel)} component.", inspectionPanel);
-                return;
-            }
-
-            inspection.Hide();
+            Debug.LogError($"[{nameof(GameManager)}] Cannot pause: no pause menu is available in " +
+                           $"{nameof(UIManager)}.", this);
             return;
         }
 
-        if (mainPanel != null && mainPanel.activeSelf)
-        {
-            ClosePauseMenuPanel();
-            SelectFirstPauseMenuControl();
-            return;
-        }
+        paused = value;
+        Time.timeScale = value ? 0f : 1f;
+        clockPause.Set(value);
 
-        TogglePauseMenu();
+        if (value)
+            inputManager.PushUIMap();
+        else
+            inputManager.PopUIMap();
+
+        OnPauseChanged?.Invoke(value);
     }
 
-    public void Resume()
-    {
-        HandlePauseMenuCancel();
-    }
+    #endregion
 
-    public void OpenPartyOverview()
-    {
-        SetPauseMenuPanelActive(partyOverviewPanel, nameof(partyOverviewPanel));
-    }
-
-    public void OpenPartyBackpack()
-    {
-        if (isInCombat)
-            return;
-
-        RenderBackpackSlots();
-        SetPauseMenuPanelActive(partyBackpackPanel, nameof(partyBackpackPanel));
-        if (selectedBackpackSlot != null)
-            SelectBackpackSlot(selectedBackpackSlot);
-    }
-
-    public void ShowOverworldLog(string message)
-    {
-        if (isInCombat)
-            return;
-
-        if (overworldLogText == null)
-            overworldLogText = FindLogTextInScene(SceneManager.GetActiveScene());
-
-        if (overworldLogText == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Could not find a TMP text on a GameObject " +
-                           "named '[Log Text]' in the active scene.");
-            return;
-        }
-
-        timedLogMessages.Remove(overworldLogText);
-        overworldLogText.text = message ?? string.Empty;
-    }
-
-    public void ShowDungeonLogTransient(string message)
-    {
-        if (isInCombat)
-            return;
-
-        if (overworldLogText == null)
-            overworldLogText = FindLogTextInScene(SceneManager.GetActiveScene());
-
-        AppendTimedLog(overworldLogText, message, "active scene");
-    }
-
-    public void ShowCombatLog(string message)
-    {
-        Scene combatScene = SceneManager.GetSceneByName("CombatStage");
-        TMP_Text combatLogText = FindLogTextInScene(combatScene);
-        AppendTimedLog(combatLogText, message, "CombatStage scene");
-    }
-
-    public void ClearDungeonLog()
-    {
-        if (overworldLogText != null)
-        {
-            timedLogMessages.Remove(overworldLogText);
-            overworldLogText.text = string.Empty;
-        }
-    }
-
-    private void AppendTimedLog(TMP_Text text, string message, string sceneDescription)
-    {
-        if (text == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Could not find a TMP text on a GameObject " +
-                           $"named '[Log Text]' in the {sceneDescription}.");
-            return;
-        }
-
-        if (!timedLogMessages.TryGetValue(text, out List<TimedLogMessage> messages))
-        {
-            messages = new List<TimedLogMessage>();
-            timedLogMessages.Add(text, messages);
-        }
-
-        TimedLogMessage entry = new()
-        {
-            id = nextLogMessageId++,
-            message = message ?? string.Empty
-        };
-        messages.Add(entry);
-        UpdateTimedLogText(text, messages);
-        StartCoroutine(ExpireLogMessage(text, entry.id));
-    }
-
-    private IEnumerator ExpireLogMessage(TMP_Text text, int messageId)
-    {
-        yield return new WaitForSecondsRealtime(LogMessageDuration);
-
-        if (text == null || !timedLogMessages.TryGetValue(text, out List<TimedLogMessage> messages))
-            yield break;
-
-        messages.RemoveAll(entry => entry.id == messageId);
-        if (messages.Count == 0)
-        {
-            timedLogMessages.Remove(text);
-            text.text = string.Empty;
-            yield break;
-        }
-
-        UpdateTimedLogText(text, messages);
-    }
-
-    private static void UpdateTimedLogText(TMP_Text text, List<TimedLogMessage> messages)
-    {
-        text.text = string.Join("\n", messages.ConvertAll(entry => entry.message));
-    }
-
-    private static TMP_Text FindLogTextInScene(Scene scene)
-    {
-        if (!scene.IsValid() || !scene.isLoaded)
-            return null;
-
-        foreach (GameObject root in scene.GetRootGameObjects())
-        {
-            foreach (TMP_Text text in root.GetComponentsInChildren<TMP_Text>(true))
-                if (text.gameObject.name == "[Log Text]")
-                    return text;
-        }
-
-        return null;
-    }
+    #region Combat state
 
     public void SetInCombat(bool value)
     {
         isInCombat = value;
-        UpdatePauseBackpackButton();
+        OnCombatStateChanged?.Invoke(value);
     }
 
-    public void ToggleBeeper()
-    {
-        if (isInCombat || paused || inputManager == null ||
-            (inputManager.CurrentMap != INPUTACTION_MAP.Dungeon &&
-             inputManager.CurrentMap != INPUTACTION_MAP.Social))
-            return;
+    #endregion
 
-        if (beeperController == null)
+    #region Consumables
+
+    /// <summary>
+    /// Applies a consumable to a party member outside of combat and removes one from the backpack.
+    /// Returns false (and logs why) if nothing was consumed.
+    /// </summary>
+    public bool TryUseConsumable(ConsumableSO consumable, Core.CombatSystem.Units.PartyMemberData member)
+    {
+        if (member?.definition == null || consumable == null)
         {
-            Debug.LogError($"[{nameof(GameManager)}] Beeper is not assigned or does not have a " +
-                           $"{nameof(Beeper)} component.", this);
-            return;
+            Debug.LogWarning($"[{nameof(GameManager)}] Cannot use the selected consumable on an invalid party member.", this);
+            return false;
         }
 
-        beeperController.Toggle();
-    }
-
-    private void FindPauseBackpackButton()
-    {
-        if (pauseMenu == null)
-            return;
-
-        foreach (Button button in pauseMenu.GetComponentsInChildren<Button>(true))
+        PartyBackpack partyBackpack = PartyBackpack.Instance;
+        if (partyBackpack == null)
         {
-            for (int i = 0; i < button.onClick.GetPersistentEventCount(); i++)
-            {
-                if (button.onClick.GetPersistentTarget(i) != this ||
-                    button.onClick.GetPersistentMethodName(i) != nameof(OpenPartyBackpack))
-                    continue;
-
-                pauseBackpackButton = button;
-                return;
-            }
+            Debug.LogError($"[{nameof(GameManager)}] No {nameof(PartyBackpack)} instance is available.", this);
+            return false;
         }
 
-        Debug.LogWarning($"[{nameof(GameManager)}] Could not find the pause-menu button " +
-                         $"wired to {nameof(OpenPartyBackpack)}.", this);
-    }
-
-    private void UpdatePauseBackpackButton()
-    {
-        if (pauseBackpackButton != null)
-            pauseBackpackButton.interactable = !isInCombat;
-    }
-    public void SelectBackpackSlotIndex(int index)
-    {
-        if (backpackSlotViews.Count == 0)
+        bool itemAvailable = false;
+        foreach (BackpackSlot slot in partyBackpack.backpackSlots)
         {
-            selectedBackpackSlot = null;
-            backpackIndex = 0;
-            return;
+            if (slot.consumableSO != consumable || slot.quantity <= 0)
+                continue;
+
+            itemAvailable = true;
+            break;
         }
 
-        index = Mathf.Clamp(index, 0, backpackSlotViews.Count - 1);
-        backpackIndex = index;
+        if (!itemAvailable)
+        {
+            Debug.LogWarning($"[{nameof(GameManager)}] The selected consumable is no longer available.", this);
+            return false;
+        }
 
-        BackpackSlotUI slotUI = backpackSlotViews[index];
-        SelectBackpackSlot(slotUI);
-    }
-    public void OpenOptions()
-    {
-        SetPauseMenuPanelActive(optionsPanel, nameof(optionsPanel));
+        int maxValue;
+        switch (consumable.statType)
+        {
+            case STAT_TYPE.HP:
+                maxValue = Mathf.Max(0, member.definition.maxHP);
+                member.currentHP = RestoreStat(member.currentHP, maxValue, consumable.restoreAmount);
+                break;
+
+            case STAT_TYPE.SP:
+                maxValue = Mathf.Max(0, member.definition.maxSP);
+                member.currentSP = RestoreStat(member.currentSP, maxValue, consumable.restoreAmount);
+                break;
+
+            default:
+                Debug.LogWarning($"[{nameof(GameManager)}] Consumable '{consumable.name}' " +
+                                 $"targets {consumable.statType}, which cannot be used in the overworld.", this);
+                return false;
+        }
+
+        partyBackpack.RemoveConsumable(consumable, 1);
+        return true;
     }
 
-    public void SetLanguageEnglish()
+    private static int RestoreStat(int currentValue, int maxValue, int restoreAmount)
     {
-        SetLocale(0);
+        int current = currentValue < 0 ? maxValue : Mathf.Clamp(currentValue, 0, maxValue);
+        int amount = Mathf.Min(maxValue - current, Mathf.Max(0, restoreAmount));
+        return current + amount;
     }
 
-    public void SetLanguageSpanish()
-    {
-        SetLocale(1);
-    }
+    #endregion
 
-    public void SetLanguageJapanese()
-    {
-        SetLocale(2);
-    }
+    #region Language
 
-    public void SetLanguageChinese()
-    {
-        SetLocale(3);
-    }
+    public void SetLanguageEnglish() => SetLocale(0);
+
+    public void SetLanguageSpanish() => SetLocale(1);
+
+    public void SetLanguageJapanese() => SetLocale(2);
+
+    public void SetLanguageChinese() => SetLocale(3);
 
     private void SetLocale(int localeIndex)
     {
@@ -405,38 +229,9 @@ public class GameManager : MonoBehaviour
         LocalizationSettings.SelectedLocale = locales[localeIndex];
     }
 
-    private void SetPauseMenuPanelActive(GameObject panel, string panelName)
-    {
-        if (panel == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] {panelName} is not assigned.", this);
-            return;
-        }
+    #endregion
 
-        if (mainPanel == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] {nameof(mainPanel)} is not assigned.", this);
-            return;
-        }
-
-        mainPanel.SetActive(true);
-        if (partyOverviewPanel != panel && partyOverviewPanel != null)
-            partyOverviewPanel.SetActive(false);
-        if (partyBackpackPanel != panel && partyBackpackPanel != null)
-            partyBackpackPanel.SetActive(false);
-        if (optionsPanel != panel && optionsPanel != null)
-            optionsPanel.SetActive(false);
-        panel.SetActive(true);
-        SelectFirstControl(panel);
-    }
-
-    private void ClosePauseMenuPanel()
-    {
-        if (partyOverviewPanel != null) partyOverviewPanel.SetActive(false);
-        if (partyBackpackPanel != null) partyBackpackPanel.SetActive(false);
-        if (optionsPanel != null) optionsPanel.SetActive(false);
-        if (mainPanel != null) mainPanel.SetActive(false);
-    }
+    #region Scene flow
 
     public void LoadMainMenu()
     {
@@ -449,409 +244,6 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    public void TogglePauseMenu()
-    {
-        if (pauseMenu == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Pause menu is not assigned.", this);
-            return;
-        }
-
-        if (inputManager == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Cannot toggle pause because " +
-                           $"{nameof(InputManager)} is not available.", this);
-            return;
-        }
-
-        if (paused)
-        {
-            if (selectingConsumableTarget)
-                CancelConsumableTargetSelection();
-
-            if (!isInCombat)
-                inputsHints.SetActive(true);
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1f;
-            paused = false;
-            clockPause.Set(false);
-            inputManager.PopUIMap();
-        }
-        else
-        {
-            inputsHints.SetActive(false);
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0f;
-            paused = true;
-            clockPause.Set(true);
-            inputManager.PushUIMap();
-            ClosePauseMenuPanel();
-            ConfigurePauseMenuInputModule();
-            SelectFirstPauseMenuControl();
-        }
-    }
-
-    private void ConfigurePauseMenuInputModule()
-    {
-        EventSystem eventSystem = EventSystem.current;
-        if (eventSystem == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Cannot configure pause-menu navigation: " +
-                           $"{nameof(EventSystem)}.current is null.", this);
-            return;
-        }
-
-        InputSystemUIInputModule uiInputModule =
-            eventSystem.GetComponent<InputSystemUIInputModule>();
-        if (uiInputModule == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] The {nameof(EventSystem)} has no " +
-                           $"{nameof(InputSystemUIInputModule)}.", this);
-            return;
-        }
-
-        uiInputModule.enabled = false;
-        uiInputModule.move = navigateReference;
-        uiInputModule.submit = confirmReference;
-        uiInputModule.cancel = cancelReference;
-        uiInputModule.enabled = true;
-    }
-
-    private void SelectFirstPauseMenuControl()
-    {
-        EventSystem eventSystem = EventSystem.current;
-        if (eventSystem == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Cannot select a pause-menu control: " +
-                           $"{nameof(EventSystem)}.current is null.", this);
-            return;
-        }
-
-        Selectable[] controls = pauseMenu.GetComponentsInChildren<Selectable>();
-        foreach (Selectable control in controls)
-        {
-            if (control == null || !control.isActiveAndEnabled || !control.IsInteractable())
-                continue;
-
-            if (mainPanel != null &&
-                (control.transform == mainPanel.transform ||
-                 control.transform.IsChildOf(mainPanel.transform)))
-                continue;
-
-            eventSystem.SetSelectedGameObject(control.gameObject);
-            return;
-        }
-
-        Debug.LogWarning($"[{nameof(GameManager)}] Pause menu sidebar has no active, interactable " +
-                         $"{nameof(Selectable)} to focus for gamepad navigation.", this);
-    }
-
-    private void RenderBackpackSlots()
-    {
-        if (backpackPanel == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Backpack panel is not assigned.");
-            return;
-        }
-
-        GridLayoutGroup slotsLayout = backpackPanel.GetComponentInChildren<GridLayoutGroup>(true);
-        if (slotsLayout == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Backpack panel has no " +
-                           $"{nameof(GridLayoutGroup)} to contain item slots.");
-            return;
-        }
-
-        if (backpackSlotPrefab == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Backpack slot prefab is not assigned.");
-            return;
-        }
-
-        Transform slotsContainer = slotsLayout.transform;
-        foreach (BackpackSlotUI slotUI in backpackSlotViews)
-        {
-            if (slotUI != null)
-                slotUI.Selected -= HandleBackpackSlotSelected;
-        }
-
-        for (int i = slotsContainer.childCount - 1; i >= 0; i--)
-            Destroy(slotsContainer.GetChild(i).gameObject);
-        backpackSlotViews.Clear();
-        selectedBackpackSlot = null;
-        backpackIndex = 0;
-
-        if (PartyBackpack.Instance == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] No {nameof(PartyBackpack)} instance is available.");
-            return;
-        }
-
-        foreach (BackpackSlot slot in PartyBackpack.Instance.backpackSlots)
-        {
-            if (slot.consumableSO == null)
-            {
-                Debug.LogWarning($"[{nameof(GameManager)}] Skipping a backpack slot with no consumable.");
-                continue;
-            }
-
-            GameObject slotObject = Instantiate(backpackSlotPrefab, slotsContainer, false);
-            BackpackSlotUI slotUI = slotObject.GetComponent<BackpackSlotUI>();
-            if (slotUI == null ||
-                slotUI.consumableIcon == null ||
-                slotUI.consumableNameText == null ||
-                slotUI.quantityText == null ||
-                slotUI.effectText == null)
-            {
-                Debug.LogError($"[{nameof(GameManager)}] Backpack slot prefab must have a " +
-                               $"{nameof(BackpackSlotUI)} with all UI fields assigned.");
-                Destroy(slotObject);
-                return;
-            }
-
-            slotUI.consumableIcon.sprite = slot.consumableSO.itemIcon;
-            slotUI.quantityText.text = $"x {slot.quantity}";
-            slotUI.SetConsumable(slot.consumableSO);
-            slotUI.SetSelected(false);
-            slotUI.Selected += HandleBackpackSlotSelected;
-
-            Button button = slotObject.GetComponent<Button>();
-            if (button != null)
-                button.onClick.AddListener(() => HandleBackpackSlotConfirmed(slotUI));
-            else
-                slotObject.AddComponent<Button>().onClick.AddListener(() => HandleBackpackSlotConfirmed(slotUI));
-
-            backpackSlotViews.Add(slotUI);
-        }
-
-        ConfigureBackpackSlotNavigation();
-        if (backpackSlotViews.Count > 0)
-            SelectBackpackSlot(backpackSlotViews[0]);
-    }
-
-    public int GetSelectedBackpackIndex() => backpackIndex;
-
-    public ConsumableSO GetSelectedConsumable()
-    {
-        return selectedBackpackSlot != null ? selectedBackpackSlot.consumable : null;
-    }
-
-    private void HandleBackpackSlotSelected(BackpackSlotUI slotUI)
-    {
-        int index = backpackSlotViews.IndexOf(slotUI);
-        if (index >= 0)
-            backpackIndex = index;
-
-        foreach (BackpackSlotUI other in backpackSlotViews)
-            if (other != null && other != slotUI) other.SetSelected(false);
-
-        selectedBackpackSlot = slotUI;
-    }
-
-    private void SelectBackpackSlot(BackpackSlotUI slotUI)
-    {
-        if (slotUI == null) return;
-        HandleBackpackSlotSelected(slotUI);
-
-        EventSystem eventSystem = EventSystem.current;
-        if (eventSystem != null && slotUI.gameObject.activeInHierarchy &&
-            eventSystem.currentSelectedGameObject != slotUI.gameObject)
-            eventSystem.SetSelectedGameObject(slotUI.gameObject);
-    }
-
-    private void HandleBackpackSlotConfirmed(BackpackSlotUI slotUI)
-    {
-        SelectBackpackSlot(slotUI);
-        BeginConsumableTargetSelection(slotUI.consumable);
-    }
-
-    private void ConfigureBackpackSlotNavigation()
-    {
-        int count = backpackSlotViews.Count;
-        for (int i = 0; i < count; i++)
-        {
-            Button button = backpackSlotViews[i].GetComponent<Button>();
-            if (button == null) continue;
-
-            Navigation navigation = button.navigation;
-            navigation.mode = Navigation.Mode.Explicit;
-            navigation.selectOnUp = backpackSlotViews[(i + count - 1) % count].GetComponent<Button>();
-            navigation.selectOnDown = backpackSlotViews[(i + 1) % count].GetComponent<Button>();
-            button.navigation = navigation;
-        }
-    }
-
-    private void BeginConsumableTargetSelection(ConsumableSO consumable)
-    {
-        if (consumable == null)
-        {
-            Debug.LogWarning($"[{nameof(GameManager)}] Cannot use a null consumable.", this);
-            return;
-        }
-
-        if (isInCombat)
-        {
-            Debug.LogWarning($"[{nameof(GameManager)}] Use the combat backpack to consume items during combat.", this);
-            return;
-        }
-
-        if (partyOverviewPanel == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Party overview panel is not assigned.", this);
-            return;
-        }
-
-        partyOverview = partyOverviewPanel.GetComponentInChildren<PartyOverview>(true);
-        if (partyOverview == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Party overview panel has no " +
-                           $"{nameof(PartyOverview)} component.", partyOverviewPanel);
-            return;
-        }
-
-        consumableBeingUsed = consumable;
-        selectingConsumableTarget = true;
-        ShowOverworldLog("Select a unit to use this consumable on.");
-        SetPauseMenuPanelActive(partyOverviewPanel, nameof(partyOverviewPanel));
-        partyOverview.BeginConsumableTargetSelection(UseConsumableOnPartyMember);
-        SelectFirstControl(partyOverviewPanel);
-    }
-
-    private void UseConsumableOnPartyMember(Core.CombatSystem.Units.PartyMemberData member)
-    {
-        ClearDungeonLog();
-
-        if (member?.definition == null || consumableBeingUsed == null)
-        {
-            Debug.LogWarning($"[{nameof(GameManager)}] Cannot use the selected consumable on an invalid party member.", this);
-            CancelConsumableTargetSelection();
-            OpenPartyBackpack();
-            return;
-        }
-
-        PartyBackpack partyBackpack = PartyBackpack.Instance;
-        if (partyBackpack == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] No {nameof(PartyBackpack)} instance is available.", this);
-            CancelConsumableTargetSelection();
-            OpenPartyBackpack();
-            return;
-        }
-
-        bool itemAvailable = false;
-        foreach (BackpackSlot slot in partyBackpack.backpackSlots)
-        {
-            if (slot.consumableSO != consumableBeingUsed || slot.quantity <= 0)
-                continue;
-
-            itemAvailable = true;
-            break;
-        }
-
-        if (!itemAvailable)
-        {
-            Debug.LogWarning($"[{nameof(GameManager)}] The selected consumable is no longer available.", this);
-            CancelConsumableTargetSelection();
-            OpenPartyBackpack();
-            return;
-        }
-
-        int maxValue;
-        switch (consumableBeingUsed.statType)
-        {
-            case STAT_TYPE.HP:
-                maxValue = Mathf.Max(0, member.definition.maxHP);
-                member.currentHP = RestoreStat(member.currentHP, maxValue, consumableBeingUsed.restoreAmount);
-                break;
-
-            case STAT_TYPE.SP:
-                maxValue = Mathf.Max(0, member.definition.maxSP);
-                member.currentSP = RestoreStat(member.currentSP, maxValue, consumableBeingUsed.restoreAmount);
-                break;
-
-            default:
-                Debug.LogWarning($"[{nameof(GameManager)}] Consumable '{consumableBeingUsed.name}' " +
-                                 $"targets {consumableBeingUsed.statType}, which cannot be used in the overworld.", this);
-                CancelConsumableTargetSelection();
-                OpenPartyBackpack();
-                return;
-        }
-
-        partyBackpack.RemoveConsumable(consumableBeingUsed, 1);
-        partyOverview.Refresh();
-        CancelConsumableTargetSelection();
-        OpenPartyBackpack();
-    }
-
-    private void CancelConsumableTargetSelection()
-    {
-        ClearDungeonLog();
-        if (partyOverview != null)
-            partyOverview.CancelConsumableTargetSelection();
-
-        selectingConsumableTarget = false;
-        consumableBeingUsed = null;
-        partyOverview = null;
-    }
-
-    private static int RestoreStat(int currentValue, int maxValue, int restoreAmount)
-    {
-        int current = currentValue < 0 ? maxValue : Mathf.Clamp(currentValue, 0, maxValue);
-        int amount = Mathf.Min(maxValue - current, Mathf.Max(0, restoreAmount));
-        return current + amount;
-    }
-
-    private void SelectFirstControl(GameObject selectionRoot)
-    {
-        if (selectionRoot == null)
-            return;
-
-        EventSystem eventSystem = EventSystem.current;
-        if (eventSystem == null)
-        {
-            Debug.LogError($"[{nameof(GameManager)}] Cannot select a pause-menu control: " +
-                           $"{nameof(EventSystem)}.current is null.", this);
-            return;
-        }
-
-        Selectable[] controls = selectionRoot.GetComponentsInChildren<Selectable>();
-        foreach (Selectable control in controls)
-        {
-            if (control == null || !control.isActiveAndEnabled || !control.IsInteractable())
-                continue;
-
-            eventSystem.SetSelectedGameObject(control.gameObject);
-            return;
-        }
-
-        Debug.LogWarning($"[{nameof(GameManager)}] Panel '{selectionRoot.name}' has no active, " +
-                         $"interactable {nameof(Selectable)} to focus for gamepad navigation.", this);
-    }
-
-    private void OnDestroy()
-    {
-        if (navigateReference != null) Destroy(navigateReference);
-        if (confirmReference != null) Destroy(confirmReference);
-        if (cancelReference != null) Destroy(cancelReference);
-
-        if (inputManager != null)
-        {
-            inputManager.Dungeon.OpenPauseMenu.performed -= OnOpenPauseMenu;
-            inputManager.Combat.OpenPauseMenu.performed -= OnOpenPauseMenu;
-            inputManager.Social.OpenPauseMenu.performed -= OnOpenPauseMenu;
-            inputManager.UI.CancelBack.performed -= OnPauseMenuCancel;
-        }
-
-        if (paused)
-        {
-            Time.timeScale = 1f;
-            paused = false;
-        }
-
-        if (Instance == this)
-            Instance = null;
     }
 
     public static void DestroyPersistentGameObjects()
@@ -870,6 +262,8 @@ public class GameManager : MonoBehaviour
         foreach (GameObject root in persistentRoots)
             Destroy(root);
     }
+
+    #endregion
 
     // ── Public API ────────────────────────────────────────────────────────
     public bool TrySpendPesos(float amount)

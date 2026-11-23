@@ -177,7 +177,7 @@ namespace Core.CombatSystem
             if (context?.target == null || context.status == null)
                 return;
 
-            GameManager.Instance?.ShowCombatLog(
+            UIManager.Instance?.ShowCombatLog(
                 $"{context.target.Name} is affected by {context.status.statusName}.");
         }
 
@@ -186,7 +186,7 @@ namespace Core.CombatSystem
             if (context == null || context.team != UNIT_TEAM.Ally)
                 return;
 
-            GameManager.Instance?.ShowCombatLog(context.success
+            UIManager.Instance?.ShowCombatLog(context.success
                 ? "Escaped combat."
                 : "Failed to flee.");
         }
@@ -351,7 +351,7 @@ namespace Core.CombatSystem
             if (actor.SP < cost)
             {
                 Debug.Log($"[{nameof(CombatInputHandler)}] Not enough SP for {action.actionName} ({actor.SP}/{cost}).");
-                GameManager.Instance?.ShowCombatLog("Not enough SP to use that skill.");
+                UIManager.Instance?.ShowCombatLog("Not enough SP to use that skill.");
                 return;
             }
 
@@ -359,7 +359,7 @@ namespace Core.CombatSystem
             if (!resolver.IsValidTarget(actor, action, target))
             {
                 OnTargetRejected?.Invoke(target);
-                GameManager.Instance?.ShowCombatLog($"Cannot use {action.actionName} on that target.");
+                UIManager.Instance?.ShowCombatLog($"Cannot use {action.actionName} on that target.");
                 return;
             }
 
@@ -368,7 +368,7 @@ namespace Core.CombatSystem
 
             // Could not be used after all: reopen the highlight, keep the turn.
             if (resolver.ResolveSkill(actor, action, target))
-                GameManager.Instance?.ShowCombatLog($"{action.actionName} used.");
+                UIManager.Instance?.ShowCombatLog($"{action.actionName} used.");
             else
                 OpenTargetSelection();
         }
@@ -407,17 +407,17 @@ namespace Core.CombatSystem
             if (target == null || target.Team != UNIT_TEAM.Ally)
             {
                 Debug.LogWarning($"[{nameof(CombatInputHandler)}] Cannot consume '{consumable.name}' on a non-ally target.");
-                GameManager.Instance?.ShowCombatLog("Cannot use a consumable on that target.");
+                UIManager.Instance?.ShowCombatLog("Cannot use a consumable on that target.");
                 return false;
             }
 
             if (!PartyBackpack.Instance.TryConsume(actor, target, consumable))
             {
-                GameManager.Instance?.ShowCombatLog($"Could not use {consumable.itemName}.");
+                UIManager.Instance?.ShowCombatLog($"Could not use {consumable.itemName}.");
                 return false;
             }
 
-            GameManager.Instance?.ShowCombatLog($"{target.Name} used {consumable.itemName}.");
+            UIManager.Instance?.ShowCombatLog($"{target.Name} used {consumable.itemName}.");
             resolver.PlayBackpackSfx(actor);
             backpackOpen = false;
             if (CombatUIManager.Instance != null)

@@ -107,8 +107,8 @@ namespace Core
 
         private static void OnToggleBeeper(InputAction.CallbackContext context)
         {
-            if (GameManager.Instance != null)
-                GameManager.Instance.ToggleBeeper();
+            if (UIManager.Instance != null)
+                UIManager.Instance.ToggleBeeper();
         }
 
         private void Start()

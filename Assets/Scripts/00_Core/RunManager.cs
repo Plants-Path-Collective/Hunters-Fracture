@@ -47,7 +47,6 @@ namespace Core
                 return;
             }
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()

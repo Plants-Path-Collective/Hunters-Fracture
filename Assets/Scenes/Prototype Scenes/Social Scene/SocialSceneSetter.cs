@@ -12,7 +12,7 @@ namespace Core
 
         protected override void OnSceneReady()
         {
-            GameManager.Instance.inputsHints = inputsHints;
+            UIManager.Instance.inputsHints = inputsHints;
             
             Debug.Log($"[SocialSceneSetter] Scene ready — {InitialActionMap} map active.");
         }

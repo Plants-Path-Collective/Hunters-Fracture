@@ -60,7 +60,6 @@ namespace Core.QuestsSystem
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             Load();
             foreach (var pair in progress)

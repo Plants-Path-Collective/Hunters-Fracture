@@ -12096,7 +12096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 320.57004, y: -29.99179}
+  m_AnchoredPosition: {x: 320.57007, y: -29.991821}
   m_SizeDelta: {x: 399.34, y: -202.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8730874619870276548
@@ -27445,8 +27445,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3062092321243711654}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 6153991795839840670}
+        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
         m_MethodName: OpenPartyOverview
         m_Mode: 1
         m_Arguments:
@@ -31169,17 +31169,6 @@ MonoBehaviour:
   paused: 0
   cmCameraActive: {fileID: 0}
   globalVisuals: {fileID: 0}
-  inputsHints: {fileID: 0}
-  logText: {fileID: 0}
-  beeper: {fileID: 8199681457569370068}
-  pauseMenu: {fileID: 5126612662894619318}
-  mainPanel: {fileID: 2340743420663935527}
-  partyOverviewPanel: {fileID: 5540434685105947019}
-  inspectionPanel: {fileID: 3705960501577447623}
-  partyBackpackPanel: {fileID: 6718518184502590182}
-  optionsPanel: {fileID: 7989754516574738820}
-  backpackPanel: {fileID: 9021127078249880504}
-  backpackSlotPrefab: {fileID: 7129604670340397062, guid: ca6d05be68d9e92e080622c39cec57ef, type: 3}
 --- !u!114 &2808013807151873663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31450,7 +31439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6693f7487d847717b9d8ced0774fb184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.QuestManager
-  catalog: {fileID: 11400000, guid: 29a7119bd1d9ead01a6106928e196dde, type: 2}
+  quests: []
+  pollInterval: 0.25
 --- !u!1 &6148959199643272149
 GameObject:
   m_ObjectHideFlags: 0
@@ -35267,7 +35257,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8043003578075680733
 Transform:
@@ -35296,6 +35286,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ddca84ead194242812d20842766b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.UIManager
+  inputsHints: {fileID: 0}
+  beeper: {fileID: 8199681457569370068}
+  pauseMenu: {fileID: 5126612662894619318}
+  mainPanel: {fileID: 2340743420663935527}
+  partyOverviewPanel: {fileID: 5540434685105947019}
+  inspectionPanel: {fileID: 6650298354361182253}
+  partyBackpackPanel: {fileID: 6718518184502590182}
+  optionsPanel: {fileID: 7989754516574738820}
+  backpackPanel: {fileID: 8450456581460748406}
+  backpackSlotPrefab: {fileID: 7129604670340397062, guid: ca6d05be68d9e92e080622c39cec57ef, type: 3}
+  dungeonLogText: {fileID: 0}
 --- !u!1 &7159076593385358056
 GameObject:
   m_ObjectHideFlags: 0
@@ -40277,8 +40278,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3062092321243711654}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 6153991795839840670}
+        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
         m_MethodName: OpenOptions
         m_Mode: 1
         m_Arguments:
@@ -40848,7 +40849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 322.53635, y: -24.677338}
+  m_AnchoredPosition: {x: 322.53638, y: -24.677368}
   m_SizeDelta: {x: 380.6243, y: -193.1803}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9042156092197911757
@@ -44721,8 +44722,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3062092321243711654}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 6153991795839840670}
+        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
@@ -46283,8 +46284,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3062092321243711654}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 6153991795839840670}
+        m_TargetAssemblyTypeName: Core.UIManager, Assembly-CSharp
         m_MethodName: OpenPartyBackpack
         m_Mode: 1
         m_Arguments:
