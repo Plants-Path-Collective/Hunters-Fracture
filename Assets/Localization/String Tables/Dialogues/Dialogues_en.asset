@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Dialogues_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 95b4cff7b78839970ae88c3ff464b6cb, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 21030430009675776
+    m_Localized: This can't be happening... this can't be happening... where did
+      I drop it? If I don't get this package delivered, Don Cucho is going to have
+      my head...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064384
+    m_Localized: Huh? Oh, hey, kid. Sorry, I didn't see you. I'm a bit desperate
+      today.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064385
+    m_Localized: Hello. You seem... worried. What happen?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064386
+    m_Localized: I dropped a package from my bag and I don't even know where. It
+      had an Aniki Magazine and an Italian Completo inside. Don Cucho ordered it
+      for his grandson, and if I don't deliver today, they'll dock my pay... again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064387
+    m_Localized: So... you need those things again. I help. I search.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064388
+    m_Localized: Really? You'd do that for me? I don't even know your name, kid...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064389
+    m_Localized: Package lost near the sewers... Maybe the things are in chests.
+      Or in the hands of bugs. I go look.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064390
+    m_Localized: Look, if you find them, take them straight to Don Cucho. He has
+      a stall here in the market. I'd be grateful for life.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064391
+    m_Localized: Understood. I deliver package to Don Cucho.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064392
+    m_Localized: Ah, it's you again. How's the search going? I'm on edge here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064393
+    m_Localized: I search. Still not find the two things.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064394
+    m_Localized: Easy, easy... but hurry, okay? Don Cucho must have been waiting
+      for a while.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258688
+    m_Localized: 'Remember: the Aniki Magazine and the Italian Completo. Both. There
+      was all sorts of stuff in the sewers, so check the chests carefully.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258689
+    m_Localized: Chests... bugs... one of those things have what's missing. I keep
+      searching.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258690
+    m_Localized: I come back when I have everything. Or... when nothing left to check.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258691
+    m_Localized: That's it, that's it. And don't get into trouble searching, okay?
+      Thanks again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258692
+    m_Localized: And now what? Another kid with offers? No, no, no, I'm not buying
+      anything, my stall is full...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258693
+    m_Localized: No sell. I bring package. From... the mail man.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258694
+    m_Localized: The mail man? That one who drops everything? Let's see, let's see...
+      My Aniki Magazine! And the Italian Completo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258695
+    m_Localized: "My grandson has been waiting all morning for this. The magazine
+      is what he wanted most, you know? It's anime, one of those they bring from
+      Valpara\xEDso."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258696
+    m_Localized: Magazine... Aniki. Yes. I hear of that.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258697
+    m_Localized: Here, kid, so you can buy yourself something. It's not much, but
+      it's from the heart.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258698
+    m_Localized: Thank you. I... happy to help. The mail man also going to be happy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258699
+    m_Localized: Tell him to be more careful next time, okay? And that he doesn't
+      lose my completo again, my grandson doesn't forgive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258700
+    m_Localized: Is it possible? A day without dropping anything... well, it's still
+      early.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258701
+    m_Localized: Ah, it's you, kid! So? Did you deliver it? Did Don Cucho receive
+      you well?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258702
+    m_Localized: Yes. He receive package. He happy. His grandson... also happy, I
+      think.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258703
+    m_Localized: What a relief! You saved my job, really. I don't know how to thank
+      you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258704
+    m_Localized: No need thank. I help. That is all.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258705
+    m_Localized: You're a good person, kid. If you ever need something from the mail...
+      well, I can't promise much, but we'll see.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258706
+    m_Localized: And hey... if you see Don Cucho around, tell him next time the completo
+      goes with more care. But don't tell him I said that!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258707
+    m_Localized: I don't know what to do anymore... I spent the whole morning looking
+      for that package.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258708
+    m_Localized: Don Cucho is going to look at me badly when I pass by his stall.
+      And he's right...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258709
+    m_Localized: Maybe someone else will find it. Or maybe not. I mean, who's going
+      to want an old magazine and a cold completo?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258710
+    m_Localized: I better keep going with my route. Sooner or later the embarrassment
+      will pass.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

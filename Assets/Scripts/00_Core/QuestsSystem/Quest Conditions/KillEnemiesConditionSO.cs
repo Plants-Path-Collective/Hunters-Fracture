@@ -5,7 +5,7 @@ using Core.ChallengesSystem;
 namespace Core.QuestsSystem
 {
     /// <summary>Counts a challenge stat (e.g. enemies defeated) from the moment the step starts.</summary>
-    [CreateAssetMenu(fileName = "Cond_Kill", menuName = "Quests/Conditions/Kill Enemies")]
+    [CreateAssetMenu(fileName = "Cond_Kill_", menuName = "Quests/Conditions/Kill Enemies")]
     public class KillEnemiesConditionSO : QuestConditionSO
     {
         [Tooltip("Stat reported by combat (set it to the 'enemies defeated' stat).")]

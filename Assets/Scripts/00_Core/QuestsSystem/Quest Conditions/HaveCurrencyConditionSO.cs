@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Core.QuestsSystem
 {
     /// <summary>The player has at least X pesos. Optionally charges them on turn-in.</summary>
-    [CreateAssetMenu(fileName = "Cond_Pesos", menuName = "Quests/Conditions/Have Pesos")]
+    [CreateAssetMenu(fileName = "Cond_Pesos_", menuName = "Quests/Conditions/Have Pesos")]
     public class HaveCurrencyConditionSO : QuestConditionSO
     {
         [SerializeField, Min(1)] private int amount = 1000;

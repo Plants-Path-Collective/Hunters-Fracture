@@ -1,0 +1,352 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Dialogues Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Dialogues
+  m_TableCollectionNameGuidString: 95b4cff7b78839970ae88c3ff464b6cb
+  m_Entries:
+  - m_Id: 21030430009675776
+    m_Key: dialogues_lostpackage_offerconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524629
+  - m_Id: 21030430018064384
+    m_Key: dialogues_lostpackage_offerconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524630
+  - m_Id: 21030430018064385
+    m_Key: dialogues_lostpackage_offerconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524631
+  - m_Id: 21030430018064386
+    m_Key: dialogues_lostpackage_offerconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524632
+  - m_Id: 21030430018064387
+    m_Key: dialogues_lostpackage_offerconversation_line5
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524633
+  - m_Id: 21030430018064388
+    m_Key: dialogues_lostpackage_offerconversation_line6
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524634
+  - m_Id: 21030430018064389
+    m_Key: dialogues_lostpackage_offerconversation_line7
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524635
+  - m_Id: 21030430018064390
+    m_Key: dialogues_lostpackage_offerconversation_line8
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524636
+  - m_Id: 21030430018064391
+    m_Key: dialogues_lostpackage_offerconversation_line9
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524637
+  - m_Id: 21030430018064392
+    m_Key: dialogues_lostpackage_inprogressconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524638
+  - m_Id: 21030430018064393
+    m_Key: dialogues_lostpackage_inprogressconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524639
+  - m_Id: 21030430018064394
+    m_Key: dialogues_lostpackage_inprogressconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524640
+  - m_Id: 21030430022258688
+    m_Key: dialogues_lostpackage_inprogressconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524641
+  - m_Id: 21030430022258689
+    m_Key: dialogues_lostpackage_inprogressconversation_line5
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524642
+  - m_Id: 21030430022258690
+    m_Key: dialogues_lostpackage_inprogressconversation_line6
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524643
+  - m_Id: 21030430022258691
+    m_Key: dialogues_lostpackage_inprogressconversation_line7
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524644
+  - m_Id: 21030430022258692
+    m_Key: dialogues_lostpackage_turninconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524645
+  - m_Id: 21030430022258693
+    m_Key: dialogues_lostpackage_turninconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524646
+  - m_Id: 21030430022258694
+    m_Key: dialogues_lostpackage_turninconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524647
+  - m_Id: 21030430022258695
+    m_Key: dialogues_lostpackage_turninconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524648
+  - m_Id: 21030430022258696
+    m_Key: dialogues_lostpackage_turninconversation_line5
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524649
+  - m_Id: 21030430022258697
+    m_Key: dialogues_lostpackage_turninconversation_line6
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524650
+  - m_Id: 21030430022258698
+    m_Key: dialogues_lostpackage_turninconversation_line7
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524651
+  - m_Id: 21030430022258699
+    m_Key: dialogues_lostpackage_turninconversation_line8
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524652
+  - m_Id: 21030430022258700
+    m_Key: dialogues_lostpackage_completedconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524653
+  - m_Id: 21030430022258701
+    m_Key: dialogues_lostpackage_completedconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524654
+  - m_Id: 21030430022258702
+    m_Key: dialogues_lostpackage_completedconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524655
+  - m_Id: 21030430022258703
+    m_Key: dialogues_lostpackage_completedconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524656
+  - m_Id: 21030430022258704
+    m_Key: dialogues_lostpackage_completedconversation_line5
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524657
+  - m_Id: 21030430022258705
+    m_Key: dialogues_lostpackage_completedconversation_line6
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524658
+  - m_Id: 21030430022258706
+    m_Key: dialogues_lostpackage_completedconversation_line7
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524659
+  - m_Id: 21030430022258707
+    m_Key: dialogues_lostpackage_expiredconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524660
+  - m_Id: 21030430022258708
+    m_Key: dialogues_lostpackage_expiredconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524661
+  - m_Id: 21030430022258709
+    m_Key: dialogues_lostpackage_expiredconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524662
+  - m_Id: 21030430022258710
+    m_Key: dialogues_lostpackage_expiredconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524663
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 7128716119379279872
+  references:
+    version: 2
+    RefIds:
+    - rid: 6806775745308524629
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor muttering to himself, hasn't noticed Renjiro yet
+    - rid: 6806775745308524630
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor finally notices Renjiro; tired and apologetic tone
+    - rid: 6806775745308524631
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro speaks in broken Spanish (foreigner conjugation)
+    - rid: 6806775745308524632
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor explains the problem and contents; does NOT know
+          where he lost it
+    - rid: 6806775745308524633
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro offers to help on his own initiative (golden retriever
+          personality)
+    - rid: 6806775745308524634
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor is surprised; he doesn't even know Renjiro's name
+    - rid: 6806775745308524635
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'RENJIRO THINKING (internal monologue). Mechanic hint: chests/sewers/enemies'
+    - rid: 6806775745308524636
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor gives delivery target instead of asking to return
+          to him
+    - rid: 6806775745308524637
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro confirms the delivery objective
+    - rid: 6806775745308524638
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor reacts to seeing Renjiro again; anxious tone
+    - rid: 6806775745308524639
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro reports progress in broken Spanish
+    - rid: 6806775745308524640
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor urges him to hurry
+    - rid: 6806775745308524641
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Mechanic reminder: both items, chests in sewers'
+    - rid: 6806775745308524642
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: RENJIRO THINKING (internal monologue). Hint that something
+          is still missing
+    - rid: 6806775745308524643
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro leaves room for re-consulting without completing
+    - rid: 6806775745308524644
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor light humor, caring tone
+    - rid: 6806775745308524645
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Don Cucho muttering about his stall, hasn't noticed Renjiro
+          yet
+    - rid: 6806775745308524646
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro explains he brings the package
+    - rid: 6806775745308524647
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Don Cucho recognizes the mailman and gets excited about the
+          items
+    - rid: 6806775745308524648
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: "Lore: Aniki Magazine is an anime magazine from Valpara\xEDso;
+          item was for his grandson"
+    - rid: 6806775745308524649
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro reacts with mild recognition
+    - rid: 6806775745308524650
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Don Cucho gives reward; generic (system handles actual reward)
+    - rid: 6806775745308524651
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro modest, golden retriever tone
+    - rid: 6806775745308524652
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Don Cucho closes with humor, sets up Completed conversation
+    - rid: 6806775745308524653
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor muttering to himself before noticing Renjiro
+    - rid: 6806775745308524654
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor notices Renjiro, eager to know how it went
+    - rid: 6806775745308524655
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro confirms delivery in broken Spanish
+    - rid: 6806775745308524656
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor relieved, grateful tone
+    - rid: 6806775745308524657
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro modest, golden retriever tone
+    - rid: 6806775745308524658
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor hints at future missions without committing
+    - rid: 6806775745308524659
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor closes with humor, callback to Turn In
+    - rid: 6806775745308524660
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'EXPIRED: Repartidor lamenting alone, does NOT address the
+          player'
+    - rid: 6806775745308524661
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'EXPIRED: Repartidor lamenting alone'
+    - rid: 6806775745308524662
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'EXPIRED: Repartidor lamenting alone, resignation tone'
+    - rid: 6806775745308524663
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'EXPIRED: Repartidor returns to his routine, does NOT address
+          the player'
+    - rid: 7128716119379279872
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1790403597978

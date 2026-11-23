@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using Core;
 using Core.CombatSystem.Backpack;
 using Core.Clock;
+using Core.CombatSystem.Units;
 
 /// <summary>
 /// Persistent owner of global game state: pause, combat flag, money, scene flow and language.
@@ -32,6 +33,9 @@ public class GameManager : MonoBehaviour
 
     #region Serialized state
     // ── Serialized state ──────────────────────────────────────────────────────
+    [Header("Party")]
+    public AllyParty party;
+
     [Header("State")]
     [Tooltip("True while a combat encounter is currently active.")]
     public bool isInCombat = false;

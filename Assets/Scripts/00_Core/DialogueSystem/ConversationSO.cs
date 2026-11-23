@@ -4,7 +4,7 @@ using PlantsPathCo.DialogueSystem;
 
 namespace PlantsPathCo.DialogueSystem
 {
-    [CreateAssetMenu(fileName = "NewConversation", menuName = "Dialogue System/Conversation")]
+    [CreateAssetMenu(fileName = "Conversation_", menuName = "Dialogue System/Conversation")]
     public class ConversationSO : ScriptableObject
     {
         [Tooltip("Líneas en orden de reproducción.")]

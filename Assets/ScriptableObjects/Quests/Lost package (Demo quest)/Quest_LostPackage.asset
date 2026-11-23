@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bd4ef5cd65f98b0a1ea51701fdee25, type: 3}
+  m_Name: Quest_LostPackage
+  m_EditorClassIdentifier: Assembly-CSharp::Core.QuestsSystem.QuestSO
+  questID: Quest_LostPackage
+  title:
+    m_TableReference:
+      m_TableCollectionName: GUID:14d44de81cd5efc7c8c6977b5ffe7a0b
+    m_TableEntryReference:
+      m_KeyId: 22338031616
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  summary:
+    m_TableReference:
+      m_TableCollectionName: GUID:14d44de81cd5efc7c8c6977b5ffe7a0b
+    m_TableEntryReference:
+      m_KeyId: 4151290744754176
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  giverNpcID: 5
+  turnInNpcID: 8
+  prerequisiteQuests: []
+  offerPhases: 1
+  turnInPhases: 4
+  steps:
+  - description:
+      m_TableReference:
+        m_TableCollectionName: GUID:14d44de81cd5efc7c8c6977b5ffe7a0b
+      m_TableEntryReference:
+        m_KeyId: 4151365889904640
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    condition: {fileID: 11400000, guid: 3cc363922129706bcb201246b1da34e5, type: 2}
+  - description:
+      m_TableReference:
+        m_TableCollectionName: GUID:14d44de81cd5efc7c8c6977b5ffe7a0b
+      m_TableEntryReference:
+        m_KeyId: 4151432940048384
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+    condition: {fileID: 11400000, guid: 3f5e7cfb63d0324368a38c83f5f544a1, type: 2}
+  offerConversation: {fileID: 0}
+  inProgressConversation: {fileID: 0}
+  turnInConversation: {fileID: 0}
+  completedConversation: {fileID: 0}
+  expiredConversation: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []

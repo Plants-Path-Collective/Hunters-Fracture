@@ -20881,10 +20881,10 @@ GameObject:
   - component: {fileID: 1905486615}
   - component: {fileID: 1905486616}
   - component: {fileID: 1905486617}
-  - component: {fileID: 1905486618}
   - component: {fileID: 1905486619}
+  - component: {fileID: 1905486618}
   m_Layer: 0
-  m_Name: NPC1
+  m_Name: NPC_MailMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20940,7 +20940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConversationTrigger
   playing: 0
-  npcID: 100
+  npcID: 5
   conversations:
   - {fileID: 11400000, guid: 6d020c596a55ff943b71fc62a418d206, type: 2}
   request: 0
@@ -23698,6 +23698,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -70
       objectReference: {fileID: 0}
+    - target: {fileID: 2846809933403458705, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: quests.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2846809933403458705, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: 'quests.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e87d9840931d92359c24efbeb59353c, type: 2}
     - target: {fileID: 3045358026133791865, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

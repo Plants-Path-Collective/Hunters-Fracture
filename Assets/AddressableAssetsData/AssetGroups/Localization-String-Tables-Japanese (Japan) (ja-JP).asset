@@ -39,6 +39,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58b4bc3da786584c6b447b62d20fde6d
+    m_Address: Speakers_ja-JP
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja-JP
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 76334bb59857a3c70a619cacf3b35842
     m_Address: Units_Iter_ja-JP
     m_ReadOnly: 1

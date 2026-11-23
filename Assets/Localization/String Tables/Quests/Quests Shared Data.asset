@@ -16,19 +16,19 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 14d44de81cd5efc7c8c6977b5ffe7a0b
   m_Entries:
   - m_Id: 22338031616
-    m_Key: quest_test_name
+    m_Key: quests_lostpackage_tittle
     m_Metadata:
       m_Items: []
-  - m_Id: 533308445511680
-    m_Key: quest_test_desc
+  - m_Id: 4151432940048384
+    m_Key: quests_lostpackage_summary
     m_Metadata:
       m_Items: []
-  - m_Id: 63312187392
-    m_Key: quest_test_step1
+  - m_Id: 4151290744754176
+    m_Key: quests_lostpackage_cond1
     m_Metadata:
       m_Items: []
-  - m_Id: 86515077120
-    m_Key: quest_test_step2
+  - m_Id: 4151365889904640
+    m_Key: quests_lostpackage_cond2
     m_Metadata:
       m_Items: []
   m_Metadata:

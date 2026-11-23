@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Dialogues_es-CL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: es-CL
+  m_SharedData: {fileID: 11400000, guid: 95b4cff7b78839970ae88c3ff464b6cb, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 21030430009675776
+    m_Localized: "No puede ser... no puede ser... \xBFd\xF3nde se me cay\xF3? Si
+      no llego con el paquete, Don Cucho me va a linchar..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064384
+    m_Localized: "\xBFEh? Ah, hola, joven. Perdona, no te vi. Ando medio desesperado
+      hoy."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064385
+    m_Localized: "Hola. T\xFA parecer... preocupado. \xBFQu\xE9 pasar?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064386
+    m_Localized: "Se me cay\xF3 un paquete de la bolsa y no s\xE9 ni d\xF3nde. Adentro
+      iba una Revista Aniki y un Completo Italiano. Don Cucho lo pidi\xF3 para su
+      nieto, y si no llego hoy, me descuentan el sueldo... otra vez."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064387
+    m_Localized: "Entonces... t\xFA necesitar esas cosas de nuevo. Yo ayudar. Yo
+      buscar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064388
+    m_Localized: "\xBFEn serio? \xBFHar\xEDas eso por m\xED? No s\xE9 ni tu nombre,
+      joven..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064389
+    m_Localized: "Paquete perdido cerca de alcantarillas... Quiz\xE1s las cosas estar
+      en cofres. O en manos de bichos. Yo ir a mirar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064390
+    m_Localized: "Mira, si las encuentras, ll\xE9valas directo a Don Cucho. Tiene
+      un puesto aqu\xED en el mercado. Te lo agradecer\xEDa toda la vida."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064391
+    m_Localized: Entendido. Yo entregar paquete a Don Cucho.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064392
+    m_Localized: "Ah, eres t\xFA otra vez. \xBFC\xF3mo va la b\xFAsqueda? Ando con
+      los nervios de punta."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064393
+    m_Localized: "Yo buscar. Todav\xEDa no encontrar las dos cosas."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430018064394
+    m_Localized: "Tranquilo, tranquilo... pero ap\xFArate, \xBFya? Don Cucho debe
+      estar esperando hace rato."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258688
+    m_Localized: "Recuerda: la Revista Aniki y el Completo Italiano. Las dos. En
+      las alcantarillas hab\xEDa de todo, as\xED que revisa bien los cofres."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258689
+    m_Localized: Cofres... bichos... alguna de esas cosas tener lo que falta. Yo
+      seguir buscando.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258690
+    m_Localized: Yo volver cuando tener todo. O... cuando ya no quedar nada que revisar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258691
+    m_Localized: "Eso, eso. Y no te metas en problemas buscando, \xBFya? Gracias
+      de nuevo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258692
+    m_Localized: "\xBFY ahora qu\xE9? \xBFOtro joven con ofertas? No, no, no compro
+      nada, tengo el puesto lleno..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258693
+    m_Localized: "No vender. Yo traer paquete. De parte de... el se\xF1or del correo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258694
+    m_Localized: "\xBFEl del correo? \xBFEse que se le cae todo? A ver, a ver...
+      \xA1Mi Revista Aniki! \xA1Y el Completo Italiano!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258695
+    m_Localized: "Mi nieto lleva toda la ma\xF1ana esperando esto. La revista es
+      lo que m\xE1s quer\xEDa, \xBFsabes? Es de anime, de esas que traen de Valpara\xEDso."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258696
+    m_Localized: "Revista... Aniki. S\xED. Yo escuchar de eso."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258697
+    m_Localized: "Toma, joven, para que te compres algo. No es mucho, pero es de
+      coraz\xF3n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258698
+    m_Localized: "Gracias. Yo... contento de ayudar. El se\xF1or del correo tambi\xE9n
+      va a estar contento."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258699
+    m_Localized: "Dile que la pr\xF3xima vez tenga m\xE1s cuidado, \xBFya? \xA1Y
+      que no me pierda el completo otra vez, que mi nieto no perdona!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258700
+    m_Localized: "\xBFSer\xE1 posible? Un d\xEDa sin que se me caiga nada... bueno,
+      todav\xEDa es temprano."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258701
+    m_Localized: "\xA1Ah, eres t\xFA, joven! \xBFY? \xBFLo entregaste? \xBFDon Cucho
+      te recibi\xF3 bien?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258702
+    m_Localized: "S\xED. \xC9l recibir paquete. \xC9l contento. Su nieto... tambi\xE9n
+      contento, creo."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258703
+    m_Localized: "\xA1Qu\xE9 alivio! Me salvaste la pega, de verdad. No s\xE9 c\xF3mo
+      agradecerte."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258704
+    m_Localized: No necesitar agradecer. Yo ayudar. Eso es todo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258705
+    m_Localized: "Eres buena persona, joven. Si alguna vez necesitas algo del correo...
+      bueno, tampoco puedo prometer mucho, pero ah\xED veremos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258706
+    m_Localized: "Y oye... si ves a Don Cucho por ah\xED, dile que la pr\xF3xima
+      vez el completo va con m\xE1s cuidado. \xA1Pero no le digas que dije eso!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258707
+    m_Localized: "Ya no s\xE9 qu\xE9 hacer... se me pas\xF3 la ma\xF1ana entera buscando
+      ese paquete."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258708
+    m_Localized: "Don Cucho me va a mirar mal cuando pase por su puesto. Y con raz\xF3n..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258709
+    m_Localized: "Capaz que alguien m\xE1s lo encuentre. O capaz que ya no. Total,
+      \xBFqui\xE9n va a querer una revista vieja y un completo fr\xEDo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21030430022258710
+    m_Localized: "Mejor sigo con la ruta. Tarde o temprano se me va a pasar la verg\xFCenza."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

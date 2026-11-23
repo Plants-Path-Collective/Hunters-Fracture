@@ -19,15 +19,22 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 22338031616
-    m_Localized: testName
+    m_Localized: Paquete perdido
     m_Metadata:
       m_Items: []
-  - m_Id: 63312187392
-    m_Localized: step1
+  - m_Id: 4151290744754176
+    m_Localized: "El primer art\xEDculo es una \"Revista Aniki\". Puedes obtenerla
+      combatiendo en las Alcantarillas, o mediante cofres."
     m_Metadata:
       m_Items: []
-  - m_Id: 86515077120
-    m_Localized: step2
+  - m_Id: 4151365889904640
+    m_Localized: "The second item is a \u201CCompleto Italiano.\u201D You can obtain
+      it by fighting in the Sewers or by opening chests."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4151432940048384
+    m_Localized: "El repartidor postal perdi\xF3 un paquete; consigue los art\xEDculos
+      conten\xEDa y ay\xFAdale a entregarlo."
     m_Metadata:
       m_Items: []
   references:
