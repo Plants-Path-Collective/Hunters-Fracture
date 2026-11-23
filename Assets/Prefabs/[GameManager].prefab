@@ -12096,7 +12096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 320.57007, y: -29.991821}
+  m_AnchoredPosition: {x: 320.57007, y: -29.99179}
   m_SizeDelta: {x: 399.34, y: -202.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8730874619870276548
@@ -31165,6 +31165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820202f0aba526f69b7c896643850140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  party:
+    members: []
   isInCombat: 0
   paused: 0
   cmCameraActive: {fileID: 0}
@@ -37298,7 +37300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6698878876399300697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -40854,7 +40856,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 322.53638, y: -24.677368}
+  m_AnchoredPosition: {x: 322.53638, y: -24.677338}
   m_SizeDelta: {x: 380.6243, y: -193.1803}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9042156092197911757

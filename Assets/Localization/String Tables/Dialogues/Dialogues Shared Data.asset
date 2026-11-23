@@ -35,31 +35,51 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6806775745308524632
-  - m_Id: 21030430018064387
-    m_Key: dialogues_lostpackage_offerconversation_line5
+  - m_Id: 21038653638922240
+    m_Key: dialogues_lostpackage_offerconversation_line5a
     m_Metadata:
       m_Items:
-      - rid: 6806775745308524633
-  - m_Id: 21030430018064388
-    m_Key: dialogues_lostpackage_offerconversation_line6
+      - rid: 6806775745308524668
+  - m_Id: 21038653643116544
+    m_Key: dialogues_lostpackage_offerconversation_line5b
     m_Metadata:
       m_Items:
-      - rid: 6806775745308524634
-  - m_Id: 21030430018064389
-    m_Key: dialogues_lostpackage_offerconversation_line7
+      - rid: 6806775745308524669
+  - m_Id: 21038653643116545
+    m_Key: dialogues_lostpackage_offeracceptconversation_line1
     m_Metadata:
       m_Items:
-      - rid: 6806775745308524635
-  - m_Id: 21030430018064390
-    m_Key: dialogues_lostpackage_offerconversation_line8
+      - rid: 6806775745308524670
+  - m_Id: 21038653643116546
+    m_Key: dialogues_lostpackage_offeracceptconversation_line2
     m_Metadata:
       m_Items:
-      - rid: 6806775745308524636
-  - m_Id: 21030430018064391
-    m_Key: dialogues_lostpackage_offerconversation_line9
+      - rid: 6806775745308524671
+  - m_Id: 21038653643116547
+    m_Key: dialogues_lostpackage_offeracceptconversation_line3
     m_Metadata:
       m_Items:
-      - rid: 6806775745308524637
+      - rid: 6806775745308524672
+  - m_Id: 21038653643116548
+    m_Key: dialogues_lostpackage_offeracceptconversation_line4
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524673
+  - m_Id: 21038653643116549
+    m_Key: dialogues_lostpackage_offerrejectconversation_line1
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524674
+  - m_Id: 21038653643116550
+    m_Key: dialogues_lostpackage_offerrejectconversation_line2
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524675
+  - m_Id: 21038653643116551
+    m_Key: dialogues_lostpackage_offerrejectconversation_line3
+    m_Metadata:
+      m_Items:
+      - rid: 6806775745308524676
   - m_Id: 21030430018064392
     m_Key: dialogues_lostpackage_inprogressconversation_line1
     m_Metadata:
@@ -190,6 +210,14 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6806775745308524663
+  - m_Id: 21038696454377472
+    m_Key: dialogues_common_acceptquest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21038700971642880
+    m_Key: dialogues_common_rejectquest
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
@@ -214,28 +242,6 @@ MonoBehaviour:
       data:
         m_CommentText: Repartidor explains the problem and contents; does NOT know
           where he lost it
-    - rid: 6806775745308524633
-      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_CommentText: Renjiro offers to help on his own initiative (golden retriever
-          personality)
-    - rid: 6806775745308524634
-      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_CommentText: Repartidor is surprised; he doesn't even know Renjiro's name
-    - rid: 6806775745308524635
-      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_CommentText: 'RENJIRO THINKING (internal monologue). Mechanic hint: chests/sewers/enemies'
-    - rid: 6806775745308524636
-      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_CommentText: Repartidor gives delivery target instead of asking to return
-          to him
-    - rid: 6806775745308524637
-      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_CommentText: Renjiro confirms the delivery objective
     - rid: 6806775745308524638
       type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
@@ -346,6 +352,50 @@ MonoBehaviour:
       data:
         m_CommentText: 'EXPIRED: Repartidor returns to his routine, does NOT address
           the player'
+    - rid: 6806775745308524668
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: CHOICE OPTION A (ACCEPT) - Player selects to accept the quest.
+          Branches to offeracceptconversation.
+    - rid: 6806775745308524669
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: CHOICE OPTION B (REJECT) - Player selects to reject the quest.
+          Branches to offerrejectconversation. Quest remains available if spoken
+          to again.
+    - rid: 6806775745308524670
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Entered from offerconversation_line5a (ACCEPT). Repartidor
+          is surprised; he doesn't even know Renjiro's name
+    - rid: 6806775745308524671
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'RENJIRO THINKING (internal monologue). Mechanic hint: chests/sewers/enemies'
+    - rid: 6806775745308524672
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor gives delivery target instead of asking to return
+          to him
+    - rid: 6806775745308524673
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Renjiro confirms the delivery objective. Quest becomes ACTIVE
+          at end of this line.
+    - rid: 6806775745308524674
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Entered from offerconversation_line5b (REJECT). Repartidor
+          takes it with resignation.
+    - rid: 6806775745308524675
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Repartidor lamenting; quest remains available.
+    - rid: 6806775745308524676
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: 'Repartidor polite farewell. Quest remains AVAILABLE: next
+          interaction restarts offerconversation from line1.'
     - rid: 7128716119379279872
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:

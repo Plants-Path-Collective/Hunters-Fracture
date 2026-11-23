@@ -57,11 +57,11 @@ MonoBehaviour:
       m_WaitForCompletion: 0
       m_LocalVariables: []
     condition: {fileID: 11400000, guid: 3f5e7cfb63d0324368a38c83f5f544a1, type: 2}
-  offerConversation: {fileID: 0}
-  inProgressConversation: {fileID: 0}
-  turnInConversation: {fileID: 0}
-  completedConversation: {fileID: 0}
-  expiredConversation: {fileID: 0}
+  offerConversation: {fileID: 11400000, guid: 018d0800d44dc088abe577ef657787a9, type: 2}
+  inProgressConversation: {fileID: 11400000, guid: 008d73e1b0356c597a4f7ecbfa1fac66, type: 2}
+  turnInConversation: {fileID: 11400000, guid: b20e457f565943183abdaf896933a322, type: 2}
+  completedConversation: {fileID: 11400000, guid: 51bd5411a82de5d938a0dfb2dc24c836, type: 2}
+  expiredConversation: {fileID: 11400000, guid: 374d1b903725f4208a97a5288c26d793, type: 2}
   references:
     version: 2
     RefIds: []

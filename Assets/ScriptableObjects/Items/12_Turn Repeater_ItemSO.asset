@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 12_Turn Repeater_ItemSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   lockedByDefault: 0
-  itemID: 11
-  itemName: Corta Zapallo
-  itemIcon: {fileID: 21300000, guid: 95fc5ef5b1a615426a865735bf8e59fc, type: 3}
+  itemID: 12
+  itemName: Reproductor de CD
+  itemIcon: {fileID: 21300000, guid: e6fadfce58b4ef3568a58d7665fb444a, type: 3}
   itemDescription: "Al atacar o usar una t\xE9cnica, 10% (+5% por copia) de probabilidad
     de repetir el turno, justo despu\xE9s de este."
   effects:

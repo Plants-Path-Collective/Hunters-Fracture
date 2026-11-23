@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d21097661e9cb77580bda5e268ced30, type: 3}
   m_Name: ChallengeCatalog
   m_EditorClassIdentifier: Assembly-CSharp::Core.ChallengesSystem.ChallengeCatalog
-  challenges:
-  - {fileID: 11400000, guid: 38b05ed889bd9054cacee600196065dc, type: 2}
+  challenges: []
