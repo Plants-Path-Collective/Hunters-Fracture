@@ -182,6 +182,7 @@ namespace PlantsPathCo.DialogueSystem
             {
                 DialogueLine line = currentConversation.lines[lineIndex];
                 yield return PlayLine(line);
+                RunActions(line.actions);
 
                 if (line.HasAnswers())
                 {
@@ -314,12 +315,13 @@ namespace PlantsPathCo.DialogueSystem
             }
         }
 
-        // Runs the data-driven actions of the chosen answer, before its next conversation starts.
-        private void RunActions(AnswerOption option)
-        {
-            if (option.actions == null) return;
+        private void RunActions(AnswerOption option) => RunActions(option.actions);
 
-            foreach (DialogueActionSO action in option.actions)
+        private void RunActions(DialogueActionSO[] actions)
+        {
+            if (actions == null) return;
+
+            foreach (DialogueActionSO action in actions)
             {
                 if (action != null) action.Execute(currentTrigger);
             }

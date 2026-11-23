@@ -28,6 +28,10 @@ namespace PlantsPathCo.DialogueSystem
                  "(o no tener) doblaje distinto por idioma.")]
         public LocalizedAudioClip voiceLine;
 
+        [Tooltip("Actions executed when this line finishes playing, whether or not it has answers " +
+         "(e.g. turn in a quest on the last line of a thank-you conversation).")]
+        public DialogueActionSO[] actions;
+
         [Tooltip("Hasta 4 opciones de respuesta. Dejar la LocalizedString vacía para desactivar el slot.")]
         public AnswerOption[] answers = new AnswerOption[4];
 

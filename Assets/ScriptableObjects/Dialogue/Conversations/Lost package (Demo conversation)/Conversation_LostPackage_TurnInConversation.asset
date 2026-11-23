@@ -31,6 +31,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -52,6 +53,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -73,6 +75,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -94,6 +97,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -115,6 +119,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -136,6 +141,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -157,6 +163,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -178,19 +185,9 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
-    answers:
-    - answerText:
-        m_TableReference:
-          m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
-        m_TableEntryReference:
-          m_KeyId: 21048161505333248
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-      nextConversation: {fileID: 0}
-      actions:
-      - {fileID: 11400000, guid: 68df10fd07d64de9baa8247abd3805b2, type: 2}
+    actions:
+    - {fileID: 11400000, guid: 68df10fd07d64de9baa8247abd3805b2, type: 2}
+    answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
   references:

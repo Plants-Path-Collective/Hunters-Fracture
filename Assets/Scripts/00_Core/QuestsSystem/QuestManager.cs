@@ -200,12 +200,13 @@ namespace Core.QuestsSystem
             return true;
         }
 
+        #region REWARDS
         private void GrantReward(QuestSO quest, QuestReward reward)
         {
             switch (reward.type)
             {
                 case QUEST_REWARD.Lore:
-                    Debug.Log("[Quest Reward]: " + reward.loreReward.GetLocalizedString());
+                    Debug.Log("[Quest Reward] " + reward.loreReward.GetLocalizedString());
                 break;
 
                 case QUEST_REWARD.Pesos:
@@ -224,6 +225,7 @@ namespace Core.QuestsSystem
                 break;
             }
         }
+        #endregion
 
         /// <summary>Current step data for a UI. False if the quest is not Active.</summary>
         public bool TryGetCurrentStep(QuestSO quest, out QuestStep step, out int current, out int target)
