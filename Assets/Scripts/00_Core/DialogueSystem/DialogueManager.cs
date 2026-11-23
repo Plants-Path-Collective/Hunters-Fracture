@@ -383,9 +383,6 @@ namespace PlantsPathCo.DialogueSystem
             {
                 currentTrigger.playing = false;
                 currentTrigger.AdvanceConversation();
-
-                if (completed)
-                    ChallengeEvents.ReportMilestone(QuestMilestones.Talk(currentTrigger.NpcID));
             }
 
             onConversationEnd?.Invoke(currentConversation);

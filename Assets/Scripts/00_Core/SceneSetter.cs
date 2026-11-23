@@ -50,8 +50,7 @@ namespace Core
             }
 
             InputManager.Instance.ChangeActionMap(InitialActionMap);
-            OnSceneReady();
-            ChallengeEvents.ReportMilestone(QuestMilestones.SceneEntered(gameObject.scene.name));
+            OnSceneReady();      
         }
     }
 }

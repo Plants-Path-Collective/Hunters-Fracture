@@ -266,4 +266,31 @@ namespace Core
         GameOver
     }
     #endregion
+
+    #region QUESTS
+    /// <summary>
+    /// Quest lifecycle. Unavailable/Available are derived (never saved); the rest are saved.
+    /// </summary>
+    public enum QUEST_STATE
+    {
+        Unavailable,
+        Available,
+        Active,
+        ReadyToTurnIn,
+        Completed,
+        Expired
+    }
+
+    /// <summary>
+    /// Evaluation order: the first usable conversation wins.
+    /// </summary>
+    public enum Slot 
+    { 
+        TurnIn, 
+        Expired, 
+        Offer, 
+        InProgress, 
+        Completed 
+    }
+    #endregion
 }

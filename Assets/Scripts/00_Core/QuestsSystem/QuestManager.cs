@@ -1,42 +1,55 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using Core.ChallengesSystem;
 using Core.Clock;
 
 namespace Core.QuestsSystem
 {
+    [Serializable]
+    public class QuestProgress
+    {
+        public string id;
+        public QUEST_STATE state;
+        public int step;
+        public int counted;
+    }
+
+    [Serializable]
+    public class QuestSaveData
+    {
+        public int version = 1;
+        public List<QuestProgress> quests = new();
+    }
+
     /// <summary>
-    /// Persistent singleton that owns quest states and objective progress.
-    /// Objectives listen to gameplay events only while their quest is Active,
-    /// so progress counts from the moment the quest was accepted.
-    /// Time windows are evaluated lazily from GameClock (on query, on phase change and on load).
+    /// Persistent singleton that owns quest state. Quests are referenced by asset, never by string.
+    /// Only the CURRENT step of an Active quest is watched; when its condition is met the quest
+    /// moves to the next step, and after the last step it becomes ReadyToTurnIn.
     /// </summary>
     public class QuestManager : MonoBehaviour
     {
         public static QuestManager Instance { get; private set; }
 
-        [Header("Data")]
-        [Tooltip("Catalog with every quest in the game.")]
-        [SerializeField] private QuestCatalog catalog;
+        [Tooltip("Every quest in the game.")]
+        [SerializeField] private List<QuestSO> quests = new();
 
-        /// <summary>Raised when a quest changes state (quest, new state).</summary>
-        public event Action<QuestSO, QUEST_STATE> OnQuestStateChanged;
+        [Tooltip("Seconds between checks of state-based conditions (items, money).")]
+        [SerializeField, Min(0.05f)] private float pollInterval = 0.25f;
 
-        /// <summary>Raised on every objective progress change (quest, objective index, current, target).</summary>
-        public event Action<QuestSO, int, int, int> OnObjectiveProgress;
+        /// <summary>Raised when a quest changes state, advances a step or counts progress.</summary>
+        public event Action<QuestSO> OnQuestChanged;
 
-        /// <summary>The catalog used by this manager (for UI lists and console).</summary>
-        public QuestCatalog Catalog => catalog;
+        public IReadOnlyList<QuestSO> Quests => quests;
 
-        private IQuestSaveBackend backend;
-        private QuestSaveData saveData;
-        private bool isDirty;
+        private readonly Dictionary<QuestSO, QuestProgress> progress = new();
+        private readonly Dictionary<QuestSO, Action> detachers = new();
+        private readonly List<QuestSO> buffer = new();
         private GameClock subscribedClock;
+        private float pollTimer;
+        private bool dirty;
 
-        // Only Active, ReadyToTurnIn, Completed and Expired quests have an entry.
-        private readonly Dictionary<string, QuestProgress> progressByID = new();
-        private readonly Dictionary<string, List<Action>> detachers = new();
+        private string SavePath => Path.Combine(Application.persistentDataPath, "quests.json");
 
         private void Awake()
         {
@@ -46,33 +59,38 @@ namespace Core.QuestsSystem
                 return;
             }
 
-            if (catalog == null)
-            {
-                Debug.LogError("[Quests] QuestManager has no catalog assigned.", this);
-                Destroy(this);
-                return;
-            }
-
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            backend = new JsonQuestSaveBackend();
-            LoadSave();
-            AttachActiveQuests();
-
-            Debug.Log($"[Quests] Ready. {catalog.Quests.Count} quest(s). Save folder: {Application.persistentDataPath}");
+            Load();
+            foreach (var pair in progress)
+            {
+                if (pair.Value.state == QUEST_STATE.Active) ListenToStep(pair.Key, pair.Value);
+            }
         }
 
         private void Start()
         {
             if (Instance != this) return;
 
-            // GameClock may be created after this Awake, so subscribe here.
             subscribedClock = GameClock.Instance;
             if (subscribedClock != null) subscribedClock.OnPhaseChanged += HandlePhaseChanged;
-            else Debug.LogWarning("[Quests] No GameClock found: time windows are ignored.");
 
             RefreshAllExpirations();
+        }
+
+        private void Update()
+        {
+            pollTimer += Time.unscaledDeltaTime;
+            if (pollTimer < pollInterval) return;
+            pollTimer = 0f;
+
+            buffer.Clear();
+            buffer.AddRange(progress.Keys);
+            foreach (QuestSO quest in buffer)
+            {
+                if (progress[quest].state == QUEST_STATE.Active) Evaluate(quest);
+            }
         }
 
         private void OnDestroy()
@@ -80,389 +98,300 @@ namespace Core.QuestsSystem
             if (Instance != this) return;
 
             if (subscribedClock != null) subscribedClock.OnPhaseChanged -= HandlePhaseChanged;
-
-            foreach (List<Action> attached in detachers.Values)
-            {
-                foreach (Action detach in attached) detach?.Invoke();
-            }
-
+            foreach (Action detach in detachers.Values) detach?.Invoke();
             detachers.Clear();
             Instance = null;
         }
 
-        private void OnApplicationQuit() => SaveIfDirty();
+        private void OnApplicationQuit()
+        {
+            if (dirty) Save();
+        }
 
         #region Public API
 
-        /// <summary>
-        /// Returns the current state of a quest. Also expires it if its turn-in window already passed.
-        /// </summary>
+        /// <summary>Current state. Also expires the quest if its turn-in window already passed.</summary>
         public QUEST_STATE GetState(QuestSO quest)
         {
             if (quest == null) return QUEST_STATE.Unavailable;
 
             RefreshExpiration(quest);
 
-            if (progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return progress.state;
-            return ArePrerequisitesMet(quest) ? QUEST_STATE.Available : QUEST_STATE.Unavailable;
+            if (progress.TryGetValue(quest, out QuestProgress p)) return p.state;
+            return PrerequisitesMet(quest) ? QUEST_STATE.Available : QUEST_STATE.Unavailable;
         }
 
-        /// <summary>Returns the current state of a quest by ID (Unavailable if the ID is unknown).</summary>
-        public QUEST_STATE GetState(string questID) =>
-            catalog.TryGet(questID, out QuestSO quest) ? GetState(quest) : QUEST_STATE.Unavailable;
-
-        /// <summary>Returns true if the quest was turned in during this run.</summary>
-        public bool IsCompleted(string questID) =>
-            progressByID.TryGetValue(questID, out QuestProgress p) && p.state == QUEST_STATE.Completed;
-
         /// <summary>Accepts an Available quest inside its offer window.</summary>
-        public bool Accept(string questID) => Accept(questID, out _);
-
-        /// <summary>Accepts an Available quest inside its offer window.</summary>
-        /// <param name="failReason">Why it was refused, or null on success.</param>
-        public bool Accept(string questID, out string failReason)
+        public bool Accept(QuestSO quest, out string failReason)
         {
-            if (!catalog.TryGet(questID, out QuestSO quest))
-            {
-                failReason = $"Unknown quest '{questID}'.";
-                return false;
-            }
+            if (quest == null) { failReason = "No quest assigned."; return false; }
 
             QUEST_STATE state = GetState(quest);
             if (state != QUEST_STATE.Available)
             {
-                failReason = $"'{questID}' is {state}, not Available.";
+                failReason = $"'{quest.name}' is {state}, not Available.";
                 return false;
             }
 
             if (!InOfferWindow(quest))
             {
-                failReason = $"'{questID}' cannot be accepted during {GameClock.Instance.CurrentPhase}.";
+                failReason = $"'{quest.name}' cannot be accepted during {GameClock.Instance.CurrentPhase}.";
                 return false;
             }
 
-            if (!quest.HasValidObjectives(out string objectiveError))
+            if (!quest.HasValidSteps(out string error))
             {
-                failReason = $"'{questID}' has invalid objectives: {objectiveError}";
+                failReason = $"'{quest.name}': {error}";
                 return false;
             }
 
-            var progress = new QuestProgress { id = quest.questID };
-            progressByID[quest.questID] = progress;
+            var p = new QuestProgress { id = quest.questID, state = QUEST_STATE.Active };
+            progress[quest] = p;
+            ListenToStep(quest, p);
 
-            AttachObjectives(quest);
-            SetState(quest, progress, QUEST_STATE.Active);
-
-            // A quest without objectives is already done.
-            CheckObjectivesMet(quest, progress);
+            Save();
+            OnQuestChanged?.Invoke(quest);
+            Evaluate(quest); // steps may already be satisfied (e.g. the player already owns the item)
 
             failReason = null;
             return true;
         }
 
         /// <summary>Turns in a ReadyToTurnIn quest inside its turn-in window.</summary>
-        public bool TryTurnIn(string questID) => TryTurnIn(questID, out _);
-
-        /// <summary>Turns in a ReadyToTurnIn quest inside its turn-in window.</summary>
-        /// <param name="failReason">Why it was refused, or null on success.</param>
-        public bool TryTurnIn(string questID, out string failReason)
+        public bool TryTurnIn(QuestSO quest, out string failReason)
         {
-            if (!catalog.TryGet(questID, out QuestSO quest))
-            {
-                failReason = $"Unknown quest '{questID}'.";
-                return false;
-            }
+            if (quest == null) { failReason = "No quest assigned."; return false; }
 
             QUEST_STATE state = GetState(quest);
             if (state != QUEST_STATE.ReadyToTurnIn)
             {
-                failReason = $"'{questID}' is {state}, not ReadyToTurnIn.";
+                failReason = $"'{quest.name}' is {state}, not ReadyToTurnIn.";
                 return false;
             }
 
             if (!InTurnInWindow(quest))
             {
-                failReason = $"'{questID}' cannot be turned in during {GameClock.Instance.CurrentPhase}.";
+                failReason = $"'{quest.name}' cannot be turned in during {GameClock.Instance.CurrentPhase}.";
                 return false;
             }
 
-            Complete(quest, progressByID[quest.questID]);
+            foreach (QuestStep step in quest.steps)
+            {
+                if (step.condition != null && !step.condition.CanConsume())
+                {
+                    failReason = $"'{quest.name}': the requirements are no longer met.";
+                    return false;
+                }
+            }
+
+            foreach (QuestStep step in quest.steps) step.condition?.Consume();
+
+            progress[quest].state = QUEST_STATE.Completed;
+            Save();
+            OnQuestChanged?.Invoke(quest);
+
             failReason = null;
             return true;
         }
 
-        /// <summary>Gets current progress and target of an objective (for UI).</summary>
-        public (int current, int target) GetObjectiveProgress(QuestSO quest, int objectiveIndex)
+        /// <summary>Current step data for a UI. False if the quest is not Active.</summary>
+        public bool TryGetCurrentStep(QuestSO quest, out QuestStep step, out int current, out int target)
         {
-            if (quest == null || quest.objectives == null ||
-                objectiveIndex < 0 || objectiveIndex >= quest.objectives.Count)
-                return (0, 0);
+            step = null; current = 0; target = 0;
+            if (quest == null || !progress.TryGetValue(quest, out QuestProgress p)) return false;
+            if (p.state != QUEST_STATE.Active || p.step >= quest.steps.Count) return false;
 
-            QuestObjectiveSO objective = quest.objectives[objectiveIndex];
-            if (objective == null) return (0, 0);
-            if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return (0, objective.Target);
-            return (progress.GetValue(objective.ObjectiveID), objective.Target);
-        }
-
-        /// <summary>
-        /// Clears every quest state and progress, and the save file. Called when a new run begins.
-        /// </summary>
-        public void BeginRun()
-        {
-            var affected = new List<string>(progressByID.Keys);
-
-            foreach (List<Action> attached in detachers.Values)
-            {
-                foreach (Action detach in attached) detach?.Invoke();
-            }
-
-            detachers.Clear();
-            progressByID.Clear();
-            isDirty = true;
-            Save();
-
-            foreach (string id in affected)
-            {
-                if (catalog.TryGet(id, out QuestSO quest)) OnQuestStateChanged?.Invoke(quest, GetState(quest));
-            }
-        }
-
-        /// <summary>Writes to disk only if something changed.</summary>
-        public void SaveIfDirty()
-        {
-            if (isDirty && backend != null) Save();
-        }
-
-        #endregion
-
-        #region Internals
-
-        private void LoadSave()
-        {
-            saveData = backend.Load();
-
-            progressByID.Clear();
-            foreach (QuestProgress progress in saveData.quests)
-            {
-                if (progress == null || string.IsNullOrEmpty(progress.id)) continue;
-
-                if (!catalog.TryGet(progress.id, out _))
-                {
-                    Debug.LogWarning($"[Quests] Saved quest '{progress.id}' is not in the catalog, dropped.");
-                    isDirty = true;
-                    continue;
-                }
-
-                progress.steps ??= new List<QuestObjectiveProgress>();
-                progressByID[progress.id] = progress;
-            }
-        }
-
-        private void Save()
-        {
-            saveData.quests.Clear();
-            saveData.quests.AddRange(progressByID.Values);
-
-            backend.Save(saveData);
-            isDirty = false;
-        }
-
-        private void AttachActiveQuests()
-        {
-            foreach (QuestProgress progress in progressByID.Values)
-            {
-                if (progress.state != QUEST_STATE.Active) continue;
-                if (catalog.TryGet(progress.id, out QuestSO quest)) AttachObjectives(quest);
-            }
-        }
-
-        private void AttachObjectives(QuestSO quest)
-        {
-            DetachObjectives(quest.questID);
-
-            var attached = new List<Action>();
-            if (quest.objectives == null)
-            {
-                Debug.LogError($"[Quests] '{quest.questID}' has a null objectives list.", quest);
-                detachers[quest.questID] = attached;
-                return;
-            }
-
-            for (int i = 0; i < quest.objectives.Count; i++)
-            {
-                QuestObjectiveSO objective = quest.objectives[i];
-                if (objective == null)
-                {
-                    Debug.LogError($"[Quests] '{quest.questID}' has no objective assigned at index {i}.", quest);
-                    continue;
-                }
-
-                int index = i;
-                Action detach = objective.Subscribe(delta => AddObjectiveProgress(quest, index, delta));
-                if (detach == null)
-                {
-                    Debug.LogError($"[Quests] Objective '{objective.ObjectiveID}' returned no unsubscribe action.", objective);
-                    continue;
-                }
-
-                attached.Add(detach);
-            }
-
-            detachers[quest.questID] = attached;
-        }
-
-        private void DetachObjectives(string questID)
-        {
-            if (!detachers.Remove(questID, out List<Action> attached)) return;
-
-            foreach (Action detach in attached) detach?.Invoke();
-        }
-
-        private void AddObjectiveProgress(QuestSO quest, int index, int delta)
-        {
-            if (delta <= 0 || index < 0 || index >= quest.objectives.Count) return;
-            if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return;
-
-            RefreshExpiration(quest);
-            if (progress.state != QUEST_STATE.Active) return;
-
-            QuestObjectiveSO objective = quest.objectives[index];
-            int previous = progress.GetValue(objective.ObjectiveID);
-            int current = Mathf.Min(previous + delta, objective.Target);
-            if (current == previous) return;
-
-            progress.SetValue(objective.ObjectiveID, current);
-            isDirty = true;
-
-            Debug.Log($"[Quests] {quest.questID}/{objective.ObjectiveID}: {current}/{objective.Target}");
-
-            OnObjectiveProgress?.Invoke(quest, index, current, objective.Target);
-            CheckObjectivesMet(quest, progress);
-        }
-
-        private void CheckObjectivesMet(QuestSO quest, QuestProgress progress)
-        {
-            if (progress.state != QUEST_STATE.Active) return;
-
-            if (quest.objectives == null) return;
-
-            foreach (QuestObjectiveSO objective in quest.objectives)
-            {
-                if (objective == null) return;
-                if (progress.GetValue(objective.ObjectiveID) < objective.Target) return;
-            }
-
-            DetachObjectives(quest.questID);
-
-            if (quest.autoComplete) Complete(quest, progress);
-            else SetState(quest, progress, QUEST_STATE.ReadyToTurnIn);
-        }
-
-        private void Complete(QuestSO quest, QuestProgress progress)
-        {
-            DetachObjectives(quest.questID);
-            SetState(quest, progress, QUEST_STATE.Completed);
-            GrantRewards(quest);
-
-            // Bridge with challenges: a challenge with a MilestoneConditionSO can listen to this.
-            ChallengeEvents.ReportMilestone(QuestMilestones.QuestCompleted(quest.questID));
-        }
-
-        private void Expire(QuestSO quest, QuestProgress progress)
-        {
-            DetachObjectives(quest.questID);
-            SetState(quest, progress, QUEST_STATE.Expired);
-
-            foreach (QuestConsequenceSO consequence in quest.expirationConsequences)
-            {
-                if (consequence != null) consequence.Execute(this, quest);
-            }
-        }
-
-        private void SetState(QuestSO quest, QuestProgress progress, QUEST_STATE state)
-        {
-            progress.state = state;
-            isDirty = true;
-            Save();
-
-            Debug.Log($"[Quests] {quest.questID} -> {state}");
-            OnQuestStateChanged?.Invoke(quest, state);
-        }
-
-        private void GrantRewards(QuestSO quest)
-        {
-            if (quest.rewards.Count == 0) return;
-
-            ChallengeManager challenges = ChallengeManager.Instance;
-            if (challenges == null)
-            {
-                Debug.LogWarning($"[Quests] No ChallengeManager: rewards of '{quest.questID}' were not granted.");
-                return;
-            }
-
-            foreach (ChallengeRewardSO reward in quest.rewards)
-            {
-                if (reward != null) reward.Grant(challenges);
-            }
-
-            challenges.SaveIfDirty();
-        }
-
-        private bool ArePrerequisitesMet(QuestSO quest)
-        {
-            foreach (QuestSO required in quest.prerequisiteQuests)
-            {
-                if (required == null) continue;
-                if (!IsCompleted(required.questID)) return false;
-            }
-
-            if (quest.prerequisiteUnlockKeys.Count == 0) return true;
-
-            ChallengeManager challenges = ChallengeManager.Instance;
-            if (challenges == null) return false;
-
-            foreach (string key in quest.prerequisiteUnlockKeys)
-            {
-                if (!string.IsNullOrEmpty(key) && !challenges.IsUnlocked(key)) return false;
-            }
-
+            step = quest.steps[p.step];
+            target = step.condition != null ? step.condition.Target : 0;
+            current = step.condition != null ? Mathf.Min(step.condition.GetCurrent(p.counted), target) : 0;
             return true;
         }
 
-        private void HandlePhaseChanged(DAY_PHASE previous, DAY_PHASE next) => RefreshAllExpirations();
+        /// <summary>Index of the current step (0-based). -1 if the quest has no progress.</summary>
+        public int GetStepIndex(QuestSO quest) =>
+            progress.TryGetValue(quest, out QuestProgress p) ? p.step : -1;
 
-        private void RefreshAllExpirations()
+        /// <summary>Clears every quest. Call it when a new run/cycle starts.</summary>
+        public void BeginRun()
         {
-            foreach (QuestSO quest in catalog.Quests)
-            {
-                if (quest != null) RefreshExpiration(quest);
-            }
+            buffer.Clear();
+            buffer.AddRange(progress.Keys);
+
+            foreach (Action detach in detachers.Values) detach?.Invoke();
+            detachers.Clear();
+            progress.Clear();
+            Save();
+
+            foreach (QuestSO quest in buffer) OnQuestChanged?.Invoke(quest);
         }
 
-        private void RefreshExpiration(QuestSO quest)
-        {
-            if (!progressByID.TryGetValue(quest.questID, out QuestProgress progress)) return;
-            if (progress.state != QUEST_STATE.Active && progress.state != QUEST_STATE.ReadyToTurnIn) return;
-
-            GameClock clock = GameClock.Instance;
-            if (clock == null) return;
-
-            if (quest.IsPastTurnInWindow(clock.CurrentPhase)) Expire(quest, progress);
-        }
-
-        // Without a clock (test scenes) every window counts as open.
-        /// <summary>True if the quest can be offered right now (always true without a clock).</summary>
         public static bool InOfferWindow(QuestSO quest)
         {
             GameClock clock = GameClock.Instance;
             return clock == null || quest.AllowsOffer(clock.CurrentPhase);
         }
 
-        /// <summary>True if the quest can be turned in right now (always true without a clock).</summary>
         public static bool InTurnInWindow(QuestSO quest)
         {
             GameClock clock = GameClock.Instance;
             return clock == null || quest.AllowsTurnIn(clock.CurrentPhase);
+        }
+
+        #endregion
+
+        #region Steps
+
+        // Moves the quest forward while the current step is complete. Returns true if anything changed.
+        private bool Evaluate(QuestSO quest)
+        {
+            if (!progress.TryGetValue(quest, out QuestProgress p)) return false;
+
+            bool changed = false;
+            while (p.state == QUEST_STATE.Active)
+            {
+                if (p.step >= quest.steps.Count)
+                {
+                    Detach(quest);
+                    p.state = QUEST_STATE.ReadyToTurnIn;
+                    changed = true;
+                    break;
+                }
+
+                QuestConditionSO condition = quest.steps[p.step].condition;
+                if (condition != null && condition.GetCurrent(p.counted) < condition.Target) break;
+
+                Detach(quest);
+                p.step++;
+                p.counted = 0;
+                changed = true;
+                ListenToStep(quest, p);
+            }
+
+            if (changed)
+            {
+                Save();
+                OnQuestChanged?.Invoke(quest);
+            }
+
+            return changed;
+        }
+
+        private void ListenToStep(QuestSO quest, QuestProgress p)
+        {
+            Detach(quest);
+            if (p.step >= quest.steps.Count) return;
+
+            QuestConditionSO condition = quest.steps[p.step].condition;
+            if (condition == null) return;
+
+            Action detach = condition.Listen(delta => OnStepEvent(quest, delta));
+            if (detach != null) detachers[quest] = detach;
+        }
+
+        private void OnStepEvent(QuestSO quest, int delta)
+        {
+            if (delta <= 0 || !progress.TryGetValue(quest, out QuestProgress p)) return;
+            if (p.state != QUEST_STATE.Active) return;
+
+            p.counted += delta;
+            dirty = true;
+
+            if (!Evaluate(quest)) OnQuestChanged?.Invoke(quest); // counted progress, same step
+        }
+
+        private void Detach(QuestSO quest)
+        {
+            if (detachers.Remove(quest, out Action detach)) detach?.Invoke();
+        }
+
+        #endregion
+
+        #region Time and prerequisites
+
+        private void HandlePhaseChanged(DAY_PHASE previous, DAY_PHASE next) => RefreshAllExpirations();
+
+        private void RefreshAllExpirations()
+        {
+            buffer.Clear();
+            buffer.AddRange(progress.Keys);
+            foreach (QuestSO quest in buffer) RefreshExpiration(quest);
+        }
+
+        private void RefreshExpiration(QuestSO quest)
+        {
+            if (!progress.TryGetValue(quest, out QuestProgress p)) return;
+            if (p.state != QUEST_STATE.Active && p.state != QUEST_STATE.ReadyToTurnIn) return;
+
+            GameClock clock = GameClock.Instance;
+            if (clock == null || !quest.IsPastTurnInWindow(clock.CurrentPhase)) return;
+
+            Detach(quest);
+            p.state = QUEST_STATE.Expired;
+            Save();
+            OnQuestChanged?.Invoke(quest);
+        }
+
+        private bool PrerequisitesMet(QuestSO quest)
+        {
+            foreach (QuestSO required in quest.prerequisiteQuests)
+            {
+                if (required == null) continue;
+                if (!progress.TryGetValue(required, out QuestProgress p) || p.state != QUEST_STATE.Completed)
+                    return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region Save
+
+        private void Load()
+        {
+            if (!File.Exists(SavePath)) return;
+
+            try
+            {
+                var data = JsonUtility.FromJson<QuestSaveData>(File.ReadAllText(SavePath));
+                if (data?.quests == null) return;
+
+                foreach (QuestProgress p in data.quests)
+                {
+                    QuestSO quest = quests.Find(q => q != null && q.questID == p.id);
+                    if (quest == null)
+                    {
+                        Debug.LogWarning($"[Quests] Saved quest '{p.id}' no longer exists, dropped.");
+                        dirty = true;
+                        continue;
+                    }
+
+                    progress[quest] = p;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Quests] Could not read {SavePath}: {e.Message}");
+            }
+        }
+
+        private void Save()
+        {
+            var data = new QuestSaveData();
+            data.quests.AddRange(progress.Values);
+
+            try
+            {
+                string temp = SavePath + ".tmp";
+                File.WriteAllText(temp, JsonUtility.ToJson(data, true));
+                File.Copy(temp, SavePath, true);
+                File.Delete(temp);
+                dirty = false;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Quests] Could not write {SavePath}: {e.Message}");
+            }
         }
 
         #endregion

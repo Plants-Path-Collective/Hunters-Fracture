@@ -638,12 +638,6 @@ public class GameManager : MonoBehaviour
         return selectedBackpackSlot != null ? selectedBackpackSlot.consumable : null;
     }
 
-    /*public bool TryConsumeSelectedBackpackItem(InputManager inputHandler)
-    {
-        ConsumableSO consumable = GetSelectedConsumable();
-        if (consumable == null || inputHandler == null) return false;
-        return inputHandler.ConsumeSelectedItem(consumable);
-    }*/
     private void HandleBackpackSlotSelected(BackpackSlotUI slotUI)
     {
         int index = backpackSlotViews.IndexOf(slotUI);
@@ -875,5 +869,13 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject root in persistentRoots)
             Destroy(root);
+    }
+
+    // ── Public API ────────────────────────────────────────────────────────
+    public bool TrySpendPesos(float amount)
+    {
+        if (pesos < amount) return false;
+        pesos -= amount;
+        return true;
     }
 }

@@ -4,47 +4,25 @@ using PlantsPathCo.DialogueSystem;
 namespace Core.QuestsSystem
 {
     /// <summary>
-    /// Selects quest conversations for the NPC on the same GameObject.
-    /// Equal-priority quests are resolved in QuestCatalog order.
+    /// Picks the quest conversation for the NPC on this GameObject.
+    /// A quest conversation slot that is empty is skipped, so the NPC falls back to its regular conversation.
     /// </summary>
     [RequireComponent(typeof(ConversationTrigger))]
     public class NpcQuestGiver : MonoBehaviour, IConversationOverride
     {
-        private enum ConversationPriority
-        {
-            TurnIn,
-            Expired,
-            Offer,
-            Reminder,
-            OfferClosed,
-            Completed
-        }
 
         private ConversationTrigger trigger;
         private QuestManager manager;
 
-        private void Awake()
-        {
-            trigger = GetComponent<ConversationTrigger>();
-        }
+        private void Awake() => trigger = GetComponent<ConversationTrigger>();
 
-        private void Start()
-        {
-            if (!BindManager())
-                Debug.LogError($"[{nameof(NpcQuestGiver)}] No QuestManager found for '{name}'.", this);
-        }
+        private void OnEnable() => Bind();
 
-        private void OnEnable()
-        {
-            if (trigger == null) trigger = GetComponent<ConversationTrigger>();
-            BindManager();
-        }
+        private void Start() => Bind();
 
         private void OnDisable()
         {
-            if (manager != null)
-                manager.OnQuestStateChanged -= HandleQuestStateChanged;
-
+            if (manager != null) manager.OnQuestChanged -= HandleQuestChanged;
             manager = null;
             if (trigger != null) trigger.SetRequest(false);
         }
@@ -52,19 +30,14 @@ namespace Core.QuestsSystem
         public bool TryGetConversation(out ConversationSO conversation)
         {
             conversation = null;
-            if (!isActiveAndEnabled || trigger == null || !BindManager()) return false;
+            if (!isActiveAndEnabled || !Bind()) return false;
 
-            var quests = manager.Catalog.Quests;
-            for (int priority = 0; priority <= (int)ConversationPriority.Completed; priority++)
+            foreach (Slot slot in System.Enum.GetValues(typeof(Slot)))
             {
-                foreach (QuestSO quest in quests)
+                foreach (QuestSO quest in manager.Quests)
                 {
-                    if (quest == null ||
-                        !TryGetConversationAtPriority(quest, trigger.NpcID, (ConversationPriority)priority, out ConversationSO candidate))
-                        continue;
-
-                    if (candidate == null || candidate.lines == null || candidate.lines.Length == 0)
-                        Debug.LogWarning($"[{nameof(NpcQuestGiver)}] Quest '{quest.questID}' has no valid conversation for priority {(ConversationPriority)priority}.", this);
+                    ConversationSO candidate = Pick(quest, slot);
+                    if (candidate == null || candidate.lines == null || candidate.lines.Length == 0) continue;
 
                     conversation = candidate;
                     return true;
@@ -74,114 +47,68 @@ namespace Core.QuestsSystem
             return false;
         }
 
-        private bool BindManager()
+        private ConversationSO Pick(QuestSO quest, Slot slot)
+        {
+            if (quest == null) return null;
+
+            QUEST_STATE state = manager.GetState(quest);
+            bool isGiver = quest.giverNpcID == trigger.NpcID;
+            bool isTurnIn = quest.EffectiveTurnInNpcID == trigger.NpcID;
+
+            switch (slot)
+            {
+                case Slot.TurnIn:
+                    return state == QUEST_STATE.ReadyToTurnIn && isTurnIn && QuestManager.InTurnInWindow(quest)
+                        ? quest.turnInConversation : null;
+                case Slot.Expired:
+                    return state == QUEST_STATE.Expired && isTurnIn ? quest.expiredConversation : null;
+                case Slot.Offer:
+                    return state == QUEST_STATE.Available && isGiver && QuestManager.InOfferWindow(quest)
+                        ? quest.offerConversation : null;
+                case Slot.InProgress:
+                    return (state == QUEST_STATE.Active || state == QUEST_STATE.ReadyToTurnIn) && isGiver
+                        ? quest.inProgressConversation : null;
+                case Slot.Completed:
+                    return state == QUEST_STATE.Completed && isTurnIn ? quest.completedConversation : null;
+            }
+
+            return null;
+        }
+
+        private bool Bind()
         {
             if (manager != null) return true;
 
             manager = QuestManager.Instance;
             if (manager == null) return false;
 
-            manager.OnQuestStateChanged += HandleQuestStateChanged;
+            manager.OnQuestChanged += HandleQuestChanged;
             RefreshRequest();
             return true;
         }
 
-        private bool TryGetConversationAtPriority(
-            QuestSO quest,
-            int npcID,
-            ConversationPriority priority,
-            out ConversationSO conversation)
-        {
-            conversation = null;
-            QUEST_STATE state = manager.GetState(quest);
-            bool isGiver = quest.giverNpcID == npcID;
-            bool isTurnInNpc = quest.EffectiveTurnInNpcID == npcID;
-            bool matched = false;
+        private void HandleQuestChanged(QuestSO quest) => RefreshRequest();
 
-            switch (priority)
-            {
-                case ConversationPriority.TurnIn:
-                    if (state == QUEST_STATE.ReadyToTurnIn &&
-                        isTurnInNpc &&
-                        QuestManager.InTurnInWindow(quest))
-                    {
-                        matched = true;
-                        conversation = quest.turnInConversation;
-                    }
-                    break;
-
-                case ConversationPriority.Expired:
-                    if (state == QUEST_STATE.Expired && isTurnInNpc)
-                    {
-                        matched = true;
-                        conversation = quest.expiredConversation;
-                    }
-                    break;
-
-                case ConversationPriority.Offer:
-                    if (state == QUEST_STATE.Available &&
-                        isGiver &&
-                        QuestManager.InOfferWindow(quest))
-                    {
-                        matched = true;
-                        conversation = quest.offerConversation;
-                    }
-                    break;
-
-                case ConversationPriority.Reminder:
-                    bool waitingOutsideTurnInWindow =
-                        state == QUEST_STATE.ReadyToTurnIn && !QuestManager.InTurnInWindow(quest);
-                    if ((state == QUEST_STATE.Active || waitingOutsideTurnInWindow) && isGiver)
-                    {
-                        matched = true;
-                        conversation = quest.reminderConversation;
-                    }
-                    break;
-
-                case ConversationPriority.OfferClosed:
-                    if (state == QUEST_STATE.Available &&
-                        isGiver &&
-                        !QuestManager.InOfferWindow(quest))
-                    {
-                        matched = true;
-                        conversation = quest.offerClosedConversation;
-                    }
-                    break;
-
-                case ConversationPriority.Completed:
-                    if (state == QUEST_STATE.Completed && isTurnInNpc)
-                    {
-                        matched = true;
-                        conversation = quest.completedConversation;
-                    }
-                    break;
-            }
-
-            return matched;
-        }
-
-        private void HandleQuestStateChanged(QuestSO changed, QUEST_STATE state) => RefreshRequest();
-
+        // While this NPC has a pending quest, the regular conversation index must not advance.
         private void RefreshRequest()
         {
             if (trigger == null || manager == null) return;
 
-            bool hasPendingQuest = false;
-            foreach (QuestSO quest in manager.Catalog.Quests)
+            bool pending = false;
+            foreach (QuestSO quest in manager.Quests)
             {
-                if (quest == null ||
-                    (quest.giverNpcID != trigger.NpcID && quest.EffectiveTurnInNpcID != trigger.NpcID))
+                if (quest == null || (quest.giverNpcID != trigger.NpcID && quest.EffectiveTurnInNpcID != trigger.NpcID))
                     continue;
 
                 QUEST_STATE state = manager.GetState(quest);
                 if (state == QUEST_STATE.Active || state == QUEST_STATE.ReadyToTurnIn)
                 {
-                    hasPendingQuest = true;
+                    pending = true;
                     break;
                 }
             }
 
-            trigger.SetRequest(hasPendingQuest);
+            trigger.SetRequest(pending);
         }
     }
 }
