@@ -161,13 +161,19 @@ namespace Player
 
         private void OnTriggerEnter(Collider other)
         {
+            #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log($"[{nameof(PlayerController)}] Trigger enter: '{other.name}' (tag: {other.tag}).", this);
+            #endif
+            
             UpdateNearbyInteractables(other, true);
         }
 
         private void OnTriggerExit(Collider other)
         {
+            #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.Log($"[{nameof(PlayerController)}] Trigger exit: '{other.name}' (tag: {other.tag}).", this);
+            #endif
+
             UpdateNearbyInteractables(other, false);
         }
 

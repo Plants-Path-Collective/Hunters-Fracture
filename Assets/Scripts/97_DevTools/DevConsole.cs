@@ -584,7 +584,9 @@ namespace DevTools
         private static void Consume(KeyDownEvent evt)
         {
             evt.StopImmediatePropagation();
-            evt.PreventDefault();
+            evt.StopPropagation();
+            
+            // evt.PreventDefault();
         }
 
         private void SetInput(string text)

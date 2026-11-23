@@ -11,30 +11,56 @@ using Core.Clock;
 
 /// <summary>
 /// Persistent owner of global game state: pause, combat flag, money, scene flow and language.
-/// It never touches UI objects directly; <see cref="UIManager"/> reacts to the events below.
+/// It never touches UI objects directly; <see cref="UIManager"/> reacts to the events exposed here.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    #region Singleton
+    // ── Singleton ─────────────────────────────────────────────────────────────
+    /// <summary>Global accessor for the single active instance of the GameManager.</summary>
     public static GameManager Instance { get; private set; }
+    #endregion
 
+    #region Events
+    // ── Events ────────────────────────────────────────────────────────────────
     /// <summary>Raised after the pause state changes. The argument is the new paused state.</summary>
     public event Action<bool> OnPauseChanged;
 
     /// <summary>Raised after <see cref="SetInCombat"/>. The argument is the new combat state.</summary>
     public event Action<bool> OnCombatStateChanged;
+    #endregion
 
+    #region Serialized state
+    // ── Serialized state ──────────────────────────────────────────────────────
+    [Header("State")]
+    [Tooltip("True while a combat encounter is currently active.")]
     public bool isInCombat = false;
+
+    [Tooltip("True while the game is paused (timeScale is 0).")]
     public bool paused = false;
+
+    [Header("Scene References")]
+    [Tooltip("Cinemachine camera currently being used by the game.")]
     public GameObject cmCameraActive;
+
+    [Tooltip("Global 3D models that do not belong to any specific zone (floor, trees, etc.).")]
     public GameObject globalVisuals;
+    #endregion
 
-    // Money
+    #region Internal state
+    // ── Internal state ────────────────────────────────────────────────────────
+    /// <summary>Currency the player currently holds.</summary>
     private float pesos;
-    public float Pesos => pesos;
 
+    /// <summary>Cached <see cref="InputManager"/> resolved in <see cref="Start"/>.</summary>
     private InputManager inputManager;
-    private readonly ClockPauseHandle clockPause = new(CLOCK_PAUSE_REASON.Menu);
 
+    /// <summary>Pause handle pushed into the game clock while paused.</summary>
+    private readonly ClockPauseHandle clockPause = new(CLOCK_PAUSE_REASON.Menu);
+    #endregion
+
+    #region Unity lifecycle
+    // ── Unity lifecycle ───────────────────────────────────────────────────────
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -42,6 +68,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -56,19 +83,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        inputManager.Dungeon.OpenPauseMenu.performed += OnOpenPauseMenu;
-        inputManager.Combat.OpenPauseMenu.performed += OnOpenPauseMenu;
-        inputManager.Social.OpenPauseMenu.performed += OnOpenPauseMenu;
+        SubscribeToPauseInput();
     }
 
     private void OnDestroy()
     {
-        if (inputManager != null)
-        {
-            inputManager.Dungeon.OpenPauseMenu.performed -= OnOpenPauseMenu;
-            inputManager.Combat.OpenPauseMenu.performed -= OnOpenPauseMenu;
-            inputManager.Social.OpenPauseMenu.performed -= OnOpenPauseMenu;
-        }
+        UnsubscribeFromPauseInput();
 
         if (paused)
         {
@@ -80,10 +100,29 @@ public class GameManager : MonoBehaviour
             Instance = null;
     }
 
-    #region Pause
+    private void SubscribeToPauseInput()
+    {
+        inputManager.Dungeon.OpenPauseMenu.performed += OnOpenPauseMenu;
+        inputManager.Combat.OpenPauseMenu.performed  += OnOpenPauseMenu;
+        inputManager.Social.OpenPauseMenu.performed  += OnOpenPauseMenu;
+    }
 
+    private void UnsubscribeFromPauseInput()
+    {
+        if (inputManager == null)
+            return;
+
+        inputManager.Dungeon.OpenPauseMenu.performed -= OnOpenPauseMenu;
+        inputManager.Combat.OpenPauseMenu.performed  -= OnOpenPauseMenu;
+        inputManager.Social.OpenPauseMenu.performed  -= OnOpenPauseMenu;
+    }
+    #endregion
+
+    #region Pause
+    // ── Pause ─────────────────────────────────────────────────────────────────
     private void OnOpenPauseMenu(InputAction.CallbackContext context) => TogglePauseMenu();
 
+    /// <summary>Opens the pause menu if the game is running, or resumes it if paused.</summary>
     public void TogglePauseMenu() => SetPaused(!paused);
 
     private void SetPaused(bool value)
@@ -117,21 +156,20 @@ public class GameManager : MonoBehaviour
 
         OnPauseChanged?.Invoke(value);
     }
-
     #endregion
 
     #region Combat state
-
+    // ── Combat state ──────────────────────────────────────────────────────────
+    /// <summary>Updates the global combat flag and notifies listeners.</summary>
     public void SetInCombat(bool value)
     {
         isInCombat = value;
         OnCombatStateChanged?.Invoke(value);
     }
-
     #endregion
 
     #region Consumables
-
+    // ── Consumables ───────────────────────────────────────────────────────────
     /// <summary>
     /// Applies a consumable to a party member outside of combat and removes one from the backpack.
     /// Returns false (and logs why) if nothing was consumed.
@@ -196,18 +234,14 @@ public class GameManager : MonoBehaviour
         int amount = Mathf.Min(maxValue - current, Mathf.Max(0, restoreAmount));
         return current + amount;
     }
-
     #endregion
 
     #region Language
-
-    public void SetLanguageEnglish() => SetLocale(0);
-
-    public void SetLanguageSpanish() => SetLocale(1);
-
+    // ── Language ──────────────────────────────────────────────────────────────
+    public void SetLanguageEnglish()  => SetLocale(0);
+    public void SetLanguageSpanish()  => SetLocale(1);
     public void SetLanguageJapanese() => SetLocale(2);
-
-    public void SetLanguageChinese() => SetLocale(3);
+    public void SetLanguageChinese()  => SetLocale(3);
 
     private void SetLocale(int localeIndex)
     {
@@ -228,11 +262,11 @@ public class GameManager : MonoBehaviour
 
         LocalizationSettings.SelectedLocale = locales[localeIndex];
     }
-
     #endregion
 
     #region Scene flow
-
+    // ── Scene flow ────────────────────────────────────────────────────────────
+    /// <summary>Tears down persistent objects and loads the main menu scene.</summary>
     public void LoadMainMenu()
     {
         Time.timeScale = 1f;
@@ -241,11 +275,13 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync("Main Menu - CombatDemo", LoadSceneMode.Single);
     }
 
+    /// <summary>Quits the application.</summary>
     public void QuitGame()
     {
         Application.Quit();
     }
 
+    /// <summary>Destroys every DontDestroyOnLoad root object (used when returning to the main menu).</summary>
     public static void DestroyPersistentGameObjects()
     {
         List<GameObject> persistentRoots = new();
@@ -262,14 +298,19 @@ public class GameManager : MonoBehaviour
         foreach (GameObject root in persistentRoots)
             Destroy(root);
     }
-
     #endregion
 
-    // ── Public API ────────────────────────────────────────────────────────
+    #region Money
+    // ── Money ─────────────────────────────────────────────────────────────────
+    /// <summary>Amount of currency the player currently holds.</summary>
+    public float Pesos => pesos;
+
+    /// <summary>Tries to deduct <paramref name="amount"/> pesos. Returns false if the player cannot afford it.</summary>
     public bool TrySpendPesos(float amount)
     {
         if (pesos < amount) return false;
         pesos -= amount;
         return true;
     }
+    #endregion
 }
