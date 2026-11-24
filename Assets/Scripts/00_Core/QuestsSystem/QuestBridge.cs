@@ -36,5 +36,29 @@ namespace Core.QuestsSystem
 
             return total;
         }
+
+        public static bool TryRemoveItem(ItemSO item, int amount)
+        {
+            AllyParty party = GameManager.Instance != null ? GameManager.Instance.party : null;
+            if (item == null || party == null || amount <= 0 || CountItem(item) < amount) return false;
+
+            int remaining = amount;
+            foreach (PartyMemberData member in party.Members)
+            {
+                if (remaining <= 0) break;
+                if (member?.inventorySnapshot == null ||
+                    !member.inventorySnapshot.TryGetValue(item.itemID, out int quantity) ||
+                    quantity <= 0)
+                    continue;
+
+                int taken = Mathf.Min(quantity, remaining);
+                remaining -= taken;
+
+                if (quantity - taken <= 0) member.inventorySnapshot.Remove(item.itemID);
+                else member.inventorySnapshot[item.itemID] = quantity - taken;
+            }
+
+            return true;
+        }
     }
 }

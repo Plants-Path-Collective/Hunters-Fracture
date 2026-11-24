@@ -324,4 +324,11 @@ public class GameManager : MonoBehaviour
         currentBalance = pesos;
     }
     #endregion
+
+    #region PARTY
+    public void SetCurrentParty(AllyParty newParty)
+    {
+        party = newParty;
+    }
+    #endregion
 }

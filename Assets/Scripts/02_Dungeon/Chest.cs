@@ -69,7 +69,8 @@ namespace Dungeon
             Vector3 targetRot = new Vector3(135, 0, 0);
             lidPivot.transform.DORotate(targetRot, 0.75f);
 
-            ItemAssignationPanel.Instance.IntializeAssignationPanel(rewards);
+            ItemAssignationController.TryOpen(rewards);
+            
             Debug.Log("[Chest] Giving reward.");
         }
 

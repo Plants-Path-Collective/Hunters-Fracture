@@ -13,11 +13,23 @@ namespace Dungeon
     /// </summary>
     public class PlayerEntity : Entity
     {
+        public static PlayerEntity Instance;
+
         [Header("----- Combat -----")]
         [SerializeField] private AllyParty party = new();
         public AllyParty Party => party;
 
         private bool subscribed;
+
+        protected override void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
+
+            base.Awake();
+        }
 
         private void Start()
         {
@@ -25,7 +37,7 @@ namespace Dungeon
 
             if (!subscribed)
             {
-                Debug.LogWarning($"[{nameof(PlayerEntity)}] InputManager.Instance is null — " +
+                Debug.LogWarning($"[PlayerEntity] InputManager.Instance is null — " +
                 "the persistent GameManager likely hasn't loaded yet (are you Play-ing this " +
                 "scene directly instead of going through the boot scene?). Attack input won't work.");
             }
@@ -39,6 +51,13 @@ namespace Dungeon
             UnsubscribeAttack();
         }
 
+        public void SetCurrentParty(AllyParty newParty)
+        {
+            party = newParty;
+
+            Debug.Log("[PlayerEntity] New paty set");
+        }
+
         protected override bool CanHit(Entity target) => target is EnemyEntity;
 
         private void SubscribeAttack()
@@ -48,7 +67,7 @@ namespace Dungeon
             InputManager.Instance.Dungeon.Attack.performed += OnAttackInput;
             subscribed = true;
             #if  UNITY_EDITOR || DEVELOPMENT_BUILD
-            Debug.Log($"[{nameof(PlayerEntity)}] Attack subscribed (map: {InputManager.Instance.CurrentMap}).");
+            Debug.Log($"[PlayerEntity] Attack subscribed (map: {InputManager.Instance.CurrentMap}).");
             #endif
         }
 
@@ -63,7 +82,7 @@ namespace Dungeon
 
         private void OnAttackInput(InputAction.CallbackContext ctx)
         {
-            Debug.Log($"[{nameof(PlayerEntity)}] Attack input received (map: {InputManager.Instance.CurrentMap}).");
+            Debug.Log($"[PlayerEntity] Attack input received (map: {InputManager.Instance.CurrentMap}).");
             TryAttack();
         }
         

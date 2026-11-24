@@ -1,3 +1,4 @@
+using Dungeon;
 using TMPro;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace Core
             UIManager.Instance.inputsHints = inputHints;
             UIManager.Instance.dungeonLogText = logText.GetComponent<TextMeshProUGUI>();
             GameManager.Instance.globalVisuals = globalVisuals;
+
+            PlayerEntity.Instance.SetCurrentParty(GameManager.Instance.party);
 
             Debug.Log($"[DungeonSceneSetter] Scene ready — {InitialActionMap} map active.");
         }
