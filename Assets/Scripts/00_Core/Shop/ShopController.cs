@@ -49,11 +49,6 @@ namespace Core.Shop
             root.style.display = DisplayStyle.None;
         }
 
-        private void Start()
-        {
-            if (debugCatalog != null) Open(debugCatalog);
-        }
-
         private void OnDisable()
         {
             if (closeButton != null) closeButton.clicked -= Close;
