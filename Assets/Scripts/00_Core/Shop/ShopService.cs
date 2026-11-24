@@ -38,5 +38,13 @@ namespace Core.Shop
             Purchased?.Invoke(entry);
             return PURCHASE_RESULT.Success;
         }
+
+        public void Refund(ShopEntry entry)
+        {
+            if (entry == null || !stock.ContainsKey(entry)) return;
+
+            if (stock[entry] >= 0) stock[entry]++; // -1 = unlimited, leave it alone
+            GameManager.Instance.AddBalance(entry.Price);
+        }
     }
 }

@@ -1,17 +1,19 @@
 using System;
 using System.Globalization;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Core.UI;
+using Core.CombatSystem.ItemSystem;
+using Core.CombatSystem.Backpack;
 
 namespace Core.Shop
 {
     [RequireComponent(typeof(UIDocument))]
     public class ShopController : MonoBehaviour
     {
+        private readonly Dictionary<ShopCatalogSO, ShopService> services = new();
         [SerializeField] private VisualTreeAsset itemTemplate;
-        [Tooltip("Optional: lets you test by opening this catalog on start.")]
-        [SerializeField] private ShopCatalogSO debugCatalog;
-
         private static readonly CultureInfo Clp = new("es-CL");
 
         private UIDocument document;
@@ -67,8 +69,12 @@ namespace Core.Shop
 
             Unsubscribe();
 
-            service = new ShopService(catalog);
-            service.Purchased += OnPurchased;
+            if (!services.TryGetValue(catalog, out service))
+            {
+                service = new ShopService(catalog);
+                services[catalog] = service;
+            }
+
             GameManager.Instance.PesosChanged += OnPesosChanged;
 
             title.text = catalog.ShopName;
@@ -89,7 +95,6 @@ namespace Core.Shop
 
         private void Unsubscribe()
         {
-            if (service != null) service.Purchased -= OnPurchased;
             if (GameManager.Instance != null) GameManager.Instance.PesosChanged -= OnPesosChanged;
         }
 
@@ -127,23 +132,82 @@ namespace Core.Shop
 
         private void OnBuyClicked(ShopEntry entry)
         {
-            status.text = service.TryPurchase(entry) switch
+            // Items go through the assignment UI: don't take the money if it can't open.
+            if (entry.Product is ItemSO)
             {
-                PURCHASE_RESULT.Success => $"Bought {entry.Product.DisplayName}!",
-                PURCHASE_RESULT.NotEnoughPesos => "Not enough pesos.",
-                PURCHASE_RESULT.OutOfStock => "Out of stock.",
-                _ => "Something went wrong."
-            };
+                var assignation = ItemAssignationController.Instance;
+                if (assignation == null || assignation.IsOpen)
+                {
+                    status.text = "Can't buy right now.";
+                    return;
+                }
+            }
 
+            var s = service;
+            PURCHASE_RESULT result = s.TryPurchase(entry);
+
+            if (result != PURCHASE_RESULT.Success)
+            {
+                status.text = result switch
+                {
+                    PURCHASE_RESULT.NotEnoughPesos => "Not enough pesos.",
+                    PURCHASE_RESULT.OutOfStock => "Out of stock.",
+                    _ => "Something went wrong."
+                };
+                RebuildRows();
+                return;
+            }
+
+            if (!Deliver(s, entry))
+            {
+                s.Refund(entry);
+                status.text = "Couldn't deliver the item. You were refunded.";
+                RebuildRows();
+                return;
+            }
+
+            status.text = $"Bought {entry.Product.DisplayName}!";
+            ItemPurchased?.Invoke(entry.Product);
             RebuildRows();
         }
 
-        private void OnPurchased(ShopEntry entry) => ItemPurchased?.Invoke(entry.Product);
+        private bool Deliver(ShopService s, ShopEntry entry)
+        {
+            switch (entry.Product)
+            {
+                case ItemSO item:
+                    bool opened = ItemAssignationController.TryOpen(
+                        new[] { item },
+                        leftover =>
+                        {
+                            // Only possible with allowLeaveItems on: the player left without taking it.
+                            if (leftover.Count > 0) s.Refund(entry);
+                        });
+
+                    if (opened) Close(); // the assignment UI pauses the clock and switches the input map
+                    return opened;
+
+                case ConsumableSO consumable:
+                    if (PartyBackpack.Instance == null) return false; // triggers the refund
+                    PartyBackpack.Instance.AddConsumable(consumable, 1);
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         private void OnPesosChanged(float _) => RefreshBalance();
 
         private void RefreshBalance() => balance.text = FormatPesos(GameManager.Instance.Pesos);
 
         private static string FormatPesos(float amount) => "$ " + amount.ToString("N0", Clp);
+    
+        public void ResetStock()
+        {
+            ShopCatalogSO current = IsOpen && service != null ? service.Catalog : null;
+            services.Clear();
+            if (current != null) Open(current);
+        }
     }
 }

@@ -23964,11 +23964,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 322.53632
+      value: 322.53647
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.677551
+      value: -24.677643
       objectReference: {fileID: 0}
     - target: {fileID: 1026861588720341945, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_fontAsset
@@ -25264,11 +25264,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320.57
+      value: 320.57016
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29.992004
+      value: -29.992096
       objectReference: {fileID: 0}
     - target: {fileID: 6153991795839840670, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: inputsHints
@@ -25573,6 +25573,10 @@ PrefabInstance:
     - target: {fileID: 8016586719817181554, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8084215047172807203, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 4.999939
       objectReference: {fileID: 0}
     - target: {fileID: 8100402035000130088, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchorMax.y
