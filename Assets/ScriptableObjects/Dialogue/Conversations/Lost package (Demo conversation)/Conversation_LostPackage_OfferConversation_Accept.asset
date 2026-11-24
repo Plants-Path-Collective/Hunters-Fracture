@@ -31,10 +31,11 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
-  - speaker: {fileID: 11400000, guid: 84c1d7671f65a7491975d82c0245338d, type: 2}
+  - speaker: {fileID: 11400000, guid: fbf1f5ddd2dc97ffa9dc2c9e99f95db7, type: 2}
     dialogueText:
       m_TableReference:
         m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
@@ -52,10 +53,11 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
-  - speaker: {fileID: 11400000, guid: fbf1f5ddd2dc97ffa9dc2c9e99f95db7, type: 2}
+  - speaker: {fileID: 11400000, guid: 84c1d7671f65a7491975d82c0245338d, type: 2}
     dialogueText:
       m_TableReference:
         m_TableCollectionName: GUID:95b4cff7b78839970ae88c3ff464b6cb
@@ -73,6 +75,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -94,6 +97,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
@@ -115,6 +119,7 @@ MonoBehaviour:
         m_Key: 
       m_FallbackState: 0
       m_WaitForCompletion: 0
+    actions: []
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0

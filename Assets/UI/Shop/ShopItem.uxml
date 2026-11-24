@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="shop-item">
+        <ui:VisualElement name="item-icon" class="shop-item__icon" />
+        <ui:VisualElement class="shop-item__info">
+            <ui:Label name="item-name" class="shop-item__name" />
+            <ui:Label name="item-desc" class="shop-item__desc" />
+        </ui:VisualElement>
+        <ui:Label name="item-stock" class="shop-item__stock" />
+        <ui:Button name="item-buy" class="shop-item__buy" />
+    </ui:VisualElement>
+</ui:UXML>

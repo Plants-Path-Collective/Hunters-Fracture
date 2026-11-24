@@ -15,6 +15,13 @@ namespace Core.CombatSystem.Backpack
         public STAT_TYPE statType;
         public int restoreAmount;
 
-        // Add any other properties or methods related to consumables here
+        [Header("IShopProduct")]
+        public string DisplayName =>
+            localizedItemName.IsEmpty ? itemName : localizedItemName.GetLocalizedString();
+
+        public string Description =>
+            localizedEffect.IsEmpty ? effect : localizedEffect.GetLocalizedString();
+
+        public Sprite Icon => itemIcon;
     }
 }

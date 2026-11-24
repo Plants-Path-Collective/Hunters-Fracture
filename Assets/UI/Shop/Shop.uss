@@ -1,0 +1,50 @@
+.shop-overlay {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-window {
+    width: 600px;
+    max-height: 80%;
+    padding: 16px;
+    background-color: rgb(32, 34, 40);
+    border-radius: 12px;
+}
+
+.shop-header {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.shop-title { font-size: 24px; color: white; -unity-font-style: bold; }
+.shop-balance { font-size: 20px; color: rgb(255, 214, 90); }
+
+.shop-list { flex-shrink: 1; min-height: 120px; }
+
+.shop-item {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 6px;
+    background-color: rgb(46, 49, 58);
+    border-radius: 8px;
+}
+
+.shop-item__icon {
+    width: 48px; height: 48px;
+    margin-right: 12px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-item__info { flex-grow: 1; flex-shrink: 1; }
+.shop-item__name { color: white; font-size: 16px; -unity-font-style: bold; }
+.shop-item__desc { color: rgb(170, 175, 190); font-size: 12px; white-space: normal; }
+.shop-item__stock { color: rgb(170, 175, 190); font-size: 12px; margin-right: 12px; }
+.shop-item__buy { min-width: 90px; height: 32px; }
+
+.shop-status { color: rgb(255, 214, 90); min-height: 20px; margin-top: 8px; -unity-text-align: middle-center; }
+.shop-close { margin-top: 8px; height: 32px; }

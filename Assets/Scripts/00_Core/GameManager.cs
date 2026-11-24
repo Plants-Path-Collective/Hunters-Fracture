@@ -309,19 +309,27 @@ public class GameManager : MonoBehaviour
     /// <summary>Amount of currency the player currently holds.</summary>
     public float Pesos => pesos;
     [ReadOnly] public float currentBalance;
+    public event Action<float> PesosChanged;
+
+    private void NotifyPesosChanged()
+    {
+        currentBalance = pesos;
+        PesosChanged?.Invoke(pesos);
+    }
 
     /// <summary>Tries to deduct <paramref name="amount"/> pesos. Returns false if the player cannot afford it.</summary>
     public bool TrySpendPesos(float amount)
     {
-        if (pesos < amount) return false;
+        if (amount < 0f || pesos < amount) return false;
         pesos -= amount;
+        NotifyPesosChanged();
         return true;
     }
 
     public void AddBalance(float amount)
     {
         pesos += amount;
-        currentBalance = pesos;
+        NotifyPesosChanged();
     }
     #endregion
 

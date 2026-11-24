@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Shop.uss" />
+    <ui:VisualElement name="shop-root" class="shop-overlay">
+        <ui:VisualElement class="shop-window">
+            <ui:VisualElement class="shop-header">
+                <ui:Label name="shop-title" text="Shop" class="shop-title" />
+                <ui:Label name="shop-balance" text="$ 0" class="shop-balance" />
+            </ui:VisualElement>
+            <ui:ScrollView name="shop-list" class="shop-list" />
+            <ui:Label name="shop-status" class="shop-status" />
+            <ui:Button name="shop-close" text="Close" class="shop-close" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -302,4 +302,14 @@ namespace Core
         KeyItem
     }
     #endregion
+
+    #region SHOP
+    public enum PURCHASE_RESULT 
+    { 
+        Success, 
+        NotEnoughPesos, 
+        OutOfStock, 
+        InvalidEntry 
+    }
+    #endregion
 }

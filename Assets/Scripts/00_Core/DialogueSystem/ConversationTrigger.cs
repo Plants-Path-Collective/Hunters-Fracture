@@ -1,10 +1,13 @@
 using UnityEngine;
 using PlantsPathCo.DialogueSystem;
 using Player;
+using Core.Shop;
 
 [RequireComponent(typeof(Collider))]
 public class ConversationTrigger : MonoBehaviour, IPlayerInteractable
 {
+    public ShopController shopController;
+    public ShopCatalogSO shopCatalog;
     [ReadOnly] public bool playing;
     
     [Header("NPC")]
@@ -55,6 +58,12 @@ public class ConversationTrigger : MonoBehaviour, IPlayerInteractable
     {
         if (!playerInRange || playing)
             return;
+
+        if (gameObject.CompareTag("ShopKeeper"))
+        {
+            shopController.Open(shopCatalog);
+            return;
+        }
 
         ConversationSO conversation;
         bool isOverride = false;

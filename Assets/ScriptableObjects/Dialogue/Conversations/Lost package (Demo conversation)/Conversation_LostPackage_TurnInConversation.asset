@@ -187,6 +187,7 @@ MonoBehaviour:
       m_WaitForCompletion: 0
     actions:
     - {fileID: 11400000, guid: 68df10fd07d64de9baa8247abd3805b2, type: 2}
+    - {fileID: 11400000, guid: 68df10fd07d64de9baa8247abd3805b2, type: 2}
     answers: []
     noResponseConversation: {fileID: 0}
     answerTimeout: 0
