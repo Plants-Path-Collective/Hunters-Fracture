@@ -13,6 +13,7 @@ namespace Core.CombatSystem.ItemSystem
 
         [Tooltip("Unique identifier for this item.")]
         public int itemID; // Unique identifier
+        public ITEM_QUALITY quality = ITEM_QUALITY.Common;
         public string itemName;
         public Sprite itemIcon;
         [TextArea(2, 4)] public string itemDescription;

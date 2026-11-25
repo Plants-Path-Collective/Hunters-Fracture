@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ef97f3b73f92199af7c172fa5469fb, type: 3}
+  m_Name: ShopCatalog_Callejon
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Shop.ShopCatalogSO
+  shopName: Callejon
+  entries:
+  - product: {fileID: 11400000, guid: 1dd8b4c5929214759a45c25f2ffb7a99, type: 2}
+    price: 3000
+    stock: 20
+  - product: {fileID: 11400000, guid: be85c4800a8c7a1b1a40883b114ba703, type: 2}
+    price: 1000
+    stock: 10
+  itemPool: {fileID: 11400000, guid: ee62c6ab2a24b764089231f52f76e876, type: 2}
+  randomItemSlots: 4
+  priceStep: 100
+  commonPrice:
+    min: 700
+    max: 3000
+  rarePrice:
+    min: 3100
+    max: 7500

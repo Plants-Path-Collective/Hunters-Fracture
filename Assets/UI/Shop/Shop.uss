@@ -7,8 +7,9 @@
 }
 
 .shop-window {
-    width: 600px;
-    max-height: 80%;
+    width: 960px;
+    max-width: 95%;
+    max-height: 85%;
     padding: 16px;
     background-color: rgb(32, 34, 40);
     border-radius: 12px;
@@ -23,7 +24,28 @@
 .shop-title { font-size: 24px; color: white; -unity-font-style: bold; }
 .shop-balance { font-size: 20px; color: rgb(255, 214, 90); }
 
-.shop-list { flex-shrink: 1; min-height: 120px; }
+/* ── Two panels ── */
+.shop-body { flex-direction: row; flex-grow: 1; flex-shrink: 1; min-height: 260px; }
+
+.shop-panel {
+    padding: 8px;
+    background-color: rgb(40, 43, 51);
+    border-radius: 8px;
+    flex-shrink: 1;
+}
+
+.shop-panel--items { flex-grow: 1; flex-basis: 0; margin-right: 8px; }
+.shop-panel--consumables { width: 340px; }
+
+.shop-panel__title {
+    color: rgb(170, 175, 190);
+    font-size: 13px;
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+}
+
+/* ── Items (rows) ── */
+.shop-list { flex-grow: 1; flex-shrink: 1; min-height: 120px; }
 
 .shop-item {
     flex-direction: row;
@@ -45,6 +67,57 @@
 .shop-item__desc { color: rgb(170, 175, 190); font-size: 12px; white-space: normal; }
 .shop-item__stock { color: rgb(170, 175, 190); font-size: 12px; margin-right: 12px; }
 .shop-item__buy { min-width: 90px; height: 32px; }
+
+/* ── Consumables (grid of square tiles) ── */
+.shop-grid { flex-grow: 1; flex-shrink: 1; min-height: 120px; }
+
+.shop-grid .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.shop-tile {
+    width: 72px; height: 72px;
+    margin: 4px;
+    background-color: rgb(46, 49, 58);
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.shop-tile:hover { background-color: rgb(58, 62, 74); }
+.shop-tile--selected { border-color: rgb(255, 214, 90); }
+.shop-tile--soldout { opacity: 0.4; }
+.shop-tile--unaffordable .shop-tile__icon { opacity: 0.5; }
+
+.shop-tile__icon {
+    flex-grow: 1;
+    margin: 6px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-tile__badge {
+    position: absolute;
+    right: 4px; bottom: 2px;
+    font-size: 11px;
+    color: white;
+    -unity-font-style: bold;
+}
+
+/* ── Selected consumable detail ── */
+.shop-detail {
+    margin-top: 8px;
+    padding: 8px;
+    min-height: 110px;
+    background-color: rgb(32, 34, 40);
+    border-radius: 8px;
+}
+
+.shop-detail__name { color: white; font-size: 15px; -unity-font-style: bold; }
+.shop-detail__desc { color: rgb(170, 175, 190); font-size: 12px; white-space: normal; flex-grow: 1; margin-top: 2px; }
+.shop-detail__footer { flex-direction: row; justify-content: space-between; align-items: center; margin-top: 6px; }
+.shop-detail__info { color: rgb(170, 175, 190); font-size: 12px; }
+.shop-detail__buy { min-width: 110px; height: 30px; }
 
 .shop-status { color: rgb(255, 214, 90); min-height: 20px; margin-top: 8px; -unity-text-align: middle-center; }
 .shop-close { margin-top: 8px; height: 32px; }

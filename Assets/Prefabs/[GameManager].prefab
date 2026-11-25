@@ -7614,7 +7614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: c2b6e8136d95a02d1b6577d4e4166912, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: d36d947ed134132e19619594296619d5, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -7636,7 +7636,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Shop.ShopController
   itemTemplate: {fileID: 9197481963319205126, guid: 0c212a9b45e77c928b00f4e93f1698dd, type: 3}
-  debugCatalog: {fileID: 0}
 --- !u!1 &3956278018891828104
 GameObject:
   m_ObjectHideFlags: 0

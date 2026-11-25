@@ -2,11 +2,34 @@
     <Style src="Shop.uss" />
     <ui:VisualElement name="shop-root" class="shop-overlay">
         <ui:VisualElement class="shop-window">
+
             <ui:VisualElement class="shop-header">
                 <ui:Label name="shop-title" text="Shop" class="shop-title" />
                 <ui:Label name="shop-balance" text="$ 0" class="shop-balance" />
             </ui:VisualElement>
-            <ui:ScrollView name="shop-list" class="shop-list" />
+
+            <ui:VisualElement class="shop-body">
+
+                <ui:VisualElement name="shop-items-panel" class="shop-panel shop-panel--items">
+                    <ui:Label text="Items" class="shop-panel__title" />
+                    <ui:ScrollView name="shop-list" class="shop-list" />
+                </ui:VisualElement>
+
+                <ui:VisualElement name="shop-consumables-panel" class="shop-panel shop-panel--consumables">
+                    <ui:Label text="Consumables" class="shop-panel__title" />
+                    <ui:ScrollView name="shop-grid" class="shop-grid" horizontal-scroller-visibility="Hidden" />
+                    <ui:VisualElement name="shop-detail" class="shop-detail">
+                        <ui:Label name="detail-name" class="shop-detail__name" />
+                        <ui:Label name="detail-desc" class="shop-detail__desc" />
+                        <ui:VisualElement class="shop-detail__footer">
+                            <ui:Label name="detail-info" class="shop-detail__info" />
+                            <ui:Button name="detail-buy" class="shop-detail__buy" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
             <ui:Label name="shop-status" class="shop-status" />
             <ui:Button name="shop-close" text="Close" class="shop-close" />
         </ui:VisualElement>

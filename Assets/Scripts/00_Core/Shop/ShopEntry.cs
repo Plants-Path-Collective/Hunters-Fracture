@@ -12,6 +12,15 @@ namespace Core.Shop
         [Tooltip("-1 = unlimited stock.")]
         [SerializeField] private int stock = -1;
 
+        public ShopEntry() { }
+
+        public ShopEntry(ScriptableObject product, float price, int stock)
+        {
+            this.product = product;
+            this.price = price;
+            this.stock = stock;
+        }
+
         public IShopProduct Product => product as IShopProduct;
         public ScriptableObject ProductAsset => product;
         public float Price => price;

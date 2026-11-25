@@ -24,6 +24,12 @@ namespace Core
 
     #endregion
 
+    #region 
+
+    public enum ITEM_QUALITY { Common, Rare }
+
+    #endregion
+
     #region COMBAT
 
     public enum COMBAT_SLOT

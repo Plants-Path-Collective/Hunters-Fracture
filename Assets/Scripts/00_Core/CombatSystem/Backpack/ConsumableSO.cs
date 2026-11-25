@@ -1,11 +1,12 @@
 using UnityEngine;
 using Core;
 using UnityEngine.Localization;
+using Core.Shop;
 
 namespace Core.CombatSystem.Backpack
 {
     [CreateAssetMenu(fileName = "New Consumable", menuName = "Combat System/Backpack/Consumable")]
-    public class ConsumableSO : ScriptableObject
+    public class ConsumableSO : ScriptableObject, IShopProduct
     {
         public string itemName;
         public LocalizedString localizedItemName;
