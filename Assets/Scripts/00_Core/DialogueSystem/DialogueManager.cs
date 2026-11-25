@@ -32,6 +32,10 @@ namespace PlantsPathCo.DialogueSystem
         [Tooltip("Texts for the different answers.")]
         public TextMeshProUGUI[] answerLabels;
 
+        [Tooltip("Root object of each answer button (the object to show/hide), same order as answerLabels. " +
+        "If left empty, the label object itself is toggled.")]
+        public GameObject[] answerButtons;
+
         [Tooltip("A frame for the illustration of the character who is speaking.")]
         public UnityEngine.UI.Image portraitImage;
 
@@ -292,6 +296,9 @@ namespace PlantsPathCo.DialogueSystem
         {
             yield return ShowAnswers(line);
 
+            // Skip one frame so the press that ended the line can't also pick an answer.
+            yield return null;
+
             float timer = 0f;
             int chosenIndex = -1;
 
@@ -299,7 +306,9 @@ namespace PlantsPathCo.DialogueSystem
             {
                 for (int i = 0; i < choiceInputs.Length; i++)
                 {
-                    if (choiceInputs[i] != null && choiceInputs[i].action.WasPressedThisFrame())
+                    if (choiceInputs[i] != null &&
+                        IsAnswerActive(line, i) &&
+                        choiceInputs[i].action.WasPressedThisFrame())
                     {
                         chosenIndex = i;
                         break;
@@ -362,15 +371,15 @@ namespace PlantsPathCo.DialogueSystem
 
             for (int i = 0; i < dialoguePanel.answerLabels.Length; i++)
             {
-                bool active = i < line.answers.Length &&
-                              line.answers[i].answerText != null &&
-                              !line.answers[i].answerText.IsEmpty;
+                bool active = IsAnswerActive(line, i);
+
+                GameObject root = GetAnswerRoot(i);
+                if (root != null) root.SetActive(active);
 
                 var label = dialoguePanel.answerLabels[i];
-                if (label == null) continue;
+                if (!active || label == null) continue;
 
-                label.gameObject.SetActive(active);
-                if (!active) continue;
+                label.gameObject.SetActive(true);
 
                 string answerText = string.Empty;
                 yield return ResolveLocalizedString(line.answers[i].answerText, result => answerText = result);
@@ -452,6 +461,22 @@ namespace PlantsPathCo.DialogueSystem
                 yield return null;
             }
             advanceRequested = false;
+        }
+
+        private static bool IsAnswerActive(DialogueLine line, int i) =>
+            line.answers != null &&
+            i < line.answers.Length &&
+            line.answers[i].answerText != null &&
+            !line.answers[i].answerText.IsEmpty;
+
+        private GameObject GetAnswerRoot(int i)
+        {
+            var buttons = dialoguePanel.answerButtons;
+            if (buttons != null && i < buttons.Length && buttons[i] != null)
+                return buttons[i];
+
+            var label = dialoguePanel.answerLabels[i];
+            return label != null ? label.gameObject : null;
         }
     }
 }
