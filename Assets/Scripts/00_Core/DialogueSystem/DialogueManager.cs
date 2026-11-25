@@ -164,8 +164,9 @@ namespace PlantsPathCo.DialogueSystem
             skipping = false;
             advanceRequested = false;
 
-            if (dialoguePanel.panelRoot != null)
-                dialoguePanel.panelRoot.SetActive(true);
+            // Panel stays hidden until the first line is fully resolved (see PlayLine).
+            if (dialoguePanel.dialogueText != null)
+                dialoguePanel.dialogueText.text = string.Empty;
 
             onConversationStart?.Invoke(conversation);
             runningCoroutine = StartCoroutine(PlayConversation());
@@ -242,31 +243,37 @@ namespace PlantsPathCo.DialogueSystem
 
         private IEnumerator PlayLine(DialogueLine line)
         {
-            if (line.speaker != null)
-                yield return ShowSpeaker(line.speaker);
+            // 1. Resolve everything. Nothing touches the UI yet.
+            string speakerName = null;
+            if (line.speaker != null && dialoguePanel.speakerNameText != null)
+                yield return ResolveLocalizedString(line.speaker.speakerName, result => speakerName = result);
 
             string text = string.Empty;
             yield return ResolveLocalizedString(line.dialogueText, result => text = result);
 
-            // Show text based on display mode
             bool showText = (displayMode == DisplayMode.TextOnly || displayMode == DisplayMode.Both);
             bool playVoice = (displayMode == DisplayMode.VoiceOnly || displayMode == DisplayMode.Both);
 
-            if (showText && dialoguePanel.dialogueText != null)
-                dialoguePanel.dialogueText.text = text;
-
-            // La línea de voz es opcional: solo se intenta resolver si el Display Mode
-            // actual la necesita. Que no haya clip (para este idioma o en general) es válido.
             AudioClip clip = null;
             if (playVoice)
                 yield return ResolveLocalizedAudioClip(line.voiceLine, result => clip = result);
 
+            // 2. Apply to the UI and only then reveal the panel.
+            if (line.speaker != null)
+                ApplySpeaker(line.speaker, speakerName);
+
+            if (showText && dialoguePanel.dialogueText != null)
+                dialoguePanel.dialogueText.text = text;
+
+            ShowPanel();
+
+            // 3. Wait for the line (unchanged)
             if (playVoice && audioSource != null && clip != null)
             {
                 audioSource.clip = clip;
                 audioSource.Play();
                 yield return WaitOrAdvance(clip.length);
-                audioSource.Stop(); // cuts the voice if the player advanced early
+                audioSource.Stop();
             }
             else if (showText)
             {
@@ -331,17 +338,19 @@ namespace PlantsPathCo.DialogueSystem
             }
         }
 
-        private IEnumerator ShowSpeaker(SpeakerSO speaker)
+        private void ApplySpeaker(SpeakerSO speaker, string resolvedName)
         {
             if (dialoguePanel.portraitImage != null)
                 dialoguePanel.portraitImage.sprite = speaker.portrait;
 
-            if (dialoguePanel.speakerNameText != null)
-            {
-                string name = string.Empty;
-                yield return ResolveLocalizedString(speaker.speakerName, result => name = result);
-                dialoguePanel.speakerNameText.text = name;
-            }
+            if (dialoguePanel.speakerNameText != null && resolvedName != null)
+                dialoguePanel.speakerNameText.text = resolvedName;
+        }
+
+        private void ShowPanel()
+        {
+            if (dialoguePanel.panelRoot != null && !dialoguePanel.panelRoot.activeSelf)
+                dialoguePanel.panelRoot.SetActive(true);
         }
 
         private IEnumerator ShowAnswers(DialogueLine line)
