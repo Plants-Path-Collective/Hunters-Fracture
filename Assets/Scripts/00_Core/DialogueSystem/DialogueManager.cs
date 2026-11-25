@@ -47,6 +47,9 @@ namespace PlantsPathCo.DialogueSystem
     {
         public static DialogueManager Instance;
 
+        [Tooltip("Typewriter animation for the dialogue text. Optional: if empty, the text appears instantly.")]
+        [SerializeField] private DialogueTextAnimator textAnimator;
+
         [Tooltip("Choose whether to display conversations only in the UI, using voice lines, or using both.")]
         [SerializeField] private DisplayMode displayMode = DisplayMode.Both;
         [Tooltip("Reference to the conversation currently being played. Used internally to track the active dialogue flow.")]
@@ -88,7 +91,10 @@ namespace PlantsPathCo.DialogueSystem
             if (Instance == null)
                 Instance = this;
             else
-                Destroy(gameObject);
+                Destroy(this);
+
+            if (textAnimator == null && dialoguePanel.dialogueText != null)
+                textAnimator = dialoguePanel.dialogueText.GetComponent<DialogueTextAnimator>();
         }
 
         private void OnEnable()
@@ -262,27 +268,33 @@ namespace PlantsPathCo.DialogueSystem
             if (playVoice)
                 yield return ResolveLocalizedAudioClip(line.voiceLine, result => clip = result);
 
-            // 2. Apply to the UI and only then reveal the panel.
+            // 2. Apply to the UI and reveal the panel.
             if (line.speaker != null)
                 ApplySpeaker(line.speaker, speakerName);
 
-            if (showText && dialoguePanel.dialogueText != null)
-                dialoguePanel.dialogueText.text = text;
-
+            // The panel must be active before the animator builds the TMP mesh (TMP can't
+            // generate geometry on an inactive object). No placeholder shows, because the text
+            // was cleared in StartConversation and the animator hides it on the same frame.
             ShowPanel();
 
-            // 3. Wait for the line (unchanged)
+            if (showText && dialoguePanel.dialogueText != null)
+            {
+                if (textAnimator != null) textAnimator.Play(text);
+                else dialoguePanel.dialogueText.text = text;
+            }
+
+            // 3. Wait for the line
             if (playVoice && audioSource != null && clip != null)
             {
                 audioSource.clip = clip;
                 audioSource.Play();
-                yield return WaitOrAdvance(clip.length);
+                yield return WaitForLine(clip.length);
                 audioSource.Stop();
             }
             else if (showText)
             {
                 float duration = Mathf.Max(2f, text.Length * 0.06f);
-                yield return WaitOrAdvance(duration);
+                yield return WaitForLine(duration);
             }
             else
             {
@@ -450,16 +462,39 @@ namespace PlantsPathCo.DialogueSystem
         private void OnSkipCanceled(InputAction.CallbackContext ctx) => skipping = false;
         private void OnAbandon(InputAction.CallbackContext ctx) => StopConversation();
 
-        // Waits up to `seconds`, but returns early on advance or while skipping.
-        private IEnumerator WaitOrAdvance(float seconds)
+        // Waits for the line to end. First advance press while typing completes the text;
+        // the next press (or auto-advance, or skip) moves on.
+        private IEnumerator WaitForLine(float seconds)
         {
             advanceRequested = false;
             float t = 0f;
-            while (t < seconds && !advanceRequested && !skipping)
+
+            while (true)
             {
+                bool revealing = textAnimator != null && textAnimator.IsRevealing;
+
+                if (skipping)
+                    break;
+
+                if (advanceRequested)
+                {
+                    advanceRequested = false;
+
+                    if (revealing)
+                        textAnimator.Complete();   // first press: finish the text
+                    else
+                        break;                     // second press: next line
+                }
+                else if (t >= seconds && !revealing)
+                {
+                    break;                         // auto-advance
+                }
+
                 t += Time.deltaTime;
                 yield return null;
             }
+
+            if (textAnimator != null) textAnimator.Complete(); // never leave a half-animated line behind
             advanceRequested = false;
         }
 

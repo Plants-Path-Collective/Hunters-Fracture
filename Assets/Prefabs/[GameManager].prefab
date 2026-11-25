@@ -12974,6 +12974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fefb009d14508d429eeca34a946f24b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.DialogueManager
+  textAnimator: {fileID: 0}
   displayMode: 0
   currentConversation: {fileID: 0}
   lineIndex: 0
@@ -13264,6 +13265,7 @@ GameObject:
   - component: {fileID: 5843739928866016278}
   - component: {fileID: 46702740822074885}
   - component: {fileID: 3182232051491001695}
+  - component: {fileID: 7645283850246457847}
   m_Layer: 0
   m_Name: DialogueText - 462 characters aprox.
   m_TagString: Untagged
@@ -13395,6 +13397,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7645283850246457847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459381485402968068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc88c54d24cf6f99e89095dc757d950f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantsPathCo.DialogueSystem.DialogueTextAnimator
+  charsPerSecond: 20
+  punctuationPause: 0.12
+  charAnimDuration: 0.22
+  hopHeight: 8
+  hopEase: 27
 --- !u!1 &6473183979559352582
 GameObject:
   m_ObjectHideFlags: 0
