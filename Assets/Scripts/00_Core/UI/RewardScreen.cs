@@ -389,8 +389,8 @@ namespace Core.UI
             bool hasSelection = unassigned.Count > 0;
             ItemSO item = hasSelection ? unassigned[selectedIndex] : null;
 
-            if (itemNameLabel != null) itemNameLabel.text = hasSelection ? item.itemName : string.Empty;
-            if (descriptionLabel != null) descriptionLabel.text = hasSelection ? item.itemDescription : string.Empty;
+            if (itemNameLabel != null) itemNameLabel.text = hasSelection ? item.localizedName.GetLocalizedString() : string.Empty;
+            if (descriptionLabel != null) descriptionLabel.text = hasSelection ? item.localizedDescription.GetLocalizedString() : string.Empty;
             if (confirmHint != null) confirmHint.SetActive(!hasSelection);
         }
 

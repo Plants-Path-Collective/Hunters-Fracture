@@ -66,8 +66,8 @@ namespace Core.UI
                 RenderMember(session, slot);
 
             ItemSO selected = session.Selected;
-            descName.text = selected != null ? selected.itemName : string.Empty;
-            descText.text = selected != null ? selected.itemDescription : string.Empty;
+            descName.text = selected != null ? selected.localizedName.GetLocalizedString() : string.Empty;
+            descText.text = selected != null ? selected.localizedDescription.GetLocalizedString() : string.Empty;
         }
 
         public override void SetHints(IReadOnlyList<InputHint> hints)
@@ -108,7 +108,7 @@ namespace Core.UI
 
                 entry.Add(MakeIcon(item, 1, 36));
 
-                Label name = MakeLabel(item.itemName, 14, selected ? Accent : Color.white);
+                Label name = MakeLabel(item.localizedName.GetLocalizedString(), 14, selected ? Accent : Color.white);
                 name.style.marginLeft = 8;
                 entry.Add(name);
 

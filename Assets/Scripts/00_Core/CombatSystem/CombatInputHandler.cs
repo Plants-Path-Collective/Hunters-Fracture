@@ -413,11 +413,11 @@ namespace Core.CombatSystem
 
             if (!PartyBackpack.Instance.TryConsume(actor, target, consumable))
             {
-                UIManager.Instance?.ShowCombatLog($"Could not use {consumable.itemName}.");
+                UIManager.Instance?.ShowCombatLog($"Could not use {consumable.consumableName}.");
                 return false;
             }
 
-            UIManager.Instance?.ShowCombatLog($"{target.Name} used {consumable.itemName}.");
+            UIManager.Instance?.ShowCombatLog($"{target.Name} used {consumable.consumableName}.");
             resolver.PlayBackpackSfx(actor);
             backpackOpen = false;
             if (CombatUIManager.Instance != null)

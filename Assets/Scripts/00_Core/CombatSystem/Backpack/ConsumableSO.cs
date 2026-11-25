@@ -8,21 +8,21 @@ namespace Core.CombatSystem.Backpack
     [CreateAssetMenu(fileName = "New Consumable", menuName = "Combat System/Backpack/Consumable")]
     public class ConsumableSO : ScriptableObject, IShopProduct
     {
-        public string itemName;
-        public LocalizedString localizedItemName;
-        public Sprite itemIcon;
-        public string effect;
-        public LocalizedString localizedEffect;
+        public Sprite consumableIcon;
+        public string consumableName;
+        public LocalizedString localizedName;
+        public string consumableDescription;
+        public LocalizedString localizedDescription;
         public STAT_TYPE statType;
         public int restoreAmount;
 
         [Header("IShopProduct")]
         public string DisplayName =>
-            localizedItemName.IsEmpty ? itemName : localizedItemName.GetLocalizedString();
+            localizedName.IsEmpty ? consumableName : localizedName.GetLocalizedString();
 
         public string Description =>
-            localizedEffect.IsEmpty ? effect : localizedEffect.GetLocalizedString();
+            localizedDescription.IsEmpty ? consumableDescription : localizedDescription.GetLocalizedString();
 
-        public Sprite Icon => itemIcon;
+        public Sprite Icon => consumableIcon;
     }
 }

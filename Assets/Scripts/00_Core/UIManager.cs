@@ -671,7 +671,7 @@ namespace Core
                     return;
                 }
 
-                slotUI.consumableIcon.sprite = slot.consumableSO.itemIcon;
+                slotUI.consumableIcon.sprite = slot.consumableSO.consumableIcon;
                 slotUI.quantityText.text = $"x {slot.quantity}";
                 slotUI.SetConsumable(slot.consumableSO);
                 slotUI.SetSelected(false);

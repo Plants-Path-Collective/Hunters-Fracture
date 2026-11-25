@@ -15,7 +15,7 @@ MonoBehaviour:
   shopName: Callejon
   entries:
   - product: {fileID: 11400000, guid: 1dd8b4c5929214759a45c25f2ffb7a99, type: 2}
-    price: 3000
+    price: 1700
     stock: 20
   - product: {fileID: 11400000, guid: be85c4800a8c7a1b1a40883b114ba703, type: 2}
     price: 1000

@@ -7,8 +7,6 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 using Core.Clock;
-using Core.ChallengesSystem;
-using Core.QuestsSystem;
 
 namespace PlantsPathCo.DialogueSystem
 {
@@ -72,7 +70,8 @@ namespace PlantsPathCo.DialogueSystem
         private Coroutine runningCoroutine;
         private INPUTACTION_MAP? mapBeforeDialogue;
         private bool clockPausedByDialogue;
-        
+        private bool advanceRequested;
+        private bool skipping;
 
         // Cache of currently active answer LocalizedStrings, in the same order as line.answers,
         // so we can map an input index back to the correct AnswerOption/nextConversation.
@@ -104,6 +103,8 @@ namespace PlantsPathCo.DialogueSystem
                 GameClock.ReleasePause(CLOCK_PAUSE_REASON.Dialogue);
                 clockPausedByDialogue = false;
             }
+
+            UnsubscribeDialogueInput();
         }
 
         /// <summary>
@@ -159,10 +160,12 @@ namespace PlantsPathCo.DialogueSystem
 
             EnterDialogueState();
 
+            SubscribeDialogueInput();
+            skipping = false;
+            advanceRequested = false;
+
             if (dialoguePanel.panelRoot != null)
                 dialoguePanel.panelRoot.SetActive(true);
-
-
 
             onConversationStart?.Invoke(conversation);
             runningCoroutine = StartCoroutine(PlayConversation());
@@ -186,6 +189,8 @@ namespace PlantsPathCo.DialogueSystem
 
                 if (line.HasAnswers())
                 {
+                    skipping = false;          // never auto-skip a decision
+                    advanceRequested = false;
                     ConversationSO next = null;
                     yield return WaitForAnswer(line, result => next = result);
 
@@ -260,14 +265,13 @@ namespace PlantsPathCo.DialogueSystem
             {
                 audioSource.clip = clip;
                 audioSource.Play();
-                yield return new WaitForSeconds(clip.length);
+                yield return WaitOrAdvance(clip.length);
+                audioSource.Stop(); // cuts the voice if the player advanced early
             }
             else if (showText)
             {
-                // Sin clip que reproducir (no había voz para esta línea/idioma, o el modo es TextOnly):
-                // se estima la duración según la longitud del texto.
                 float duration = Mathf.Max(2f, text.Length * 0.06f);
-                yield return new WaitForSeconds(duration);
+                yield return WaitOrAdvance(duration);
             }
             else
             {
@@ -373,6 +377,10 @@ namespace PlantsPathCo.DialogueSystem
 
         private void EndConversation(bool completed)
         {
+            if (audioSource != null) audioSource.Stop();
+            UnsubscribeDialogueInput();
+            skipping = false;
+            advanceRequested = false;
             HideAnswers();
 
             if (dialoguePanel.dialogueText != null)
@@ -394,6 +402,47 @@ namespace PlantsPathCo.DialogueSystem
 
             if (mapBeforeDialogue != null || clockPausedByDialogue)
                 ExitDialogueState();
+        }
+
+        private void SubscribeDialogueInput()
+        {
+            if (InputManager.Instance == null) return;
+            UnsubscribeDialogueInput(); // idempotent: StartConversation can be called mid-conversation
+
+            var d = InputManager.Instance.Dialogue;
+            d.CompleteLineConfirmSelection.performed += OnAdvance;
+            d.SkipConversation.performed += OnSkipPerformed;   // hold completed
+            d.SkipConversation.canceled += OnSkipCanceled;     // released
+            d.AbandonConversation.performed += OnAbandon;      // hold completed
+        }
+
+        private void UnsubscribeDialogueInput()
+        {
+            if (InputManager.Instance == null || InputManager.Instance.Actions == null) return;
+
+            var d = InputManager.Instance.Dialogue;
+            d.CompleteLineConfirmSelection.performed -= OnAdvance;
+            d.SkipConversation.performed -= OnSkipPerformed;
+            d.SkipConversation.canceled -= OnSkipCanceled;
+            d.AbandonConversation.performed -= OnAbandon;
+        }
+
+        private void OnAdvance(InputAction.CallbackContext ctx) => advanceRequested = true;
+        private void OnSkipPerformed(InputAction.CallbackContext ctx) => skipping = true;
+        private void OnSkipCanceled(InputAction.CallbackContext ctx) => skipping = false;
+        private void OnAbandon(InputAction.CallbackContext ctx) => StopConversation();
+
+        // Waits up to `seconds`, but returns early on advance or while skipping.
+        private IEnumerator WaitOrAdvance(float seconds)
+        {
+            advanceRequested = false;
+            float t = 0f;
+            while (t < seconds && !advanceRequested && !skipping)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+            advanceRequested = false;
         }
     }
 }

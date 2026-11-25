@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Core.Shop;
+using UnityEngine.Localization;
 
 namespace Core.CombatSystem.ItemSystem
 {
@@ -14,16 +15,20 @@ namespace Core.CombatSystem.ItemSystem
         [Tooltip("Unique identifier for this item.")]
         public int itemID; // Unique identifier
         public ITEM_QUALITY quality = ITEM_QUALITY.Common;
-        public string itemName;
         public Sprite itemIcon;
-        [TextArea(2, 4)] public string itemDescription;
+        public string itemName;
+        public LocalizedString localizedName;
+        public string itemDescription;
+        public LocalizedString localizedDescription;
 
         public List<ItemEffectSO> effects; // List of effects this item has
 
 
         [Header("IShopProduct")]
-        public string DisplayName => itemName;
-        public string Description => itemDescription;
+        public string DisplayName => 
+                    localizedName.IsEmpty ? itemName : localizedName.GetLocalizedString();
+        public string Description => 
+                    localizedDescription.IsEmpty ? itemDescription : localizedDescription.GetLocalizedString();
         public Sprite Icon => itemIcon;
     }
 }

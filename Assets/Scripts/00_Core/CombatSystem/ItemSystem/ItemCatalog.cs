@@ -72,7 +72,7 @@ namespace Core.CombatSystem.ItemSystem
                 if (_lookup.ContainsKey(item.itemID))
                 {
                     Debug.LogError($"[ItemCatalog] Duplicate itemID {item.itemID} between " +
-                                    $"'{_lookup[item.itemID].name}' and '{item.name}'. " +
+                                    $"'{_lookup[item.itemID].itemName}' and '{item.itemName}'. " +
                                     "Every item must have a unique itemID.");
                     continue;
                 }

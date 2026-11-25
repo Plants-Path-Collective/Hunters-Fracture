@@ -99,7 +99,7 @@ namespace Core.CombatSystem.Units
             }
             else
             {
-                Debug.LogWarning($"[UnitInventory] {gameObject.name} does not have {itemSO.name} " +
+                Debug.LogWarning($"[UnitInventory] {gameObject.name} does not have {itemSO.itemName} " +
                                  "in its inventory. Don't forget to add it to the ItemCatalogue first!");
             }
         }
@@ -141,7 +141,7 @@ namespace Core.CombatSystem.Units
             }
             else
             {
-                Debug.LogWarning($"[UnitInventory] {gameObject.name} does not have {itemSO.name} " +
+                Debug.LogWarning($"[UnitInventory] {gameObject.name} does not have {itemSO.itemName} " +
                                  "in its inventory. Don't forget to add it to the ItemCatalogue first!");
             }
         }

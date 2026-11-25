@@ -13,7 +13,7 @@ namespace ExtendedDebug
             if (other.CompareTag("Player"))
             {
 
-                Debug.Log($"[ItemTest] Player contact with item: {testItem.itemName} (ID: {testItem.itemID})");
+                Debug.Log($"[ItemTest] Player contact with item: {testItem.localizedName} (ID: {testItem.itemID})");
 
                 Unit playerUnit = other.GetComponent<Unit>();
 
@@ -33,7 +33,7 @@ namespace ExtendedDebug
 
                 playerInventory.AddItem(testItem, 1);
                 
-                Debug.Log($"[ItemTest] Player picked up item: {testItem.itemName} (ID: {testItem.itemID})");
+                Debug.Log($"[ItemTest] Player picked up item: {testItem.localizedName} (ID: {testItem.itemID})");
                 Destroy(gameObject);
             }
         }

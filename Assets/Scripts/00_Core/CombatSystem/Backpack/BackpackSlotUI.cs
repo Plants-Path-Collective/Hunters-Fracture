@@ -51,13 +51,13 @@ namespace Core.CombatSystem.Backpack
             if (value == null)
                 return;
 
-            localizedName = value.localizedItemName;
-            localizedEffect = value.localizedEffect;
+            localizedName = value.localizedName;
+            localizedEffect = value.localizedDescription;
 
             if (consumableNameText != null)
-                consumableNameText.text = value.itemName;
+                consumableNameText.text = value.consumableName;
             if (effectText != null)
-                effectText.text = value.effect;
+                effectText.text = value.consumableDescription;
 
             SubscribeLocalizedText();
         }
