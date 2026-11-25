@@ -168,6 +168,7 @@ namespace PlantsPathCo.DialogueSystem
             currentTrigger = trigger;
             lineIndex = 0;
 
+
             EnterDialogueState();
 
             SubscribeDialogueInput();
@@ -177,6 +178,8 @@ namespace PlantsPathCo.DialogueSystem
             // Panel stays hidden until the first line is fully resolved (see PlayLine).
             if (dialoguePanel.dialogueText != null)
                 dialoguePanel.dialogueText.text = string.Empty;
+
+            HideAnswers();
 
             onConversationStart?.Invoke(conversation);
             runningCoroutine = StartCoroutine(PlayConversation());
@@ -378,25 +381,42 @@ namespace PlantsPathCo.DialogueSystem
         {
             if (dialoguePanel.answerPanel == null) yield break;
 
-            dialoguePanel.answerPanel.SetActive(true);
-            if (dialoguePanel.answerLabels == null) yield break;
-
-            for (int i = 0; i < dialoguePanel.answerLabels.Length; i++)
+            if (dialoguePanel.answerLabels == null)
             {
-                bool active = IsAnswerActive(line, i);
+                dialoguePanel.answerPanel.SetActive(true);
+                yield break;
+            }
 
+            int slots = dialoguePanel.answerLabels.Length;
+            bool[] active = new bool[slots];
+            string[] texts = new string[slots];
+
+            // 1. Count and resolve every answer while the panel is still hidden.
+            for (int i = 0; i < slots; i++)
+            {
+                active[i] = IsAnswerActive(line, i);
+                if (!active[i]) continue;
+
+                string resolved = string.Empty;
+                yield return ResolveLocalizedString(line.answers[i].answerText, result => resolved = result);
+                texts[i] = resolved;
+            }
+
+            // 2. Configure every slot in the same frame, no waiting in between.
+            for (int i = 0; i < slots; i++)
+            {
                 GameObject root = GetAnswerRoot(i);
-                if (root != null) root.SetActive(active);
+                if (root != null) root.SetActive(active[i]);
 
                 var label = dialoguePanel.answerLabels[i];
-                if (!active || label == null) continue;
+                if (!active[i] || label == null) continue;
 
                 label.gameObject.SetActive(true);
-
-                string answerText = string.Empty;
-                yield return ResolveLocalizedString(line.answers[i].answerText, result => answerText = result);
-                label.text = answerText;
+                label.text = texts[i];
             }
+
+            // 3. Reveal the panel last, already showing the final state.
+            dialoguePanel.answerPanel.SetActive(true);
         }
 
         private void HideAnswers()
