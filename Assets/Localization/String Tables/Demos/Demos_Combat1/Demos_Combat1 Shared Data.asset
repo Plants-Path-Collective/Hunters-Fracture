@@ -27,6 +27,10 @@ MonoBehaviour:
     m_Key: subtitleversion1B
     m_Metadata:
       m_Items: []
+  - m_Id: 19823302152011776
+    m_Key: subtitleversion2A
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

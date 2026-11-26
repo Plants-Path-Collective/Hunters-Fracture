@@ -19,7 +19,7 @@ namespace World
     {
         [Header("Destination")]
         [Tooltip("Name of the scene to load. It must be enabled in Build Settings.")]
-        [SerializeField] private string targetScene = "Overworld - CombatDemo1";
+        [SerializeField] private string targetScene;
 
         [Header("Interaction")]
         [Tooltip("Tag of the player object that can use this door.")]

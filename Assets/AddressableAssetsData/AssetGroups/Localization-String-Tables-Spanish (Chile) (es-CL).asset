@@ -94,7 +94,7 @@ MonoBehaviour:
     - Locale-es-CL
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d972712e195332e2c8429b0ff3a20cdc
-    m_Address: SocialArea_Misc_es-CL
+    m_Address: Misc_es-CL
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-es-CL

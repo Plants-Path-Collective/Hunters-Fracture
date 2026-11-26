@@ -106,7 +106,7 @@ MonoBehaviour:
     - Locale-ja-JP
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea65d18a74f4ffbd5b3dada5bc50abde
-    m_Address: SocialArea_Misc_ja-JP
+    m_Address: Misc_ja-JP
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ja-JP

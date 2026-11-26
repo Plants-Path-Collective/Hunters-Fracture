@@ -76,7 +76,7 @@ MonoBehaviour:
     - Locale-zh-Hans
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8d27c1c85c76594e7991c574f645b59f
-    m_Address: SocialArea_Misc_zh-Hans
+    m_Address: Misc_zh-Hans
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hans

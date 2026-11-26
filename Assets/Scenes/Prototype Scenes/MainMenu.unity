@@ -555,7 +555,7 @@ MonoBehaviour:
   m_text: '[Quit]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
-  m_sharedMaterial: {fileID: -9198151940197514948, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
+  m_sharedMaterial: {fileID: 492775690180304785, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   m_text: '[Options]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
-  m_sharedMaterial: {fileID: -9198151940197514948, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
+  m_sharedMaterial: {fileID: 492775690180304785, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1440,7 +1440,7 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:43b97c49dd8e5b50298536a14238ce6d
     m_TableEntryReference:
-      m_KeyId: 1723442876416
+      m_KeyId: 19823302152011776
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -1486,8 +1486,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '[subtitleversion]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
-  m_sharedMaterial: {fileID: -9198151940197514948, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6b6fe18533d6633339685a3efc2cca86, type: 2}
+  m_sharedMaterial: {fileID: -3856360326314704047, guid: 6b6fe18533d6633339685a3efc2cca86, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1511,7 +1511,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 53.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2642,9 +2642,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: GUID:5d087e21f2ad2694092005582285f089
+      m_TableCollectionName: GUID:43b97c49dd8e5b50298536a14238ce6d
     m_TableEntryReference:
-      m_KeyId: 3968249283956736
+      m_KeyId: 57356275712
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -2691,7 +2691,7 @@ MonoBehaviour:
   m_text: '[startdemo]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
-  m_sharedMaterial: {fileID: -9198151940197514948, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
+  m_sharedMaterial: {fileID: 492775690180304785, guid: 11044d1da5ce38b4aa3b3e0d3b1261b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2811,7 +2811,7 @@ Transform:
   m_GameObject: {fileID: 2017986165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 298.34625, y: 235.70705, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

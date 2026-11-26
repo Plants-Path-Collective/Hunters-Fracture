@@ -13038,7 +13038,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   party:
-    members: []
+    members:
+    - definition: {fileID: 11400000, guid: 723e38aa2760feef082487d4af5c5ec6, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
+    - definition: {fileID: 11400000, guid: 1af66545aab74bcb8bfa20fe53b9a863, type: 2}
+      currentHP: -1
+      currentSP: -1
+      inventorySnapshot:
+        entries: []
   isInCombat: 0
   paused: 0
   cmCameraActive: {fileID: 0}

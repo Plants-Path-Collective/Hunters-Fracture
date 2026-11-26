@@ -76,7 +76,7 @@ MonoBehaviour:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8ad5fa1293df922f5a4e0cfee202fb0d
-    m_Address: SocialArea_Misc_en
+    m_Address: Misc_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en
