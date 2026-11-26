@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Status_MagicDefUp
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.StatModifierStatusSO
   statusName: Magical Defense Up
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 66e7386b420d1503f8e2784ccf20c230, type: 3}
   isDebuff: 1
   stat: 6

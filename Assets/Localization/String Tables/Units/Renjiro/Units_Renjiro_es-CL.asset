@@ -43,22 +43,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2413976309760
-    m_Localized: "Selecciona una Unit, luego castea y manda una corriente de Kuroy\u016B
-      hacia ella. Si es Aliada, se endurece y otorga PDef en X%, por 3 turnos. Mientras
-      que si es Enemiga, reduce la Pdef en X% y quema a la unit con da\xF1o Magical
-      por 3 rondas.\n\nX = 0.1 + (1- (MP / 100))"
+    m_Localized: "Selecciona un combatiente y lanza una corriente de Kuroy\u016B
+      hacia \xE9l. Si es aliado, se endurece y gana un X% de defensa f\xEDsica durante
+      3 turnos. Si es enemigo, su defensa f\xEDsica se reduce un X% y recibe da\xF1o
+      m\xE1gico durante 3 turnos.\n\nX = 10% + (100 \u2212 poder m\xE1gico)%"
     m_Metadata:
       m_Items: []
   - m_Id: 2450995236864
-    m_Localized: "Esparce un \xE1rea de Kuroy\u016B por el campo, afectando a las
-      Units, del bando Aliado, la Unit central adelanta 1 turno, mientras que a las
-      Units izquierda y derecha del bando Enemigo se atrasan 1 turno c/u."
+    m_Localized: "Esparce un \xE1rea de Kuroy\u016B por el campo. El combatiente
+      aliado central avanza 1 posici\xF3n en la l\xEDnea de tiempo, mientras que
+      los combatientes enemigos de los flancos izquierdo y derecho retroceden 1 posici\xF3n
+      cada uno."
     m_Metadata:
       m_Items: []
   - m_Id: 2619652395008
-    m_Localized: "Renjiro transforma la arena de combate, envolvi\xE9ndola con su
-      Kuroy\u016B. Durante 2 rondas, las Units Aliadas recuperan 15 de SP por turno
-      y aumenta su da\xF1o en 15%."
+    m_Localized: "Renjiro transforma el campo de batalla y lo envuelve en su Kuroy\u016B.
+      Durante 2 rondas, los combatientes aliados recuperan 15 de energ\xEDa por turno
+      y su da\xF1o aumenta un 15%."
     m_Metadata:
       m_Items: []
   references:

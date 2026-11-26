@@ -175,6 +175,9 @@ namespace Core.CombatSystem.Units
         public float EffectiveMagicalDefense =>
             isDefending ? MagicalDefense * Definition.defendMultiplier : MagicalDefense;
 
+        public event Action<Unit> OnStatusesChanged;
+        internal void NotifyStatusesChanged() => OnStatusesChanged?.Invoke(this);
+        
         // ----- Fury (secondary resource) -----
         private int fury;
 

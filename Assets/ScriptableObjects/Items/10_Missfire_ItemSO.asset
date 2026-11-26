@@ -15,9 +15,39 @@ MonoBehaviour:
   lockedByDefault: 0
   itemID: 10
   quality: 1
-  itemName: Cerveza de Sal
+  localizedQuality:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753544720385
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 326631b8dc42202b88d5e9a5df322b66, type: 3}
+  itemName: Cerveza de Sal
+  localizedName:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553108996
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemDescription: "Cambia el Ataque B\xE1sico por un Ataque Multiple (2 objetivos),
     limita el da\xF1o del ataque a un 66% (+10% por copia)."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553108997
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   effects:
   - {fileID: 11400000, guid: ad551c9c7408c18528b1ad4bbcf99826, type: 2}
+  references:
+    version: 2
+    RefIds: []

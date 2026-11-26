@@ -15,9 +15,39 @@ MonoBehaviour:
   lockedByDefault: 0
   itemID: 12
   quality: 1
-  itemName: Reproductor de CD
+  localizedQuality:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753544720385
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: e6fadfce58b4ef3568a58d7665fb444a, type: 3}
+  itemName: Reproductor de CD
+  localizedName:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553109000
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemDescription: "Al atacar o usar una t\xE9cnica, 10% (+5% por copia) de probabilidad
     de repetir el turno, justo despu\xE9s de este."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553109001
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   effects:
   - {fileID: 11400000, guid: 16e4afa1c3784343b848e39fb06894ed, type: 2}
+  references:
+    version: 2
+    RefIds: []

@@ -15,6 +15,7 @@ namespace Core.CombatSystem.ItemSystem
         [Tooltip("Unique identifier for this item.")]
         public int itemID; // Unique identifier
         public ITEM_QUALITY quality = ITEM_QUALITY.Common;
+        public LocalizedString localizedQuality;
         public Sprite itemIcon;
         public string itemName;
         public LocalizedString localizedName;

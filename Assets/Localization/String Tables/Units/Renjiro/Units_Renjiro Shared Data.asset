@@ -34,7 +34,8 @@ MonoBehaviour:
   - m_Id: 2413976309760
     m_Key: units_renjiro_skill1_desc
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 6806775817626189905
   - m_Id: 215229878272
     m_Key: units_renjiro_skill2_name
     m_Metadata:
@@ -58,6 +59,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 6806775817626189905
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: Formula incorrecta, a mayor MP, menos dmg
     - rid: 7685833087234867276
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:

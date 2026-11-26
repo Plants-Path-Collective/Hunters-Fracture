@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5893ec57595416133a1ee13901ac2575, type: 3}
   m_Name: Status_Sleep
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.SkipTurnStatusSO
-  statusName: Sleep
-  icon: {fileID: 0}
+  statusName: Sleeping
+  icon: {fileID: 21300000, guid: 6423237ad5cc6007ab88ccba0b24d2e4, type: 3}
   isDebuff: 0

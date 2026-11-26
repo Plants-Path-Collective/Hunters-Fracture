@@ -27,11 +27,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6190221304745984
-    m_Localized: +15 SP
+    m_Localized: Restores 15 Energy to the selected ally.
     m_Metadata:
       m_Items: []
   - m_Id: 6190234239979520
-    m_Localized: + 15 HP
+    m_Localized: Restores 15 Health to the selected ally.
     m_Metadata:
       m_Items: []
   references:

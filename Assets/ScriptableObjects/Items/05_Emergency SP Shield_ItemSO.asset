@@ -14,9 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   lockedByDefault: 0
   itemID: 5
-  itemName: Collar de Piedra Luna
+  quality: 0
+  localizedQuality:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753544720384
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 95fc5ef5b1a615426a865735bf8e59fc, type: 3}
+  itemName: Collar de Piedra Luna
+  localizedName:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753548914694
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemDescription: Si el HP del portador, disminuye bajo el 30%, se regenera el 20%
     (+10% por copia) de su HP, gastando el 50% (+10% por copia) de su SP actual.
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753548914695
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   effects:
   - {fileID: 11400000, guid: 3f08dcee92530dc1c98d676fa1f95980, type: 2}
+  references:
+    version: 2
+    RefIds: []

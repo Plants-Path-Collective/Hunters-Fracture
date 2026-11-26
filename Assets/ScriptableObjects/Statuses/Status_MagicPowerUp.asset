@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Status_MagicPowerUp
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.StatModifierStatusSO
   statusName: Magic Power Up
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 149d8f9a41fc2c149b110413c081a14e, type: 3}
   isDebuff: 0
   stat: 4

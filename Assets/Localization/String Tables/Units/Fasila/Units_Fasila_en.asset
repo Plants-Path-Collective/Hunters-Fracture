@@ -43,26 +43,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6278461214720
-    m_Localized: 'Active: Select a Unit; the target is put to sleep for 1 round by
-      that Unit (skipping its next turn).
+    m_Localized: 'Active: select a combatant; it falls asleep and loses its next
+      turn.
 
 
-      Passive: Every time Fasila uses
-      a skill, one of her Fragments resonates. If she has 3 resonating Fragments,
-      her next skill doubles its effect (doubles stats, turns, etc.).'
+      Passive: every time Fasila uses a skill, one of her Fragments
+      resonates. With 3 resonating Fragments, her next skill doubles its effects
+      (stats, duration, etc.).'
     m_Metadata:
       m_Items: []
   - m_Id: 6322916642816
-    m_Localized: 'Reduces the target unit''s MDef by X% for 2 rounds.
-
-
-      X%
-      = 10% (HP / 50)'
+    m_Localized: "Reduces the magic defense of the target combatant by X% for 2 rounds.\n\nX%
+      = 10% \xD7 (Fasila's Health / 50)"
     m_Metadata:
       m_Items: []
   - m_Id: 6371717369856
-    m_Localized: Freezes enemy units in the center and right positions for 2 rounds
-      (skips the unit's next 2 turns).
+    m_Localized: Freezes the enemy combatants in the center and right positions for
+      2 rounds (they lose their next 2 turns).
     m_Metadata:
       m_Items: []
   references:

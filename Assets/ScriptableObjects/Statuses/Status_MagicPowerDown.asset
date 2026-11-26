@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Status_MagicPowerDown
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.StatModifierStatusSO
   statusName: Magic Power Down
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1bc31feabb90f9011bca39ded986bce8, type: 3}
   isDebuff: 1
   stat: 4

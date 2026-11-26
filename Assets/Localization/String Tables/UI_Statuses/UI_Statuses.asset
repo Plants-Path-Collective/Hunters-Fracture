@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
+  m_Name: UI_Statuses
+  m_EditorClassIdentifier: Unity.Localization.Editor::UnityEditor.Localization.StringTableCollection
+  m_SharedTableData: {fileID: 11400000, guid: 1593b383efc174e9fb6d5528667fcba6, type: 2}
+  m_Tables:
+  - {fileID: 11400000, guid: a4d36b4705b7e57d69f3a41caa114901, type: 2}
+  - {fileID: 11400000, guid: 4b521ce7efba024c0985d24c74cbf282, type: 2}
+  - {fileID: 11400000, guid: de1f7018d7b398bdb970aae261b9ddc6, type: 2}
+  - {fileID: 11400000, guid: f6613a64dbed3f503885b2b106674cfe, type: 2}
+  m_Extensions: []
+  m_Group: String Table
+  references:
+    version: 2
+    RefIds: []

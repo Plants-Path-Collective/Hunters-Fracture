@@ -35,7 +35,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1823816228753408
-    m_Localized: Select an enemy Unit and swap its position with Iter's.
+    m_Localized: 'Select an enemy combatant: Iter leaps toward them, fires his hook,
+      and pulls them to the slot Iter previously occupied. The enemy does not change
+      sides.'
     m_Metadata:
       m_Items: []
   - m_Id: 1828938044362752
@@ -43,15 +45,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1829005245501440
-    m_Localized: 'Iter strikes an enemy, dealing X Physical damage, and then strikes
-      another enemy to its right, dealing X Magical damage
+    m_Localized: 'Iter strikes an enemy for X physical damage, then strikes the enemy
+      to the target''s right for X magic damage. If no other target is available,
+      it strikes the same one.
 
 
-      (Strikes the same
-      target if no other targets are available)
-
-
-      X = 10 + ((STR/2) + (MP/50))'
+      X = 10 + ((Strength / 2) + (Magic Power /
+      50))'
     m_Metadata:
       m_Items: []
   - m_Id: 1834540871143424
@@ -59,12 +59,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1834508986044416
-    m_Localized: 'Iter launches an enemy into the air and then kicks them, dealing
-      X Physical damage and moving that enemy to a random position.
-
-
-      X = STR
-      * 2'
+    m_Localized: "Iter launches an enemy into the air and finishes with a kick. The
+      enemy takes X physical damage and lands in a random position.\n\nX = Strength
+      \xD7 2"
     m_Metadata:
       m_Items: []
   references:

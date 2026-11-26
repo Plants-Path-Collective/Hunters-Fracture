@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5893ec57595416133a1ee13901ac2575, type: 3}
   m_Name: SkipTurnKnocked_SatusSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.SkipTurnStatusSO
-  statusName: Knocked
-  icon: {fileID: 0}
+  statusName: Knocked Down
+  icon: {fileID: 21300000, guid: e271133b0c57cf9c8b9917b00d03996e, type: 3}
   isDebuff: 1

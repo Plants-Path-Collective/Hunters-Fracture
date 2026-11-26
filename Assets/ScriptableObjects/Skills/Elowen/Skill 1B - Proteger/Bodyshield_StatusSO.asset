@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Bodyshield_StatusSO
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.BodyshieldStatusSO
   statusName: Bodyshield
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ce99c9a54f9aca2bcbbbace886b9fd91, type: 3}
   isDebuff: 0

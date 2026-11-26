@@ -27,11 +27,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6190221304745984
-    m_Localized: +15 SP
+    m_Localized: "Restaura 15 de energ\xEDa al aliado seleccionado."
     m_Metadata:
       m_Items: []
   - m_Id: 6190234239979520
-    m_Localized: + 15 HP
+    m_Localized: Restaura 15 de vida al aliado seleccionado.
     m_Metadata:
       m_Items: []
   references:

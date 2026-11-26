@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-zh-Hans
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 324151727695043c2879c33a1a5a45dd
+    m_Address: UI_Items_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ec3cf768faf6e9ed9329dc903e215bc
     m_Address: UI_Challenges_zh-Hans
     m_ReadOnly: 1
@@ -101,6 +107,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f2cdc2c99e2b70be6afb7ff34a2c68aa
     m_Address: Units_Fasila_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6613a64dbed3f503885b2b106674cfe
+    m_Address: UI_Statuses_zh-Hans
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-zh-Hans

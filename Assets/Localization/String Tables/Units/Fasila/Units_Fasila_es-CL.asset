@@ -43,24 +43,20 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 6278461214720
-    m_Localized: "Activa: Selecciona una Unit, el objetivo queda Dormido por 1 ronda
-      de aquella Unit (Skipea su pr\xF3ximo turno).\n\nPasiva: Cada vez que Fasila
-      utiliza alguna t\xE9cnica, uno de sus Fragmentos resuena, si cuenta con 3 Fragmentos
-      resonantes, la siguiente t\xE9cnica duplica su efecto (dobla stats, turnos,
-      etc.)."
+    m_Localized: "Activa: selecciona un combatiente; queda dormido y pierde su pr\xF3ximo
+      turno.\n\nPasiva: cada vez que Fasila usa una t\xE9cnica, uno de sus Fragmentos
+      resuena. Con 3 Fragmentos resonantes, su siguiente t\xE9cnica duplica sus efectos
+      (atributos, duraci\xF3n, etc.)."
     m_Metadata:
       m_Items: []
   - m_Id: 6322916642816
-    m_Localized: 'Reduce la MDef de la Unit targeteada en X%, por 2 rondas.
-
-
-      X%
-      = 10% (HP / 50)'
+    m_Localized: "Reduce la defensa m\xE1gica del combatiente objetivo en X% durante
+      2 rondas.\n\nX% = 10% \xD7 (vida de Fasila / 50)"
     m_Metadata:
       m_Items: []
   - m_Id: 6371717369856
-    m_Localized: "Congela a las Units Enemigas en la posici\xF3n central y derecha,
-      por 2 rondas (Skipea los 2 pr\xF3ximos turnos de la Unit)."
+    m_Localized: "Congela a los combatientes enemigos en las posiciones central y
+      derecha durante 2 rondas (pierden sus pr\xF3ximos 2 turnos)."
     m_Metadata:
       m_Items: []
   references:

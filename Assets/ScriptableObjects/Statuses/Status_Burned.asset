@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f17a9c24c727aea0685cccb1c1d24a4c, type: 3}
-  m_Name: Status_Burn
+  m_Name: Status_Burned
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.DamageOverTimeStatusSO
-  statusName: Burn
-  icon: {fileID: 0}
+  statusName: Burned
+  icon: {fileID: 21300000, guid: 7af4df3fb4b9d661db258d00ba5f8aaa, type: 3}
   isDebuff: 0
   damageType: 1

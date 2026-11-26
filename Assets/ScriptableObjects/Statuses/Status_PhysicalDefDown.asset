@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Status_PhysicalDefDown
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.StatModifierStatusSO
   statusName: Physical Defense Down
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5431acfb4fdaf95de8daa4ed8d822a20, type: 3}
   isDebuff: 1
   stat: 5

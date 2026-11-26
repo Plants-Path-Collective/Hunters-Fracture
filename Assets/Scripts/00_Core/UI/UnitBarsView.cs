@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Core.CombatSystem.Units;
+using Core.CombatSystem.StatusSystem;
+using System.Collections.Generic;
 
 namespace Core.UI
 {
@@ -17,23 +19,30 @@ namespace Core.UI
         [Header("--- Identity ---")]
         [SerializeField] private TMP_Text nameLabel;
 
-        [Header("--- HP ---")]
+        [Header("--- Health ---")]
         [SerializeField] private Image hpFill;
         [Tooltip("Optional.")]
         [SerializeField] private TMP_Text hpText;
 
-        [Header("--- SP ---")]
+        [Header("--- Energy ---")]
         [Tooltip("Root of the whole SP bar. Hidden when the Unit has no SP (generic enemies).")]
         [SerializeField] private GameObject spRoot;
         [SerializeField] private Image spFill;
         [Tooltip("Optional.")]
         [SerializeField] private TMP_Text spText;
 
+        [Header("--- Statuses ---")]
+        public GridLayoutGroup statusesContainer;
+        [SerializeField] private GameObject statusPrefab;
+        public List<StatusIcon> activeStatuses = new List<StatusIcon>();
+
         [Header("--- Behaviour ---")]
         [SerializeField, Min(0f)] private float fillDuration = 0.25f;
         [Tooltip("Keeps the bars parallel to the screen, whatever the Unit's rotation.")]
         [SerializeField] private bool faceCamera = true;
         [SerializeField] private bool hideWhenDead = true;
+
+        private static readonly IReadOnlyList<StatusInstance> NoStatuses = new List<StatusInstance>();
 
         private Unit unit;
         private Canvas canvas;
@@ -57,17 +66,26 @@ namespace Core.UI
 
             // Subscribe only. Reading stats here is not safe yet: Unit.Awake may not have run.
             unit.OnResourcesChanged += Refresh;
+            unit.OnStatusesChanged += RefreshStatuses;
         }
 
         private void Start()
         {
-            if (unit != null) Refresh(unit);
+            if (unit != null)
+            {
+                Refresh(unit);
+                RefreshStatuses(unit);
+            }
             if (nameLabel != null) nameLabel.text = unit.Name;
         }
 
         private void OnDisable()
         {
-            if (unit != null) unit.OnResourcesChanged -= Refresh;
+            if (unit != null)
+            {
+                unit.OnResourcesChanged -= Refresh;
+                unit.OnStatusesChanged -= RefreshStatuses;
+            }
 
             hpTween?.Kill();
             spTween?.Kill();
@@ -102,6 +120,64 @@ namespace Core.UI
                 SetFill(spFill, unit.SP / (float)unit.MaxSP, ref spTween, animate);
                 if (spText != null) spText.text = $"{unit.SP}/{unit.MaxSP}";
             }
+        }
+
+        /// <summary>
+        /// Syncs the icons with the statuses the unit has right now. It diffs against the tracker's
+        /// current list instead of reacting to each event, so it does not matter which change fired it
+        /// (applied, refreshed, expired, countdown, death) or in what order: the result is the same.
+        /// </summary>
+        private void RefreshStatuses(Unit changed)
+        {
+            if (statusesContainer == null || statusPrefab == null) return;
+
+            // Combat is null outside an encounter (before EnterCombat, after ExitCombat).
+            IReadOnlyList<StatusInstance> current =
+                unit.Combat != null ? unit.Combat.GetStatuses(unit) : NoStatuses;
+
+            // Icons whose status is gone. Removed from the list right away: the fade-out takes a moment,
+            // and the same status applied again meanwhile must get a fresh icon, not this fading one.
+            for (int i = activeStatuses.Count - 1; i >= 0; i--)
+            {
+                StatusIcon icon = activeStatuses[i];
+                if (!HasStatus(current, icon.Definition))
+                {
+                    activeStatuses.RemoveAt(i);
+                    icon.Remove();
+                }
+            }
+
+            // New statuses get an icon; existing ones just update their counter.
+            for (int i = 0; i < current.Count; i++)
+            {
+                StatusInstance instance = current[i];
+                StatusIcon icon = FindIcon(instance.definition);
+
+                if (icon != null)
+                {
+                    icon.SetTurns(instance.remainingTurns);
+                    continue;
+                }
+
+                GameObject go = Instantiate(statusPrefab, statusesContainer.transform);
+                icon = go.GetComponent<StatusIcon>();
+                icon.SetStatus(instance.definition, instance.remainingTurns);
+                activeStatuses.Add(icon);
+            }
+        }
+
+        private StatusIcon FindIcon(StatusSO definition)
+        {
+            for (int i = 0; i < activeStatuses.Count; i++)
+                if (activeStatuses[i].Definition == definition) return activeStatuses[i];
+            return null;
+        }
+
+        private static bool HasStatus(IReadOnlyList<StatusInstance> statuses, StatusSO definition)
+        {
+            for (int i = 0; i < statuses.Count; i++)
+                if (statuses[i].definition == definition) return true;
+            return false;
         }
 
         private void SetFill(Image fill, float target, ref Tween tween, bool animate)

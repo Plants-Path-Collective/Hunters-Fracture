@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: UI_Items_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 958935858e1cad9ad9b44b6f088553bb, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 22753544720384
+    m_Localized: Common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753544720385
+    m_Localized: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 881679618048
+    m_Localized: Aniki Magazine
+    m_Metadata:
+      m_Items: []
+  - m_Id: 950298431488
+    m_Localized: "When the wearer is attacked, they have a 5% chance to increase
+      their magic defense by 5\u201310% (+5% per copy) until the end of combat, depending
+      on their missing Health."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914688
+    m_Localized: Italian Completo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914689
+    m_Localized: The wearer increases their Health by 15 (+5 per copy) for every
+      10 strength.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914690
+    m_Localized: Birthday Hat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914691
+    m_Localized: When the wearer attacks, they steal 10% (+5% per copy) of the target's
+      magic power for the rest of combat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914692
+    m_Localized: Porcelain Doll
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914693
+    m_Localized: The wearer increases their strength by 25% (+10% per copy), but
+      reduces their physical and magic defense by 15% (+10% per copy).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914694
+    m_Localized: Moonstone Necklace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914695
+    m_Localized: Once per combat, when the wearer's Health falls below 30%, they
+      recover 20% (+10% per copy) of their Health and consume 50% (+10% per copy)
+      of their current Energy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914696
+    m_Localized: Pressure Cooker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914697
+    m_Localized: The wearer increases their physical defense by 30%. When attacked,
+      they have a 10% chance to become stunned and lose their next turn.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914698
+    m_Localized: Bag of Fish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914699
+    m_Localized: When the wearer hits with a basic attack or a skill, they have a
+      10% chance to reduce the target's speed by 5% (+1.5% per copy).
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108992
+    m_Localized: Out-of-Circulation Bill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108993
+    m_Localized: The wearer reduces the Energy cost of their skills by 10% (+3% per
+      copy). Additionally, the wearer increases the chance that enemies attack them.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108994
+    m_Localized: 3-Pronged PVC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108995
+    m_Localized: 'The wearer replaces their basic attack with a multi-attack: it
+      hits the target and a random combatant adjacent to the target. The attack''s
+      damage is reduced to 66% (+10% per copy).'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108996
+    m_Localized: Salt Beer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108997
+    m_Localized: When the wearer uses a skill with an enemy target, there is a 20%
+      (+20% per copy) chance that it hits all enemies and also one random unit adjacent
+      to the wearer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108998
+    m_Localized: Squash Knife
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108999
+    m_Localized: When the wearer hits with a basic attack or a skill, they reduce
+      the target's physical defense by 10% per hit and apply 1 bleed stack. Each
+      stack (20 max.) deals 10 damage per turn and reduces the target's speed by
+      5% until the end of combat.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553109000
+    m_Localized: CD Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553109001
+    m_Localized: When the wearer attacks or uses a skill, they have a 10% (+5% per
+      copy) chance to repeat their turn immediately.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

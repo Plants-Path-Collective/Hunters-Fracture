@@ -14,11 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   lockedByDefault: 0
   itemID: 4
-  itemName: "Mu\xF1eca de Porcelana"
+  quality: 0
+  localizedQuality:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753544720384
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 94eace61d2161ff89b39bba14d6a409d, type: 3}
+  itemName: "Mu\xF1eca de Porcelana"
+  localizedName:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753548914692
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemDescription: Aumenta tu 25% STRENGTH (+10% por copia) disminuye tu 15% PHYSICAL
     DEFENSE (+10% por copia) y tu 15% MAGICAL DEFENSE (+10% por copia)
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753548914693
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   effects:
   - {fileID: 11400000, guid: 6f2d3a1b17e13635d992239b3f58ccc6, type: 2}
   - {fileID: 11400000, guid: 50116b05e7c98f45abf9f95525f61e04, type: 2}
   - {fileID: 11400000, guid: 5e4307bcb93f2ea3683c12f13fa7a1fd, type: 2}
+  references:
+    version: 2
+    RefIds: []

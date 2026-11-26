@@ -81,8 +81,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a6c4949c8294e59a803ec750f589953
+    m_Address: UI_Items_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3ef335168e10c1cfb2f485622d527a3
     m_Address: Quests_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4d36b4705b7e57d69f3a41caa114901
+    m_Address: UI_Statuses_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

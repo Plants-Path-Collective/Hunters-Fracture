@@ -253,6 +253,7 @@ namespace Core.CombatSystem
             if (statuses.ConsumeSkip(CurrentActor))
             {
                 OnTurnSkipped?.Invoke(CurrentActor);
+                CurrentActor.NotifyStatusesChanged();
                 StartCoroutine(EndSkippedTurn(CurrentActor));
                 return;
             }
@@ -282,6 +283,7 @@ namespace Core.CombatSystem
             // actor and even end the combat, so check before going on.
             statuses.TickTurnEnd(finishedActor);
             if (!IsCombatActive) return;
+            finishedActor.NotifyStatusesChanged();
 
             OnTurnEnd?.Invoke(finishedActor);
 
@@ -385,6 +387,7 @@ namespace Core.CombatSystem
             float deathAnimationDuration = unit.PlayDeathAnimation();
             timeline.Remove(unit);
             statuses.ClearAll(unit);
+            unit.NotifyStatusesChanged();
             OnUnitKilled?.Invoke(unit);
 
             if (TryResolveOutcome(out COMBAT_OUTCOME outcome))
@@ -631,8 +634,16 @@ namespace Core.CombatSystem
         public IReadOnlyList<StatusInstance> GetStatuses(Unit unit) => statuses.GetStatuses(unit);
 
         // The tracker raises these through us: events can only be invoked from the declaring class.
-        internal void NotifyStatusApplied(StatusContext context) => OnStatusApplied?.Invoke(context);
-        internal void NotifyStatusExpired(StatusContext context) => OnStatusExpired?.Invoke(context);
+        internal void NotifyStatusApplied(StatusContext context)
+        {
+            OnStatusApplied?.Invoke(context);
+            if (context.target != null) context.target.NotifyStatusesChanged();
+        }
+        internal void NotifyStatusExpired(StatusContext context)
+        {
+            OnStatusExpired?.Invoke(context);
+            if (context.target != null) context.target.NotifyStatusesChanged();
+        }
 
         // ── Timeline delegation (nothing outside touches TimelineController directly) ───────
 

@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI_Items Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: UI_Items
+  m_TableCollectionNameGuidString: 958935858e1cad9ad9b44b6f088553bb
+  m_Entries:
+  - m_Id: 22753544720384
+    m_Key: ui_items_quality_common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753544720385
+    m_Key: ui_items_quality_rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 881679618048
+    m_Key: ui_items_01_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 950298431488
+    m_Key: ui_items_01_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914688
+    m_Key: ui_items_02_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914689
+    m_Key: ui_items_02_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914690
+    m_Key: ui_items_03_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914691
+    m_Key: ui_items_03_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914692
+    m_Key: ui_items_04_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914693
+    m_Key: ui_items_04_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914694
+    m_Key: ui_items_05_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914695
+    m_Key: ui_items_05_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914696
+    m_Key: ui_items_06_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914697
+    m_Key: ui_items_06_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914698
+    m_Key: ui_items_07_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753548914699
+    m_Key: ui_items_07_desc
+    m_Metadata:
+      m_Items:
+      - rid: 6806775812827906049
+  - m_Id: 22753553108992
+    m_Key: ui_items_08_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108993
+    m_Key: ui_items_08_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108994
+    m_Key: ui_items_09_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108995
+    m_Key: ui_items_09_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108996
+    m_Key: ui_items_10_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108997
+    m_Key: ui_items_10_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108998
+    m_Key: ui_items_11_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553108999
+    m_Key: ui_items_11_desc
+    m_Metadata:
+      m_Items:
+      - rid: 6806775812827906050
+  - m_Id: 22753553109000
+    m_Key: ui_items_12_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22753553109001
+    m_Key: ui_items_12_desc
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6806775812827906048
+  references:
+    version: 2
+    RefIds:
+    - rid: 6806775812827906048
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1795661013607
+    - rid: 6806775812827906049
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: SPEED items are pending revision; they may change in the feature.
+          Speed does not affect combat except in the initial timeline order.
+    - rid: 6806775812827906050
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: SPEED items are pending revision; they may change in the feature.
+          Speed does not affect combat except in the initial timeline order.

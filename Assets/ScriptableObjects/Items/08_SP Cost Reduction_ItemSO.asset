@@ -14,10 +14,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.ItemSystem.ItemSO
   lockedByDefault: 0
   itemID: 8
-  itemName: "Billete fuera de Circulaci\xF3n"
+  quality: 0
+  localizedQuality:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753544720384
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: c0e5c10adea937b629d8b446f8f4ac23, type: 3}
+  itemName: "Billete fuera de Circulaci\xF3n"
+  localizedName:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553108992
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   itemDescription: "Reduce el costo de SP en 10% (+3% por copia) de las t\xE9cnicas
     del portador. Aumenta la probabilidad de ser objetivo de un ataque."
+  localizedDescription:
+    m_TableReference:
+      m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
+    m_TableEntryReference:
+      m_KeyId: 22753553108993
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   effects:
   - {fileID: 11400000, guid: a3557704270f9ca19ba25ca2f1b3eb7e, type: 2}
   - {fileID: 11400000, guid: bc4c549b022db06b3a87465afd489ec6, type: 2}
+  references:
+    version: 2
+    RefIds: []

@@ -34,23 +34,30 @@ namespace Dungeon
 
         private void RandomizeRewards()
         {
-            if (rewardsQuantity <= 0) rewardsQuantity = 1;
-            
-            List<ItemSO>canBeReward = new List<ItemSO>(0);
+            rewards.Clear();
+
+            List<ItemSO> canBeReward = new List<ItemSO>();
             foreach (ItemSO item in itemCatalog.AllItems)
             {
-                if (itemCatalog.IsAvailable(item) == true)
-                {
+                if (itemCatalog.IsAvailable(item))
                     canBeReward.Add(item);
-                }
             }
 
-            while (rewardsQuantity > 0)
-            {    
-                int reward = UnityEngine.Random.Range(1, canBeReward.Count + 1);
-                ItemSO choosenReward = canBeReward[reward];
-                rewards.Add(choosenReward);
-                rewardsQuantity--;
+            if (canBeReward.Count == 0)
+            {
+                Debug.LogWarning("[Chest] No items available for rewards.");
+                return;
+            }
+
+            int remaining = Mathf.Max(1, rewardsQuantity);
+
+            while (remaining > 0 && canBeReward.Count > 0)
+            {
+                int index = UnityEngine.Random.Range(0, canBeReward.Count);
+                ItemSO chosenReward = canBeReward[index];
+                rewards.Add(chosenReward);
+                canBeReward.RemoveAt(index);
+                remaining--;
             }
 
             canBeReward.Clear();
