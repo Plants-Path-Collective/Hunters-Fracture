@@ -23,6 +23,7 @@ namespace Dungeon
 
         [Header("Placeholders, replace with 3D Models later")]
         [SerializeField] private Transform lidPivot;
+        private bool claimed;
         
         // ── Internal State ──────────────────────────────────────────────────
         private bool playerCanInteract = false;
@@ -30,6 +31,7 @@ namespace Dungeon
         private void Start()
         {
             RandomizeRewards();
+            claimed = false;
         }
 
         private void RandomizeRewards()
@@ -72,12 +74,16 @@ namespace Dungeon
 
         private void OpenChest()
         {
+            if (claimed == true) return;
+
             Debug.Log("[Chest] Opening chest.");
             Vector3 targetRot = new Vector3(135, 0, 0);
             lidPivot.transform.DORotate(targetRot, 0.75f);
 
             ItemAssignationController.TryOpen(rewards);
             
+            claimed = true;
+
             Debug.Log("[Chest] Giving reward.");
         }
 
