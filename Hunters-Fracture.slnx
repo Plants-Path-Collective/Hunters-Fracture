@@ -1,6 +1,6 @@
 ﻿<Solution>
   <Project Path="Unity.Timeline.csproj" />
-  <Project Path="Autodesk.Fbx.csproj" />
+  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Unity.RenderPipelines.GPUDriven.Runtime.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.csproj" />
   <Project Path="Unity.Localization.csproj" />
@@ -26,7 +26,6 @@
   <Project Path="Unity.Burst.csproj" />
   <Project Path="Unity.ProBuilder.Csg.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
-  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="PPv2URPConverters.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
@@ -38,6 +37,7 @@
   <Project Path="Unity.UnifiedRayTracing.Runtime.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
   <Project Path="Unity.Cinemachine.csproj" />
+  <Project Path="Autodesk.Fbx.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
   <Project Path="Unity.Addressables.DocExampleCode.Editor.Tests.csproj" />
   <Project Path="Unity.Splines.Editor.csproj" />

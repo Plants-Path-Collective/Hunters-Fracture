@@ -16,6 +16,13 @@ namespace Core.Render
         [Tooltip("The CinemachineCamera that covers this zone.")]
         [SerializeField] protected CinemachineCamera cinemachineCamera;
 
+        [Header("Blend")]
+        [Tooltip("Blend used when the camera cuts TO this zone. Cut = instant, anything else = smooth transition.")]
+        [SerializeField] protected CinemachineBlendDefinition blendIn =
+            new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
+        /// <summary>Set before Activate() to skip the blend once (e.g. the starting zone of a scene).</summary>
+        protected bool instantNextActivation;
+
         [Header("Priority")]
         [SerializeField] protected int activePriority   = 10;
         [SerializeField] protected int inactivePriority =  0;
@@ -61,6 +68,7 @@ namespace Core.Render
         public virtual void Activate()
         {
             if (cinemachineCamera == null) return;
+            ApplyBlend();
             cinemachineCamera.gameObject.SetActive(true);
             cinemachineCamera.Priority = activePriority;
             GameManager.Instance.cmCameraActive = this.gameObject;
@@ -74,6 +82,24 @@ namespace Core.Render
             if (cinemachineCamera == null) return;
             cinemachineCamera.Priority = inactivePriority;
             cinemachineCamera.gameObject.SetActive(false);
+        }
+
+        // ── Private Methods ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Configures the brain so the next camera switch uses this zone's blend.
+        /// Must run before the priority change; the brain resolves the blend in LateUpdate.
+        /// </summary>
+        protected void ApplyBlend()
+        {
+            if (CinemachineBrain.ActiveBrainCount == 0) return;
+
+            CinemachineBrain brain = CinemachineBrain.GetActiveBrain(0);
+            brain.DefaultBlend = instantNextActivation
+                ? new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f)
+                : blendIn;
+
+            instantNextActivation = false;
         }
     }
 }

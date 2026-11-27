@@ -55,7 +55,7 @@ namespace Dungeon
         {
             party = newParty;
 
-            Debug.Log("[PlayerEntity] New paty set");
+            Debug.Log("[PlayerEntity] New party set");
         }
 
         protected override bool CanHit(Entity target) => target is EnemyEntity;

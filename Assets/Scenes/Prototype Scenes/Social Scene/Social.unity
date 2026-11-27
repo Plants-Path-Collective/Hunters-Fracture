@@ -14087,6 +14087,52 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.291, y: -0.873, z: -2.996}
   m_TimeToStationary: 0.5
+--- !u!1 &801541545
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 801541546}
+  - component: {fileID: 801541547}
+  m_Layer: 0
+  m_Name: '[SpawnPoint]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &801541546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801541545}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.8999996, y: 0, z: 2.6000004}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1389130190}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &801541547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801541545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0850526f87a90f78e8dfe07e7eab084f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.SpawnPoint
+  spawnId: DungeonDoor
+  playerTag: Player
 --- !u!208 &804781988
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -17765,7 +17811,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1389130190
 Transform:
   m_ObjectHideFlags: 0
@@ -17782,6 +17828,7 @@ Transform:
   - {fileID: 562685834}
   - {fileID: 2058683060}
   - {fileID: 1979023634}
+  - {fileID: 801541546}
   m_Father: {fileID: 709694443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1389518143
@@ -23433,11 +23480,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 322.5365
+      value: 322.53644
       objectReference: {fileID: 0}
     - target: {fileID: 996980143809883753, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.677643
+      value: -24.677612
       objectReference: {fileID: 0}
     - target: {fileID: 1026861588720341945, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_fontAsset
@@ -24645,7 +24692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5843739928866016278, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 10.355728
+      value: 10.355743
       objectReference: {fileID: 0}
     - target: {fileID: 6031132000656813121, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24701,11 +24748,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320.5703
+      value: 320.57025
       objectReference: {fileID: 0}
     - target: {fileID: 6136675324144548577, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29.992096
+      value: -29.992065
       objectReference: {fileID: 0}
     - target: {fileID: 6153991795839840670, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: inputsHints

@@ -12,7 +12,7 @@ namespace Core
     /// Lives on the persistent GameManager GameObject and survives scene loads.
     ///
     /// Usage — subscribe from any system:
-    ///   InputManager.Instance.Overworld.Move.performed += OnMove;
+    ///   InputManager.Instance.Dungeon.Move.performed += OnMove;
     ///   InputManager.Instance.Combat.BasicAttack.performed += OnAttack;
     ///
     /// Switch maps:
@@ -158,7 +158,7 @@ namespace Core
             if (Actions.UI.enabled) names.Add("UI");
             if (Actions.Rewards.enabled) names.Add("Rewards");
             if (Actions.Social.enabled) names.Add("Social");
-            if (Actions.Dungeon.enabled) names.Add("Overworld");
+            if (Actions.Dungeon.enabled) names.Add("Dungeon");
             if (Actions.Dialogue.enabled) names.Add("Dialogue");
             if (Actions.Combat.enabled) names.Add("Combat");
             return names.Count == 0 ? "none" : string.Join(", ", names);
@@ -166,7 +166,7 @@ namespace Core
         
         /// <summary>
         /// Switches to UI map, remembering the previous map so PopUIMap() can restore it.
-        /// Useful for opening menus during Social, Overworld, or Combat.
+        /// Useful for opening menus during Social, Dungeon, or Combat.
         /// </summary>
         public void PushUIMap()
         {

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Render;
 using UnityEngine;
+using Unity.Cinemachine;
+using System.Collections;
 
 namespace Dungeon
 {
@@ -24,6 +26,7 @@ namespace Dungeon
 
         [Tooltip("Rooms directly connected to this one. Activated alongside this room so crossing between them has no pop-in.")]
         [SerializeField] private List<DungeonRoom> neighbors = new();
+        private static int neighborhoodVersion;
 
         [Tooltip("Enemies assigned to this room. Their patrol points are restricted to this room's collider bounds.")]
         [SerializeField] private List<EnemyEntity> enemyEntities = new();
@@ -69,7 +72,10 @@ namespace Dungeon
             // scene — so by now every room has registered itself in allRooms, and it's safe to
             // activate the starting one without missing any neighbors.
             if (isStartingRoom)
+            {
+                instantNextActivation = true;
                 Activate();
+            }
         }
 
         private void OnEnable()  => allRooms.Add(this);
@@ -79,8 +85,23 @@ namespace Dungeon
 
         public override void Activate()
         {
-            base.Activate();
-            ActivateNeighborhood();
+            if (cinemachineCamera == null) return;
+
+            // Read before ApplyBlend(), which resets the flag.
+            bool blends = !instantNextActivation
+                        && blendIn.Style != CinemachineBlendDefinition.Styles.Cut;
+
+            ApplyBlend();
+            cinemachineCamera.Priority = activePriority;
+            GameManager.Instance.cmCameraActive = this.gameObject;
+
+            ActivateNeighborhood(deferDeactivation: blends);
+        }
+
+        public override void Deactivate()
+        {
+            if (cinemachineCamera == null) return;
+            cinemachineCamera.Priority = inactivePriority;
         }
 
         // Deliberately no Deactivate() override: whether this room's content should turn off
@@ -90,12 +111,51 @@ namespace Dungeon
 
         // ── Room activation ───────────────────────────────────────────────────
 
-        private void ActivateNeighborhood()
+        private void ActivateNeighborhood(bool deferDeactivation)
         {
             var shouldBeActive = new HashSet<DungeonRoom>(neighbors) { this };
+            int version = ++neighborhoodVersion;
 
+            // Turning on is always immediate: the new room must be ready before the camera arrives.
             foreach (DungeonRoom room in allRooms)
-                room.SetContentActive(shouldBeActive.Contains(room));
+                if (shouldBeActive.Contains(room))
+                    room.SetContentActive(true);
+
+            if (deferDeactivation)
+                StartCoroutine(DeactivateAfterBlend(shouldBeActive, version));
+            else
+                DeactivateOthers(shouldBeActive);
+        }
+
+        private IEnumerator DeactivateAfterBlend(HashSet<DungeonRoom> keepActive, int version)
+        {
+            // The brain starts the blend in LateUpdate, so wait a frame before checking IsBlending.
+            yield return null;
+
+            if (CinemachineBrain.ActiveBrainCount > 0)
+            {
+                CinemachineBrain brain = CinemachineBrain.GetActiveBrain(0);
+                float timeout = blendIn.Time + 1f; // safety net so content never stays on forever
+                float elapsed = 0f;
+
+                while (brain.IsBlending && elapsed < timeout)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    yield return null;
+                }
+            }
+
+            // A newer activation happened meanwhile: it owns the deactivation now.
+            if (version != neighborhoodVersion) yield break;
+
+            DeactivateOthers(keepActive);
+        }
+
+        private static void DeactivateOthers(HashSet<DungeonRoom> keepActive)
+        {
+            foreach (DungeonRoom room in allRooms)
+                if (!keepActive.Contains(room))
+                    room.SetContentActive(false);
         }
 
         private void SetContentActive(bool active)

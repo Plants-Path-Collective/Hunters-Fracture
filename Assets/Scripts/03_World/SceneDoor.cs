@@ -21,6 +21,9 @@ namespace World
         [Tooltip("Name of the scene to load. It must be enabled in Build Settings.")]
         [SerializeField] private string targetScene;
 
+        [Tooltip("ID of the SpawnPoint where the player appears in the target scene. Empty = the scene's default position.")]
+        [SerializeField] private string targetSpawnId;
+
         [Header("Interaction")]
         [Tooltip("Tag of the player object that can use this door.")]
         [SerializeField] private string playerTag = "Player";
@@ -73,7 +76,7 @@ namespace World
             SetPlayerInRange(false);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             SetPlayerInRange(false);
         }
@@ -87,6 +90,7 @@ namespace World
 
         public void Interact()
         {
+            
             string currentMap = InputManager.Instance != null
                 ? InputManager.Instance.CurrentMap.ToString()
                 : "unavailable";
@@ -119,12 +123,23 @@ namespace World
             LoadTarget();
         }
 
+        /// <summary>
+        /// Called right before the target scene loads. Override it to run extra logic (e.g. persist state).
+        /// Return false to cancel the load.
+        /// </summary>
+        protected virtual bool OnBeforeLoad() => true;
+
         private void LoadTarget()
         {
-            entering = true;
+            if (!OnBeforeLoad())
+            {
+                Debug.LogWarning($"[SceneDoor] '{name}' cancelled the load in OnBeforeLoad.", this);
+                return;
+            }
 
-            // Freeze the clock and the input while the scene loads. The target scene's SceneSetter
-            // selects the right map again in Start().
+            entering = true;
+            SceneSpawn.PendingId = targetSpawnId;
+
             GameClock.RequestPause(CLOCK_PAUSE_REASON.Transition);
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Empty);
 
@@ -132,15 +147,14 @@ namespace World
 
             if (load == null)
             {
-                // LoadSceneAsync returns null (and logs an error) when the scene is not in Build Settings.
                 Debug.LogError($"[SceneDoor] Could not load scene '{targetScene}'. Is it enabled in Build Settings?", this);
+                SceneSpawn.PendingId = null;
                 GameClock.ReleasePause(CLOCK_PAUSE_REASON.Transition);
                 InputManager.Instance.ChangeActionMap(interactMap);
                 entering = false;
                 return;
             }
 
-            // This door is destroyed by the load, so release the pause from a callback that does not depend on it.
             load.completed += _ => GameClock.ReleasePause(CLOCK_PAUSE_REASON.Transition);
         }
     }

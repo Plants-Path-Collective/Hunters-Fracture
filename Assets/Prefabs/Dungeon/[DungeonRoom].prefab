@@ -418,6 +418,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Render.OverworldRoomRender
   cinemachineCamera: {fileID: 1239524721997192381}
+  blendIn:
+    Style: 1
+    Time: 0
+    CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   activePriority: 10
   inactivePriority: 0
   playerTag: Player
