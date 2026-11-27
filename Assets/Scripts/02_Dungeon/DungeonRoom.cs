@@ -23,6 +23,16 @@ namespace Dungeon
         [Tooltip("Root containing everything that belongs to this room (enemies, props, etc.). " +
                  "Activated when this room (or a neighbor) becomes current; deactivated otherwise.")]
         [SerializeField] private GameObject roomContent;
+        private static DungeonRoom currentRoom;
+
+        [Header("----- North Wall -----")]
+        [Tooltip("If true, the north wall is shown while the Player is inside this room and hidden when leaving.")]
+        [SerializeField] private bool hasNorthNeighbor;
+
+        [Tooltip("Wall object toggled by 'Has North Neighbor'. Only used when that bool is true.")]
+        public GameObject northWall;
+
+        private Coroutine hideNorthWallRoutine;
 
         [Tooltip("Rooms directly connected to this one. Activated alongside this room so crossing between them has no pop-in.")]
         [SerializeField] private List<DungeonRoom> neighbors = new();
@@ -64,6 +74,7 @@ namespace Dungeon
             // Mirror the camera's "start inactive" default — an external bootstrap/SceneSetter
             // is responsible for activating whichever room the Player actually starts in.
             SetContentActive(false);
+            SetNorthWall(false);
         }
 
         private void Start()
@@ -85,9 +96,18 @@ namespace Dungeon
 
         public override void Activate()
         {
+            if (hideNorthWallRoutine != null)
+            {
+                StopCoroutine(hideNorthWallRoutine);
+                hideNorthWallRoutine = null;
+            }
+            SetNorthWall(true);
+
+            DungeonRoom previous = currentRoom;
+            currentRoom = this;
+
             if (cinemachineCamera == null) return;
 
-            // Read before ApplyBlend(), which resets the flag.
             bool blends = !instantNextActivation
                         && blendIn.Style != CinemachineBlendDefinition.Styles.Cut;
 
@@ -95,13 +115,28 @@ namespace Dungeon
             cinemachineCamera.Priority = activePriority;
             GameManager.Instance.cmCameraActive = this.gameObject;
 
+            // The new room owns hiding the previous wall, since it knows the blend.
+            if (previous != null && previous != this)
+                previous.BeginHideNorthWall(blends);
+
             ActivateNeighborhood(deferDeactivation: blends);
         }
 
         public override void Deactivate()
         {
+            // Wall is handled by the next room's Activate(); nothing to do here.
             if (cinemachineCamera == null) return;
             cinemachineCamera.Priority = inactivePriority;
+        }
+
+        private void BeginHideNorthWall(bool waitForBlend)
+        {
+            if (hideNorthWallRoutine != null) StopCoroutine(hideNorthWallRoutine);
+
+            if (waitForBlend && isActiveAndEnabled)
+                hideNorthWallRoutine = StartCoroutine(HideNorthWallAfterBlend());
+            else
+                SetNorthWall(false);
         }
 
         // Deliberately no Deactivate() override: whether this room's content should turn off
@@ -167,6 +202,37 @@ namespace Dungeon
             }
 
             roomContent.SetActive(active);
+        }
+
+        private IEnumerator HideNorthWallAfterBlend()
+        {
+            // The brain starts the blend in LateUpdate, so wait a frame before checking IsBlending.
+            yield return null;
+
+            if (CinemachineBrain.ActiveBrainCount > 0)
+            {
+                CinemachineBrain brain = CinemachineBrain.GetActiveBrain(0);
+                const float maxWait = 5f; // safety net so the wall never stays on forever
+                float elapsed = 0f;
+
+                while (brain.IsBlending && elapsed < maxWait)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    yield return null;
+                }
+            }
+
+            SetNorthWall(false);
+            hideNorthWallRoutine = null;
+        }
+
+        // ── Room activation ───────────────────────────────────────────────────
+    
+        /// <summary>Shows or hides the north wall, but only if this room has a north neighbor.</summary>
+        private void SetNorthWall(bool visible)
+        {
+            if (!hasNorthNeighbor || northWall == null) return;
+            northWall.SetActive(visible);
         }
     }
 }
