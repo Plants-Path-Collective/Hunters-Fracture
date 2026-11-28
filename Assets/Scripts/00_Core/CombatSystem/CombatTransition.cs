@@ -102,6 +102,13 @@ namespace Core.CombatSystem
             GameManager.Instance.SetInCombat(false);
             GameClock.ReleasePause(CLOCK_PAUSE_REASON.Combat);
 
+            GameObject defeatedEnemy = null;
+            if (outcome == COMBAT_OUTCOME.Victory)
+            {
+                defeatedEnemy = suspendedEnemy;
+                suspendedEnemy = null;
+            }
+
             foreach (GameObject content in suspendedRoomContents)
                 if (content != null)
                     content.SetActive(true);
@@ -118,11 +125,17 @@ namespace Core.CombatSystem
             suspendedPlayer?.SetActive(true);
             suspendedPlayer = null;
 
-            // Victory will eventually destroy the enemy's Overworld GameObject instead of
-            // restoring it (once RewardsScreen exists) — see combat.html's "salida-de-combate".
-            // For now every non-Defeat outcome just brings it back, same as a Fled.
-            suspendedEnemy?.SetActive(true);
-            suspendedEnemy = null;
+            if (defeatedEnemy != null)
+            {
+                // Victory: the encounter is cleared, remove the Overworld enemy for good.
+                Object.Destroy(defeatedEnemy);
+            }
+            else
+            {
+                // Fled: the enemy survives and EnemyEntity gives the player a grace period.
+                suspendedEnemy?.SetActive(true);
+                suspendedEnemy = null;
+            }
 
             InputManager.Instance.ChangeActionMap(INPUTACTION_MAP.Dungeon);
 
