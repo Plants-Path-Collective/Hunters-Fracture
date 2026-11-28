@@ -129,6 +129,8 @@ namespace Core.CombatSystem
             CombatSetUp setUp = CombatSetUp.Consume();
             if (setUp != null)
                 StartFromSetUp(setUp);
+
+            // NEED TO CHECK WHY THIS THROW ERROR
             combatMusic = RuntimeManager.CreateInstance(FMODEvents.Instance.CombatMusic);
             combatMusic.start();
         }

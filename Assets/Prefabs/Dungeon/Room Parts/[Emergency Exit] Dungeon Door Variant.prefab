@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7867340234597930772, guid: 1169ae6ac33d3cb40821289e7e0254fd, type: 3}
       propertyPath: m_Name
-      value: '[Dungeon Door] Variant'
+      value: '[Emergency Exit] Dungeon Door Variant'
       objectReference: {fileID: 0}
     - target: {fileID: 8269580329500301552, guid: 1169ae6ac33d3cb40821289e7e0254fd, type: 3}
       propertyPath: interactMap
