@@ -24553,6 +24553,42 @@ PrefabInstance:
       propertyPath: globalVisuals
       value: 
       objectReference: {fileID: 493458462}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[0].inventorySnapshot.entries.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[1].inventorySnapshot.entries.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[0].inventorySnapshot.entries.Array.data[0].key
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[0].inventorySnapshot.entries.Array.data[1].key
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[1].inventorySnapshot.entries.Array.data[0].key
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[0].inventorySnapshot.entries.Array.data[0].value
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[0].inventorySnapshot.entries.Array.data[1].value
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062092321243711654, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
+      propertyPath: party.members.Array.data[1].inventorySnapshot.entries.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3084895873532172320, guid: 802a42c4fc8a8cc4dbb16e4ccb893d1b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

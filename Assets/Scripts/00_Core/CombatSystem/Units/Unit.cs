@@ -143,11 +143,12 @@ namespace Core.CombatSystem.Units
         /// (see EffectivePhysicalDefense / EffectiveMagicalDefense).</summary>
         public bool isDefending => defendingTurnsRemaining > 0;
 
-        /// <summary>Starts the guard. Only CombatController.Defend() should call this.</summary>
-        internal void SetDefending(int turns) => defendingTurnsRemaining = turns;
+        internal void SetDefending(int turns, IndicatorSO indicator = null)
+        {
+            defendingTurnsRemaining = turns;
+            if (indicator != null) SetIndicator(indicator);
+        }
 
-        /// <summary>Counts one turn advance toward the guard's expiry. Called once per
-        /// AdvanceToNextTurn, for every Unit in the roster — see CombatController.</summary>
         internal void TickDefending()
         {
             if (defendingTurnsRemaining > 0)
@@ -177,6 +178,11 @@ namespace Core.CombatSystem.Units
 
         public event Action<Unit> OnStatusesChanged;
         internal void NotifyStatusesChanged() => OnStatusesChanged?.Invoke(this);
+
+        // ----- Indicators (icons that are not statuses) -----
+        private readonly List<IndicatorEntry> indicators = new();
+        public IReadOnlyList<IndicatorEntry> Indicators => indicators;
+        public event Action<Unit> OnIndicatorsChanged;
         
         // ----- Fury (secondary resource) -----
         private int fury;
@@ -405,6 +411,57 @@ namespace Core.CombatSystem.Units
 
             HP = MaxHP;
             SP = MaxSP;
+        }
+
+         public void SetIndicator(IndicatorSO definition, int count = 0)
+        {
+            if (definition == null) return;
+            int i = IndexOfIndicator(definition);
+            if (i >= 0)
+            {
+                if (indicators[i].count == count) return;
+                indicators[i] = new IndicatorEntry(definition, count);
+            }
+            else indicators.Add(new IndicatorEntry(definition, count));
+            OnIndicatorsChanged?.Invoke(this);
+        }
+
+        public void AddToIndicator(IndicatorSO definition, int amount)
+        {
+            if (definition == null) return;
+            int i = IndexOfIndicator(definition);
+            SetIndicator(definition, (i >= 0 ? indicators[i].count : 0) + amount);
+        }
+
+        public void ClearIndicator(IndicatorSO definition)
+        {
+            int i = IndexOfIndicator(definition);
+            if (i < 0) return;
+            indicators.RemoveAt(i);
+            OnIndicatorsChanged?.Invoke(this);
+        }
+
+        internal void ClearIndicators()
+        {
+            if (indicators.Count == 0) return;
+            indicators.Clear();
+            OnIndicatorsChanged?.Invoke(this);
+        }
+
+        /// <summary>Drops the turn-scoped markers: the ones that end when the turn starts (turnEnded = false)
+        /// or the ones that last through the turn and end when it closes (turnEnded = true).</summary>
+        internal void ExpireTurnIndicators(bool turnEnded)
+        {
+            bool changed = indicators.RemoveAll(e =>
+                e.definition.expiresOnOwnTurn && e.definition.lastsThroughOwnTurn == turnEnded) > 0;
+            if (changed) OnIndicatorsChanged?.Invoke(this);
+        }
+
+        private int IndexOfIndicator(IndicatorSO definition)
+        {
+            for (int i = 0; i < indicators.Count; i++)
+                if (indicators[i].definition == definition) return i;
+            return -1;
         }
     }
 }

@@ -18,3 +18,6 @@ MonoBehaviour:
   perStackHealPercent: 0.1
   spCostPercent: 0.5
   perStackSpCostPercent: 0.1
+  indicator: {fileID: 11400000, guid: f072ac6b49243460286dc9da5991c56f, type: 2}
+  usedIndicator: {fileID: 11400000, guid: 6abf71cbc653ac6e9a9a77bf47e5d7a4, type: 2}
+  debugLog: 0

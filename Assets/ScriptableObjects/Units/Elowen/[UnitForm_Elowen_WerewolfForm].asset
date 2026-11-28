@@ -21,4 +21,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 984fe84db4b5f57bebd6c569c0336ce8, type: 2}
   - {fileID: 11400000, guid: a9dfeec046be3ff249deb1bb6f0e60e0, type: 2}
   ultimate: {fileID: 11400000, guid: 0c2286cf2d23e204ea2b8cac72cceb03, type: 2}
+  indicator: {fileID: 11400000, guid: 037f75181420bbcc383a66e33dd9a949, type: 2}
   downedHpPenalty: 0.15

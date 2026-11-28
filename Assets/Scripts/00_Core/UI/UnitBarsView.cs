@@ -67,6 +67,7 @@ namespace Core.UI
             // Subscribe only. Reading stats here is not safe yet: Unit.Awake may not have run.
             unit.OnResourcesChanged += Refresh;
             unit.OnStatusesChanged += RefreshStatuses;
+            unit.OnIndicatorsChanged += RefreshStatuses;
         }
 
         private void Start()
@@ -85,6 +86,7 @@ namespace Core.UI
             {
                 unit.OnResourcesChanged -= Refresh;
                 unit.OnStatusesChanged -= RefreshStatuses;
+                unit.OnIndicatorsChanged -= RefreshStatuses;
             }
 
             hpTween?.Kill();
@@ -122,61 +124,58 @@ namespace Core.UI
             }
         }
 
-        /// <summary>
-        /// Syncs the icons with the statuses the unit has right now. It diffs against the tracker's
-        /// current list instead of reacting to each event, so it does not matter which change fired it
-        /// (applied, refreshed, expired, countdown, death) or in what order: the result is the same.
-        /// </summary>
+        private readonly struct IconEntry
+        {
+            public readonly object key; public readonly Sprite sprite; public readonly int count; public readonly Color tint;
+            public IconEntry(object key, Sprite sprite, int count, Color tint)
+            { this.key = key; this.sprite = sprite; this.count = count; this.tint = tint; }
+        }
+        private readonly List<IconEntry> wanted = new();
+
         private void RefreshStatuses(Unit changed)
         {
             if (statusesContainer == null || statusPrefab == null) return;
 
-            // Combat is null outside an encounter (before EnterCombat, after ExitCombat).
-            IReadOnlyList<StatusInstance> current =
-                unit.Combat != null ? unit.Combat.GetStatuses(unit) : NoStatuses;
+            wanted.Clear();
+            if (unit.Combat != null)
+                foreach (StatusInstance s in unit.Combat.GetStatuses(unit))
+                    wanted.Add(new IconEntry(s.definition, s.definition.icon, s.definition.GetDisplayCount(s), Color.white));
+            foreach (IndicatorEntry e in unit.Indicators)
+                wanted.Add(new IconEntry(e.definition, e.definition.icon, e.count, e.definition.tint));
 
-            // Icons whose status is gone. Removed from the list right away: the fade-out takes a moment,
-            // and the same status applied again meanwhile must get a fresh icon, not this fading one.
             for (int i = activeStatuses.Count - 1; i >= 0; i--)
             {
                 StatusIcon icon = activeStatuses[i];
-                if (!HasStatus(current, icon.Definition))
+                if (!Wants(icon.Key))
                 {
                     activeStatuses.RemoveAt(i);
                     icon.Remove();
                 }
             }
 
-            // New statuses get an icon; existing ones just update their counter.
-            for (int i = 0; i < current.Count; i++)
+            foreach (IconEntry entry in wanted)
             {
-                StatusInstance instance = current[i];
-                StatusIcon icon = FindIcon(instance.definition);
-
-                if (icon != null)
-                {
-                    icon.SetTurns(instance.definition.GetDisplayCount(instance));
-                    continue;
-                }
+                StatusIcon icon = FindIcon(entry.key);
+                if (icon != null) { icon.SetTurns(entry.count); continue; }
 
                 GameObject go = Instantiate(statusPrefab, statusesContainer.transform);
                 icon = go.GetComponent<StatusIcon>();
-                icon.SetStatus(instance.definition, instance.definition.GetDisplayCount(instance));
+                icon.Show(entry.key, entry.sprite, entry.count, entry.tint);
                 activeStatuses.Add(icon);
             }
         }
 
-        private StatusIcon FindIcon(StatusSO definition)
+        private StatusIcon FindIcon(object key)
         {
             for (int i = 0; i < activeStatuses.Count; i++)
-                if (activeStatuses[i].Definition == definition) return activeStatuses[i];
+                if (activeStatuses[i].Key == key) return activeStatuses[i];
             return null;
         }
 
-        private static bool HasStatus(IReadOnlyList<StatusInstance> statuses, StatusSO definition)
+        private bool Wants(object key)
         {
-            for (int i = 0; i < statuses.Count; i++)
-                if (statuses[i].definition == definition) return true;
+            for (int i = 0; i < wanted.Count; i++)
+                if (wanted[i].key == key) return true;
             return false;
         }
 

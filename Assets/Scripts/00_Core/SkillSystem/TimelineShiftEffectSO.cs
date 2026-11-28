@@ -12,6 +12,10 @@ namespace Core.CombatSystem.SkillSystem
         [SerializeField] private TIMELINE_SHIFT shift;
         [SerializeField, Min(1)] private int amount = 1;
 
+        [Header("--- UI ---")]
+        [Tooltip("Optional marker shown on each shifted unit until its next turn.")]
+        [SerializeField] private IndicatorSO indicator;
+
         public override void Apply(ActionContext context, CombatController combat)
         {
             int n = Mathf.Max(1, Mathf.RoundToInt(amount * context.effectScale));
@@ -21,6 +25,8 @@ namespace Core.CombatSystem.SkillSystem
             {
                 if (shift == TIMELINE_SHIFT.Advance) combat.Advance(target, n);
                 else combat.Delay(target, n);
+                if (indicator != null && target != combat.CurrentActor && target.IsAlive)
+                    target.AddToIndicator(indicator, n);
             }
         }
     }

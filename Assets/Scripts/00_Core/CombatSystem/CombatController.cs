@@ -74,6 +74,8 @@ namespace Core.CombatSystem
 
         // ── Status events ────────────────────────────────────────────────────
 
+        [SerializeField] private IndicatorSO defendingIndicator; 
+
         public event Action<StatusContext> OnStatusApplied;
         public event Action<StatusContext> OnStatusExpired;
 
@@ -240,11 +242,14 @@ namespace Core.CombatSystem
             while (CurrentActor != null && !CurrentActor.IsAlive)
                 CurrentActor = timeline.Pop();
 
+
             if (CurrentActor == null)
             {
                 Debug.LogWarning($"[{nameof(CombatController)}] Timeline is empty — nothing to act.");
                 return;
             }
+
+            CurrentActor.ExpireTurnIndicators(false);
 
             // Tick every unit's Defending countdown once per turn advance — see Unit.TickDefending().
             foreach (Unit unit in roster)
@@ -286,6 +291,7 @@ namespace Core.CombatSystem
             statuses.TickTurnEnd(finishedActor);
             if (!IsCombatActive) return;
             finishedActor.NotifyStatusesChanged();
+            finishedActor.ExpireTurnIndicators(true);
 
             OnTurnEnd?.Invoke(finishedActor);
 
@@ -390,6 +396,7 @@ namespace Core.CombatSystem
             timeline.Remove(unit);
             statuses.ClearAll(unit);
             unit.NotifyStatusesChanged();
+            unit.ClearIndicators();
             OnUnitKilled?.Invoke(unit);
 
             if (TryResolveOutcome(out COMBAT_OUTCOME outcome))
@@ -443,6 +450,7 @@ namespace Core.CombatSystem
             if (form.maxHpFromMaxSp)
                 unit.HP = unit.MaxHP;
 
+            if (form.indicator != null) unit.SetIndicator(form.indicator);
             unit.NotifyFormChanged();
             OnFormChanged?.Invoke(unit, true);
         }
@@ -459,6 +467,7 @@ namespace Core.CombatSystem
             float hpFraction = unit.MaxHP > 0 ? (float)unit.HP / unit.MaxHP : 0f;
 
             unit.ActiveForm = null;
+            if (form.indicator != null) unit.ClearIndicator(form.indicator);
             unit.RestoreBaseKit();
             unit.StatsController.ClearForm();
             unit.Fury = 0;
@@ -595,7 +604,7 @@ namespace Core.CombatSystem
         {
             if (!IsCombatActive || unit == null || unit != CurrentActor) return false;
 
-            unit.SetDefending(defendingDurationTurns);
+            unit.SetDefending(defendingDurationTurns, defendingIndicator);
             RestoreSP(unit, unit.Definition.RollSPRegen());
 
             EndTurn();
@@ -610,7 +619,7 @@ namespace Core.CombatSystem
         {
             if (!IsCombatActive || unit == null || !unit.IsAlive) return;
 
-            unit.SetDefending(Mathf.Max(1, advances));
+            unit.SetDefending(Mathf.Max(1, advances), defendingIndicator);
         }
 
         // ── Status verbs ──────────────────────────────────────────────────────

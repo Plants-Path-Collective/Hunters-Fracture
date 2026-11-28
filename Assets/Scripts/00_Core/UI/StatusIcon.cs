@@ -19,8 +19,9 @@ namespace Core.UI
 
         public int remainingTurns;
 
+        public object Key { get; private set; }
         /// <summary>The status this icon represents. UnitBarsView uses it to match icons to statuses.</summary>
-        public StatusSO Definition { get; private set; }
+        public StatusSO Definition => Key as StatusSO;
 
         private TextMeshProUGUI turnsText;
         private Image icon;
@@ -34,23 +35,21 @@ namespace Core.UI
             turnsText = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        /// <summary>First appearance: fades the icon in, then pops the counter if more than 1 turn remains.</summary>
-        public void SetStatus(StatusSO definition, int turns)
+        public void Show(object key, Sprite sprite, int count, Color tint)
         {
-            Definition = definition;
-            remainingTurns = turns;
-            icon.sprite = definition.icon;
-            turnsText.text = turns.ToString();
+            Key = key;
+            remainingTurns = count;
+            icon.sprite = sprite;
+            icon.color = new Color(tint.r, tint.g, tint.b, 0f);
+            turnsText.text = count.ToString();
 
-            SetIconAlpha(0f);
             turnsText.transform.localScale = Vector3.zero;
             textVisible = false;
 
-            icon.DOFade(1f, fadeDuration)
+            icon.DOFade(tint.a, fadeDuration)
                 .SetLink(gameObject)
                 .OnComplete(() =>
                 {
-                    // Read the field, not the argument: the count may have changed during the fade.
                     if (remainingTurns > 1 && !textVisible && !removing) ShowText();
                 });
         }

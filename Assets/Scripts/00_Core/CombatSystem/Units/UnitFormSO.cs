@@ -26,6 +26,10 @@ namespace Core.CombatSystem.Units
         [Tooltip("Replaces the unit's ultimate while in this form (e.g. 'Return to human').")]
         public ActionSO ultimate;
 
+        [Header("--- UI ---")]
+        [Tooltip("Optional icon shown on the unit's status row while it is in this form.")]
+        public IndicatorSO indicator;
+
         [Header("--- Rules ---")]
         [Tooltip("If HP reaches 0 the unit leaves the form instead of dying, keeping the HP it had " +
                  "before the form reduced by this fraction (0.15 = 15% less).")]

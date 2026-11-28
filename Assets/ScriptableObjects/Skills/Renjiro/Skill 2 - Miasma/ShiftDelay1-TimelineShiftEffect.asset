@@ -17,3 +17,4 @@ MonoBehaviour:
   slots: 5
   shift: 1
   amount: 1
+  indicator: {fileID: 11400000, guid: 157da4ffb2067c5599c63dc735d35149, type: 2}
