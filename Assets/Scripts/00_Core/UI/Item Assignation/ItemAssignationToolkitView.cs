@@ -9,6 +9,7 @@ namespace Core.UI
     /// <summary>
     /// PLACEHOLDER view built with UI Toolkit. The whole tree is created in code (no UXML/USS) so it works
     /// as soon as it is dropped on an object with a UIDocument that has a Panel Settings asset.
+    /// Layout: header, party cards (one per slot, key badge on top), unassigned list + description, footer hints.
     /// Texts are hardcoded and not localized yet.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
@@ -17,6 +18,7 @@ namespace Core.UI
         private sealed class MemberRow
         {
             public VisualElement root;
+            public VisualElement keyHolder;
             public VisualElement portrait;
             public Label nameLabel;
             public VisualElement items;
@@ -25,21 +27,51 @@ namespace Core.UI
         private static readonly Color Dim = new(0f, 0f, 0f, 0.7f);
         private static readonly Color Card = new(0.09f, 0.10f, 0.13f, 1f);
         private static readonly Color Slot = new(0.15f, 0.17f, 0.21f, 1f);
+        private static readonly Color SlotSelected = new(0.22f, 0.24f, 0.30f, 1f);
         private static readonly Color Accent = new(1f, 0.78f, 0.25f, 1f);
         private static readonly Color Muted = new(0.65f, 0.68f, 0.74f, 1f);
+        private static readonly Color Line = new(1f, 1f, 1f, 0.10f);
 
         private UIDocument document;
         private VisualElement overlay;
+        private Label counterLabel;
+        private ScrollView unassignedScroll;
         private VisualElement unassignedList;
-        private VisualElement holdBar;
         private VisualElement holdFill;
+        private VisualElement descIcon;
         private Label descName;
         private Label descText;
         private VisualElement pillBar;
         private readonly MemberRow[] rows = new MemberRow[AllyParty.MaxMembers];
         private bool visible;
 
+        [Header("--- Input glyphs ---")]
+        [SerializeField] private InputGlyphLibrary glyphs;
+
+        private readonly List<Sprite> glyphBuffer = new();
+        private IReadOnlyList<InputHint> lastHints;
+
+        // ── Lyfecycle ───────────────────────────────────────────────
+
         private void Awake() => document = GetComponent<UIDocument>();
+
+        private void OnEnable()
+        {
+            InputEvent.RegisterListener();
+            InputEvent.InputTypeChanged += OnInputTypeChanged;
+        }
+
+        private void OnDisable()
+        {
+            InputEvent.InputTypeChanged -= OnInputTypeChanged;
+            InputEvent.UnregisterListener();
+        }
+
+        // Swap keyboard <-> gamepad glyphs live.
+        private void OnInputTypeChanged(InputEvent.InputType type)
+        {
+            if (lastHints != null) SetHints(lastHints);
+        }
 
         // ── ItemAssignationView ───────────────────────────────────────────────
 
@@ -60,6 +92,10 @@ namespace Core.UI
             if (!EnsureBuilt()) return;
             if (visible) overlay.style.display = DisplayStyle.Flex;
 
+            int left = session.Unassigned.Count;
+            counterLabel.text = left > 0 ? $"{left} left to assign" : "All items assigned";
+            counterLabel.style.color = left > 0 ? Muted : Accent;
+
             RenderUnassigned(session);
 
             for (int slot = 0; slot < rows.Length; slot++)
@@ -68,22 +104,37 @@ namespace Core.UI
             ItemSO selected = session.Selected;
             descName.text = selected != null ? selected.localizedName.GetLocalizedString() : string.Empty;
             descText.text = selected != null ? selected.localizedDescription.GetLocalizedString() : string.Empty;
+            descIcon.style.display = selected != null ? DisplayStyle.Flex : DisplayStyle.None;
+            if (selected != null) SetSprite(descIcon, selected.itemIcon);
         }
 
         public override void SetHints(IReadOnlyList<InputHint> hints)
         {
             if (!EnsureBuilt()) return;
 
+            lastHints = hints;
             pillBar.Clear();
             foreach (InputHint hint in hints)
-                pillBar.Add(MakePill(hint));
+            {
+                if (hint.slot >= 0)
+                {
+                    if (hint.slot < rows.Length) ApplySlotHint(rows[hint.slot], hint);
+                    continue;
+                }
+
+                if (hint.enabled) pillBar.Add(MakePill(hint));
+            }
         }
 
+        private void ApplySlotHint(MemberRow row, InputHint hint)
+        {
+            FillKey(row.keyHolder, hint, 28);
+            row.keyHolder.style.visibility = hint.enabled ? Visibility.Visible : Visibility.Hidden;
+        }
+        
         public override void SetHoldProgress(float normalized)
         {
             if (!EnsureBuilt()) return;
-
-            holdBar.style.display = normalized > 0f ? DisplayStyle.Flex : DisplayStyle.None;
             holdFill.style.width = Length.Percent(Mathf.Clamp01(normalized) * 100f);
         }
 
@@ -93,6 +144,17 @@ namespace Core.UI
         {
             unassignedList.Clear();
 
+            if (session.Unassigned.Count == 0)
+            {
+                Label empty = MakeLabel("Nothing left to assign.", 13, Muted);
+                empty.style.unityFontStyleAndWeight = FontStyle.Normal;
+                empty.style.marginTop = 8;
+                unassignedList.Add(empty);
+                return;
+            }
+
+            VisualElement selectedEntry = null;
+
             for (int i = 0; i < session.Unassigned.Count; i++)
             {
                 ItemSO item = session.Unassigned[i];
@@ -101,18 +163,26 @@ namespace Core.UI
                 var entry = new VisualElement();
                 entry.style.flexDirection = FlexDirection.Row;
                 entry.style.alignItems = Align.Center;
-                entry.style.backgroundColor = Slot;
+                entry.style.backgroundColor = selected ? SlotSelected : Slot;
                 entry.style.marginBottom = 4;
-                SetPadding(entry, 4);
-                SetBorder(entry, 2, selected ? Accent : Color.clear, 4);
+                SetPadding(entry, 6);
+                SetBorder(entry, 2, selected ? Accent : Color.clear, 6);
 
                 entry.Add(MakeIcon(item, 1, 36));
 
                 Label name = MakeLabel(item.localizedName.GetLocalizedString(), 14, selected ? Accent : Color.white);
-                name.style.marginLeft = 8;
+                name.style.marginLeft = 4;
                 entry.Add(name);
 
                 unassignedList.Add(entry);
+                if (selected) selectedEntry = entry;
+            }
+
+            // Keep the selection visible; layout is only valid on the next frame.
+            if (selectedEntry != null)
+            {
+                VisualElement target = selectedEntry;
+                target.schedule.Execute(() => unassignedScroll.ScrollTo(target));
             }
         }
 
@@ -128,9 +198,19 @@ namespace Core.UI
             SetSprite(row.portrait, target.Portrait);
 
             row.items.Clear();
+            bool any = false;
             foreach ((ItemSO item, int quantity) in session.GetStacks(slot))
             {
-                if (item != null && quantity > 0) row.items.Add(MakeIcon(item, quantity, 36));
+                if (item == null || quantity <= 0) continue;
+                row.items.Add(MakeIcon(item, quantity, 36));
+                any = true;
+            }
+
+            if (!any)
+            {
+                Label none = MakeLabel("No items", 12, Muted);
+                none.style.unityFontStyleAndWeight = FontStyle.Normal;
+                row.items.Add(none);
             }
         }
 
@@ -163,76 +243,131 @@ namespace Core.UI
             overlay.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
             root.Add(overlay);
 
-            // Column: input hint pills above, main card below.
-            var column = new VisualElement();
-            column.style.width = Length.Percent(80);
-            column.style.maxWidth = 1000;
-            overlay.Add(column);
-
-            pillBar = new VisualElement();
-            pillBar.style.flexDirection = FlexDirection.Row;
-            pillBar.style.flexWrap = Wrap.Wrap;
-            pillBar.style.justifyContent = Justify.Center;
-            pillBar.style.marginBottom = 10;
-            column.Add(pillBar);
-
             var card = new VisualElement();
+            card.style.width = Length.Percent(85);
+            card.style.maxWidth = 960;
             card.style.backgroundColor = Card;
             SetPadding(card, 20);
-            SetBorder(card, 2, Muted, 8);
-            column.Add(card);
+            SetBorder(card, 2, Muted, 10);
+            overlay.Add(card);
 
-            card.Add(MakeLabel("ASSIGN ITEMS", 22, Accent));
+            BuildHeader(card);
+            BuildPartyRow(card);
+            BuildBottomRow(card);
+            BuildFooter(card);
+        }
 
-            var body = new VisualElement();
-            body.style.flexDirection = FlexDirection.Row;
-            body.style.marginTop = 12;
-            card.Add(body);
+        private void BuildHeader(VisualElement card)
+        {
+            var header = new VisualElement();
+            header.style.flexDirection = FlexDirection.Row;
+            header.style.justifyContent = Justify.SpaceBetween;
+            header.style.alignItems = Align.Center;
+            header.style.marginBottom = 14;
+            card.Add(header);
 
-            // Left: one row per party slot.
-            var left = new VisualElement();
-            left.style.flexGrow = 1;
-            left.Add(MakeLabel("Party", 14, Muted));
+            header.Add(MakeLabel("ASSIGN ITEMS", 22, Accent));
+
+            counterLabel = MakeLabel(string.Empty, 14, Muted);
+            header.Add(counterLabel);
+        }
+
+        private void BuildPartyRow(VisualElement card)
+        {
+            // Same left / center / right order as the assign keys.
+            var party = new VisualElement();
+            party.style.flexDirection = FlexDirection.Row;
+            card.Add(party);
+
             for (int i = 0; i < rows.Length; i++)
             {
                 rows[i] = BuildMemberRow();
-                left.Add(rows[i].root);
+                if (i > 0) rows[i].root.style.marginLeft = 12;
+                party.Add(rows[i].root);
             }
-            body.Add(left);
+        }
 
-            // Right: unassigned items.
-            var right = new VisualElement();
-            right.style.width = Length.Percent(34);
-            right.style.marginLeft = 16;
-            right.Add(MakeLabel("Unassigned", 14, Muted));
-            unassignedList = new VisualElement();
-            unassignedList.style.marginTop = 6;
-            right.Add(unassignedList);
-            body.Add(right);
+        private void BuildBottomRow(VisualElement card)
+        {
+            var bottom = new VisualElement();
+            bottom.style.flexDirection = FlexDirection.Row;
+            bottom.style.marginTop = 16;
+            card.Add(bottom);
 
-            // Description.
+            // Left: unassigned items (scrolls when there are many).
+            var left = new VisualElement();
+            left.style.width = Length.Percent(42);
+            left.Add(MakeLabel("Unassigned", 13, Muted));
+
+            unassignedScroll = new ScrollView(ScrollViewMode.Vertical);
+            unassignedScroll.style.maxHeight = 190;
+            unassignedScroll.style.marginTop = 6;
+            unassignedScroll.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+            unassignedList = unassignedScroll.contentContainer;
+            left.Add(unassignedScroll);
+            bottom.Add(left);
+
+            // Right: description of the selected item.
+            var desc = new VisualElement();
+            desc.style.flexGrow = 1;
+            desc.style.flexDirection = FlexDirection.Row;
+            desc.style.marginLeft = 16;
+            desc.style.minHeight = 110;
+            desc.style.backgroundColor = Slot;
+            SetPadding(desc, 14);
+            SetBorder(desc, 1, Line, 8);
+            bottom.Add(desc);
+
+            descIcon = new VisualElement();
+            descIcon.style.width = 56;
+            descIcon.style.height = 56;
+            descIcon.style.marginRight = 14;
+            descIcon.style.flexShrink = 0;
+            descIcon.style.backgroundColor = new Color(0f, 0f, 0f, 0.35f);
+            descIcon.style.display = DisplayStyle.None;
+            desc.Add(descIcon);
+
+            var texts = new VisualElement();
+            texts.style.flexGrow = 1;
+            texts.style.flexShrink = 1;
+            desc.Add(texts);
+
             descName = MakeLabel(string.Empty, 18, Color.white);
-            descName.style.marginTop = 16;
-            card.Add(descName);
+            texts.Add(descName);
 
             descText = MakeLabel(string.Empty, 14, Muted);
+            descText.style.unityFontStyleAndWeight = FontStyle.Normal;
             descText.style.whiteSpace = WhiteSpace.Normal;
-            descText.style.minHeight = 40;
-            card.Add(descText);
+            descText.style.marginTop = 4;
+            texts.Add(descText);
+        }
 
-            // Hold-to-confirm bar.
-            holdBar = new VisualElement();
-            holdBar.style.height = 8;
-            holdBar.style.marginTop = 8;
-            holdBar.style.backgroundColor = Slot;
-            holdBar.style.display = DisplayStyle.None;
+        private void BuildFooter(VisualElement card)
+        {
+            // Hold-to-confirm track is always reserved so the layout never jumps.
+            var holdBar = new VisualElement();
+            holdBar.style.height = 4;
+            holdBar.style.marginTop = 16;
+            holdBar.style.backgroundColor = Line;
+            holdBar.style.borderTopLeftRadius = 2;
+            holdBar.style.borderTopRightRadius = 2;
+            holdBar.style.borderBottomLeftRadius = 2;
+            holdBar.style.borderBottomRightRadius = 2;
+            card.Add(holdBar);
 
             holdFill = new VisualElement();
             holdFill.style.height = Length.Percent(100);
             holdFill.style.width = Length.Percent(0);
             holdFill.style.backgroundColor = Accent;
             holdBar.Add(holdFill);
-            card.Add(holdBar);
+
+            pillBar = new VisualElement();
+            pillBar.style.flexDirection = FlexDirection.Row;
+            pillBar.style.flexWrap = Wrap.Wrap;
+            pillBar.style.justifyContent = Justify.Center;
+            pillBar.style.marginTop = 12;
+            pillBar.style.minHeight = 30; // keeps the card height stable while pills come and go
+            card.Add(pillBar);
         }
 
         private MemberRow BuildMemberRow()
@@ -240,38 +375,55 @@ namespace Core.UI
             var row = new MemberRow();
 
             row.root = new VisualElement();
-            row.root.style.flexDirection = FlexDirection.Row;
+            row.root.style.flexGrow = 1;
+            row.root.style.flexBasis = 0; // equal width for every card
             row.root.style.alignItems = Align.Center;
             row.root.style.backgroundColor = Slot;
-            row.root.style.marginTop = 6;
-            SetPadding(row.root, 6);
-            SetBorder(row.root, 1, Muted, 4);
+            SetPadding(row.root, 12);
+            SetBorder(row.root, 1, Line, 8);
+
+            row.keyHolder = new VisualElement();
+            row.keyHolder.style.flexDirection = FlexDirection.Row;
+            row.keyHolder.style.alignItems = Align.Center;
+            row.keyHolder.style.justifyContent = Justify.Center;
+            row.keyHolder.style.minHeight = 28;
+            row.keyHolder.style.marginBottom = 10;
+            row.keyHolder.style.visibility = Visibility.Hidden;
+            row.root.Add(row.keyHolder);
 
             row.portrait = new VisualElement();
-            row.portrait.style.width = 64;
-            row.portrait.style.height = 64;
-            row.portrait.style.marginRight = 10;
+            row.portrait.style.width = 96;
+            row.portrait.style.height = 96;
+            row.portrait.style.backgroundColor = new Color(0f, 0f, 0f, 0.35f);
+            SetRadius(row.portrait, 8);
             row.root.Add(row.portrait);
 
-            var info = new VisualElement();
-            info.style.flexGrow = 1;
             row.nameLabel = MakeLabel(string.Empty, 16, Color.white);
-            info.Add(row.nameLabel);
+            row.nameLabel.style.marginTop = 8;
+            row.root.Add(row.nameLabel);
+
+            var divider = new VisualElement();
+            divider.style.alignSelf = Align.Stretch;
+            divider.style.height = 1;
+            divider.style.marginTop = 8;
+            divider.style.marginBottom = 8;
+            divider.style.backgroundColor = Line;
+            row.root.Add(divider);
 
             row.items = new VisualElement();
             row.items.style.flexDirection = FlexDirection.Row;
             row.items.style.flexWrap = Wrap.Wrap;
-            row.items.style.marginTop = 4;
-            info.Add(row.items);
+            row.items.style.justifyContent = Justify.Center;
+            row.items.style.minHeight = 40;
+            row.root.Add(row.items);
 
-            row.root.Add(info);
             return row;
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
 
-        // Rounded pill: key badge + action label. Dimmed when the action does nothing right now.
-        private static VisualElement MakePill(InputHint hint)
+        // Rounded pill: key badge + action label.
+        private VisualElement MakePill(InputHint hint)
         {
             var pill = new VisualElement();
             pill.style.flexDirection = FlexDirection.Row;
@@ -284,20 +436,13 @@ namespace Core.UI
             pill.style.paddingRight = 12;
             pill.style.paddingTop = 4;
             pill.style.paddingBottom = 4;
-            pill.style.opacity = hint.enabled ? 1f : 0.35f;
             SetBorder(pill, 1, Muted, 16);
 
-            Label key = MakeLabel(hint.key, 12, Card);
-            key.style.backgroundColor = Accent;
-            key.style.paddingLeft = 8;
-            key.style.paddingRight = 8;
-            key.style.paddingTop = 2;
-            key.style.paddingBottom = 2;
+            var key = new VisualElement();
+            key.style.flexDirection = FlexDirection.Row;
+            key.style.alignItems = Align.Center;
             key.style.marginRight = 8;
-            key.style.borderTopLeftRadius = 12;
-            key.style.borderTopRightRadius = 12;
-            key.style.borderBottomLeftRadius = 12;
-            key.style.borderBottomRightRadius = 12;
+            FillKey(key, hint, 22);
             pill.Add(key);
 
             pill.Add(MakeLabel(hint.label, 13, Color.white));
@@ -321,6 +466,7 @@ namespace Core.UI
             icon.style.marginRight = 4;
             icon.style.marginBottom = 4;
             icon.style.backgroundColor = new Color(0f, 0f, 0f, 0.35f);
+            SetRadius(icon, 4);
             SetSprite(icon, item.itemIcon);
 
             if (quantity > 1)
@@ -351,6 +497,14 @@ namespace Core.UI
             element.style.paddingRight = value;
         }
 
+        private static void SetRadius(VisualElement element, float radius)
+        {
+            element.style.borderTopLeftRadius = radius;
+            element.style.borderTopRightRadius = radius;
+            element.style.borderBottomLeftRadius = radius;
+            element.style.borderBottomRightRadius = radius;
+        }
+
         private static void SetBorder(VisualElement element, float width, Color color, float radius)
         {
             element.style.borderTopWidth = width;
@@ -363,10 +517,42 @@ namespace Core.UI
             element.style.borderLeftColor = color;
             element.style.borderRightColor = color;
 
-            element.style.borderTopLeftRadius = radius;
-            element.style.borderTopRightRadius = radius;
-            element.style.borderBottomLeftRadius = radius;
-            element.style.borderBottomRightRadius = radius;
+            SetRadius(element, radius);
+        }
+
+        // Glyph sprite(s) for the current device, or the old text badge if the library has none for this control.
+        private void FillKey(VisualElement holder, InputHint hint, float size)
+        {
+            holder.Clear();
+            InputGlyphs.Resolve(hint.action, InputEvent.CurrentInputType, glyphs, glyphBuffer);
+
+            if (glyphBuffer.Count > 0)
+            {
+                holder.style.backgroundColor = Color.clear;
+                holder.style.minWidth = 0;
+                SetPadding(holder, 0);
+                SetRadius(holder, 0);
+
+                foreach (Sprite sprite in glyphBuffer)
+                {
+                    var icon = new VisualElement();
+                    icon.style.width = size;
+                    icon.style.height = size;
+                    icon.style.marginRight = 2;
+                    SetSprite(icon, sprite);
+                    holder.Add(icon);
+                }
+                return;
+            }
+
+            holder.style.backgroundColor = Accent;
+            holder.style.minWidth = 24;
+            holder.style.paddingLeft = 8;
+            holder.style.paddingRight = 8;
+            holder.style.paddingTop = 2;
+            holder.style.paddingBottom = 2;
+            SetRadius(holder, 12);
+            holder.Add(MakeLabel(hint.key, 12, Card));
         }
     }
 }

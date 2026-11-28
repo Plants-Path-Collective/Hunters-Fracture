@@ -261,19 +261,19 @@ namespace Core.UI
 
             hints.Clear();
 
-            selectHint = new InputHint { key = KeyOf(map.Navigate), label = "Select" };
+            selectHint = new InputHint { key = KeyOf(map.Navigate), label = "Select", action = map.Navigate };
             hints.Add(selectHint);
 
             for (int i = 0; i < assignHints.Length; i++)
             {
-                assignHints[i] = new InputHint { key = KeyOf(slotActions[i]), label = slotNames[i] };
+                assignHints[i] = new InputHint { key = KeyOf(slotActions[i]), label = slotNames[i], slot = i, action = slotActions[i] };
                 hints.Add(assignHints[i]);
             }
 
-            backHint = new InputHint { key = KeyOf(map.CancelBack), label = "Undo" };
+            backHint = new InputHint { key = KeyOf(map.CancelBack), label = "Undo", action = map.CancelBack };
             hints.Add(backHint);
 
-            confirmHint = new InputHint { key = KeyOf(map.Confirm), label = "Hold to continue" };
+            confirmHint = new InputHint { key = KeyOf(map.Confirm), label = "Hold to continue", action = map.Confirm };
             hints.Add(confirmHint);
         }
 

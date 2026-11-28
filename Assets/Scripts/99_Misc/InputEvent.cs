@@ -26,26 +26,21 @@ public class InputEvent : MonoBehaviour
     [SerializeField] private Sprite keyboardMouseSprite;
 
     private static int activeListenerCount;
-    private static event Action<InputType> InputTypeChanged;
+    public static event Action<InputType> InputTypeChanged;
 
     public static InputType CurrentInputType { get; private set; } = InputType.KeyboardMouse;
 
     private void OnEnable()
     {
         InputTypeChanged += HandleInputTypeChanged;
-
-        if (activeListenerCount++ == 0)
-            UnityEngine.InputSystem.InputSystem.onEvent += DetectInputType;
-
+        RegisterListener();
         UpdateSprite(CurrentInputType);
     }
 
     private void OnDisable()
     {
         InputTypeChanged -= HandleInputTypeChanged;
-
-        if (activeListenerCount > 0 && --activeListenerCount == 0)
-            UnityEngine.InputSystem.InputSystem.onEvent -= DetectInputType;
+        UnregisterListener();
     }
 
     private static void DetectInputType(InputEventPtr eventPtr, InputDevice device)
@@ -113,7 +108,7 @@ public class InputEvent : MonoBehaviour
             return InputType.XboxGamepad;
 
         if (ContainsAny(description, "Nintendo", "switch", "joy-con", "pro controller"))
-            return InputType.XboxGamepad;
+            return InputType.NintendoGamepad;
 
         return InputType.OtherGamepad;
     }
@@ -127,5 +122,18 @@ public class InputEvent : MonoBehaviour
         }
 
         return false;
+    }
+
+    /// <summary>Ref-counted: input-device detection runs while at least one listener is registered.</summary>
+    public static void RegisterListener()
+    {
+        if (activeListenerCount++ == 0)
+            UnityEngine.InputSystem.InputSystem.onEvent += DetectInputType;
+    }
+
+    public static void UnregisterListener()
+    {
+        if (activeListenerCount > 0 && --activeListenerCount == 0)
+            UnityEngine.InputSystem.InputSystem.onEvent -= DetectInputType;
     }
 }

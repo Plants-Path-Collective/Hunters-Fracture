@@ -19995,6 +19995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a51ab819f8f41bdfba9ffc88b5d9ac21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.UI.ItemAssignationToolkitView
+  glyphs: {fileID: 11400000, guid: 4dcd014f54e16bbec8121b8888ede319, type: 2}
 --- !u!1 &9127547063934205767
 GameObject:
   m_ObjectHideFlags: 0
