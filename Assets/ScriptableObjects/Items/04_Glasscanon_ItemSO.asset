@@ -25,7 +25,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 94eace61d2161ff89b39bba14d6a409d, type: 3}
-  itemName: "Mu\xF1eca de Porcelana"
+  itemName: 
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
@@ -35,8 +35,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  itemDescription: Aumenta tu 25% STRENGTH (+10% por copia) disminuye tu 15% PHYSICAL
-    DEFENSE (+10% por copia) y tu 15% MAGICAL DEFENSE (+10% por copia)
+  itemDescription: 
   localizedDescription:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb

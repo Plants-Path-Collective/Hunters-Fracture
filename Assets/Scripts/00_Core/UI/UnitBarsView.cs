@@ -155,13 +155,13 @@ namespace Core.UI
 
                 if (icon != null)
                 {
-                    icon.SetTurns(instance.remainingTurns);
+                    icon.SetTurns(instance.definition.GetDisplayCount(instance));
                     continue;
                 }
 
                 GameObject go = Instantiate(statusPrefab, statusesContainer.transform);
                 icon = go.GetComponent<StatusIcon>();
-                icon.SetStatus(instance.definition, instance.remainingTurns);
+                icon.SetStatus(instance.definition, instance.definition.GetDisplayCount(instance));
                 activeStatuses.Add(icon);
             }
         }

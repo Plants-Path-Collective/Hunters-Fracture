@@ -17,6 +17,9 @@ namespace Core.CombatSystem.StatusSystem
         public Sprite icon;
         [Tooltip("Shown as a debuff in the UI. Stat and damage modifiers also use it as the sign of their effect.")]
         public bool isDebuff;
+        /// <summary>Number shown on the icon's counter. Defaults to the remaining turns; stacking or
+        /// permanent statuses override it.</summary>
+        public virtual int GetDisplayCount(StatusInstance instance) => instance.remainingTurns;
 
         /// <summary>The bearer loses its turn while it has this status.</summary>
         public virtual bool SkipsTurn => false;

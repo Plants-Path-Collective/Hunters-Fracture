@@ -25,7 +25,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: b55c9eaa221251ea28f43f86e067d349, type: 3}
-  itemName: Olla de Hierro
+  itemName: 
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
@@ -35,8 +35,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  itemDescription: Aumenta la PHYSICAL DEFENSE en un 30%, existe un 10% de que la
-    unidad con este objeto sea ATURDIDA (Pierde el siguiente turno) al ser atacada.
+  itemDescription: 
   localizedDescription:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb

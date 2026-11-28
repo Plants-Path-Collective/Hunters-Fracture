@@ -57,5 +57,8 @@ namespace Core.CombatSystem.StatusSystem
                 flat = -physicalDefenseLossPerStack * stacks // NEW field, see patch notes
             });
         }
+
+        public override int GetDisplayCount(StatusInstance instance) =>
+            Mathf.Min(maxStacks, Mathf.RoundToInt(instance.magnitude));
     }
 }

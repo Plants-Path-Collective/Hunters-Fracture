@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.CombatSystem.StatusSystem.HemorrhageStatusSO
   statusName: Hemorrhage
   icon: {fileID: 21300000, guid: 0595a9cea175912a0bc618a92c25e09b, type: 3}
-  isDebuff: 0
+  isDebuff: 1
   damagePerStack: 10
   speedLossPerStack: 0.05
   physicalDefenseLossPerStack: 0.1

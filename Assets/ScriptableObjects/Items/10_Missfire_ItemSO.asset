@@ -25,7 +25,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: 326631b8dc42202b88d5e9a5df322b66, type: 3}
-  itemName: Cerveza de Sal
+  itemName: 
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
@@ -35,8 +35,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  itemDescription: "Cambia el Ataque B\xE1sico por un Ataque Multiple (2 objetivos),
-    limita el da\xF1o del ataque a un 66% (+10% por copia)."
+  itemDescription: 
   localizedDescription:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb

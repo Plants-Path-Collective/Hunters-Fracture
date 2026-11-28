@@ -25,7 +25,7 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   itemIcon: {fileID: 21300000, guid: c0e5c10adea937b629d8b446f8f4ac23, type: 3}
-  itemName: "Billete fuera de Circulaci\xF3n"
+  itemName: 
   localizedName:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
@@ -35,8 +35,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  itemDescription: "Reduce el costo de SP en 10% (+3% por copia) de las t\xE9cnicas
-    del portador. Aumenta la probabilidad de ser objetivo de un ataque."
+  itemDescription: 
   localizedDescription:
     m_TableReference:
       m_TableCollectionName: GUID:958935858e1cad9ad9b44b6f088553bb
